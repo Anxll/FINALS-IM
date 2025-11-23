@@ -24,10 +24,8 @@ Partial Class AdminDashboard
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AdminDashboard))
         Me.SidePanel = New System.Windows.Forms.Panel()
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ReservationPayment = New System.Windows.Forms.Button()
+        Me.OrderPayment = New System.Windows.Forms.Button()
         Me.Feedback = New System.Windows.Forms.Button()
         Me.Customer = New System.Windows.Forms.Button()
         Me.Employee = New System.Windows.Forms.Button()
@@ -39,7 +37,11 @@ Partial Class AdminDashboard
         Me.btnMenuItems = New System.Windows.Forms.Button()
         Me.btnUserAccounts = New System.Windows.Forms.Button()
         Me.btnDashboard = New System.Windows.Forms.Button()
+        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.btnLogout = New System.Windows.Forms.Button()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.SidePanel.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -48,6 +50,8 @@ Partial Class AdminDashboard
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ReservationPayment)
+        Me.SidePanel.Controls.Add(Me.OrderPayment)
         Me.SidePanel.Controls.Add(Me.Feedback)
         Me.SidePanel.Controls.Add(Me.Customer)
         Me.SidePanel.Controls.Add(Me.Employee)
@@ -65,53 +69,42 @@ Partial Class AdminDashboard
         Me.SidePanel.Location = New System.Drawing.Point(0, 0)
         Me.SidePanel.Margin = New System.Windows.Forms.Padding(4)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(348, 808)
+        Me.SidePanel.Size = New System.Drawing.Size(348, 877)
         Me.SidePanel.TabIndex = 0
         '
-        'Panel3
+        'ReservationPayment
         '
-        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel3.Controls.Add(Me.btnLogout)
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel3.Location = New System.Drawing.Point(0, 755)
-        Me.Panel3.Margin = New System.Windows.Forms.Padding(4)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(348, 53)
-        Me.Panel3.TabIndex = 1
+        Me.ReservationPayment.FlatAppearance.BorderSize = 0
+        Me.ReservationPayment.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ReservationPayment.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ReservationPayment.ForeColor = System.Drawing.Color.White
+        Me.ReservationPayment.Image = CType(resources.GetObject("ReservationPayment.Image"), System.Drawing.Image)
+        Me.ReservationPayment.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.ReservationPayment.Location = New System.Drawing.Point(26, 754)
+        Me.ReservationPayment.Margin = New System.Windows.Forms.Padding(4)
+        Me.ReservationPayment.Name = "ReservationPayment"
+        Me.ReservationPayment.Size = New System.Drawing.Size(253, 34)
+        Me.ReservationPayment.TabIndex = 14
+        Me.ReservationPayment.Text = "     Reservation Payment"
+        Me.ReservationPayment.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.ReservationPayment.UseVisualStyleBackColor = True
         '
-        'Panel2
+        'OrderPayment
         '
-        Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel2.Controls.Add(Me.Label1)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel2.Location = New System.Drawing.Point(0, 0)
-        Me.Panel2.Margin = New System.Windows.Forms.Padding(4)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(348, 80)
-        Me.Panel2.TabIndex = 0
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.ForeColor = System.Drawing.Color.White
-        Me.Label1.Location = New System.Drawing.Point(31, 22)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(249, 37)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Admin Dashboard"
-        '
-        'Panel1
-        '
-        Me.Panel1.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(348, 0)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(719, 808)
-        Me.Panel1.TabIndex = 1
+        Me.OrderPayment.FlatAppearance.BorderSize = 0
+        Me.OrderPayment.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.OrderPayment.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.OrderPayment.ForeColor = System.Drawing.Color.White
+        Me.OrderPayment.Image = CType(resources.GetObject("OrderPayment.Image"), System.Drawing.Image)
+        Me.OrderPayment.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.OrderPayment.Location = New System.Drawing.Point(26, 702)
+        Me.OrderPayment.Margin = New System.Windows.Forms.Padding(4)
+        Me.OrderPayment.Name = "OrderPayment"
+        Me.OrderPayment.Size = New System.Drawing.Size(253, 34)
+        Me.OrderPayment.TabIndex = 13
+        Me.OrderPayment.Text = "     Order Payement"
+        Me.OrderPayment.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.OrderPayment.UseVisualStyleBackColor = True
         '
         'Feedback
         '
@@ -300,6 +293,17 @@ Partial Class AdminDashboard
         Me.btnDashboard.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnDashboard.UseVisualStyleBackColor = True
         '
+        'Panel3
+        '
+        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel3.Controls.Add(Me.btnLogout)
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel3.Location = New System.Drawing.Point(0, 824)
+        Me.Panel3.Margin = New System.Windows.Forms.Padding(4)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(348, 53)
+        Me.Panel3.TabIndex = 1
+        '
         'btnLogout
         '
         Me.btnLogout.FlatAppearance.BorderSize = 0
@@ -317,11 +321,45 @@ Partial Class AdminDashboard
         Me.btnLogout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnLogout.UseVisualStyleBackColor = True
         '
+        'Panel2
+        '
+        Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel2.Controls.Add(Me.Label1)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel2.Location = New System.Drawing.Point(0, 0)
+        Me.Panel2.Margin = New System.Windows.Forms.Padding(4)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(348, 80)
+        Me.Panel2.TabIndex = 0
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.White
+        Me.Label1.Location = New System.Drawing.Point(31, 22)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(249, 37)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Admin Dashboard"
+        '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(348, 0)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(719, 877)
+        Me.Panel1.TabIndex = 1
+        '
         'AdminDashboard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1067, 808)
+        Me.ClientSize = New System.Drawing.Size(1067, 877)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.SidePanel)
         Me.DoubleBuffered = True
@@ -353,4 +391,6 @@ Partial Class AdminDashboard
     Friend WithEvents Employee As Button
     Friend WithEvents Customer As Button
     Friend WithEvents Feedback As Button
+    Friend WithEvents ReservationPayment As Button
+    Friend WithEvents OrderPayment As Button
 End Class

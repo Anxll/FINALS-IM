@@ -196,6 +196,12 @@
     <Compile Include="Admin\Feedback.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Admin\OrderPayment.Designer.vb">
+      <DependentUpon>OrderPayment.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\OrderPayment.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Admin\FormAddNewmenuItem.Designer.vb">
       <DependentUpon>FormAddNewmenuItem.vb</DependentUpon>
     </Compile>
@@ -267,6 +273,12 @@
       <DependentUpon>Reports.vb</DependentUpon>
     </Compile>
     <Compile Include="Admin\Reports.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\ReservationPayment.Designer.vb">
+      <DependentUpon>ReservationPayment.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReservationPayment.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Admin\Reservations.Designer.vb">
@@ -453,6 +465,9 @@
     <EmbeddedResource Include="Admin\MenuItems.resx">
       <DependentUpon>MenuItems.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Admin\OrderPayment.resx">
+      <DependentUpon>OrderPayment.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Admin\Orders.resx">
       <DependentUpon>Orders.vb</DependentUpon>
     </EmbeddedResource>
@@ -461,6 +476,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\Reports.resx">
       <DependentUpon>Reports.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReservationPayment.resx">
+      <DependentUpon>ReservationPayment.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\Reservations.resx">
       <DependentUpon>Reservations.vb</DependentUpon>

@@ -201,6 +201,43 @@ Public Class AdminDashboard
         End With
     End Sub
 
+    Private Sub OrderPayment_Click(sender As Object, e As EventArgs) Handles OrderPayment.Click
+        HighlightButton(OrderPayment) ' ← Correct button to highlight
+
+        ' Load Feedback form inside Panel1
+        Dim orderpaymentForm As New OrderPayment() ' If this is really your Feedback form
+
+        With orderpaymentForm
+            .TopLevel = False
+            .FormBorderStyle = FormBorderStyle.None
+            .Dock = DockStyle.Fill
+
+            Panel1.Controls.Clear()
+            Panel1.Controls.Add(orderpaymentForm)
+
+            .BringToFront()
+            .Show()
+        End With
+    End Sub
+
+    Private Sub ReservationPayment_Click(sender As Object, e As EventArgs) Handles ReservationPayment.Click
+        HighlightButton(ReservationPayment) ' ← Correct button to highlight
+
+        ' Load Feedback form inside Panel1
+        Dim reservationpaymentForm As New ReservationPayment() ' If this is really your Feedback form
+
+        With reservationpaymentForm
+            .TopLevel = False
+            .FormBorderStyle = FormBorderStyle.None
+            .Dock = DockStyle.Fill
+
+            Panel1.Controls.Clear()
+            Panel1.Controls.Add(reservationpaymentForm)
+
+            .BringToFront()
+            .Show()
+        End With
+    End Sub
     Private Sub btnLogout_Click(sender As Object, e As EventArgs) Handles btnLogout.Click
         Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 

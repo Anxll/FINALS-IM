@@ -34,4 +34,11 @@ Public Class Orders
 
     End Sub
 
+    Private Sub OrderPayment_Click(sender As Object, e As EventArgs)
+        With OrderPayment
+            .Show()
+            .BringToFront()
+        End With
+    End Sub
+
 End Class
