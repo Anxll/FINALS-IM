@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Customer
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -18,9 +18,8 @@ Partial Class Customer
     Private components As System.ComponentModel.IContainer
 
     'NOTE: The following procedure is required by the Windows Form Designer
-    'It can be modified using the Windows Form Designer.  
-    'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    'It can be modified using the code editor.
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -28,22 +27,22 @@ Partial Class Customer
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Splitter1 = New System.Windows.Forms.Splitter()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.OrderID = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CustomerID = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.EmployeeID = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.OrderType = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.OrderSource = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ReceiptNumber = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.NumberOfDiners = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.OrderDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.OrderTime = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ItemsOrderedCount = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.TotalAmount = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.OrderStatus = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Remarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.OrderPriority = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.PreparationTimeEstimate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.SpecialRequestFlag = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FirstName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.LastName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Email = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ContactNumber = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.CustomerType = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.FeedbackCount = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.TotalOrdersCount = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ReservationCount = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.LastTransactionDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.LastLoginDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.CreatedDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.AccountStatus = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.SatisfactionRating = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DeleteBtn = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.SuspendBtn = New System.Windows.Forms.DataGridViewButtonColumn()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -54,9 +53,9 @@ Partial Class Customer
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.Label2.Location = New System.Drawing.Point(14, 61)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(169, 20)
+        Me.Label2.Size = New System.Drawing.Size(296, 20)
         Me.Label2.TabIndex = 37
-        Me.Label2.Text = "Track and manage "
+        Me.Label2.Text = "Track and manage customer accounts"
         '
         'Label1
         '
@@ -64,9 +63,9 @@ Partial Class Customer
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(12, 25)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(150, 36)
+        Me.Label1.Size = New System.Drawing.Size(175, 36)
         Me.Label1.TabIndex = 35
-        Me.Label1.Text = "Costumer"
+        Me.Label1.Text = "Customers"
         '
         'Splitter1
         '
@@ -79,187 +78,180 @@ Partial Class Customer
         '
         'DataGridView1
         '
-        Me.DataGridView1.AllowUserToResizeColumns = False
+        Me.DataGridView1.AllowUserToResizeColumns = True
         Me.DataGridView1.AllowUserToResizeRows = False
         Me.DataGridView1.BackgroundColor = System.Drawing.Color.White
         Me.DataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.DataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None
+        Me.DataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         Me.DataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeight = 40
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.OrderID, Me.CustomerID, Me.EmployeeID, Me.OrderType, Me.OrderSource, Me.ReceiptNumber, Me.NumberOfDiners, Me.OrderDate, Me.OrderTime, Me.ItemsOrderedCount, Me.TotalAmount, Me.OrderStatus, Me.Remarks, Me.OrderPriority, Me.PreparationTimeEstimate, Me.SpecialRequestFlag})
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.CustomerID, Me.FirstName, Me.LastName, Me.Email, Me.ContactNumber, Me.CustomerType, Me.FeedbackCount, Me.TotalOrdersCount, Me.ReservationCount, Me.LastTransactionDate, Me.LastLoginDate, Me.CreatedDate, Me.AccountStatus, Me.SatisfactionRating, Me.DeleteBtn, Me.SuspendBtn})
+        Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridView1.EnableHeadersVisualStyles = False
-        Me.DataGridView1.Location = New System.Drawing.Point(18, 152)
+        Me.DataGridView1.Location = New System.Drawing.Point(0, 105)
         Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.White
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(240, Byte), Integer))
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.DataGridView1.RowHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowHeadersWidth = 51
-        Me.DataGridView1.Size = New System.Drawing.Size(1516, 181)
         Me.DataGridView1.TabIndex = 42
-        '
-        'OrderID
-        '
-        Me.OrderID.DataPropertyName = "colOrderID"
-        Me.OrderID.Frozen = True
-        Me.OrderID.HeaderText = "OrderID"
-        Me.OrderID.MinimumWidth = 6
-        Me.OrderID.Name = "OrderID"
-        Me.OrderID.ReadOnly = True
-        Me.OrderID.Width = 150
         '
         'CustomerID
         '
-        Me.CustomerID.DataPropertyName = "colCustomerID"
-        Me.CustomerID.HeaderText = "Customer ID"
-        Me.CustomerID.MinimumWidth = 6
+        Me.CustomerID.DataPropertyName = "CustomerID"
+        Me.CustomerID.Frozen = True
+        Me.CustomerID.HeaderText = "ID"
+        Me.CustomerID.MinimumWidth = 50
         Me.CustomerID.Name = "CustomerID"
         Me.CustomerID.ReadOnly = True
-        Me.CustomerID.Width = 125
+        Me.CustomerID.Width = 50
         '
-        'EmployeeID
+        'FirstName
         '
-        Me.EmployeeID.DataPropertyName = "colEmployeeID"
-        Me.EmployeeID.HeaderText = "EmployeeID"
-        Me.EmployeeID.MinimumWidth = 6
-        Me.EmployeeID.Name = "EmployeeID"
-        Me.EmployeeID.ReadOnly = True
-        Me.EmployeeID.Width = 125
+        Me.FirstName.DataPropertyName = "FirstName"
+        Me.FirstName.HeaderText = "First Name"
+        Me.FirstName.MinimumWidth = 100
+        Me.FirstName.Name = "FirstName"
+        Me.FirstName.ReadOnly = True
         '
-        'OrderType
+        'LastName
         '
-        Me.OrderType.DataPropertyName = "colOrderType"
-        Me.OrderType.HeaderText = "Order Type"
-        Me.OrderType.MinimumWidth = 6
-        Me.OrderType.Name = "OrderType"
-        Me.OrderType.ReadOnly = True
-        Me.OrderType.Width = 125
+        Me.LastName.DataPropertyName = "LastName"
+        Me.LastName.HeaderText = "Last Name"
+        Me.LastName.MinimumWidth = 100
+        Me.LastName.Name = "LastName"
+        Me.LastName.ReadOnly = True
         '
-        'OrderSource
+        'Email
         '
-        Me.OrderSource.DataPropertyName = "colOrderSource"
-        Me.OrderSource.HeaderText = "Order Source"
-        Me.OrderSource.MinimumWidth = 6
-        Me.OrderSource.Name = "OrderSource"
-        Me.OrderSource.ReadOnly = True
-        Me.OrderSource.Width = 125
+        Me.Email.DataPropertyName = "Email"
+        Me.Email.HeaderText = "Email"
+        Me.Email.MinimumWidth = 150
+        Me.Email.Name = "Email"
+        Me.Email.ReadOnly = True
         '
-        'ReceiptNumber
+        'ContactNumber
         '
-        Me.ReceiptNumber.DataPropertyName = "colReceiptNumber"
-        Me.ReceiptNumber.HeaderText = "ReceiptNumber"
-        Me.ReceiptNumber.MinimumWidth = 6
-        Me.ReceiptNumber.Name = "ReceiptNumber"
-        Me.ReceiptNumber.ReadOnly = True
-        Me.ReceiptNumber.Width = 135
+        Me.ContactNumber.DataPropertyName = "ContactNumber"
+        Me.ContactNumber.HeaderText = "Contact"
+        Me.ContactNumber.MinimumWidth = 110
+        Me.ContactNumber.Name = "ContactNumber"
+        Me.ContactNumber.ReadOnly = True
         '
-        'NumberOfDiners
+        'CustomerType
         '
-        Me.NumberOfDiners.DataPropertyName = "colNumberOfDiners"
-        Me.NumberOfDiners.HeaderText = "Number Of Diners"
-        Me.NumberOfDiners.MinimumWidth = 6
-        Me.NumberOfDiners.Name = "NumberOfDiners"
-        Me.NumberOfDiners.ReadOnly = True
-        Me.NumberOfDiners.Width = 145
+        Me.CustomerType.DataPropertyName = "CustomerType"
+        Me.CustomerType.HeaderText = "Type"
+        Me.CustomerType.MinimumWidth = 90
+        Me.CustomerType.Name = "CustomerType"
+        Me.CustomerType.ReadOnly = True
         '
-        'OrderDate
+        'FeedbackCount
         '
-        Me.OrderDate.DataPropertyName = "colOrderDate"
-        Me.OrderDate.HeaderText = "Order Date"
-        Me.OrderDate.MinimumWidth = 6
-        Me.OrderDate.Name = "OrderDate"
-        Me.OrderDate.ReadOnly = True
-        Me.OrderDate.Width = 125
+        Me.FeedbackCount.DataPropertyName = "FeedbackCount"
+        Me.FeedbackCount.HeaderText = "Feedback"
+        Me.FeedbackCount.MinimumWidth = 80
+        Me.FeedbackCount.Name = "FeedbackCount"
+        Me.FeedbackCount.ReadOnly = True
         '
-        'OrderTime
+        'TotalOrdersCount
         '
-        Me.OrderTime.DataPropertyName = "colOrderTime"
-        Me.OrderTime.HeaderText = "Order Time"
-        Me.OrderTime.MinimumWidth = 6
-        Me.OrderTime.Name = "OrderTime"
-        Me.OrderTime.ReadOnly = True
-        Me.OrderTime.Width = 125
+        Me.TotalOrdersCount.DataPropertyName = "TotalOrdersCount"
+        Me.TotalOrdersCount.HeaderText = "Orders"
+        Me.TotalOrdersCount.MinimumWidth = 70
+        Me.TotalOrdersCount.Name = "TotalOrdersCount"
+        Me.TotalOrdersCount.ReadOnly = True
         '
-        'ItemsOrderedCount
+        'ReservationCount
         '
-        Me.ItemsOrderedCount.DataPropertyName = "colItemsOrderedCount"
-        Me.ItemsOrderedCount.HeaderText = "Items Ordered Count"
-        Me.ItemsOrderedCount.MinimumWidth = 6
-        Me.ItemsOrderedCount.Name = "ItemsOrderedCount"
-        Me.ItemsOrderedCount.ReadOnly = True
-        Me.ItemsOrderedCount.Width = 135
+        Me.ReservationCount.DataPropertyName = "ReservationCount"
+        Me.ReservationCount.HeaderText = "Reservations"
+        Me.ReservationCount.MinimumWidth = 100
+        Me.ReservationCount.Name = "ReservationCount"
+        Me.ReservationCount.ReadOnly = True
         '
-        'TotalAmount
+        'LastTransactionDate
         '
-        Me.TotalAmount.DataPropertyName = "colTotalAmount"
-        Me.TotalAmount.HeaderText = "Total Amount"
-        Me.TotalAmount.MinimumWidth = 6
-        Me.TotalAmount.Name = "TotalAmount"
-        Me.TotalAmount.ReadOnly = True
-        Me.TotalAmount.Width = 125
+        Me.LastTransactionDate.DataPropertyName = "LastTransactionDate"
+        Me.LastTransactionDate.HeaderText = "Last Transaction"
+        Me.LastTransactionDate.MinimumWidth = 130
+        Me.LastTransactionDate.Name = "LastTransactionDate"
+        Me.LastTransactionDate.ReadOnly = True
         '
-        'OrderStatus
+        'LastLoginDate
         '
-        Me.OrderStatus.DataPropertyName = "colOrderStatus"
-        Me.OrderStatus.HeaderText = "Order Status"
-        Me.OrderStatus.MinimumWidth = 6
-        Me.OrderStatus.Name = "OrderStatus"
-        Me.OrderStatus.ReadOnly = True
-        Me.OrderStatus.Width = 125
+        Me.LastLoginDate.DataPropertyName = "LastLoginDate"
+        Me.LastLoginDate.HeaderText = "Last Login"
+        Me.LastLoginDate.MinimumWidth = 130
+        Me.LastLoginDate.Name = "LastLoginDate"
+        Me.LastLoginDate.ReadOnly = True
         '
-        'Remarks
+        'CreatedDate
         '
-        Me.Remarks.DataPropertyName = "colRemarks"
-        Me.Remarks.HeaderText = "Remarks"
-        Me.Remarks.MinimumWidth = 6
-        Me.Remarks.Name = "Remarks"
-        Me.Remarks.ReadOnly = True
-        Me.Remarks.Width = 125
+        Me.CreatedDate.DataPropertyName = "CreatedDate"
+        Me.CreatedDate.HeaderText = "Created"
+        Me.CreatedDate.MinimumWidth = 130
+        Me.CreatedDate.Name = "CreatedDate"
+        Me.CreatedDate.ReadOnly = True
         '
-        'OrderPriority
+        'AccountStatus
         '
-        Me.OrderPriority.DataPropertyName = "colOrderPriority"
-        Me.OrderPriority.HeaderText = "Order Priority"
-        Me.OrderPriority.MinimumWidth = 6
-        Me.OrderPriority.Name = "OrderPriority"
-        Me.OrderPriority.ReadOnly = True
-        Me.OrderPriority.Width = 125
+        Me.AccountStatus.DataPropertyName = "AccountStatus"
+        Me.AccountStatus.HeaderText = "Status"
+        Me.AccountStatus.MinimumWidth = 90
+        Me.AccountStatus.Name = "AccountStatus"
+        Me.AccountStatus.ReadOnly = True
         '
-        'PreparationTimeEstimate
+        'SatisfactionRating
         '
-        Me.PreparationTimeEstimate.DataPropertyName = "colPreparationTimeEstimate"
-        Me.PreparationTimeEstimate.HeaderText = "Preparation Time Estimate"
-        Me.PreparationTimeEstimate.MinimumWidth = 6
-        Me.PreparationTimeEstimate.Name = "PreparationTimeEstimate"
-        Me.PreparationTimeEstimate.ReadOnly = True
-        Me.PreparationTimeEstimate.Width = 135
+        Me.SatisfactionRating.DataPropertyName = "SatisfactionRating"
+        Me.SatisfactionRating.HeaderText = "Rating"
+        Me.SatisfactionRating.MinimumWidth = 70
+        Me.SatisfactionRating.Name = "SatisfactionRating"
+        Me.SatisfactionRating.ReadOnly = True
         '
-        'SpecialRequestFlag
+        'DeleteBtn
         '
-        Me.SpecialRequestFlag.DataPropertyName = "colSpecialRequestFlag"
-        Me.SpecialRequestFlag.HeaderText = "Special Request Flag"
-        Me.SpecialRequestFlag.MinimumWidth = 6
-        Me.SpecialRequestFlag.Name = "SpecialRequestFlag"
-        Me.SpecialRequestFlag.ReadOnly = True
-        Me.SpecialRequestFlag.Width = 125
+        Me.DeleteBtn.HeaderText = "Delete"
+        Me.DeleteBtn.MinimumWidth = 70
+        Me.DeleteBtn.Name = "DeleteBtn"
+        Me.DeleteBtn.ReadOnly = True
+        Me.DeleteBtn.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DeleteBtn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.DeleteBtn.Text = "Delete"
+        Me.DeleteBtn.UseColumnTextForButtonValue = True
+        Me.DeleteBtn.Width = 70
         '
-        'Costumer
+        'SuspendBtn
+        '
+        Me.SuspendBtn.HeaderText = "Suspend"
+        Me.SuspendBtn.MinimumWidth = 80
+        Me.SuspendBtn.Name = "SuspendBtn"
+        Me.SuspendBtn.ReadOnly = True
+        Me.SuspendBtn.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.SuspendBtn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.SuspendBtn.Text = "Suspend"
+        Me.SuspendBtn.UseColumnTextForButtonValue = True
+        Me.SuspendBtn.Width = 80
+        '
+        'Customer
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -268,8 +260,8 @@ Partial Class Customer
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Splitter1)
-        Me.Name = "Costumer"
-        Me.Text = "Costumer"
+        Me.Name = "Customer"
+        Me.Text = "Customer Management"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -280,20 +272,20 @@ Partial Class Customer
     Friend WithEvents Label1 As Label
     Friend WithEvents Splitter1 As Splitter
     Friend WithEvents DataGridView1 As DataGridView
-    Friend WithEvents OrderID As DataGridViewTextBoxColumn
     Friend WithEvents CustomerID As DataGridViewTextBoxColumn
-    Friend WithEvents EmployeeID As DataGridViewTextBoxColumn
-    Friend WithEvents OrderType As DataGridViewTextBoxColumn
-    Friend WithEvents OrderSource As DataGridViewTextBoxColumn
-    Friend WithEvents ReceiptNumber As DataGridViewTextBoxColumn
-    Friend WithEvents NumberOfDiners As DataGridViewTextBoxColumn
-    Friend WithEvents OrderDate As DataGridViewTextBoxColumn
-    Friend WithEvents OrderTime As DataGridViewTextBoxColumn
-    Friend WithEvents ItemsOrderedCount As DataGridViewTextBoxColumn
-    Friend WithEvents TotalAmount As DataGridViewTextBoxColumn
-    Friend WithEvents OrderStatus As DataGridViewTextBoxColumn
-    Friend WithEvents Remarks As DataGridViewTextBoxColumn
-    Friend WithEvents OrderPriority As DataGridViewTextBoxColumn
-    Friend WithEvents PreparationTimeEstimate As DataGridViewTextBoxColumn
-    Friend WithEvents SpecialRequestFlag As DataGridViewTextBoxColumn
+    Friend WithEvents FirstName As DataGridViewTextBoxColumn
+    Friend WithEvents LastName As DataGridViewTextBoxColumn
+    Friend WithEvents Email As DataGridViewTextBoxColumn
+    Friend WithEvents ContactNumber As DataGridViewTextBoxColumn
+    Friend WithEvents CustomerType As DataGridViewTextBoxColumn
+    Friend WithEvents FeedbackCount As DataGridViewTextBoxColumn
+    Friend WithEvents TotalOrdersCount As DataGridViewTextBoxColumn
+    Friend WithEvents ReservationCount As DataGridViewTextBoxColumn
+    Friend WithEvents LastTransactionDate As DataGridViewTextBoxColumn
+    Friend WithEvents LastLoginDate As DataGridViewTextBoxColumn
+    Friend WithEvents CreatedDate As DataGridViewTextBoxColumn
+    Friend WithEvents AccountStatus As DataGridViewTextBoxColumn
+    Friend WithEvents SatisfactionRating As DataGridViewTextBoxColumn
+    Friend WithEvents DeleteBtn As DataGridViewButtonColumn
+    Friend WithEvents SuspendBtn As DataGridViewButtonColumn
 End Class
