@@ -85,7 +85,7 @@ Partial Class Reports
         Me.FlowLayoutPanel1.Margin = New System.Windows.Forms.Padding(4)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(13, 6, 13, 6)
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2309, 55)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2305, 55)
         Me.FlowLayoutPanel1.TabIndex = 4
         Me.FlowLayoutPanel1.WrapContents = False
         '

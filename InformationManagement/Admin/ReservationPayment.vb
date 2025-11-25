@@ -25,7 +25,6 @@ Public Class ReservationPayment
                     ProofOfPayment,
                     ReceiptFileName,
                     TransactionID,
-                    Notes,
                     UpdatedDate
                 FROM reservation_payments"
 
