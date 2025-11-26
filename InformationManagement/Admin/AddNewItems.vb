@@ -476,9 +476,12 @@ Public Class AddNewItems
                 cmdBatch.Parameters.AddWithValue("@p_unit_type", Unit.Text)
                 cmdBatch.Parameters.AddWithValue("@p_cost_per_unit", Convert.ToDecimal(RoundedTextBox1.Text))
                 cmdBatch.Parameters.AddWithValue("@p_expiration_date", DateTimePicker2.Value.Date)
-                cmdBatch.Parameters.AddWithValue("@p_market_source", "Direct Purchase")
+
+                ' ADD THIS LINE - Set storage location based on category or use default
+                cmdBatch.Parameters.AddWithValue("@p_storage_location", DBNull.Value) ' Will use 'Main Storage' default
+
                 cmdBatch.Parameters.AddWithValue("@p_notes",
-                    "Initial batch added on " & DateTimePicker1.Value.ToString("yyyy-MM-dd"))
+                "Initial batch added on " & DateTimePicker1.Value.ToString("yyyy-MM-dd"))
 
                 ' Output parameters
                 Dim paramBatchID As New MySqlParameter("@p_batch_id", MySqlDbType.Int32)

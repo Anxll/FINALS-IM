@@ -39,25 +39,27 @@ Partial Class FormOrders
         Dim DataPoint9 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 20.0R)
         Dim DataPoint10 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 10.0R)
         Dim Title1 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
-        Me.Chart2 = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormOrders))
+        Me.MonthlyChartOrder = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.OrderCategoriesGraph = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.RoundedPane22 = New InformationManagement.RoundedPane2()
-        CType(Me.Chart2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.btnExportReport = New System.Windows.Forms.Button()
+        CType(Me.MonthlyChartOrder, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane21.SuspendLayout()
-        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.OrderCategoriesGraph, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane22.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Chart2
+        'MonthlyChartOrder
         '
         ChartArea1.Name = "ChartArea1"
-        Me.Chart2.ChartAreas.Add(ChartArea1)
+        Me.MonthlyChartOrder.ChartAreas.Add(ChartArea1)
         Legend1.Name = "Legend1"
-        Me.Chart2.Legends.Add(Legend1)
-        Me.Chart2.Location = New System.Drawing.Point(32, 63)
-        Me.Chart2.Name = "Chart2"
+        Me.MonthlyChartOrder.Legends.Add(Legend1)
+        Me.MonthlyChartOrder.Location = New System.Drawing.Point(32, 63)
+        Me.MonthlyChartOrder.Name = "MonthlyChartOrder"
         Series1.ChartArea = "ChartArea1"
         Series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline
         Series1.Legend = "Legend1"
@@ -74,17 +76,17 @@ Partial Class FormOrders
         Series1.Points.Add(DataPoint4)
         Series1.Points.Add(DataPoint5)
         Series1.Points.Add(DataPoint6)
-        Me.Chart2.Series.Add(Series1)
-        Me.Chart2.Size = New System.Drawing.Size(462, 300)
-        Me.Chart2.TabIndex = 1
-        Me.Chart2.Text = "Chart2"
+        Me.MonthlyChartOrder.Series.Add(Series1)
+        Me.MonthlyChartOrder.Size = New System.Drawing.Size(462, 300)
+        Me.MonthlyChartOrder.TabIndex = 1
+        Me.MonthlyChartOrder.Text = "Chart2"
         '
         'RoundedPane21
         '
         Me.RoundedPane21.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane21.BorderThickness = 1
         Me.RoundedPane21.Controls.Add(Me.Label1)
-        Me.RoundedPane21.Controls.Add(Me.Chart1)
+        Me.RoundedPane21.Controls.Add(Me.OrderCategoriesGraph)
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
         Me.RoundedPane21.Location = New System.Drawing.Point(576, 60)
@@ -104,14 +106,14 @@ Partial Class FormOrders
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Popular Categories"
         '
-        'Chart1
+        'OrderCategoriesGraph
         '
         ChartArea2.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea2)
+        Me.OrderCategoriesGraph.ChartAreas.Add(ChartArea2)
         Legend2.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend2)
-        Me.Chart1.Location = New System.Drawing.Point(33, 72)
-        Me.Chart1.Name = "Chart1"
+        Me.OrderCategoriesGraph.Legends.Add(Legend2)
+        Me.OrderCategoriesGraph.Location = New System.Drawing.Point(33, 72)
+        Me.OrderCategoriesGraph.Name = "OrderCategoriesGraph"
         Series2.ChartArea = "ChartArea1"
         Series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
         Series2.Legend = "Legend1"
@@ -132,20 +134,20 @@ Partial Class FormOrders
         Series2.Points.Add(DataPoint8)
         Series2.Points.Add(DataPoint9)
         Series2.Points.Add(DataPoint10)
-        Me.Chart1.Series.Add(Series2)
-        Me.Chart1.Size = New System.Drawing.Size(450, 268)
-        Me.Chart1.TabIndex = 0
-        Me.Chart1.Text = "Chart1"
+        Me.OrderCategoriesGraph.Series.Add(Series2)
+        Me.OrderCategoriesGraph.Size = New System.Drawing.Size(450, 268)
+        Me.OrderCategoriesGraph.TabIndex = 0
+        Me.OrderCategoriesGraph.Text = "Chart1"
         Title1.Alignment = System.Drawing.ContentAlignment.TopLeft
         Title1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Title1.Name = "Popular Categories"
-        Me.Chart1.Titles.Add(Title1)
+        Me.OrderCategoriesGraph.Titles.Add(Title1)
         '
         'RoundedPane22
         '
         Me.RoundedPane22.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane22.BorderThickness = 1
-        Me.RoundedPane22.Controls.Add(Me.Chart2)
+        Me.RoundedPane22.Controls.Add(Me.MonthlyChartOrder)
         Me.RoundedPane22.CornerRadius = 15
         Me.RoundedPane22.FillColor = System.Drawing.Color.White
         Me.RoundedPane22.Location = New System.Drawing.Point(32, 60)
@@ -153,29 +155,44 @@ Partial Class FormOrders
         Me.RoundedPane22.Size = New System.Drawing.Size(524, 386)
         Me.RoundedPane22.TabIndex = 2
         '
+        'btnExportReport
+        '
+        Me.btnExportReport.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnExportReport.Image = CType(resources.GetObject("btnExportReport.Image"), System.Drawing.Image)
+        Me.btnExportReport.Location = New System.Drawing.Point(994, 12)
+        Me.btnExportReport.Name = "btnExportReport"
+        Me.btnExportReport.Size = New System.Drawing.Size(104, 30)
+        Me.btnExportReport.TabIndex = 8
+        Me.btnExportReport.Text = "   Export"
+        Me.btnExportReport.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnExportReport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnExportReport.UseVisualStyleBackColor = True
+        '
         'FormOrders
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.GhostWhite
         Me.ClientSize = New System.Drawing.Size(1151, 749)
+        Me.Controls.Add(Me.btnExportReport)
         Me.Controls.Add(Me.RoundedPane22)
         Me.Controls.Add(Me.RoundedPane21)
         Me.DoubleBuffered = True
         Me.Name = "FormOrders"
         Me.Text = "FormOrders"
-        CType(Me.Chart2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.MonthlyChartOrder, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane21.ResumeLayout(False)
         Me.RoundedPane21.PerformLayout()
-        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.OrderCategoriesGraph, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane22.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents RoundedPane21 As RoundedPane2
-    Friend WithEvents Chart1 As DataVisualization.Charting.Chart
+    Friend WithEvents OrderCategoriesGraph As DataVisualization.Charting.Chart
     Friend WithEvents Label1 As Label
-    Friend WithEvents Chart2 As DataVisualization.Charting.Chart
+    Friend WithEvents MonthlyChartOrder As DataVisualization.Charting.Chart
     Friend WithEvents RoundedPane22 As RoundedPane2
+    Friend WithEvents btnExportReport As Button
 End Class

@@ -2,6 +2,9 @@
 
 Public Class Reports
 
+    ' === SHARED PROPERTY FOR PERIOD SELECTION ===
+    Public Shared Property SelectedPeriod As String = "Daily"
+
     ' === Load Form into Panel1 ===
     Private Sub LoadFormIntoPanel(childForm As Form)
         Panel1.Controls.Clear()
@@ -33,6 +36,12 @@ Public Class Reports
         Panel1.AutoSize = False
         Panel1.AutoScroll = True
         Panel1.BorderStyle = BorderStyle.None
+
+        ' === INITIALIZE COMBOBOX ===
+        reportPeriod.Items.Clear()
+        reportPeriod.Items.AddRange(New String() {"Daily", "Weekly", "Monthly", "Yearly"})
+        reportPeriod.SelectedIndex = 0 ' Default to "Daily"
+        reportPeriod.DropDownStyle = ComboBoxStyle.DropDownList
 
         ' === FLOWLAYOUTPANEL SETTINGS ===
         FlowLayoutPanel1.AutoScroll = True
@@ -136,7 +145,81 @@ Public Class Reports
         activeBtn.Region = New Region(gp)
     End Sub
 
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+    Private Sub ComboBox_DrawItem(sender As Object, e As DrawItemEventArgs) _
+       Handles reportPeriod.DrawItem
 
+        If e.Index < 0 Then Return
+        Dim cmb As ComboBox = DirectCast(sender, ComboBox)
+        e.DrawBackground()
+        e.Graphics.DrawString(cmb.Items(e.Index).ToString(), cmb.Font, Brushes.Black, e.Bounds)
+        e.DrawFocusRectangle()
     End Sub
+
+
+    ' === PERIOD SELECTION CHANGED ===
+    Private Sub reportPeriod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles reportPeriod.SelectedIndexChanged
+        ' Update the shared property
+        SelectedPeriod = reportPeriod.SelectedItem.ToString()
+
+        ' Reload the current form to apply the new period
+        Dim currentForm As Form = Nothing
+        If Panel1.Controls.Count > 0 Then
+            currentForm = TryCast(Panel1.Controls(0), Form)
+        End If
+
+        ' Reload based on the active button
+        For Each ctrl As Control In FlowLayoutPanel1.Controls
+            If TypeOf ctrl Is Button Then
+                Dim btn As Button = CType(ctrl, Button)
+                If btn.BackColor = Color.White Then ' Active button
+                    Select Case btn.Name
+                        Case "btnSales" : LoadFormIntoPanel(New FormSales())
+                        Case "btnOrders" : LoadFormIntoPanel(New FormOrders())
+                        Case "btnPayroll" : LoadFormIntoPanel(New FormPayroll())
+                        Case "btnCatering" : LoadFormIntoPanel(New FormCateringReservations())
+                        Case "btnStatus" : LoadFormIntoPanel(New FormReservationStatus())
+                        Case "btnDineIn" : LoadFormIntoPanel(New FormDineInOrders())
+                        Case "btnTakeout" : LoadFormIntoPanel(New FormTakeOutOrders())
+                        Case "btnCustomerHistory" : LoadFormIntoPanel(New FormCustomerHistory())
+                        Case "btnEmployeeAttendance" : LoadFormIntoPanel(New FormEmployeeAttendance())
+                        Case "btnProductsPerformance" : LoadFormIntoPanel(New FormProductPerformance())
+                    End Select
+                    Exit For
+                End If
+            End If
+        Next
+    End Sub
+
+    ' === HELPER FUNCTION TO GET SQL DATE GROUPING ===
+    Public Shared Function GetDateGrouping(dateColumn As String) As String
+        Select Case SelectedPeriod
+            Case "Daily"
+                Return $"DATE({dateColumn})"
+            Case "Weekly"
+                Return $"YEARWEEK({dateColumn}, 1)"
+            Case "Monthly"
+                Return $"DATE_FORMAT({dateColumn}, '%Y-%m')"
+            Case "Yearly"
+                Return $"YEAR({dateColumn})"
+            Case Else
+                Return $"DATE({dateColumn})"
+        End Select
+    End Function
+
+    ' === HELPER FUNCTION TO GET DISPLAY FORMAT ===
+    Public Shared Function GetDateDisplayFormat(dateValue As Object) As String
+        Select Case SelectedPeriod
+            Case "Daily"
+                Return Convert.ToDateTime(dateValue).ToString("MMM dd, yyyy")
+            Case "Weekly"
+                Return $"Week {dateValue}"
+            Case "Monthly"
+                Return Convert.ToDateTime(dateValue & "-01").ToString("MMM yyyy")
+            Case "Yearly"
+                Return dateValue.ToString()
+            Case Else
+                Return dateValue.ToString()
+        End Select
+    End Function
+
 End Class

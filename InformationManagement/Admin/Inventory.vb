@@ -251,6 +251,9 @@ Public Class Inventory
             FormatInventoryGrid()
             ColorCodeStatusColumn()
 
+            ' Update total value card after grid refresh
+            UpdateTotalValueCard()
+
         Catch ex As Exception
             MessageBox.Show("Error loading inventory: " & ex.Message,
                           "Database Error",
@@ -408,42 +411,63 @@ Public Class Inventory
         End Try
     End Sub
 
-    ' Load statistics
-    Private Sub LoadInventoryStatistics()
+    ' Update the total value card based on the visible batches in the grid
+    Private Sub UpdateTotalValueCard()
         Try
-            openConn()
+            Dim totalValue As Decimal = 0D
 
-            ' Total Items (Active Ingredients)
-            Dim sqlTotal As String = "
-                SELECT COUNT(DISTINCT i.IngredientID) 
-                FROM ingredients i
-                WHERE i.IsActive = 1
-            "
-            Dim cmdTotal As New MySqlCommand(sqlTotal, conn)
-            Dim totalItems As Integer = Convert.ToInt32(cmdTotal.ExecuteScalar())
+            For Each row As DataGridViewRow In InventoryGrid.Rows
+                If row.IsNewRow OrElse Not row.Visible Then
+                    Continue For
+                End If
 
-            If Me.Controls.Contains(Label5) Then
-                Label5.Text = totalItems.ToString("#,##0")
-            End If
+                Dim valueCell = row.Cells("Total Value").Value
 
-            ' Total Value (Active Batches Only)
-            Dim sqlValue As String = "
-                SELECT COALESCE(SUM(ib.StockQuantity * ib.CostPerUnit), 0)
-                FROM inventory_batches ib
-                WHERE ib.BatchStatus = 'Active'
-            "
-            Dim cmdValue As New MySqlCommand(sqlValue, conn)
-            Dim totalValue As Decimal = Convert.ToDecimal(cmdValue.ExecuteScalar())
+                If valueCell IsNot Nothing AndAlso Not IsDBNull(valueCell) Then
+                    totalValue += Convert.ToDecimal(valueCell)
+                End If
+            Next
 
             If Me.Controls.Contains(Label11) Then
                 Label11.Text = "₱" & totalValue.ToString("#,##0.00")
             End If
+        Catch ex As Exception
+            ' Silent fail for visual total update
+        End Try
+    End Sub
+
+    ' Load statistics
+    ' Load statistics in the top panels
+    Private Sub LoadInventoryStatistics()
+        Try
+            openConn()
+
+            ' Total Items - Count only ingredients that have active inventory batches
+            Dim sqlTotalItems As String = "
+            SELECT COUNT(DISTINCT ib.IngredientID) 
+            FROM inventory_batches ib
+            INNER JOIN ingredients i ON ib.IngredientID = i.IngredientID
+            WHERE ib.BatchStatus = 'Active' 
+              AND i.IsActive = 1
+        "
+            Dim cmdTotal As New MySqlCommand(sqlTotalItems, conn)
+            Dim totalItems As Integer = Convert.ToInt32(cmdTotal.ExecuteScalar())
+            Label5.Text = totalItems.ToString()
+
+            ' Total Value - Sum from active batches only
+            Dim sqlTotalValue As String = "
+            SELECT COALESCE(SUM(ib.StockQuantity * ib.CostPerUnit), 0)
+            FROM inventory_batches ib
+            INNER JOIN ingredients i ON ib.IngredientID = i.IngredientID
+            WHERE ib.BatchStatus = 'Active'
+              AND i.IsActive = 1
+        "
+            Dim cmdValue As New MySqlCommand(sqlTotalValue, conn)
+            Dim totalValue As Decimal = Convert.ToDecimal(cmdValue.ExecuteScalar())
+            Label11.Text = "₱" & totalValue.ToString("#,##0.00")
 
         Catch ex As Exception
-            MessageBox.Show("Error loading statistics: " & ex.Message,
-                          "Statistics Error",
-                          MessageBoxButtons.OK,
-                          MessageBoxIcon.Error)
+            MessageBox.Show("Error loading statistics: " & ex.Message)
         Finally
             closeConn()
         End Try
@@ -588,6 +612,7 @@ Public Class Inventory
                 End If
 
                 ColorCodeStatusColumn()
+                UpdateTotalValueCard()
             End If
         Catch ex As Exception
             ' Silent fail for search
@@ -610,6 +635,7 @@ Public Class Inventory
                 End If
 
                 ColorCodeStatusColumn()
+                UpdateTotalValueCard()
             End If
         Catch ex As Exception
             ' Silent fail for filter
@@ -640,4 +666,7 @@ Public Class Inventory
         LoadInventoryStatistics()
     End Sub
 
+    Private Sub Label6_Click(sender As Object, e As EventArgs) Handles Label6.Click
+
+    End Sub
 End Class
