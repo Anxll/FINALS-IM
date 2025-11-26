@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FormDineInOrders
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,18 +20,13 @@ Partial Class FormDineInOrders
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormDineInOrders))
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.OrderID = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Item = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Amount = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.PaymentStatus = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Time = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorker2 = New System.ComponentModel.BackgroundWorker()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -59,10 +54,10 @@ Partial Class FormDineInOrders
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridView1.ColumnHeadersHeight = 40
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.OrderID, Me.Item, Me.Amount, Me.PaymentStatus, Me.Time})
         Me.DataGridView1.EnableHeadersVisualStyles = False
         Me.DataGridView1.GridColor = System.Drawing.Color.White
-        Me.DataGridView1.Location = New System.Drawing.Point(23, 78)
+        Me.DataGridView1.Location = New System.Drawing.Point(31, 96)
+        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
@@ -76,38 +71,8 @@ Partial Class FormDineInOrders
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowHeadersWidth = 40
         Me.DataGridView1.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView1.Size = New System.Drawing.Size(1019, 204)
+        Me.DataGridView1.Size = New System.Drawing.Size(1359, 251)
         Me.DataGridView1.TabIndex = 0
-        '
-        'OrderID
-        '
-        Me.OrderID.HeaderText = "Order ID"
-        Me.OrderID.Name = "OrderID"
-        Me.OrderID.Width = 150
-        '
-        'Item
-        '
-        Me.Item.HeaderText = "Items"
-        Me.Item.Name = "Item"
-        Me.Item.Width = 250
-        '
-        'Amount
-        '
-        Me.Amount.HeaderText = "Amount"
-        Me.Amount.Name = "Amount"
-        Me.Amount.Width = 200
-        '
-        'PaymentStatus
-        '
-        Me.PaymentStatus.HeaderText = "Payment Status"
-        Me.PaymentStatus.Name = "PaymentStatus"
-        Me.PaymentStatus.Width = 200
-        '
-        'Time
-        '
-        Me.Time.HeaderText = "Time"
-        Me.Time.Name = "Time"
-        Me.Time.Width = 200
         '
         'Label2
         '
@@ -115,9 +80,10 @@ Partial Class FormDineInOrders
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label2.Location = New System.Drawing.Point(20, 21)
+        Me.Label2.Location = New System.Drawing.Point(27, 26)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(149, 20)
+        Me.Label2.Size = New System.Drawing.Size(189, 25)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Dine-in Order Report"
         '
@@ -125,9 +91,10 @@ Partial Class FormDineInOrders
         '
         Me.Button1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(914, 17)
+        Me.Button1.Location = New System.Drawing.Point(1219, 21)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(104, 30)
+        Me.Button1.Size = New System.Drawing.Size(139, 37)
         Me.Button1.TabIndex = 10
         Me.Button1.Text = "   Export"
         Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -143,18 +110,20 @@ Partial Class FormDineInOrders
         Me.RoundedPane21.Controls.Add(Me.Label2)
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
-        Me.RoundedPane21.Location = New System.Drawing.Point(32, 21)
+        Me.RoundedPane21.Location = New System.Drawing.Point(43, 26)
+        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(1045, 306)
+        Me.RoundedPane21.Size = New System.Drawing.Size(1393, 377)
         Me.RoundedPane21.TabIndex = 2
         '
         'FormDineInOrders
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1151, 749)
+        Me.ClientSize = New System.Drawing.Size(1535, 922)
         Me.Controls.Add(Me.RoundedPane21)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormDineInOrders"
         Me.Text = "FormDineInOrders"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -168,11 +137,6 @@ Partial Class FormDineInOrders
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents BackgroundWorker2 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Label2 As Label
-    Friend WithEvents OrderID As DataGridViewTextBoxColumn
-    Friend WithEvents Item As DataGridViewTextBoxColumn
-    Friend WithEvents Amount As DataGridViewTextBoxColumn
-    Friend WithEvents PaymentStatus As DataGridViewTextBoxColumn
-    Friend WithEvents Time As DataGridViewTextBoxColumn
     Friend WithEvents Button1 As Button
     Friend WithEvents RoundedPane21 As RoundedPane2
 End Class

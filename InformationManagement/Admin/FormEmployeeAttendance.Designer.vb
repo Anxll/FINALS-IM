@@ -22,9 +22,9 @@ Partial Class FormEmployeeAttendance
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridView1 As System.Windows.Forms.DataGridView
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormEmployeeAttendance))
+        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Employee = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Position = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.RegularHours = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -34,17 +34,16 @@ Partial Class FormEmployeeAttendance
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
-        DataGridView1 = New System.Windows.Forms.DataGridView()
-        CType(DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane21.SuspendLayout()
         Me.SuspendLayout()
         '
         'DataGridView1
         '
-        DataGridView1.BackgroundColor = System.Drawing.Color.White
-        DataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        DataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
-        DataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
+        Me.DataGridView1.BackgroundColor = System.Drawing.Color.White
+        Me.DataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.DataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
+        Me.DataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle1.BackColor = System.Drawing.Color.White
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -52,15 +51,15 @@ Partial Class FormEmployeeAttendance
         DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.White
         DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
-        DataGridView1.ColumnHeadersHeight = 40
-        DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Employee, Me.Position, Me.RegularHours, Me.OvertimeHours, Me.Absences, Me.Status})
-        DataGridView1.Location = New System.Drawing.Point(25, 118)
-        DataGridView1.Name = "DataGridView1"
-        DataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridView1.RowHeadersVisible = False
-        DataGridView1.Size = New System.Drawing.Size(997, 150)
-        DataGridView1.TabIndex = 10
+        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        Me.DataGridView1.ColumnHeadersHeight = 40
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Employee, Me.Position, Me.RegularHours, Me.OvertimeHours, Me.Absences, Me.Status})
+        Me.DataGridView1.Location = New System.Drawing.Point(25, 118)
+        Me.DataGridView1.Name = "DataGridView1"
+        Me.DataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
+        Me.DataGridView1.RowHeadersVisible = False
+        Me.DataGridView1.Size = New System.Drawing.Size(997, 150)
+        Me.DataGridView1.TabIndex = 10
         '
         'Employee
         '
@@ -101,7 +100,7 @@ Partial Class FormEmployeeAttendance
         '
         Me.RoundedPane21.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane21.BorderThickness = 1
-        Me.RoundedPane21.Controls.Add(DataGridView1)
+        Me.RoundedPane21.Controls.Add(Me.DataGridView1)
         Me.RoundedPane21.Controls.Add(Me.Button1)
         Me.RoundedPane21.Controls.Add(Me.Label1)
         Me.RoundedPane21.CornerRadius = 15
@@ -144,7 +143,7 @@ Partial Class FormEmployeeAttendance
         Me.Controls.Add(Me.RoundedPane21)
         Me.Name = "FormEmployeeAttendance"
         Me.Text = "FormEmployeeAttendance"
-        CType(DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane21.ResumeLayout(False)
         Me.RoundedPane21.PerformLayout()
         Me.ResumeLayout(False)
@@ -160,4 +159,5 @@ Partial Class FormEmployeeAttendance
     Friend WithEvents OvertimeHours As DataGridViewTextBoxColumn
     Friend WithEvents Absences As DataGridViewTextBoxColumn
     Friend WithEvents Status As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridView1 As DataGridView
 End Class
