@@ -192,10 +192,10 @@ Public Class Dashboard
     Private Sub LoadTopMenuItems()
         Try
             ' Clear existing items except the header
-            For i = RoundedPane25.Controls.Count - 1 To 0 Step -1
-                If TypeOf RoundedPane25.Controls(i) Is RoundedPane2 AndAlso
-                   RoundedPane25.Controls(i).Name <> "RoundedPane214" Then
-                    RoundedPane25.Controls.RemoveAt(i)
+            For i = PanelMenu.Controls.Count - 1 To 0 Step -1
+                If TypeOf PanelMenu.Controls(i) Is RoundedPane2 AndAlso
+                   PanelMenu.Controls(i).Name <> "RoundedPane214" Then
+                    PanelMenu.Controls.RemoveAt(i)
                 End If
             Next
 
@@ -265,7 +265,7 @@ Public Class Dashboard
                 }
 
                 itemPanel.Controls.AddRange({icon, lblName, lblOrders, lblRevenue})
-                RoundedPane25.Controls.Add(itemPanel)
+                PanelMenu.Controls.Add(itemPanel)
                 itemPanel.BringToFront()
 
                 yPosition += 83
@@ -285,7 +285,7 @@ Public Class Dashboard
                     .AutoSize = True,
                     .BackColor = Color.Transparent
                 }
-                RoundedPane25.Controls.Add(noDataLabel)
+                PanelMenu.Controls.Add(noDataLabel)
             End If
 
         Catch ex As Exception
