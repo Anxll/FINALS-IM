@@ -118,11 +118,7 @@ Public Class Inventory
                 Category.Size = New Size(categoryWidth, 24)
             End If
 
-            ' Add Item button
-            If Me.Controls.Contains(AddItem) Then
-                AddItem.Location = New Point(formWidth - leftMargin - 165, 27)
-                AddItem.Size = New Size(165, 56)
-            End If
+
 
             ' DataGrid
             Dim gridTop As Integer = searchTop + 60
@@ -643,7 +639,7 @@ Public Class Inventory
     End Sub
 
     ' Add new batch
-    Private Sub AddItem_Click(sender As Object, e As EventArgs) Handles AddItem.Click
+    Private Sub AddItem_Click(sender As Object, e As EventArgs)
         Try
             Dim addForm As New AddNewItems()
             addForm.StartPosition = FormStartPosition.CenterScreen
