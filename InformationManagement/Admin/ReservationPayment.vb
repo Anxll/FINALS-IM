@@ -75,10 +75,31 @@ Public Class ReservationPayment
         Reservation.ColumnHeadersDefaultCellStyle.ForeColor = Color.White
         Reservation.EnableHeadersVisualStyles = False
 
-        ' Format AmountPaid to Peso
+        ' Format column headers with spaces
+        If Reservation.Columns.Contains("PaymentDate") Then
+            Reservation.Columns("PaymentDate").HeaderText = "Payment Date"
+        End If
+
+        If Reservation.Columns.Contains("PaymentMethod") Then
+            Reservation.Columns("PaymentMethod").HeaderText = "Payment Method"
+        End If
+
+        If Reservation.Columns.Contains("PaymentStatus") Then
+            Reservation.Columns("PaymentStatus").HeaderText = "Payment Status"
+        End If
+
         If Reservation.Columns.Contains("AmountPaid") Then
+            Reservation.Columns("AmountPaid").HeaderText = "Amount Paid"
             Reservation.Columns("AmountPaid").DefaultCellStyle.Format = "₱ #,##0.00"
-            Reservation.Columns("AmountPaid").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+            Reservation.Columns("AmountPaid").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+        End If
+
+        If Reservation.Columns.Contains("PaymentSource") Then
+            Reservation.Columns("PaymentSource").HeaderText = "Payment Source"
+        End If
+
+        If Reservation.Columns.Contains("UpdatedDate") Then
+            Reservation.Columns("UpdatedDate").HeaderText = "Updated Date"
         End If
     End Sub
 

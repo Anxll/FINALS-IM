@@ -199,6 +199,16 @@ Public Class FormSales
             )
         End If
 
+        ' Add inventory batches as expenses
+        If TableExists("inventory_batches") Then
+            q.Add("
+                SELECT MONTH(PurchaseDate) AS MonthNum, TotalCost AS Amount, 'Expenses' AS Type
+                FROM inventory_batches
+                WHERE BatchStatus = 'Active'
+                AND YEAR(PurchaseDate) = " & currentYear & "
+            ")
+        End If
+
         If q.Count = 0 Then Throw New Exception("No valid tables found.")
 
         Return "
@@ -272,12 +282,15 @@ Public Class FormSales
             tPro += v.Profit
         Next
 
+        ' Calculate total cost from inventory_batches
+        Dim totalInventoryCost As Decimal = GetTotalInventoryCost()
+
         lblTotalRevenue.Text = $"₱{tRev:N2}"
-        Label11.Text = $"₱{tExp:N2}"
+        Label11.Text = $"₱{totalInventoryCost:N2}"
         Label14.Text = $"₱{tPro:N2}"
 
         UpdateTrendIndicator(PictureBox1, tRev)
-        UpdateTrendIndicator(PictureBox7, tExp)
+        UpdateTrendIndicator(PictureBox7, totalInventoryCost)
         UpdateTrendIndicator(PictureBox9, tPro)
     End Sub
 
@@ -288,6 +301,40 @@ Public Class FormSales
             pic.BackColor = Color.FromArgb(254, 226, 226)
         End If
     End Sub
+
+    ' =======================================================================
+    ' GET TOTAL INVENTORY COST
+    ' =======================================================================
+    Private Function GetTotalInventoryCost() As Decimal
+        Try
+            If conn Is Nothing OrElse conn.State <> ConnectionState.Open Then
+                Return 0D
+            End If
+
+            If Not TableExists("inventory_batches") Then
+                Return 0D
+            End If
+
+            ' Calculate: TotalCost = Sum of (TotalCost) for all active batches
+            Dim sql As String = "
+                SELECT COALESCE(SUM(TotalCost), 0) AS TotalCost
+                FROM inventory_batches
+                WHERE BatchStatus = 'Active'
+                AND YEAR(PurchaseDate) = @Year
+            "
+
+            Using cmd As New MySqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@Year", currentYear)
+                Dim result = cmd.ExecuteScalar()
+                Return If(IsDBNull(result), 0D, Convert.ToDecimal(result))
+            End Using
+
+        Catch ex As Exception
+            MessageBox.Show("Error calculating inventory cost: " & ex.Message,
+                          "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return 0D
+        End Try
+    End Function
 
     ' =======================================================================
     ' EXPORT CHART

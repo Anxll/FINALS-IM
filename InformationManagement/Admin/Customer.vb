@@ -51,13 +51,62 @@ Public Class Customer
     End Sub
 
     ' ==============================
-    ' FORMAT GRID (Hide ID here ✅)
+    ' FORMAT GRID (Hide ID + Format Headers)
     ' ==============================
     Private Sub FormatDataGridView()
 
         ' ✅ HIDE CUSTOMER ID COLUMN
         If DataGridView1.Columns.Contains("CustomerID") Then
             DataGridView1.Columns("CustomerID").Visible = False
+        End If
+
+        ' ✅ FORMAT COLUMN HEADERS WITH SPACES
+        If DataGridView1.Columns.Contains("FirstName") Then
+            DataGridView1.Columns("FirstName").HeaderText = "First Name"
+        End If
+
+        If DataGridView1.Columns.Contains("LastName") Then
+            DataGridView1.Columns("LastName").HeaderText = "Last Name"
+        End If
+
+        If DataGridView1.Columns.Contains("ContactNumber") Then
+            DataGridView1.Columns("ContactNumber").HeaderText = "Contact Number"
+        End If
+
+        If DataGridView1.Columns.Contains("CustomerType") Then
+            DataGridView1.Columns("CustomerType").HeaderText = "Customer Type"
+        End If
+
+        If DataGridView1.Columns.Contains("FeedbackCount") Then
+            DataGridView1.Columns("FeedbackCount").HeaderText = "Feedback Count"
+        End If
+
+        If DataGridView1.Columns.Contains("TotalOrdersCount") Then
+            DataGridView1.Columns("TotalOrdersCount").HeaderText = "Total Orders Count"
+        End If
+
+        If DataGridView1.Columns.Contains("ReservationCount") Then
+            DataGridView1.Columns("ReservationCount").HeaderText = "Reservation Count"
+        End If
+
+        If DataGridView1.Columns.Contains("LastTransactionDate") Then
+            DataGridView1.Columns("LastTransactionDate").HeaderText = "Last Transaction Date"
+        End If
+
+        If DataGridView1.Columns.Contains("LastLoginDate") Then
+            DataGridView1.Columns("LastLoginDate").HeaderText = "Last Login Date"
+        End If
+
+        If DataGridView1.Columns.Contains("CreatedDate") Then
+            DataGridView1.Columns("CreatedDate").HeaderText = "Created Date"
+        End If
+
+        If DataGridView1.Columns.Contains("AccountStatus") Then
+            DataGridView1.Columns("AccountStatus").HeaderText = "Account Status"
+        End If
+
+        If DataGridView1.Columns.Contains("SatisfactionRating") Then
+            DataGridView1.Columns("SatisfactionRating").HeaderText = "Satisfaction Rating"
         End If
 
         ' ✅ FORMAT DATES AND NUMBERS

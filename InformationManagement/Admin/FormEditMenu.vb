@@ -73,24 +73,36 @@ Public Class FormEditMenu
                 cmbCategory.Text = rd("Category").ToString()
                 cmbMealTime.Text = rd("MealTime").ToString()
 
-                ' ========== SAFE IMAGE LOADING ==========
+                ' ========== FIXED IMAGE LOADING ==========
                 If Not IsDBNull(rd("Image")) Then
-                    Dim bytes As Byte() = CType(rd("Image"), Byte())
+                    Dim imageData = rd("Image")
 
-                    If bytes IsNot Nothing AndAlso bytes.Length > 100 Then  ' check if real image
-                        Try
-                            Using ms As New MemoryStream(bytes)
-                                PictureBox1.Image = Image.FromStream(ms)
-                            End Using
-                            SelectedImageBytes = bytes
-                        Catch
+                    ' Check if it's actually a byte array
+                    If TypeOf imageData Is Byte() Then
+                        Dim bytes As Byte() = CType(imageData, Byte())
+
+                        If bytes IsNot Nothing AndAlso bytes.Length > 100 Then
+                            Try
+                                Using ms As New MemoryStream(bytes)
+                                    PictureBox1.Image = Image.FromStream(ms)
+                                End Using
+                                SelectedImageBytes = bytes
+                            Catch ex As Exception
+                                PictureBox1.Image = Nothing
+                                SelectedImageBytes = Nothing
+                            End Try
+                        Else
                             PictureBox1.Image = Nothing
                             SelectedImageBytes = Nothing
-                        End Try
+                        End If
                     Else
+                        ' If it's not a byte array (e.g., string path), clear the image
                         PictureBox1.Image = Nothing
                         SelectedImageBytes = Nothing
                     End If
+                Else
+                    PictureBox1.Image = Nothing
+                    SelectedImageBytes = Nothing
                 End If
             End If
             rd.Close()

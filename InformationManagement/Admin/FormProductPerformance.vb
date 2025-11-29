@@ -61,7 +61,7 @@ Public Class FormProductPerformance
         End With
 
         Chart1.Titles.Add(New Title With {
-            .Text = "Revenue by Product",
+            .Text = "Revenue by Product (Completed Orders)",
             .Alignment = ContentAlignment.TopLeft,
             .Font = New Font("Segoe UI Semibold", 11.25F, FontStyle.Bold)
         })
@@ -84,15 +84,23 @@ Public Class FormProductPerformance
         SUM(Quantity) AS TotalOrders,
         SUM(TotalPrice) AS Revenue
  FROM (
-        SELECT ProductName,
-               Quantity,
-               TotalPrice
-        FROM reservation_items
+        -- Reservation items with Confirmed or Served status
+        SELECT ri.ProductName,
+               ri.Quantity,
+               ri.TotalPrice
+        FROM reservation_items ri
+        INNER JOIN reservations r ON ri.ReservationID = r.ReservationID
+        WHERE r.ReservationStatus IN ('Confirmed', 'Served')
+        
         UNION ALL
-        SELECT ProductName,
-               Quantity,
-               (Quantity * UnitPrice) AS TotalPrice
-        FROM order_items
+        
+        -- Order items with Served or Completed status
+        SELECT oi.ProductName,
+               oi.Quantity,
+               (oi.Quantity * oi.UnitPrice) AS TotalPrice
+        FROM order_items oi
+        INNER JOIN orders o ON oi.OrderID = o.OrderID
+        WHERE o.OrderStatus IN ('Served', 'Completed')
       ) AS combined
  GROUP BY ProductName
  ORDER BY Revenue DESC;"
