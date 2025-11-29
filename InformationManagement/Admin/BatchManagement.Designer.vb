@@ -338,6 +338,7 @@
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
+
     End Sub
 
     Friend WithEvents Panel1 As Panel

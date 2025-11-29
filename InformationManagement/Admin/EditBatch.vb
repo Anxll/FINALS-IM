@@ -205,100 +205,228 @@ Public Class EditBatch
 
     ' Update batch in database
     Private Sub UpdateBatch()
+    Try
+        openConn()
+
+        Dim transaction As MySqlTransaction = conn.BeginTransaction()
+
         Try
-            openConn()
+            ' STEP 1: Get current batch data BEFORE making any changes
+            Dim sqlGetCurrent As String = "
+            SELECT 
+                ib.StockQuantity,
+                ib.BatchNumber,
+                ib.UnitType,
+                i.IngredientName
+            FROM inventory_batches ib
+            JOIN ingredients i ON ib.IngredientID = i.IngredientID
+            WHERE ib.BatchID = @id
+        "
 
-            Dim transaction As MySqlTransaction = conn.BeginTransaction()
+            Dim cmdGetCurrent As New MySqlCommand(sqlGetCurrent, conn, transaction)
+            cmdGetCurrent.Parameters.AddWithValue("@id", _batchID)
 
-            Try
-                ' Get old quantity for transaction log
-                Dim sqlGetOldQty As String = "SELECT StockQuantity FROM inventory_batches WHERE BatchID = @id"
-                Dim cmdGetOldQty As New MySqlCommand(sqlGetOldQty, conn, transaction)
-                cmdGetOldQty.Parameters.AddWithValue("@id", _batchID)
-                Dim oldQuantity As Decimal = Convert.ToDecimal(cmdGetOldQty.ExecuteScalar())
+            Dim reader As MySqlDataReader = cmdGetCurrent.ExecuteReader()
 
-                ' Update batch
-                Dim sqlUpdateBatch As String = "
-                    UPDATE inventory_batches
-                    SET StockQuantity = @quantity,
-                        UnitType = @unit,
-                        CostPerUnit = @cost,
-                        TotalCost = @quantity * @cost,
-                        PurchaseDate = @purchaseDate,
-                        ExpirationDate = @expirationDate
-                    WHERE BatchID = @id
-                "
+            Dim oldQuantity As Decimal = 0
+            Dim batchNumber As String = ""
+            Dim oldUnit As String = ""
+            Dim ingredientName As String = ""
 
-                Dim cmdUpdate As New MySqlCommand(sqlUpdateBatch, conn, transaction)
-                cmdUpdate.Parameters.AddWithValue("@id", _batchID)
-                cmdUpdate.Parameters.AddWithValue("@quantity", Convert.ToDecimal(Quantity.Text))
-                cmdUpdate.Parameters.AddWithValue("@unit", Unit.Text)
-                cmdUpdate.Parameters.AddWithValue("@cost", Convert.ToDecimal(RoundedTextBox1.Text))
-                cmdUpdate.Parameters.AddWithValue("@purchaseDate", DateTimePicker1.Value.Date)
-                cmdUpdate.Parameters.AddWithValue("@expirationDate", DateTimePicker2.Value.Date)
-                cmdUpdate.ExecuteNonQuery()
+            If reader.Read() Then
+                oldQuantity = reader.GetDecimal("StockQuantity")
+                batchNumber = reader.GetString("BatchNumber")
+                oldUnit = reader.GetString("UnitType")
+                ingredientName = reader.GetString("IngredientName")
+            End If
 
-                ' Update ingredient min/max levels
-                Dim sqlUpdateIngredient As String = "
-                    UPDATE ingredients
-                    SET MinStockLevel = @minStock,
-                        MaxStockLevel = @maxStock,
-                        UnitType = @unit
+            reader.Close()
+
+            ' New values
+            Dim newQuantity As Decimal = Convert.ToDecimal(Quantity.Text)
+            Dim newUnit As String = Unit.Text
+            Dim quantityChanged As Decimal = newQuantity - oldQuantity
+
+            ' Update batch
+            Dim sqlUpdateBatch As String = "
+            UPDATE inventory_batches
+            SET StockQuantity = @quantity,
+                UnitType = @unit,
+                CostPerUnit = @cost,
+                PurchaseDate = @purchaseDate,
+                ExpirationDate = @expirationDate,
+                UpdatedDate = NOW()
+            WHERE BatchID = @id
+        "
+
+            Dim cmdUpdate As New MySqlCommand(sqlUpdateBatch, conn, transaction)
+            cmdUpdate.Parameters.AddWithValue("@id", _batchID)
+            cmdUpdate.Parameters.AddWithValue("@quantity", newQuantity)
+            cmdUpdate.Parameters.AddWithValue("@unit", newUnit)
+            cmdUpdate.Parameters.AddWithValue("@cost", Convert.ToDecimal(RoundedTextBox1.Text))
+            cmdUpdate.Parameters.AddWithValue("@purchaseDate", DateTimePicker1.Value.Date)
+            cmdUpdate.Parameters.AddWithValue("@expirationDate", DateTimePicker2.Value.Date)
+            cmdUpdate.ExecuteNonQuery()
+
+            ' Update ingredient stock
+            Dim sqlUpdateIngredient As String = "
+            UPDATE ingredients
+            SET MinStockLevel = @minStock,
+                MaxStockLevel = @maxStock,
+                UnitType = @unit,
+                StockQuantity = (
+                    SELECT COALESCE(SUM(StockQuantity), 0)
+                    FROM inventory_batches
                     WHERE IngredientID = @id
-                "
+                    AND BatchStatus = 'Active'
+                )
+            WHERE IngredientID = @id
+        "
 
-                Dim cmdUpdateIng As New MySqlCommand(sqlUpdateIngredient, conn, transaction)
-                cmdUpdateIng.Parameters.AddWithValue("@id", _ingredientID)
-                cmdUpdateIng.Parameters.AddWithValue("@minStock", NumericUpDown1.Value)
-                cmdUpdateIng.Parameters.AddWithValue("@maxStock", NumericUpDown2.Value)
-                cmdUpdateIng.Parameters.AddWithValue("@unit", Unit.Text)
-                cmdUpdateIng.ExecuteNonQuery()
+            Dim cmdUpdateIng As New MySqlCommand(sqlUpdateIngredient, conn, transaction)
+            cmdUpdateIng.Parameters.AddWithValue("@id", _ingredientID)
+            cmdUpdateIng.Parameters.AddWithValue("@minStock", NumericUpDown1.Value)
+            cmdUpdateIng.Parameters.AddWithValue("@maxStock", NumericUpDown2.Value)
+            cmdUpdateIng.Parameters.AddWithValue("@unit", newUnit)
+            cmdUpdateIng.ExecuteNonQuery()
 
-                ' Log the update if quantity changed
-                Dim newQuantity As Decimal = Convert.ToDecimal(Quantity.Text)
-                If oldQuantity <> newQuantity Then
-                    Dim sqlLog As String = "
-                        INSERT INTO batch_transactions (
-                            BatchID, TransactionType, QuantityChanged,
-                            StockBefore, StockAfter, Reason, Notes
-                        ) VALUES (
-                            @batch, 'Adjustment', @qtyChange,
-                            @before, @after, 'Manual Edit', @notes
-                        )
-                    "
-                    Dim cmdLog As New MySqlCommand(sqlLog, conn, transaction)
-                    cmdLog.Parameters.AddWithValue("@batch", _batchID)
-                    cmdLog.Parameters.AddWithValue("@qtyChange", newQuantity - oldQuantity)
-                    cmdLog.Parameters.AddWithValue("@before", oldQuantity)
-                    cmdLog.Parameters.AddWithValue("@after", newQuantity)
-                    cmdLog.Parameters.AddWithValue("@notes", "Batch edited by user")
-                    cmdLog.ExecuteNonQuery()
-                End If
+            ' Log in batch_transactions (existing system)
+            If oldQuantity <> newQuantity Then
+                Dim sqlLog As String = "
+                INSERT INTO batch_transactions (
+                    BatchID, TransactionType, QuantityChanged,
+                    StockBefore, StockAfter, Reason, Notes, TransactionDate
+                ) VALUES (
+                    @batch, 'Adjustment', @qtyChange,
+                    @before, @after, 'Manual Edit', @notes, NOW()
+                )
+            "
+                Dim cmdLog As New MySqlCommand(sqlLog, conn, transaction)
+                cmdLog.Parameters.AddWithValue("@batch", _batchID)
+                cmdLog.Parameters.AddWithValue("@qtyChange", quantityChanged)
+                cmdLog.Parameters.AddWithValue("@before", oldQuantity)
+                cmdLog.Parameters.AddWithValue("@after", newQuantity)
+                cmdLog.Parameters.AddWithValue("@notes", "Batch edited by user")
+                cmdLog.ExecuteNonQuery()
+            End If
 
-                transaction.Commit()
 
-                MessageBox.Show(
-                    "Batch updated successfully!" & vbCrLf & vbCrLf &
-                    "Batch #: " & txtBatchNumber.Text & vbCrLf &
-                    "New Quantity: " & Quantity.Text & " " & Unit.Text,
-                    "Success",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information)
+            ' ===========================================
+            ' ⭐ NEW: COMPUTE GLOBAL STOCK BEFORE & AFTER
+            ' ===========================================
+            Dim globalBefore As Decimal = 0
 
-                Me.DialogResult = DialogResult.OK
-                Me.Close()
+            Dim sqlGetGlobal As String = "
+                SELECT StockAfter
+                FROM inventory_movement_log
+                WHERE IngredientID = @iid
+                ORDER BY MovementID DESC
+                LIMIT 1
+            "
 
-            Catch ex As Exception
-                transaction.Rollback()
-                Throw
-            End Try
+            Dim cmdGetGlobal As New MySqlCommand(sqlGetGlobal, conn, transaction)
+            cmdGetGlobal.Parameters.AddWithValue("@iid", _ingredientID)
+
+            Dim result As Object = cmdGetGlobal.ExecuteScalar()
+            If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                globalBefore = Convert.ToDecimal(result)
+            End If
+
+            Dim globalAfter As Decimal = globalBefore + quantityChanged
+
+
+
+            ' ===========================================
+            ' NEW: Log in inventory_movement_log (CORRECTED)
+            ' ===========================================
+            If oldQuantity <> newQuantity Then
+                Dim changeType As String = "ADJUST"
+
+                Dim sqlMovementLog As String = "
+                INSERT INTO inventory_movement_log (
+                    IngredientID,
+                    BatchID,
+                    ChangeType,
+                    QuantityChanged,
+                    StockBefore,
+                    StockAfter,
+                    UnitType,
+                    Reason,
+                    Source,
+                    SourceID,
+                    SourceName,
+                    OrderID,
+                    ReservationID,
+                    ReferenceNumber,
+                    Notes,
+                    MovementDate
+                ) VALUES (
+                    @ingredientID,
+                    @batchID,
+                    @changeType,
+                    @quantityChanged,
+                    @stockBefore,
+                    @stockAfter,
+                    @unitType,
+                    @reason,
+                    'ADMIN',
+                    NULL,
+                    'Admin User',
+                    NULL,
+                    NULL,
+                    @referenceNumber,
+                    @notes,
+                    NOW()
+                )
+            "
+
+                Dim cmdMovementLog As New MySqlCommand(sqlMovementLog, conn, transaction)
+                cmdMovementLog.Parameters.AddWithValue("@ingredientID", _ingredientID)
+                cmdMovementLog.Parameters.AddWithValue("@batchID", _batchID)
+                cmdMovementLog.Parameters.AddWithValue("@changeType", changeType)
+                cmdMovementLog.Parameters.AddWithValue("@quantityChanged", quantityChanged)
+
+                ' ⭐ FIX: Replace batch stock with GLOBAL stock
+                cmdMovementLog.Parameters.AddWithValue("@stockBefore", globalBefore)
+                cmdMovementLog.Parameters.AddWithValue("@stockAfter", globalAfter)
+
+                cmdMovementLog.Parameters.AddWithValue("@unitType", newUnit)
+                cmdMovementLog.Parameters.AddWithValue("@reason", "Batch Edited")
+                cmdMovementLog.Parameters.AddWithValue("@referenceNumber", batchNumber)
+
+                Dim notesText As String =
+                    $"Batch Edit: {ingredientName} | Batch: {batchNumber} | Previous: {oldQuantity} {oldUnit} | New: {newQuantity} {newUnit} | Change: {quantityChanged} {newUnit}"
+
+                cmdMovementLog.Parameters.AddWithValue("@notes", notesText)
+                cmdMovementLog.ExecuteNonQuery()
+            End If
+
+            transaction.Commit()
+
+            MessageBox.Show(
+            "Batch updated successfully!" & vbCrLf & vbCrLf &
+            "Batch #: " & batchNumber & vbCrLf &
+            "Previous Quantity: " & oldQuantity.ToString("N2") & " " & oldUnit & vbCrLf &
+            "New Quantity: " & newQuantity.ToString("N2") & " " & newUnit & vbCrLf &
+            "Change: " & quantityChanged.ToString("N2") & " " & newUnit,
+            "Success",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information)
+
+            Me.DialogResult = DialogResult.OK
+            Me.Close()
 
         Catch ex As Exception
-            MessageBox.Show("Error updating batch: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
-            closeConn()
+            transaction.Rollback()
+            Throw
         End Try
-    End Sub
+
+    Catch ex As Exception
+        MessageBox.Show("Error updating batch: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    Finally
+        closeConn()
+    End Try
+End Sub
 
     ' Cancel Button
     Private Sub Cancel_Click(sender As Object, e As EventArgs) Handles Cancel.Click

@@ -70,36 +70,36 @@ Public Class InventoryMovementHistory
             openConn()
 
             Dim sql As String = "
-                SELECT 
-                    iml.MovementID AS 'Movement ID',
-                    iml.MovementDate AS 'Date & Time',
-                    i.IngredientName AS 'Ingredient',
-                    COALESCE(ic.CategoryName, 'Uncategorized') AS 'Category',
-                    ib.BatchNumber AS 'Batch #',
-                    iml.ChangeType AS 'Type',
+            SELECT 
+                iml.MovementID AS 'Movement ID',
+                iml.MovementDate AS 'Date & Time',
+                i.IngredientName AS 'Ingredient',
+                COALESCE(ic.CategoryName, 'Uncategorized') AS 'Category',
+                ib.BatchNumber AS 'Batch #',
+                iml.ChangeType AS 'Type',
 
-                    -- FIXED: No more duplicated unit values like '56 56'
-                    FORMAT(iml.QuantityChanged, 2) AS 'Change',
-                    FORMAT(iml.StockBefore, 2) AS 'Stock Before',
-                    FORMAT(iml.StockAfter, 2) AS 'Stock After',
-                    iml.UnitType AS 'Unit',
+                -- FIXED: Display values with unit separately
+                FORMAT(iml.QuantityChanged, 2) AS 'Change',
+                FORMAT(iml.StockBefore, 2) AS 'Stock Before',
+                FORMAT(iml.StockAfter, 2) AS 'Stock After',
+                iml.UnitType AS 'Unit',
 
-                    iml.Reason,
-                    iml.Source,
-                    COALESCE(iml.SourceName, 'System') AS 'Performed By',
-                    CASE 
-                        WHEN iml.OrderID IS NOT NULL THEN CONCAT('Order #', iml.OrderID)
-                        WHEN iml.ReservationID IS NOT NULL THEN CONCAT('Reservation #', iml.ReservationID)
-                        ELSE iml.ReferenceNumber
-                    END AS 'Reference',
-                    ib.StorageLocation AS 'Storage',
-                    iml.Notes
-                FROM inventory_movement_log iml
-                INNER JOIN ingredients i ON iml.IngredientID = i.IngredientID
-                LEFT JOIN ingredient_categories ic ON i.CategoryID = ic.CategoryID
-                INNER JOIN inventory_batches ib ON iml.BatchID = ib.BatchID
-                WHERE 1=1
-            "
+                iml.Reason,
+                iml.Source,
+                COALESCE(iml.SourceName, 'System') AS 'Performed By',
+                CASE 
+                    WHEN iml.OrderID IS NOT NULL THEN CONCAT('Order #', iml.OrderID)
+                    WHEN iml.ReservationID IS NOT NULL THEN CONCAT('Reservation #', iml.ReservationID)
+                    ELSE iml.ReferenceNumber
+                END AS 'Reference',
+                ib.StorageLocation AS 'Storage',
+                iml.Notes
+            FROM inventory_movement_log iml
+            INNER JOIN ingredients i ON iml.IngredientID = i.IngredientID
+            LEFT JOIN ingredient_categories ic ON i.CategoryID = ic.CategoryID
+            INNER JOIN inventory_batches ib ON iml.BatchID = ib.BatchID
+            WHERE 1=1
+        "
 
             ' Add filters
             If _ingredientID > 0 Then
@@ -120,7 +120,8 @@ Public Class InventoryMovementHistory
                 sql &= " AND (i.IngredientName LIKE @search OR ib.BatchNumber LIKE @search OR iml.Reason LIKE @search)"
             End If
 
-            sql &= " ORDER BY iml.MovementDate DESC LIMIT 1000"
+            ' *** CHANGED: Order by ASC to show newest at bottom ***
+            sql &= " ORDER BY iml.MovementDate ASC, iml.MovementID ASC LIMIT 1000"
 
             Dim cmd As New MySqlCommand(sql, conn)
 
@@ -153,16 +154,47 @@ Public Class InventoryMovementHistory
             ColorCodeMovements()
 
             ' Update the record count in subtitle
-            Me.lblSubtitle.Text = "Showing " & dt.Rows.Count.ToString() & " records"
+            Me.lblSubtitle.Text = "Showing " & dt.Rows.Count.ToString() & " records (oldest to newest)"
+
+            ' *** NEW: Auto-scroll to bottom to show latest entry ***
+            If dgvMovements.Rows.Count > 0 Then
+                dgvMovements.FirstDisplayedScrollingRowIndex = dgvMovements.Rows.Count - 1
+                dgvMovements.CurrentCell = dgvMovements.Rows(dgvMovements.Rows.Count - 1).Cells(1)
+            End If
 
         Catch ex As Exception
             MessageBox.Show("Error loading movements: " & ex.Message,
-                          "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                      "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             closeConn()
         End Try
     End Sub
 
+    ' *** NEW: Helper method to scroll to latest entry ***
+    Private Sub ScrollToLatestEntry()
+        Try
+            If dgvMovements.Rows.Count > 0 Then
+                ' Scroll to the last row
+                dgvMovements.FirstDisplayedScrollingRowIndex = dgvMovements.Rows.Count - 1
+
+                ' Select the last row
+                dgvMovements.ClearSelection()
+                dgvMovements.Rows(dgvMovements.Rows.Count - 1).Selected = True
+
+                ' Set focus on a visible cell
+                dgvMovements.CurrentCell = dgvMovements.Rows(dgvMovements.Rows.Count - 1).Cells(1)
+            End If
+        Catch ex As Exception
+            ' Silently fail if scrolling fails
+        End Try
+    End Sub
+
+    ' *** NEW: Add button handler to jump to latest entry ***
+    Private Sub btnScrollToLatest_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
+        LoadMovementHistory()
+        LoadMovementStatistics()
+        ScrollToLatestEntry()
+    End Sub
     Private Sub FormatMovementGrid()
         Try
             With dgvMovements
@@ -483,7 +515,66 @@ Public Class InventoryMovementHistory
         End Try
     End Sub
 
+    ' Clear History functionality (already provided in previous update)
+
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
+    End Sub
+
+    Private Sub btnclear_Click(sender As Object, e As EventArgs) Handles btnclear.Click
+        Try
+            ' Show confirmation with options
+            Dim result As DialogResult = MessageBox.Show(
+                "This will permanently delete movement history records." & vbCrLf & vbCrLf &
+                "Click YES to clear history BEFORE the selected start date." & vbCrLf &
+                "Click NO to cancel." & vbCrLf & vbCrLf &
+                "Records before: " & dtpStartDate.Value.ToShortDateString(),
+                "Confirm Clear History",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2)
+
+            If result = DialogResult.No Then Return
+
+            openConn()
+
+            Dim cmd As New MySqlCommand("CALL ClearMovementHistory(@ingredientID, @beforeDate)", conn)
+
+            If _ingredientID > 0 Then
+                cmd.Parameters.AddWithValue("@ingredientID", _ingredientID)
+            Else
+                cmd.Parameters.AddWithValue("@ingredientID", DBNull.Value)
+            End If
+
+            cmd.Parameters.AddWithValue("@beforeDate", dtpStartDate.Value.Date)
+
+            Dim reader As MySqlDataReader = cmd.ExecuteReader()
+            Dim rowsDeleted As Integer = 0
+
+            If reader.Read() Then
+                rowsDeleted = reader.GetInt32("RowsDeleted")
+            End If
+
+            reader.Close()
+
+            MessageBox.Show(
+                "History cleared successfully!" & vbCrLf & vbCrLf &
+                "Records deleted: " & rowsDeleted,
+                "Clear History Complete",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information)
+
+            ' Reload data
+            LoadMovementHistory()
+            LoadMovementStatistics()
+
+        Catch ex As Exception
+            MessageBox.Show("Error clearing history: " & ex.Message,
+                          "Clear History Error",
+                          MessageBoxButtons.OK,
+                          MessageBoxIcon.Error)
+        Finally
+            closeConn()
+        End Try
     End Sub
 End Class

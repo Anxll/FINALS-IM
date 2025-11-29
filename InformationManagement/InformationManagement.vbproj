@@ -491,6 +491,9 @@
     <EmbeddedResource Include="Admin\Inventory.resx">
       <DependentUpon>Inventory.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Admin\InventoryMovementHistory.resx">
+      <DependentUpon>InventoryMovementHistory.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Admin\Login.resx">
       <DependentUpon>Login.vb</DependentUpon>
     </EmbeddedResource>

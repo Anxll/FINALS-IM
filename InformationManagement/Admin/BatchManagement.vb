@@ -214,19 +214,28 @@ Public Class BatchManagement
     End Sub
 
     ' Discard batch
+    ' Discard batch
     Private Sub DiscardBatch(id As Integer, stock As Decimal)
-        If MessageBox.Show("Discard this batch? This will mark it as discarded and set stock to zero.", "Confirm Discard", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then Exit Sub
+        Dim reason As String = InputBox("Enter reason for discarding this batch:", "Discard Reason", "Expired/Damaged")
+
+        If String.IsNullOrWhiteSpace(reason) Then
+            MessageBox.Show("Please provide a reason for discarding.", "Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        If MessageBox.Show("Discard this batch? This will mark it as discarded and set stock to zero." & vbCrLf & vbCrLf & "Stock to discard: " & stock.ToString("N2"), "Confirm Discard", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then Exit Sub
 
         Try
             openConn()
-            Dim cmd As New MySqlCommand("
-                UPDATE inventory_batches 
-                SET BatchStatus='Discarded', StockQuantity=0 
-                WHERE BatchID=@id", conn)
+
+            ' Call stored procedure to properly log the discard
+            Dim cmd As New MySqlCommand("CALL DiscardBatch(@id, @reason, @notes)", conn)
             cmd.Parameters.AddWithValue("@id", id)
+            cmd.Parameters.AddWithValue("@reason", reason)
+            cmd.Parameters.AddWithValue("@notes", "Batch discarded from Batch Management interface")
             cmd.ExecuteNonQuery()
 
-            MessageBox.Show("Batch discarded successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("Batch discarded successfully." & vbCrLf & "Discarded quantity: " & stock.ToString("N2"), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             LoadBatchData()
 
         Catch ex As Exception
