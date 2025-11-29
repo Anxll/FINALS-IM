@@ -50,13 +50,11 @@ Partial Class Inventory
         Me.RoundedPane22 = New InformationManagement.RoundedPane2()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.PictureBox7 = New System.Windows.Forms.PictureBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.PictureBox8 = New System.Windows.Forms.PictureBox()
         CType(Me.InventoryGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane21.SuspendLayout()
         Me.RoundedPane22.SuspendLayout()
-        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -227,7 +225,7 @@ Partial Class Inventory
         'TextBox1
         '
         Me.TextBox1.Location = New System.Drawing.Point(35, 366)
-        Me.TextBox1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(728, 20)
         Me.TextBox1.TabIndex = 38
@@ -238,7 +236,7 @@ Partial Class Inventory
         Me.Category.FormattingEnabled = True
         Me.Category.Items.AddRange(New Object() {"Meat & Poultry", "Vegetables", "Dairy", "Dry Goods", "Oils & Condiments", "Herbs & Spices", "Beverages", "Seafood"})
         Me.Category.Location = New System.Drawing.Point(767, 366)
-        Me.Category.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Category.Margin = New System.Windows.Forms.Padding(2)
         Me.Category.Name = "Category"
         Me.Category.Size = New System.Drawing.Size(188, 21)
         Me.Category.TabIndex = 37
@@ -270,7 +268,7 @@ Partial Class Inventory
         '
         Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Splitter1.Location = New System.Drawing.Point(0, 0)
-        Me.Splitter1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Splitter1.Margin = New System.Windows.Forms.Padding(2)
         Me.Splitter1.Name = "Splitter1"
         Me.Splitter1.Size = New System.Drawing.Size(1108, 85)
         Me.Splitter1.TabIndex = 31
@@ -316,7 +314,6 @@ Partial Class Inventory
         Me.RoundedPane22.BorderThickness = 1
         Me.RoundedPane22.Controls.Add(Me.Label4)
         Me.RoundedPane22.Controls.Add(Me.Label10)
-        Me.RoundedPane22.Controls.Add(Me.PictureBox7)
         Me.RoundedPane22.Controls.Add(Me.Label11)
         Me.RoundedPane22.Controls.Add(Me.PictureBox8)
         Me.RoundedPane22.CornerRadius = 15
@@ -350,16 +347,6 @@ Partial Class Inventory
         Me.Label10.Text = "Total Value"
         Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'PictureBox7
-        '
-        Me.PictureBox7.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox7.Image = CType(resources.GetObject("PictureBox7.Image"), System.Drawing.Image)
-        Me.PictureBox7.Location = New System.Drawing.Point(31, 87)
-        Me.PictureBox7.Name = "PictureBox7"
-        Me.PictureBox7.Size = New System.Drawing.Size(20, 20)
-        Me.PictureBox7.TabIndex = 2
-        Me.PictureBox7.TabStop = False
-        '
         'Label11
         '
         Me.Label11.AutoSize = True
@@ -373,7 +360,6 @@ Partial Class Inventory
         '
         'PictureBox8
         '
-        Me.PictureBox8.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.PictureBox8.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox8.Image = CType(resources.GetObject("PictureBox8.Image"), System.Drawing.Image)
         Me.PictureBox8.Location = New System.Drawing.Point(104, 20)
@@ -397,7 +383,7 @@ Partial Class Inventory
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Splitter1)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Inventory"
         Me.Text = "Inventory"
         CType(Me.InventoryGrid, System.ComponentModel.ISupportInitialize).EndInit()
@@ -405,7 +391,6 @@ Partial Class Inventory
         Me.RoundedPane21.PerformLayout()
         Me.RoundedPane22.ResumeLayout(False)
         Me.RoundedPane22.PerformLayout()
-        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -417,7 +402,6 @@ Partial Class Inventory
     Friend WithEvents Label5 As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents Label10 As Label
-    Friend WithEvents PictureBox7 As PictureBox
     Friend WithEvents Label11 As Label
     Friend WithEvents PictureBox8 As PictureBox
     Friend WithEvents RoundedPane22 As RoundedPane2

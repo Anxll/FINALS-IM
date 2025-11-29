@@ -6,8 +6,6 @@ Public Class Dashboard
 
     Private Sub Dashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.BackColor = ColorTranslator.FromHtml("#F7F8FA")
-        Me.AutoScroll = True
-        Me.AutoScrollMinSize = New Size(0, 1200)
 
         Me.SetStyle(ControlStyles.OptimizedDoubleBuffer Or
             ControlStyles.AllPaintingInWmPaint Or
@@ -632,7 +630,7 @@ Public Class Dashboard
 
             While reader.Read() AndAlso itemCount < 5
                 Dim orderPanel As New Panel With {
-                    .BackColor = Color.FromArgb(255, 250, 240),
+                    .BackColor = Color.PeachPuff,
                     .Size = New Size(456, 58),
                     .Location = New Point(18, yPosition),
                     .Name = "orderPanel" & itemCount
@@ -758,5 +756,6 @@ Public Class Dashboard
     Public Sub RefreshDashboard()
         LoadDashboardData()
     End Sub
+
 
 End Class

@@ -21,9 +21,28 @@ Public Class InventoryMovementHistory
     Private Sub InventoryMovementHistory_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
             ' Set form properties
-            Me.WindowState = FormWindowState.Maximized  ' ADD THIS LINE
+            Me.WindowState = FormWindowState.Maximized
             Me.Text = "Inventory Movement History - " & _ingredientName
             Me.lblTitle.Text = "Inventory Movement History - " & _ingredientName
+
+            ' Add Overall Total Cost Label programmatically if it doesn't exist
+            If Me.Controls.Find("lblOverallTotalCost", True).Length = 0 Then
+                Dim lblOverallCost As New Label()
+                lblOverallCost.Name = "lblOverallTotalCost"
+                lblOverallCost.Text = "Overall Total Cost: ₱0.00"
+                lblOverallCost.Font = New Font("Segoe UI", 14, FontStyle.Bold)
+                lblOverallCost.ForeColor = Color.DarkGreen
+                lblOverallCost.AutoSize = True
+                lblOverallCost.BackColor = Color.Transparent
+
+                ' Position it to the left of Close button
+                ' Adjust these coordinates based on your Close button position
+                lblOverallCost.Left = 20
+                lblOverallCost.Top = btnClose.Top + ((btnClose.Height - lblOverallCost.Height) \ 2)
+
+                Me.Controls.Add(lblOverallCost)
+                lblOverallCost.BringToFront()
+            End If
 
             ' Initialize filters
             InitializeFilters()
@@ -33,6 +52,9 @@ Public Class InventoryMovementHistory
 
             ' Load statistics
             LoadMovementStatistics()
+
+            ' Load total cost
+            LoadTotalCost()
 
         Catch ex As Exception
             MessageBox.Show("Error loading movement history: " & ex.Message,
@@ -78,11 +100,15 @@ Public Class InventoryMovementHistory
                 ib.BatchNumber AS 'Batch #',
                 iml.ChangeType AS 'Type',
 
-                -- FIXED: Display values with unit separately
+                -- Display values with unit separately
                 FORMAT(iml.QuantityChanged, 2) AS 'Change',
                 FORMAT(iml.StockBefore, 2) AS 'Stock Before',
                 FORMAT(iml.StockAfter, 2) AS 'Stock After',
                 iml.UnitType AS 'Unit',
+
+                -- ADD COST COLUMNS
+                FORMAT(ib.CostPerUnit, 2) AS 'Cost/Unit',
+                FORMAT(ABS(iml.QuantityChanged) * ib.CostPerUnit, 2) AS 'Movement Cost',
 
                 iml.Reason,
                 iml.Source,
@@ -120,7 +146,6 @@ Public Class InventoryMovementHistory
                 sql &= " AND (i.IngredientName LIKE @search OR ib.BatchNumber LIKE @search OR iml.Reason LIKE @search)"
             End If
 
-            ' *** CHANGED: Order by ASC to show newest at bottom ***
             sql &= " ORDER BY iml.MovementDate ASC, iml.MovementID ASC LIMIT 1000"
 
             Dim cmd As New MySqlCommand(sql, conn)
@@ -156,7 +181,7 @@ Public Class InventoryMovementHistory
             ' Update the record count in subtitle
             Me.lblSubtitle.Text = "Showing " & dt.Rows.Count.ToString() & " records (oldest to newest)"
 
-            ' *** NEW: Auto-scroll to bottom to show latest entry ***
+            ' Auto-scroll to bottom to show latest entry
             If dgvMovements.Rows.Count > 0 Then
                 dgvMovements.FirstDisplayedScrollingRowIndex = dgvMovements.Rows.Count - 1
                 dgvMovements.CurrentCell = dgvMovements.Rows(dgvMovements.Rows.Count - 1).Cells(1)
@@ -170,18 +195,12 @@ Public Class InventoryMovementHistory
         End Try
     End Sub
 
-    ' *** NEW: Helper method to scroll to latest entry ***
     Private Sub ScrollToLatestEntry()
         Try
             If dgvMovements.Rows.Count > 0 Then
-                ' Scroll to the last row
                 dgvMovements.FirstDisplayedScrollingRowIndex = dgvMovements.Rows.Count - 1
-
-                ' Select the last row
                 dgvMovements.ClearSelection()
                 dgvMovements.Rows(dgvMovements.Rows.Count - 1).Selected = True
-
-                ' Set focus on a visible cell
                 dgvMovements.CurrentCell = dgvMovements.Rows(dgvMovements.Rows.Count - 1).Cells(1)
             End If
         Catch ex As Exception
@@ -189,12 +208,6 @@ Public Class InventoryMovementHistory
         End Try
     End Sub
 
-    ' *** NEW: Add button handler to jump to latest entry ***
-    Private Sub btnScrollToLatest_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
-        LoadMovementHistory()
-        LoadMovementStatistics()
-        ScrollToLatestEntry()
-    End Sub
     Private Sub FormatMovementGrid()
         Try
             With dgvMovements
@@ -243,13 +256,28 @@ Public Class InventoryMovementHistory
                 End If
 
                 If .Columns.Contains("Stock Before") Then
-                    .Columns("Stock Before").Width = 120  ' INCREASE FROM 100 to 120
+                    .Columns("Stock Before").Width = 120
                     .Columns("Stock Before").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
                 End If
 
                 If .Columns.Contains("Stock After") Then
-                    .Columns("Stock After").Width = 120  ' INCREASE FROM 100 to 120
+                    .Columns("Stock After").Width = 120
                     .Columns("Stock After").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                End If
+
+                ' FORMAT NEW COST COLUMNS
+                If .Columns.Contains("Cost/Unit") Then
+                    .Columns("Cost/Unit").Width = 100
+                    .Columns("Cost/Unit").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                    .Columns("Cost/Unit").HeaderText = "Cost/Unit (₱)"
+                End If
+
+                If .Columns.Contains("Movement Cost") Then
+                    .Columns("Movement Cost").Width = 120
+                    .Columns("Movement Cost").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                    .Columns("Movement Cost").DefaultCellStyle.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                    .Columns("Movement Cost").DefaultCellStyle.ForeColor = Color.DarkGreen
+                    .Columns("Movement Cost").HeaderText = "Movement Cost (₱)"
                 End If
 
                 If .Columns.Contains("Reason") Then
@@ -440,10 +468,99 @@ Public Class InventoryMovementHistory
         End Try
     End Sub
 
+    ' NEW METHOD: Load Total Cost - Calculates overall total from ALL data in inventory_batches table
+    Private Sub LoadTotalCost()
+        Try
+            openConn()
+
+            ' Calculate OVERALL TOTAL COST from ALL active batches in inventory_batches table
+            Dim sqlOverall As String = "
+                SELECT 
+                    COALESCE(SUM(StockQuantity * CostPerUnit), 0) AS OverallTotalCost
+                FROM inventory_batches
+                WHERE BatchStatus = 'Active'
+            "
+
+            ' Add ingredient filter if viewing specific ingredient
+            If _ingredientID > 0 Then
+                sqlOverall &= " AND IngredientID = @ingredientID"
+            End If
+
+            Dim cmdOverall As New MySqlCommand(sqlOverall, conn)
+
+            If _ingredientID > 0 Then
+                cmdOverall.Parameters.AddWithValue("@ingredientID", _ingredientID)
+            End If
+
+            Dim overallTotalCost As Decimal = Convert.ToDecimal(cmdOverall.ExecuteScalar())
+
+            ' Display in the label next to close button
+            If Me.Controls.Find("lblOverallTotalCost", True).Length > 0 Then
+                Dim lblOverallCost As Label = CType(Me.Controls.Find("lblOverallTotalCost", True)(0), Label)
+                lblOverallCost.Text = "Overall Total Cost: ₱" & overallTotalCost.ToString("#,##0.00")
+                lblOverallCost.Font = New Font("Segoe UI", 14, FontStyle.Bold)
+                lblOverallCost.ForeColor = Color.DarkGreen
+            End If
+
+            ' Also calculate filtered movement cost for the current view
+            Dim sqlFiltered As String = "
+                SELECT 
+                    COALESCE(SUM(ABS(iml.QuantityChanged) * ib.CostPerUnit), 0) AS FilteredCost
+                FROM inventory_movement_log iml
+                INNER JOIN inventory_batches ib ON iml.BatchID = ib.BatchID
+                WHERE DATE(iml.MovementDate) BETWEEN @startDate AND @endDate
+            "
+
+            If _ingredientID > 0 Then
+                sqlFiltered &= " AND iml.IngredientID = @ingredientID"
+            End If
+
+            If cmbSource.SelectedIndex > 0 Then
+                sqlFiltered &= " AND iml.Source = @source"
+            End If
+
+            If cmbChangeType.SelectedIndex > 0 Then
+                sqlFiltered &= " AND iml.ChangeType = @changeType"
+            End If
+
+            Dim cmdFiltered As New MySqlCommand(sqlFiltered, conn)
+            cmdFiltered.Parameters.AddWithValue("@startDate", dtpStartDate.Value.Date)
+            cmdFiltered.Parameters.AddWithValue("@endDate", dtpEndDate.Value.Date)
+
+            If _ingredientID > 0 Then
+                cmdFiltered.Parameters.AddWithValue("@ingredientID", _ingredientID)
+            End If
+
+            If cmbSource.SelectedIndex > 0 Then
+                cmdFiltered.Parameters.AddWithValue("@source", cmbSource.Text)
+            End If
+
+            If cmbChangeType.SelectedIndex > 0 Then
+                cmdFiltered.Parameters.AddWithValue("@changeType", cmbChangeType.Text)
+            End If
+
+            Dim filteredCost As Decimal = Convert.ToDecimal(cmdFiltered.ExecuteScalar())
+
+            ' Display filtered movement cost if label exists
+            If Me.Controls.Find("lblFilteredCost", True).Length > 0 Then
+                Dim lblFiltered As Label = CType(Me.Controls.Find("lblFilteredCost", True)(0), Label)
+                lblFiltered.Text = "Filtered Movement Cost: ₱" & filteredCost.ToString("#,##0.00")
+                lblFiltered.Font = New Font("Segoe UI", 11, FontStyle.Bold)
+                lblFiltered.ForeColor = Color.DarkBlue
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error loading total cost: " & ex.Message)
+        Finally
+            closeConn()
+        End Try
+    End Sub
+
     ' Filter event handlers
     Private Sub btnApplyFilters_Click(sender As Object, e As EventArgs) Handles btnApplyFilters.Click
         LoadMovementHistory()
         LoadMovementStatistics()
+        LoadTotalCost()
     End Sub
 
     Private Sub btnResetFilters_Click(sender As Object, e As EventArgs) Handles btnResetFilters.Click
@@ -454,11 +571,14 @@ Public Class InventoryMovementHistory
         txtSearch.Clear()
         LoadMovementHistory()
         LoadMovementStatistics()
+        LoadTotalCost()
     End Sub
 
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         LoadMovementHistory()
         LoadMovementStatistics()
+        LoadTotalCost()
+        ScrollToLatestEntry()
     End Sub
 
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
@@ -505,8 +625,50 @@ Public Class InventoryMovementHistory
                     End If
                 Next
 
+                ' Add costs at the bottom
+                openConn()
+
+                ' Filtered Movement Cost
+                Dim cmdFiltered As New MySqlCommand("
+                    SELECT COALESCE(SUM(ABS(iml.QuantityChanged) * ib.CostPerUnit), 0)
+                    FROM inventory_movement_log iml
+                    INNER JOIN inventory_batches ib ON iml.BatchID = ib.BatchID
+                    WHERE DATE(iml.MovementDate) BETWEEN @startDate AND @endDate
+                ", conn)
+                cmdFiltered.Parameters.AddWithValue("@startDate", dtpStartDate.Value.Date)
+                cmdFiltered.Parameters.AddWithValue("@endDate", dtpEndDate.Value.Date)
+
+                If _ingredientID > 0 Then
+                    cmdFiltered.CommandText &= " AND iml.IngredientID = @ingredientID"
+                    cmdFiltered.Parameters.AddWithValue("@ingredientID", _ingredientID)
+                End If
+
+                Dim filteredCost As Decimal = Convert.ToDecimal(cmdFiltered.ExecuteScalar())
+
+                ' Overall Total Cost from active batches
+                Dim cmdOverall As New MySqlCommand("
+                    SELECT COALESCE(SUM(StockQuantity * CostPerUnit), 0)
+                    FROM inventory_batches
+                    WHERE BatchStatus = 'Active'
+                ", conn)
+
+                If _ingredientID > 0 Then
+                    cmdOverall.CommandText &= " AND IngredientID = @ingredientID"
+                    cmdOverall.Parameters.AddWithValue("@ingredientID", _ingredientID)
+                End If
+
+                Dim overallCost As Decimal = Convert.ToDecimal(cmdOverall.ExecuteScalar())
+                closeConn()
+
+                csv.AppendLine("")
+                csv.AppendLine("FILTERED MOVEMENT COST,₱" & filteredCost.ToString("#,##0.00"))
+                csv.AppendLine("OVERALL TOTAL COST (Active Batches),₱" & overallCost.ToString("#,##0.00"))
+
                 System.IO.File.WriteAllText(sfd.FileName, csv.ToString())
-                MessageBox.Show("Export successful!", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                MessageBox.Show("Export successful!" & vbCrLf &
+                              "Filtered Movement Cost: ₱" & filteredCost.ToString("#,##0.00") & vbCrLf &
+                              "Overall Total Cost: ₱" & overallCost.ToString("#,##0.00"),
+                              "Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
 
         Catch ex As Exception
@@ -515,20 +677,17 @@ Public Class InventoryMovementHistory
         End Try
     End Sub
 
-    ' Clear History functionality (already provided in previous update)
-
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Me.Close()
     End Sub
 
     Private Sub btnclear_Click(sender As Object, e As EventArgs) Handles btnclear.Click
         Try
-            ' Show confirmation with options
+            ' Show simple confirmation without date reference
             Dim result As DialogResult = MessageBox.Show(
-                "This will permanently delete movement history records." & vbCrLf & vbCrLf &
-                "Click YES to clear history BEFORE the selected start date." & vbCrLf &
-                "Click NO to cancel." & vbCrLf & vbCrLf &
-                "Records before: " & dtpStartDate.Value.ToShortDateString(),
+                "This will permanently delete ALL movement history records." & vbCrLf & vbCrLf &
+                "Are you sure you want to clear the history?" & vbCrLf & vbCrLf &
+                "This action cannot be undone!",
                 "Confirm Clear History",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning,
@@ -546,7 +705,8 @@ Public Class InventoryMovementHistory
                 cmd.Parameters.AddWithValue("@ingredientID", DBNull.Value)
             End If
 
-            cmd.Parameters.AddWithValue("@beforeDate", dtpStartDate.Value.Date)
+            ' Use current date as the cutoff (clears everything before today)
+            cmd.Parameters.AddWithValue("@beforeDate", Date.Now.Date)
 
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
             Dim rowsDeleted As Integer = 0
@@ -564,9 +724,9 @@ Public Class InventoryMovementHistory
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information)
 
-            ' Reload data
             LoadMovementHistory()
             LoadMovementStatistics()
+            LoadTotalCost()
 
         Catch ex As Exception
             MessageBox.Show("Error clearing history: " & ex.Message,
@@ -576,5 +736,9 @@ Public Class InventoryMovementHistory
         Finally
             closeConn()
         End Try
+    End Sub
+
+    Private Sub lblOverallTotalCost_Click(sender As Object, e As EventArgs) Handles lblOverallTotalCost.Click
+
     End Sub
 End Class
