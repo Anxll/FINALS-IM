@@ -150,26 +150,33 @@ Public Class AddNewBatch
         End If
         ' Unit (text box or combo box)
         Dim unit As String = ""
-        If Me.Controls.ContainsKey("txtUnit") Then
-            Dim txt As TextBox = TryCast(Me.Controls("txtUnit"), TextBox)
-            If txt IsNot Nothing Then
-                unit = txt.Text.Trim()
-            End If
-        ElseIf Me.Controls.ContainsKey("cmbUnit") Then
+        ' === FORCE UNIT DROPDOWN ===
+        If Me.Controls.ContainsKey("cmbUnit") Then
             Dim cmb As ComboBox = TryCast(Me.Controls("cmbUnit"), ComboBox)
-            If cmb IsNot Nothing AndAlso cmb.SelectedItem IsNot Nothing Then
-                unit = cmb.SelectedItem.ToString()
+            If cmb IsNot Nothing Then
+                cmb.DropDownStyle = ComboBoxStyle.DropDownList  ' prevent typing
+                cmb.Items.Clear()
+                cmb.Items.Add("kg")
+                cmb.Items.Add("g")
+                cmb.Items.Add("L")
+                cmb.Items.Add("ml")
+                cmb.Items.Add("pieces")
+
+                ' Auto-preselect the unit from Ingredient table
+                If Not String.IsNullOrEmpty(_unitType) Then
+                    If cmb.Items.Contains(_unitType) Then
+                        cmb.SelectedItem = _unitType
+                    Else
+                        cmb.Items.Add(_unitType)
+                        cmb.SelectedItem = _unitType
+                    End If
+                End If
             End If
-        Else
-            unit = _unitType
         End If
-        If String.IsNullOrWhiteSpace(unit) Then
-            MessageBox.Show("Please specify a unit type for this batch.", "Validation Error",
-            MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return False
-        End If
-        ' Storage location
-        If Me.Controls.ContainsKey("cmbStorageLocation") Then
+
+
+        ' Storage location
+        If Me.Controls.ContainsKey("cmbStorageLocation") Then
             Dim cmbStorage As ComboBox = TryCast(Me.Controls("cmbStorageLocation"), ComboBox)
             If cmbStorage IsNot Nothing AndAlso cmbStorage.SelectedIndex = -1 Then
                 MessageBox.Show("Please select a storage location.", "Validation Error",

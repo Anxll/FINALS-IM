@@ -215,6 +215,12 @@
     <Compile Include="Admin\Feedback.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Admin\InventoryMovementHistory.Designer.vb">
+      <DependentUpon>InventoryMovementHistory.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\InventoryMovementHistory.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Admin\OrderPayment.Designer.vb">
       <DependentUpon>OrderPayment.vb</DependentUpon>
     </Compile>
@@ -484,6 +490,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\Inventory.resx">
       <DependentUpon>Inventory.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\InventoryMovementHistory.resx">
+      <DependentUpon>InventoryMovementHistory.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\Login.resx">
       <DependentUpon>Login.vb</DependentUpon>

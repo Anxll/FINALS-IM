@@ -53,9 +53,9 @@ Partial Class Employee
         Me.Panel1.Controls.Add(Me.lblTitle)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1028, 52)
+        Me.Panel1.Size = New System.Drawing.Size(1080, 52)
         Me.Panel1.TabIndex = 0
         '
         'lblTitle
@@ -81,10 +81,10 @@ Partial Class Employee
         Me.Panel2.Controls.Add(Me.lblSearch)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel2.Location = New System.Drawing.Point(0, 52)
-        Me.Panel2.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Panel2.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Padding = New System.Windows.Forms.Padding(8, 9, 8, 9)
-        Me.Panel2.Size = New System.Drawing.Size(1028, 52)
+        Me.Panel2.Size = New System.Drawing.Size(1080, 63)
         Me.Panel2.TabIndex = 1
         '
         'btnDelete
@@ -95,10 +95,10 @@ Partial Class Employee
         Me.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnDelete.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnDelete.ForeColor = System.Drawing.Color.White
-        Me.btnDelete.Location = New System.Drawing.Point(931, 13)
-        Me.btnDelete.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnDelete.Location = New System.Drawing.Point(995, 13)
+        Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
-        Me.btnDelete.Size = New System.Drawing.Size(86, 26)
+        Me.btnDelete.Size = New System.Drawing.Size(100, 30)
         Me.btnDelete.TabIndex = 5
         Me.btnDelete.Text = "Delete"
         Me.btnDelete.UseVisualStyleBackColor = False
@@ -111,10 +111,10 @@ Partial Class Employee
         Me.EditEmployee.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.EditEmployee.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.EditEmployee.ForeColor = System.Drawing.Color.White
-        Me.EditEmployee.Location = New System.Drawing.Point(820, 13)
-        Me.EditEmployee.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.EditEmployee.Location = New System.Drawing.Point(885, 13)
+        Me.EditEmployee.Margin = New System.Windows.Forms.Padding(2)
         Me.EditEmployee.Name = "EditEmployee"
-        Me.EditEmployee.Size = New System.Drawing.Size(103, 26)
+        Me.EditEmployee.Size = New System.Drawing.Size(103, 30)
         Me.EditEmployee.TabIndex = 4
         Me.EditEmployee.Text = "Edit Employee"
         Me.EditEmployee.UseVisualStyleBackColor = False
@@ -127,10 +127,10 @@ Partial Class Employee
         Me.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnRefresh.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnRefresh.ForeColor = System.Drawing.Color.White
-        Me.btnRefresh.Location = New System.Drawing.Point(725, 13)
-        Me.btnRefresh.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnRefresh.Location = New System.Drawing.Point(777, 13)
+        Me.btnRefresh.Margin = New System.Windows.Forms.Padding(2)
         Me.btnRefresh.Name = "btnRefresh"
-        Me.btnRefresh.Size = New System.Drawing.Size(86, 26)
+        Me.btnRefresh.Size = New System.Drawing.Size(100, 30)
         Me.btnRefresh.TabIndex = 3
         Me.btnRefresh.Text = "Refresh"
         Me.btnRefresh.UseVisualStyleBackColor = False
@@ -143,10 +143,10 @@ Partial Class Employee
         Me.AddEmployee.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.AddEmployee.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
         Me.AddEmployee.ForeColor = System.Drawing.Color.White
-        Me.AddEmployee.Location = New System.Drawing.Point(599, 13)
-        Me.AddEmployee.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.AddEmployee.Location = New System.Drawing.Point(651, 13)
+        Me.AddEmployee.Margin = New System.Windows.Forms.Padding(2)
         Me.AddEmployee.Name = "AddEmployee"
-        Me.AddEmployee.Size = New System.Drawing.Size(117, 26)
+        Me.AddEmployee.Size = New System.Drawing.Size(117, 30)
         Me.AddEmployee.TabIndex = 2
         Me.AddEmployee.Text = "➕ Add Employee"
         Me.AddEmployee.UseVisualStyleBackColor = False
@@ -157,9 +157,9 @@ Partial Class Employee
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.txtSearch.Location = New System.Drawing.Point(68, 15)
-        Me.txtSearch.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(515, 25)
+        Me.txtSearch.Size = New System.Drawing.Size(567, 25)
         Me.txtSearch.TabIndex = 1
         '
         'lblSearch
@@ -181,11 +181,11 @@ Partial Class Employee
         Me.Panel3.Controls.Add(Me.btnViewActive)
         Me.Panel3.Controls.Add(Me.lblFilter)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel3.Location = New System.Drawing.Point(0, 104)
-        Me.Panel3.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Panel3.Location = New System.Drawing.Point(0, 115)
+        Me.Panel3.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Padding = New System.Windows.Forms.Padding(8, 9, 8, 9)
-        Me.Panel3.Size = New System.Drawing.Size(1028, 43)
+        Me.Panel3.Size = New System.Drawing.Size(1080, 48)
         Me.Panel3.TabIndex = 2
         '
         'btnViewAll
@@ -195,10 +195,10 @@ Partial Class Employee
         Me.btnViewAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewAll.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnViewAll.ForeColor = System.Drawing.Color.White
-        Me.btnViewAll.Location = New System.Drawing.Point(292, 9)
-        Me.btnViewAll.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnViewAll.Location = New System.Drawing.Point(377, 9)
+        Me.btnViewAll.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewAll.Name = "btnViewAll"
-        Me.btnViewAll.Size = New System.Drawing.Size(86, 26)
+        Me.btnViewAll.Size = New System.Drawing.Size(100, 30)
         Me.btnViewAll.TabIndex = 3
         Me.btnViewAll.Text = "All"
         Me.btnViewAll.UseVisualStyleBackColor = False
@@ -210,10 +210,10 @@ Partial Class Employee
         Me.btnViewInactive.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewInactive.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnViewInactive.ForeColor = System.Drawing.Color.White
-        Me.btnViewInactive.Location = New System.Drawing.Point(197, 9)
-        Me.btnViewInactive.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnViewInactive.Location = New System.Drawing.Point(270, 9)
+        Me.btnViewInactive.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewInactive.Name = "btnViewInactive"
-        Me.btnViewInactive.Size = New System.Drawing.Size(86, 26)
+        Me.btnViewInactive.Size = New System.Drawing.Size(100, 30)
         Me.btnViewInactive.TabIndex = 2
         Me.btnViewInactive.Text = "Inactive"
         Me.btnViewInactive.UseVisualStyleBackColor = False
@@ -225,10 +225,10 @@ Partial Class Employee
         Me.btnViewActive.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewActive.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
         Me.btnViewActive.ForeColor = System.Drawing.Color.White
-        Me.btnViewActive.Location = New System.Drawing.Point(103, 9)
-        Me.btnViewActive.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnViewActive.Location = New System.Drawing.Point(163, 9)
+        Me.btnViewActive.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewActive.Name = "btnViewActive"
-        Me.btnViewActive.Size = New System.Drawing.Size(86, 26)
+        Me.btnViewActive.Size = New System.Drawing.Size(100, 30)
         Me.btnViewActive.TabIndex = 1
         Me.btnViewActive.Text = "Active"
         Me.btnViewActive.UseVisualStyleBackColor = False
@@ -266,15 +266,15 @@ Partial Class Employee
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridView1.EnableHeadersVisualStyles = False
-        Me.DataGridView1.Location = New System.Drawing.Point(0, 147)
-        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.DataGridView1.Location = New System.Drawing.Point(0, 163)
+        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(2)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowHeadersWidth = 51
         Me.DataGridView1.RowTemplate.Height = 35
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1028, 399)
+        Me.DataGridView1.Size = New System.Drawing.Size(1080, 383)
         Me.DataGridView1.TabIndex = 3
         '
         'Panel4
@@ -283,9 +283,9 @@ Partial Class Employee
         Me.Panel4.Controls.Add(Me.lblTotalEmployees)
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel4.Location = New System.Drawing.Point(0, 546)
-        Me.Panel4.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Panel4.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1028, 26)
+        Me.Panel4.Size = New System.Drawing.Size(1080, 26)
         Me.Panel4.TabIndex = 4
         '
         'lblTotalEmployees
@@ -304,13 +304,13 @@ Partial Class Employee
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(247, Byte), Integer), CType(CType(250, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1028, 572)
+        Me.ClientSize = New System.Drawing.Size(1080, 572)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.MinimumSize = New System.Drawing.Size(688, 525)
         Me.Name = "Employee"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

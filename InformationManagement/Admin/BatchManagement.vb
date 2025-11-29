@@ -214,19 +214,28 @@ Public Class BatchManagement
     End Sub
 
     ' Discard batch
+    ' Discard batch
     Private Sub DiscardBatch(id As Integer, stock As Decimal)
-        If MessageBox.Show("Discard this batch? This will mark it as discarded and set stock to zero.", "Confirm Discard", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then Exit Sub
+        Dim reason As String = InputBox("Enter reason for discarding this batch:", "Discard Reason", "Expired/Damaged")
+
+        If String.IsNullOrWhiteSpace(reason) Then
+            MessageBox.Show("Please provide a reason for discarding.", "Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        If MessageBox.Show("Discard this batch? This will mark it as discarded and set stock to zero." & vbCrLf & vbCrLf & "Stock to discard: " & stock.ToString("N2"), "Confirm Discard", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then Exit Sub
 
         Try
             openConn()
-            Dim cmd As New MySqlCommand("
-                UPDATE inventory_batches 
-                SET BatchStatus='Discarded', StockQuantity=0 
-                WHERE BatchID=@id", conn)
+
+            ' Call stored procedure to properly log the discard
+            Dim cmd As New MySqlCommand("CALL DiscardBatch(@id, @reason, @notes)", conn)
             cmd.Parameters.AddWithValue("@id", id)
+            cmd.Parameters.AddWithValue("@reason", reason)
+            cmd.Parameters.AddWithValue("@notes", "Batch discarded from Batch Management interface")
             cmd.ExecuteNonQuery()
 
-            MessageBox.Show("Batch discarded successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("Batch discarded successfully." & vbCrLf & "Discarded quantity: " & stock.ToString("N2"), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             LoadBatchData()
 
         Catch ex As Exception
@@ -239,104 +248,16 @@ Public Class BatchManagement
     ' View History
     Private Sub btnViewHistory_Click(sender As Object, e As EventArgs) Handles btnViewHistory.Click
         Try
-            Dim historyForm As New Form()
-            historyForm.Text = "Batch History - " & _ingredientName
-            historyForm.Size = New Size(1200, 600)
-            historyForm.StartPosition = FormStartPosition.CenterParent
-
-            ' Create DataGridView for history
-            Dim dgvHistory As New DataGridView()
-            dgvHistory.Dock = DockStyle.Fill
-            dgvHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-            dgvHistory.ReadOnly = True
-            dgvHistory.AllowUserToAddRows = False
-            dgvHistory.SelectionMode = DataGridViewSelectionMode.FullRowSelect
-
-            ' Create panel for buttons
-            Dim pnlButtons As New Panel()
-            pnlButtons.Dock = DockStyle.Bottom
-            pnlButtons.Height = 50
-
-            ' Clear History Button
-            Dim btnClearHistory As New Button()
-            btnClearHistory.Text = "Clear History"
-            btnClearHistory.Size = New Size(120, 35)
-            btnClearHistory.Location = New Point(10, 8)
-            AddHandler btnClearHistory.Click, Sub()
-                                                  If MessageBox.Show("Are you sure you want to clear all discarded batch history for this ingredient?" & vbCrLf & "This action cannot be undone!", "Confirm Clear History", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.Yes Then
-                                                      Try
-                                                          openConn()
-                                                          Dim cmdClear As New MySqlCommand("DELETE FROM inventory_batches WHERE IngredientID = @ingredientID AND BatchStatus = 'Discarded'", conn)
-                                                          cmdClear.Parameters.AddWithValue("@ingredientID", _ingredientID)
-                                                          Dim rowsDeleted As Integer = cmdClear.ExecuteNonQuery()
-                                                          closeConn()
-
-                                                          MessageBox.Show(rowsDeleted & " discarded batch(es) removed from history.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                                                          historyForm.Close()
-                                                      Catch ex As Exception
-                                                          MessageBox.Show("Error clearing history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                                                          closeConn()
-                                                      End Try
-                                                  End If
-                                              End Sub
-
-            ' Close Button
-            Dim btnCloseHistory As New Button()
-            btnCloseHistory.Text = "Close"
-            btnCloseHistory.Size = New Size(100, 35)
-            btnCloseHistory.Location = New Point(140, 8)
-            AddHandler btnCloseHistory.Click, Sub() historyForm.Close()
-
-            pnlButtons.Controls.Add(btnClearHistory)
-            pnlButtons.Controls.Add(btnCloseHistory)
-
-            ' Load history data
-            openConn()
-            Dim sql As String = "
-                SELECT 
-                    BatchID AS 'Batch ID',
-                    BatchNumber AS 'Batch Number',
-                    OriginalQuantity AS 'Original Qty',
-                    UnitType AS 'Unit',
-                    CostPerUnit AS 'Cost/Unit',
-                    PurchaseDate AS 'Purchase Date',
-                    ExpirationDate AS 'Expiration',
-                    BatchStatus AS 'Status',
-                    StorageLocation AS 'Storage Location',
-                    Notes
-                FROM inventory_batches
-                WHERE IngredientID = @ingredientID
-                  AND BatchStatus = 'Discarded'
-                ORDER BY BatchID DESC
-            "
-            Dim cmd As New MySqlCommand(sql, conn)
-            cmd.Parameters.AddWithValue("@ingredientID", _ingredientID)
-
-            Dim da As New MySqlDataAdapter(cmd)
-            Dim dt As New DataTable()
-            da.Fill(dt)
-            closeConn()
-
-            dgvHistory.DataSource = dt
-
-            ' Format currency columns
-            If dgvHistory.Columns.Contains("Cost/Unit") Then
-                dgvHistory.Columns("Cost/Unit").DefaultCellStyle.Format = "₱#,##0.00"
-            End If
-            If dgvHistory.Columns.Contains("Purchase Date") Then
-                dgvHistory.Columns("Purchase Date").DefaultCellStyle.Format = "MMM dd, yyyy"
-            End If
-            If dgvHistory.Columns.Contains("Expiration") Then
-                dgvHistory.Columns("Expiration").DefaultCellStyle.Format = "MMM dd, yyyy"
-            End If
-
-            historyForm.Controls.Add(dgvHistory)
-            historyForm.Controls.Add(pnlButtons)
+            ' Open the InventoryMovementHistory form filtered for this ingredient
+            Dim historyForm As New InventoryMovementHistory(_ingredientID, _ingredientName)
             historyForm.ShowDialog()
 
+            ' Refresh batch data after closing history (in case adjustments were made)
+            LoadBatchData()
+
         Catch ex As Exception
-            MessageBox.Show("Error loading history: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            closeConn()
+            MessageBox.Show("Error opening movement history: " & ex.Message,
+                       "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 

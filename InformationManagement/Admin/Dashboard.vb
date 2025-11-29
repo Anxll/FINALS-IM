@@ -110,19 +110,21 @@ Public Class Dashboard
     End Sub
 
     ' ============================================
-    ' SALES BY CHANNEL PIE CHART
+    ' FIXED: SALES BY CHANNEL - Now captures actual prices from orders
     ' ============================================
 
     Private Sub LoadSalesByChannel()
         Try
             openConn()
+
+            ' Get sales from completed orders grouped by type
             cmd = New MySqlCommand("
-                SELECT 
-                    OrderType,
-                    COALESCE(SUM(TotalAmount), 0) as TotalSales
-                FROM orders 
-                WHERE OrderStatus = 'Completed'
-                GROUP BY OrderType", conn)
+            SELECT 
+                OrderType,
+                COALESCE(SUM(TotalAmount), 0) as TotalSales
+            FROM orders 
+            WHERE OrderStatus = 'Completed'
+            GROUP BY OrderType", conn)
 
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
 
@@ -145,50 +147,90 @@ Public Class Dashboard
             End While
             reader.Close()
 
-            ' Add Catering/Reservation revenue
+            ' Get Catering/Reservation revenue from completed payments
             cmd = New MySqlCommand("
-                SELECT COALESCE(SUM(AmountPaid), 0) as CateringRevenue
-                FROM reservation_payments 
-                WHERE PaymentStatus = 'Completed'", conn)
+            SELECT COALESCE(SUM(AmountPaid), 0) as CateringRevenue
+            FROM reservation_payments 
+            WHERE PaymentStatus = 'Completed'", conn)
             Dim cateringRevenue As Decimal = Convert.ToDecimal(cmd.ExecuteScalar())
 
             closeConn()
 
             ' Calculate total and percentages
-            Dim totalSales As Decimal = dineInSales + takeoutSales + cateringRevenue
+            Dim totalSales As Decimal = dineInSales + takeoutSales + onlineSales + cateringRevenue
 
             If totalSales > 0 Then
                 Dim dineInPercent As Decimal = (dineInSales / totalSales) * 100
-                Dim takeoutPercent As Decimal = (takeoutSales / totalSales) * 100
+                Dim takeoutPercent As Decimal = ((takeoutSales + onlineSales) / totalSales) * 100
                 Dim cateringPercent As Decimal = (cateringRevenue / totalSales) * 100
 
-                ' Update chart
+                ' Clear and update chart with actual values (not percentages)
                 Chart2.Series(0).Points.Clear()
-                Chart2.Series(0).Points.AddXY("Dine-in", dineInPercent)
-                Chart2.Series(0).Points.AddXY("Takeout", takeoutPercent)
-                Chart2.Series(0).Points.AddXY("Catering", cateringPercent)
+
+                Dim point1 As New DataVisualization.Charting.DataPoint()
+                point1.SetValueXY("Dine-in", dineInSales)
+                point1.Color = Color.FromArgb(165, 149, 233)
+                point1.BorderColor = Color.White
+                point1.BorderWidth = 2
+                point1.Label = Math.Round(dineInPercent, 0).ToString() & "%"
+                point1.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+                point1.LabelForeColor = Color.White
+                Chart2.Series(0).Points.Add(point1)
+
+                Dim point2 As New DataVisualization.Charting.DataPoint()
+                point2.SetValueXY("Takeout", takeoutSales + onlineSales)
+                point2.Color = Color.FromArgb(144, 213, 169)
+                point2.BorderColor = Color.White
+                point2.BorderWidth = 2
+                point2.Label = Math.Round(takeoutPercent, 0).ToString() & "%"
+                point2.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+                point2.LabelForeColor = Color.White
+                Chart2.Series(0).Points.Add(point2)
+
+                Dim point3 As New DataVisualization.Charting.DataPoint()
+                point3.SetValueXY("Catering", cateringRevenue)
+                point3.Color = Color.FromArgb(251, 203, 119)
+                point3.BorderColor = Color.White
+                point3.BorderWidth = 2
+                point3.Label = Math.Round(cateringPercent, 0).ToString() & "%"
+                point3.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+                point3.LabelForeColor = Color.White
+                Chart2.Series(0).Points.Add(point3)
 
                 ' Update legend labels
                 lblPercentDineIn.Text = Math.Round(dineInPercent, 0).ToString() & "%"
                 lblValueDinein.Text = "₱" & dineInSales.ToString("N2")
 
+                ' Combine takeout and online
                 lblPercentTakeout.Text = Math.Round(takeoutPercent, 0).ToString() & "%"
-                lblValueTakeout.Text = "₱" & takeoutSales.ToString("N2")
+                lblValueTakeout.Text = "₱" & (takeoutSales + onlineSales).ToString("N2")
 
                 lblPercentCatering.Text = Math.Round(cateringPercent, 0).ToString() & "%"
                 lblValueCatering.Text = "₱" & cateringRevenue.ToString("N2")
+            Else
+                ' No data yet - show zeros
+                Chart2.Series(0).Points.Clear()
+
+                lblPercentDineIn.Text = "0%"
+                lblValueDinein.Text = "₱0.00"
+
+                lblPercentTakeout.Text = "0%"
+                lblValueTakeout.Text = "₱0.00"
+
+                lblPercentCatering.Text = "0%"
+                lblValueCatering.Text = "₱0.00"
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Error loading sales by channel: " & ex.Message)
+            MessageBox.Show("Error loading sales by channel: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             closeConn()
         End Try
     End Sub
 
     ' ============================================
-    ' TOP MENU ITEMS - FIXED (Using OrderCount from Products table)
+    ' FIXED: TOP MENU ITEMS - Uses OrderCount from products table
+    ' No order_items table needed - works with existing schema
     ' ============================================
-
 
     Private Sub LoadTopMenuItems()
         Try
@@ -205,17 +247,21 @@ Public Class Dashboard
             Next
 
             openConn()
-            ' Get all products with order count > 0, ordered by popularity
+
+            ' Get top products by OrderCount (manually maintained)
+            ' Revenue calculated as: OrderCount × Current Price
             cmd = New MySqlCommand("
-                SELECT 
-                    ProductID,
-                    ProductName,
-                    OrderCount,
-                    Price,
-                    (Price * OrderCount) as TotalRevenue
-                FROM products
-                WHERE OrderCount > 0
-                ORDER BY OrderCount DESC", conn)
+            SELECT 
+                ProductID,
+                ProductName,
+                OrderCount,
+                Price,
+                (OrderCount * Price) as EstimatedRevenue
+            FROM products
+            WHERE OrderCount > 0
+            AND Availability = 'Available'
+            ORDER BY OrderCount DESC
+            LIMIT 10", conn)
 
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
             Dim yPosition As Integer = 61
@@ -223,53 +269,53 @@ Public Class Dashboard
 
             While reader.Read()
                 Dim itemPanel As New RoundedPane2 With {
-                    .BorderColor = Color.LightGray,
-                    .BorderThickness = 1,
-                    .CornerRadius = 15,
-                    .FillColor = Color.White,
-                    .Size = New Size(456, 67),
-                    .Location = New Point(20, yPosition),
-                    .Name = "itemPanel" & itemCount
-                }
+                .BorderColor = Color.LightGray,
+                .BorderThickness = 1,
+                .CornerRadius = 15,
+                .FillColor = Color.White,
+                .Size = New Size(456, 67),
+                .Location = New Point(20, yPosition),
+                .Name = "itemPanel" & itemCount
+            }
 
                 ' Icon
                 Dim icon As New PictureBox With {
-                    .BackColor = Color.Transparent,
-                    .Image = My.Resources.fork_and_knife,
-                    .Location = New Point(21, 25),
-                    .Size = New Size(20, 17),
-                    .SizeMode = PictureBoxSizeMode.StretchImage
-                }
+                .BackColor = Color.Transparent,
+                .Image = My.Resources.fork_and_knife,
+                .Location = New Point(21, 25),
+                .Size = New Size(20, 17),
+                .SizeMode = PictureBoxSizeMode.StretchImage
+            }
 
                 ' Product name
                 Dim lblName As New Label With {
-                    .AutoSize = True,
-                    .BackColor = Color.Transparent,
-                    .Font = New Font("Segoe UI Semibold", 11.25!, FontStyle.Bold),
-                    .Location = New Point(53, 15),
-                    .Text = reader("ProductName").ToString()
-                }
+                .AutoSize = True,
+                .BackColor = Color.Transparent,
+                .Font = New Font("Segoe UI Semibold", 11.25!, FontStyle.Bold),
+                .Location = New Point(53, 15),
+                .Text = reader("ProductName").ToString()
+            }
 
                 ' Order count
                 Dim orderCount As Integer = Convert.ToInt32(reader("OrderCount"))
                 Dim lblOrders As New Label With {
-                    .AutoSize = True,
-                    .BackColor = Color.Transparent,
-                    .Font = New Font("Segoe UI", 9.75!),
-                    .ForeColor = SystemColors.ControlDarkDark,
-                    .Location = New Point(54, 35),
-                    .Text = orderCount.ToString("#,##0") & " orders"
-                }
+                .AutoSize = True,
+                .BackColor = Color.Transparent,
+                .Font = New Font("Segoe UI", 9.75!),
+                .ForeColor = SystemColors.ControlDarkDark,
+                .Location = New Point(54, 35),
+                .Text = orderCount.ToString("#,##0") & " orders"
+            }
 
-                ' Revenue
-                Dim revenue As Decimal = Convert.ToDecimal(reader("TotalRevenue"))
+                ' Estimated Revenue (OrderCount × Price)
+                Dim revenue As Decimal = Convert.ToDecimal(reader("EstimatedRevenue"))
                 Dim lblRevenue As New Label With {
-                    .AutoSize = True,
-                    .BackColor = Color.Transparent,
-                    .Font = New Font("Segoe UI", 11.25!, FontStyle.Bold),
-                    .Location = New Point(320, 25),
-                    .Text = "₱" & revenue.ToString("N2")
-                }
+                .AutoSize = True,
+                .BackColor = Color.Transparent,
+                .Font = New Font("Segoe UI", 11.25!, FontStyle.Bold),
+                .Location = New Point(320, 25),
+                .Text = "₱" & revenue.ToString("N2")
+            }
 
                 itemPanel.Controls.AddRange({icon, lblName, lblOrders, lblRevenue})
                 PanelMenu.Controls.Add(itemPanel)
@@ -288,19 +334,50 @@ Public Class Dashboard
             Else
                 ' If no items found, show a message
                 Dim noDataLabel As New Label With {
-                    .Text = "No order data available yet",
-                    .Font = New Font("Segoe UI", 10),
-                    .ForeColor = Color.Gray,
-                    .Location = New Point(20, 61),
-                    .AutoSize = True,
-                    .BackColor = Color.Transparent
-                }
+                .Text = "No order data available yet",
+                .Font = New Font("Segoe UI", 10),
+                .ForeColor = Color.Gray,
+                .Location = New Point(20, 61),
+                .AutoSize = True,
+                .BackColor = Color.Transparent
+            }
                 PanelMenu.Controls.Add(noDataLabel)
                 PanelMenu.Height = 150
             End If
 
         Catch ex As Exception
             MessageBox.Show("Error loading top menu items: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            closeConn()
+        End Try
+    End Sub
+
+    ' ============================================
+    ' HELPER: Update Product OrderCount (Optional - for maintenance)
+    ' Call this after completing orders to keep OrderCount field updated
+    ' ============================================
+
+    Public Sub UpdateProductOrderCounts()
+        Try
+            openConn()
+
+            ' Update OrderCount based on actual completed orders
+            cmd = New MySqlCommand("
+            UPDATE products p
+            LEFT JOIN (
+                SELECT 
+                    oi.ProductID,
+                    COUNT(DISTINCT oi.OrderID) as OrderCount
+                FROM order_items oi
+                INNER JOIN orders o ON oi.OrderID = o.OrderID
+                WHERE o.OrderStatus = 'Completed'
+                GROUP BY oi.ProductID
+            ) counts ON p.ProductID = counts.ProductID
+            SET p.OrderCount = COALESCE(counts.OrderCount, 0)", conn)
+
+            cmd.ExecuteNonQuery()
+            closeConn()
+
+        Catch ex As Exception
             closeConn()
         End Try
     End Sub
