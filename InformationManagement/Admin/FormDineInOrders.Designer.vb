@@ -30,7 +30,7 @@ Partial Class FormDineInOrders
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.BackgroundWorker2 = New System.ComponentModel.BackgroundWorker()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Export = New System.Windows.Forms.Button()
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane21.SuspendLayout()
@@ -87,25 +87,25 @@ Partial Class FormDineInOrders
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Dine-in Order Report"
         '
-        'Button1
+        'Export
         '
-        Me.Button1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(1219, 21)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(139, 37)
-        Me.Button1.TabIndex = 10
-        Me.Button1.Text = "   Export"
-        Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Export.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Export.Image = CType(resources.GetObject("Export.Image"), System.Drawing.Image)
+        Me.Export.Location = New System.Drawing.Point(1219, 21)
+        Me.Export.Margin = New System.Windows.Forms.Padding(4)
+        Me.Export.Name = "Export"
+        Me.Export.Size = New System.Drawing.Size(139, 37)
+        Me.Export.TabIndex = 10
+        Me.Export.Text = "   Export"
+        Me.Export.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Export.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.Export.UseVisualStyleBackColor = True
         '
         'RoundedPane21
         '
         Me.RoundedPane21.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane21.BorderThickness = 1
-        Me.RoundedPane21.Controls.Add(Me.Button1)
+        Me.RoundedPane21.Controls.Add(Me.Export)
         Me.RoundedPane21.Controls.Add(Me.DataGridView1)
         Me.RoundedPane21.Controls.Add(Me.Label2)
         Me.RoundedPane21.CornerRadius = 15
@@ -137,6 +137,6 @@ Partial Class FormDineInOrders
     Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents BackgroundWorker2 As System.ComponentModel.BackgroundWorker
     Friend WithEvents Label2 As Label
-    Friend WithEvents Button1 As Button
+    Friend WithEvents Export As Button
     Friend WithEvents RoundedPane21 As RoundedPane2
 End Class

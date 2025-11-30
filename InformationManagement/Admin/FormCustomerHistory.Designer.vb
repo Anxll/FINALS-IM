@@ -25,7 +25,7 @@ Partial Class FormCustomerHistory
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormCustomerHistory))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Export = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.dateid = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -42,7 +42,7 @@ Partial Class FormCustomerHistory
         '
         Me.RoundedPane21.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane21.BorderThickness = 1
-        Me.RoundedPane21.Controls.Add(Me.Button1)
+        Me.RoundedPane21.Controls.Add(Me.Export)
         Me.RoundedPane21.Controls.Add(Me.Label1)
         Me.RoundedPane21.Controls.Add(Me.DataGridView1)
         Me.RoundedPane21.CornerRadius = 15
@@ -53,19 +53,19 @@ Partial Class FormCustomerHistory
         Me.RoundedPane21.Size = New System.Drawing.Size(1393, 528)
         Me.RoundedPane21.TabIndex = 0
         '
-        'Button1
+        'Export
         '
-        Me.Button1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(1228, 26)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(139, 37)
-        Me.Button1.TabIndex = 9
-        Me.Button1.Text = "   Export"
-        Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Export.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Export.Image = CType(resources.GetObject("Export.Image"), System.Drawing.Image)
+        Me.Export.Location = New System.Drawing.Point(1228, 26)
+        Me.Export.Margin = New System.Windows.Forms.Padding(4)
+        Me.Export.Name = "Export"
+        Me.Export.Size = New System.Drawing.Size(139, 37)
+        Me.Export.TabIndex = 9
+        Me.Export.Text = "   Export"
+        Me.Export.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Export.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.Export.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -177,5 +177,5 @@ Partial Class FormCustomerHistory
     Friend WithEvents Amount As DataGridViewTextBoxColumn
     Friend WithEvents Status As DataGridViewTextBoxColumn
     Friend WithEvents Label1 As Label
-    Friend WithEvents Button1 As Button
+    Friend WithEvents Export As Button
 End Class

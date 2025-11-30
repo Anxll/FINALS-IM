@@ -26,7 +26,7 @@ Partial Class FormTakeOutOrders
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormTakeOutOrders))
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Export = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.RoundedPane21.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -37,12 +37,12 @@ Partial Class FormTakeOutOrders
         Me.RoundedPane21.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane21.BorderThickness = 1
         Me.RoundedPane21.Controls.Add(Me.DataGridView1)
-        Me.RoundedPane21.Controls.Add(Me.Button1)
+        Me.RoundedPane21.Controls.Add(Me.Export)
         Me.RoundedPane21.Controls.Add(Me.Label1)
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
         Me.RoundedPane21.Location = New System.Drawing.Point(33, 30)
-        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(1393, 555)
         Me.RoundedPane21.TabIndex = 0
@@ -63,7 +63,7 @@ Partial Class FormTakeOutOrders
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeight = 40
         Me.DataGridView1.Location = New System.Drawing.Point(48, 94)
-        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         Me.DataGridView1.RowHeadersVisible = False
@@ -71,19 +71,19 @@ Partial Class FormTakeOutOrders
         Me.DataGridView1.Size = New System.Drawing.Size(1376, 219)
         Me.DataGridView1.TabIndex = 9
         '
-        'Button1
+        'Export
         '
-        Me.Button1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(1229, 21)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(139, 37)
-        Me.Button1.TabIndex = 8
-        Me.Button1.Text = "   Export"
-        Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Export.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Export.Image = CType(resources.GetObject("Export.Image"), System.Drawing.Image)
+        Me.Export.Location = New System.Drawing.Point(1229, 21)
+        Me.Export.Margin = New System.Windows.Forms.Padding(4)
+        Me.Export.Name = "Export"
+        Me.Export.Size = New System.Drawing.Size(139, 37)
+        Me.Export.TabIndex = 8
+        Me.Export.Text = "   Export"
+        Me.Export.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Export.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.Export.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -104,7 +104,7 @@ Partial Class FormTakeOutOrders
         Me.BackColor = System.Drawing.Color.GhostWhite
         Me.ClientSize = New System.Drawing.Size(1535, 922)
         Me.Controls.Add(Me.RoundedPane21)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormTakeOutOrders"
         Me.Text = "FormTakeOutOrders"
         Me.RoundedPane21.ResumeLayout(False)
@@ -116,6 +116,6 @@ Partial Class FormTakeOutOrders
 
     Friend WithEvents RoundedPane21 As RoundedPane2
     Friend WithEvents Label1 As Label
-    Friend WithEvents Button1 As Button
+    Friend WithEvents Export As Button
     Friend WithEvents DataGridView1 As DataGridView
 End Class
