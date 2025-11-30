@@ -1,4 +1,4 @@
-﻿Imports MySqlConnector
+Imports MySqlConnector
 
 Public Class EditEmployee
 
@@ -98,9 +98,10 @@ Public Class EditEmployee
 
             MessageBox.Show("Employee updated successfully!", "Success")
 
-            ' === REFRESH MAIN EMPLOYEE FORM ===
-            If Application.OpenForms().OfType(Of Employee).Any() Then
-                Dim empForm = Application.OpenForms().OfType(Of Employee)().First()
+            If Application.OpenForms().OfType(Of Employee).Any Then
+                Dim empForm As Employee = Application.OpenForms().OfType(Of Employee).First()
+                empForm.LoadEmployees()
+                empForm.BringToFront()
             End If
 
             Me.Close()
