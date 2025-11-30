@@ -68,7 +68,7 @@ Partial Class AdminDashboard
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Left
         Me.SidePanel.Location = New System.Drawing.Point(0, 0)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(261, 609)
+        Me.SidePanel.Size = New System.Drawing.Size(261, 715)
         Me.SidePanel.TabIndex = 0
         '
         'ReservationPayment
@@ -131,7 +131,7 @@ Partial Class AdminDashboard
         Me.Customer.Name = "Customer"
         Me.Customer.Size = New System.Drawing.Size(190, 28)
         Me.Customer.TabIndex = 11
-        Me.Customer.Text = "    Customer"
+        Me.Customer.Text = "     Customer"
         Me.Customer.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.Customer.UseVisualStyleBackColor = True
         '
@@ -147,7 +147,7 @@ Partial Class AdminDashboard
         Me.Employee.Name = "Employee"
         Me.Employee.Size = New System.Drawing.Size(190, 28)
         Me.Employee.TabIndex = 10
-        Me.Employee.Text = "    Employee"
+        Me.Employee.Text = "     Employee"
         Me.Employee.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.Employee.UseVisualStyleBackColor = True
         '
@@ -284,7 +284,7 @@ Partial Class AdminDashboard
         Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel3.Controls.Add(Me.btnLogout)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel3.Location = New System.Drawing.Point(0, 566)
+        Me.Panel3.Location = New System.Drawing.Point(0, 672)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(261, 43)
         Me.Panel3.TabIndex = 1
@@ -333,14 +333,14 @@ Partial Class AdminDashboard
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(261, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(539, 609)
+        Me.Panel1.Size = New System.Drawing.Size(539, 715)
         Me.Panel1.TabIndex = 1
         '
         'AdminDashboard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 609)
+        Me.ClientSize = New System.Drawing.Size(800, 715)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.SidePanel)
         Me.DoubleBuffered = True

@@ -206,8 +206,19 @@ Public Class Dashboard
                 lblPercentCatering.Text = Math.Round(cateringPercent, 0).ToString() & "%"
                 lblValueCatering.Text = "₱" & cateringRevenue.ToString("N2")
             Else
-                ' No data yet - show zeros
+                ' No data yet - show zeros and add "No data" label
                 Chart2.Series(0).Points.Clear()
+
+                ' Add "No Data Available" text annotation to chart
+                Chart2.Annotations.Clear()
+                Dim noDataAnnotation As New TextAnnotation()
+                noDataAnnotation.Text = "No Sales Data Available"
+                noDataAnnotation.Font = New Font("Segoe UI", 12, FontStyle.Bold)
+                noDataAnnotation.ForeColor = Color.Gray
+                noDataAnnotation.X = 50
+                noDataAnnotation.Y = 50
+                noDataAnnotation.Alignment = ContentAlignment.MiddleCenter
+                Chart2.Annotations.Add(noDataAnnotation)
 
                 lblPercentDineIn.Text = "0%"
                 lblValueDinein.Text = "₱0.00"
@@ -238,6 +249,10 @@ Public Class Dashboard
                 If TypeOf ctrl Is RoundedPane2 AndAlso ctrl.Name.StartsWith("itemPanel") Then
                     controlsToRemove.Add(ctrl)
                 End If
+                ' Also remove any "no data" labels from previous loads
+                If TypeOf ctrl Is Label AndAlso ctrl.Name = "lblNoMenuData" Then
+                    controlsToRemove.Add(ctrl)
+                End If
             Next
             For Each ctrl In controlsToRemove
                 PanelMenu.Controls.Remove(ctrl)
@@ -249,17 +264,17 @@ Public Class Dashboard
             ' Get top products by OrderCount (manually maintained)
             ' Revenue calculated as: OrderCount × Current Price
             cmd = New MySqlCommand("
-            SELECT 
-                ProductID,
-                ProductName,
-                OrderCount,
-                Price,
-                (OrderCount * Price) as EstimatedRevenue
-            FROM products
-            WHERE OrderCount > 0
-            AND Availability = 'Available'
-            ORDER BY OrderCount DESC
-            LIMIT 10", conn)
+        SELECT 
+            ProductID,
+            ProductName,
+            OrderCount,
+            Price,
+            (OrderCount * Price) as EstimatedRevenue
+        FROM products
+        WHERE OrderCount > 0
+        AND Availability = 'Available'
+        ORDER BY OrderCount DESC
+        LIMIT 10", conn)
 
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
             Dim yPosition As Integer = 61
@@ -267,53 +282,53 @@ Public Class Dashboard
 
             While reader.Read()
                 Dim itemPanel As New RoundedPane2 With {
-                .BorderColor = Color.LightGray,
-                .BorderThickness = 1,
-                .CornerRadius = 15,
-                .FillColor = Color.White,
-                .Size = New Size(456, 67),
-                .Location = New Point(20, yPosition),
-                .Name = "itemPanel" & itemCount
-            }
+            .BorderColor = Color.LightGray,
+            .BorderThickness = 1,
+            .CornerRadius = 15,
+            .FillColor = Color.White,
+            .Size = New Size(456, 67),
+            .Location = New Point(20, yPosition),
+            .Name = "itemPanel" & itemCount
+        }
 
                 ' Icon
                 Dim icon As New PictureBox With {
-                .BackColor = Color.Transparent,
-                .Image = My.Resources.fork_and_knife,
-                .Location = New Point(21, 25),
-                .Size = New Size(20, 17),
-                .SizeMode = PictureBoxSizeMode.StretchImage
-            }
+            .BackColor = Color.Transparent,
+            .Image = My.Resources.fork_and_knife,
+            .Location = New Point(21, 25),
+            .Size = New Size(20, 17),
+            .SizeMode = PictureBoxSizeMode.StretchImage
+        }
 
                 ' Product name
                 Dim lblName As New Label With {
-                .AutoSize = True,
-                .BackColor = Color.Transparent,
-                .Font = New Font("Segoe UI Semibold", 11.25!, FontStyle.Bold),
-                .Location = New Point(53, 15),
-                .Text = reader("ProductName").ToString()
-            }
+            .AutoSize = True,
+            .BackColor = Color.Transparent,
+            .Font = New Font("Segoe UI Semibold", 11.25!, FontStyle.Bold),
+            .Location = New Point(53, 15),
+            .Text = reader("ProductName").ToString()
+        }
 
                 ' Order count
                 Dim orderCount As Integer = Convert.ToInt32(reader("OrderCount"))
                 Dim lblOrders As New Label With {
-                .AutoSize = True,
-                .BackColor = Color.Transparent,
-                .Font = New Font("Segoe UI", 9.75!),
-                .ForeColor = SystemColors.ControlDarkDark,
-                .Location = New Point(54, 35),
-                .Text = orderCount.ToString("#,##0") & " orders"
-            }
+            .AutoSize = True,
+            .BackColor = Color.Transparent,
+            .Font = New Font("Segoe UI", 9.75!),
+            .ForeColor = SystemColors.ControlDarkDark,
+            .Location = New Point(54, 35),
+            .Text = orderCount.ToString("#,##0") & " orders"
+        }
 
                 ' Estimated Revenue (OrderCount × Price)
                 Dim revenue As Decimal = Convert.ToDecimal(reader("EstimatedRevenue"))
                 Dim lblRevenue As New Label With {
-                .AutoSize = True,
-                .BackColor = Color.Transparent,
-                .Font = New Font("Segoe UI", 11.25!, FontStyle.Bold),
-                .Location = New Point(320, 25),
-                .Text = "₱" & revenue.ToString("N2")
-            }
+            .AutoSize = True,
+            .BackColor = Color.Transparent,
+            .Font = New Font("Segoe UI", 11.25!, FontStyle.Bold),
+            .Location = New Point(320, 25),
+            .Text = "₱" & revenue.ToString("N2")
+        }
 
                 itemPanel.Controls.AddRange({icon, lblName, lblOrders, lblRevenue})
                 PanelMenu.Controls.Add(itemPanel)
@@ -329,26 +344,31 @@ Public Class Dashboard
             ' Adjust panel height to fit all items
             If itemCount > 0 Then
                 PanelMenu.Height = yPosition + 30
+                ' Adjust Pending Orders position (same as Quick Stats pattern)
+                AdjustPendingOrdersPosition()
             Else
-                ' If no items found, show a message
+                ' FIXED: Show "No data" message in the MENU PANEL, not Chart2
                 Dim noDataLabel As New Label With {
-                .Text = "No order data available yet",
-                .Font = New Font("Segoe UI", 10),
+                .Text = "No menu items data available",
+                .Font = New Font("Segoe UI", 12, FontStyle.Bold),
                 .ForeColor = Color.Gray,
                 .Location = New Point(20, 61),
-                .AutoSize = True,
-                .BackColor = Color.Transparent
+                .Size = New Size(456, 100),
+                .TextAlign = ContentAlignment.MiddleCenter,
+                .BackColor = Color.Transparent,
+                .Name = "lblNoMenuData"
             }
                 PanelMenu.Controls.Add(noDataLabel)
+                noDataLabel.BringToFront()
                 PanelMenu.Height = 150
+                ' Adjust Pending Orders position (same as Quick Stats pattern)
+                AdjustPendingOrdersPosition()
             End If
-
         Catch ex As Exception
             MessageBox.Show("Error loading top menu items: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             closeConn()
         End Try
     End Sub
-
     ' ============================================
     ' HELPER: Update Product OrderCount (Optional - for maintenance)
     ' Call this after completing orders to keep OrderCount field updated
@@ -560,7 +580,6 @@ Public Class Dashboard
                 For Each ctrl As Control In Me.Controls
                     If ctrl.Controls.Contains(Label39) OrElse
                        ctrl.Controls.Contains(Label38) OrElse
-                       ctrl.Controls.Contains(Label37) OrElse
                        ctrl.Controls.Contains(Label36) Then
                         quickStatsPanel = ctrl
                         Exit For
@@ -730,7 +749,7 @@ Public Class Dashboard
             Label38.Text = cmd.ExecuteScalar().ToString()
 
             ' Tables Available (hardcoded for now - you can create a tables table later)
-            Label37.Text = "12/20"
+
 
             ' Average Order Value
             cmd = New MySqlCommand("
@@ -757,5 +776,14 @@ Public Class Dashboard
         LoadDashboardData()
     End Sub
 
+    Private Sub AdjustPendingOrdersPosition()
+        ' Find the Pending Orders panel (the parent of flpOrders)
+        Dim pendingOrdersPanel As Control = flpOrders.Parent
 
+        If pendingOrdersPanel IsNot Nothing AndAlso PanelMenu IsNot Nothing Then
+            ' Position it 20 pixels below Top Menu Items (same as Quick Stats spacing)
+            Dim newY As Integer = PanelMenu.Location.Y + PanelMenu.Height + 20
+            pendingOrdersPanel.Location = New Point(pendingOrdersPanel.Location.X, newY)
+        End If
+    End Sub
 End Class

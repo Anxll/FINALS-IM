@@ -53,14 +53,11 @@ Partial Class Dashboard
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
         Me.Label39 = New System.Windows.Forms.Label()
         Me.Label38 = New System.Windows.Forms.Label()
-        Me.Label37 = New System.Windows.Forms.Label()
         Me.Label36 = New System.Windows.Forms.Label()
         Me.PictureBox13 = New System.Windows.Forms.PictureBox()
         Me.Label35 = New System.Windows.Forms.Label()
-        Me.PictureBox12 = New System.Windows.Forms.PictureBox()
         Me.PictureBox11 = New System.Windows.Forms.PictureBox()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.PictureBox6 = New System.Windows.Forms.PictureBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -107,7 +104,6 @@ Partial Class Dashboard
         CType(Me.Chart2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane24.SuspendLayout()
         CType(Me.PictureBox13, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox12, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelReservations.SuspendLayout()
@@ -131,7 +127,7 @@ Partial Class Dashboard
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(27, 24)
+        Me.Label1.Location = New System.Drawing.Point(12, 20)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(252, 32)
         Me.Label1.TabIndex = 0
@@ -145,7 +141,7 @@ Partial Class Dashboard
         Me.RoundedPane28.Controls.Add(Me.Chart2)
         Me.RoundedPane28.CornerRadius = 15
         Me.RoundedPane28.FillColor = System.Drawing.Color.White
-        Me.RoundedPane28.Location = New System.Drawing.Point(42, 240)
+        Me.RoundedPane28.Location = New System.Drawing.Point(42, 245)
         Me.RoundedPane28.Name = "RoundedPane28"
         Me.RoundedPane28.Size = New System.Drawing.Size(1068, 357)
         Me.RoundedPane28.TabIndex = 22
@@ -400,22 +396,19 @@ Partial Class Dashboard
         Me.RoundedPane24.BorderThickness = 1
         Me.RoundedPane24.Controls.Add(Me.Label39)
         Me.RoundedPane24.Controls.Add(Me.Label38)
-        Me.RoundedPane24.Controls.Add(Me.Label37)
         Me.RoundedPane24.Controls.Add(Me.Label36)
         Me.RoundedPane24.Controls.Add(Me.PictureBox13)
         Me.RoundedPane24.Controls.Add(Me.Label35)
-        Me.RoundedPane24.Controls.Add(Me.PictureBox12)
         Me.RoundedPane24.Controls.Add(Me.PictureBox11)
         Me.RoundedPane24.Controls.Add(Me.Label8)
-        Me.RoundedPane24.Controls.Add(Me.Label11)
         Me.RoundedPane24.Controls.Add(Me.PictureBox6)
         Me.RoundedPane24.Controls.Add(Me.Label10)
         Me.RoundedPane24.Controls.Add(Me.Label9)
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
-        Me.RoundedPane24.Location = New System.Drawing.Point(599, 830)
+        Me.RoundedPane24.Location = New System.Drawing.Point(599, 826)
         Me.RoundedPane24.Name = "RoundedPane24"
-        Me.RoundedPane24.Size = New System.Drawing.Size(505, 225)
+        Me.RoundedPane24.Size = New System.Drawing.Size(505, 188)
         Me.RoundedPane24.TabIndex = 15
         '
         'Label39
@@ -440,23 +433,12 @@ Partial Class Dashboard
         Me.Label38.TabIndex = 23
         Me.Label38.Text = "67"
         '
-        'Label37
-        '
-        Me.Label37.AutoSize = True
-        Me.Label37.BackColor = System.Drawing.Color.Transparent
-        Me.Label37.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label37.Location = New System.Drawing.Point(429, 143)
-        Me.Label37.Name = "Label37"
-        Me.Label37.Size = New System.Drawing.Size(52, 20)
-        Me.Label37.TabIndex = 22
-        Me.Label37.Text = "12/20"
-        '
         'Label36
         '
         Me.Label36.AutoSize = True
         Me.Label36.BackColor = System.Drawing.Color.Transparent
         Me.Label36.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label36.Location = New System.Drawing.Point(426, 183)
+        Me.Label36.Location = New System.Drawing.Point(435, 139)
         Me.Label36.Name = "Label36"
         Me.Label36.Size = New System.Drawing.Size(50, 20)
         Me.Label36.TabIndex = 21
@@ -466,7 +448,7 @@ Partial Class Dashboard
         '
         Me.PictureBox13.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox13.Image = CType(resources.GetObject("PictureBox13.Image"), System.Drawing.Image)
-        Me.PictureBox13.Location = New System.Drawing.Point(29, 183)
+        Me.PictureBox13.Location = New System.Drawing.Point(28, 139)
         Me.PictureBox13.Name = "PictureBox13"
         Me.PictureBox13.Size = New System.Drawing.Size(20, 17)
         Me.PictureBox13.TabIndex = 20
@@ -477,21 +459,11 @@ Partial Class Dashboard
         Me.Label35.AutoSize = True
         Me.Label35.BackColor = System.Drawing.Color.Transparent
         Me.Label35.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label35.Location = New System.Drawing.Point(74, 183)
+        Me.Label35.Location = New System.Drawing.Point(74, 139)
         Me.Label35.Name = "Label35"
         Me.Label35.Size = New System.Drawing.Size(107, 17)
         Me.Label35.TabIndex = 19
         Me.Label35.Text = "Avg. Order Value"
-        '
-        'PictureBox12
-        '
-        Me.PictureBox12.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox12.Image = CType(resources.GetObject("PictureBox12.Image"), System.Drawing.Image)
-        Me.PictureBox12.Location = New System.Drawing.Point(29, 143)
-        Me.PictureBox12.Name = "PictureBox12"
-        Me.PictureBox12.Size = New System.Drawing.Size(20, 17)
-        Me.PictureBox12.TabIndex = 18
-        Me.PictureBox12.TabStop = False
         '
         'PictureBox11
         '
@@ -513,17 +485,6 @@ Partial Class Dashboard
         Me.Label8.Size = New System.Drawing.Size(82, 20)
         Me.Label8.TabIndex = 8
         Me.Label8.Text = "Quick Stats"
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.BackColor = System.Drawing.Color.Transparent
-        Me.Label11.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(74, 143)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(101, 17)
-        Me.Label11.TabIndex = 16
-        Me.Label11.Text = "Tables Available"
         '
         'PictureBox6
         '
@@ -567,7 +528,7 @@ Partial Class Dashboard
         Me.PanelReservations.Controls.Add(Me.Label7)
         Me.PanelReservations.CornerRadius = 15
         Me.PanelReservations.FillColor = System.Drawing.Color.White
-        Me.PanelReservations.Location = New System.Drawing.Point(599, 635)
+        Me.PanelReservations.Location = New System.Drawing.Point(599, 638)
         Me.PanelReservations.Name = "PanelReservations"
         Me.PanelReservations.Size = New System.Drawing.Size(511, 153)
         Me.PanelReservations.TabIndex = 21
@@ -667,7 +628,7 @@ Partial Class Dashboard
         Me.flpOrders.Controls.Add(Me.Label5)
         Me.flpOrders.CornerRadius = 15
         Me.flpOrders.FillColor = System.Drawing.Color.White
-        Me.flpOrders.Location = New System.Drawing.Point(42, 830)
+        Me.flpOrders.Location = New System.Drawing.Point(42, 826)
         Me.flpOrders.Name = "flpOrders"
         Me.flpOrders.Size = New System.Drawing.Size(505, 188)
         Me.flpOrders.TabIndex = 20
@@ -760,7 +721,7 @@ Partial Class Dashboard
         Me.PanelMenu.Controls.Add(Me.Label6)
         Me.PanelMenu.CornerRadius = 15
         Me.PanelMenu.FillColor = System.Drawing.Color.White
-        Me.PanelMenu.Location = New System.Drawing.Point(42, 635)
+        Me.PanelMenu.Location = New System.Drawing.Point(42, 638)
         Me.PanelMenu.Name = "PanelMenu"
         Me.PanelMenu.Size = New System.Drawing.Size(514, 153)
         Me.PanelMenu.TabIndex = 19
@@ -845,7 +806,7 @@ Partial Class Dashboard
         Me.RoundedPane22.Controls.Add(Me.Label14)
         Me.RoundedPane22.CornerRadius = 15
         Me.RoundedPane22.FillColor = System.Drawing.Color.White
-        Me.RoundedPane22.Location = New System.Drawing.Point(415, 82)
+        Me.RoundedPane22.Location = New System.Drawing.Point(411, 79)
         Me.RoundedPane22.Name = "RoundedPane22"
         Me.RoundedPane22.Size = New System.Drawing.Size(330, 120)
         Me.RoundedPane22.TabIndex = 16
@@ -893,7 +854,7 @@ Partial Class Dashboard
         Me.RoundedPane23.Controls.Add(Me.Label16)
         Me.RoundedPane23.CornerRadius = 15
         Me.RoundedPane23.FillColor = System.Drawing.Color.White
-        Me.RoundedPane23.Location = New System.Drawing.Point(782, 82)
+        Me.RoundedPane23.Location = New System.Drawing.Point(780, 79)
         Me.RoundedPane23.Name = "RoundedPane23"
         Me.RoundedPane23.Size = New System.Drawing.Size(330, 120)
         Me.RoundedPane23.TabIndex = 17
@@ -941,7 +902,7 @@ Partial Class Dashboard
         Me.RoundedPane21.Controls.Add(Me.lblTotalRevenue)
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
-        Me.RoundedPane21.Location = New System.Drawing.Point(42, 82)
+        Me.RoundedPane21.Location = New System.Drawing.Point(42, 79)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(330, 120)
         Me.RoundedPane21.TabIndex = 15
@@ -1012,7 +973,6 @@ Partial Class Dashboard
         Me.RoundedPane24.ResumeLayout(False)
         Me.RoundedPane24.PerformLayout()
         CType(Me.PictureBox13, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox12, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelReservations.ResumeLayout(False)
@@ -1096,14 +1056,11 @@ Partial Class Dashboard
     Friend WithEvents Label9 As Label
     Friend WithEvents Label10 As Label
     Friend WithEvents PictureBox6 As PictureBox
-    Friend WithEvents Label11 As Label
     Friend WithEvents Label8 As Label
     Friend WithEvents RoundedPane24 As RoundedPane2
-    Friend WithEvents PictureBox12 As PictureBox
     Friend WithEvents PictureBox11 As PictureBox
     Friend WithEvents Label39 As Label
     Friend WithEvents Label38 As Label
-    Friend WithEvents Label37 As Label
     Friend WithEvents Label36 As Label
     Friend WithEvents PictureBox13 As PictureBox
     Friend WithEvents Label35 As Label

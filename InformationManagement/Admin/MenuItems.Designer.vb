@@ -52,7 +52,7 @@ Partial Class MenuItems
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1174, 61)
+        Me.Panel1.Size = New System.Drawing.Size(1219, 61)
         Me.Panel1.TabIndex = 0
         '
         'Label1
@@ -78,8 +78,8 @@ Partial Class MenuItems
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel2.Location = New System.Drawing.Point(0, 61)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Padding = New System.Windows.Forms.Padding(9, 9, 9, 9)
-        Me.Panel2.Size = New System.Drawing.Size(1174, 61)
+        Me.Panel2.Padding = New System.Windows.Forms.Padding(9)
+        Me.Panel2.Size = New System.Drawing.Size(1219, 61)
         Me.Panel2.TabIndex = 1
         '
         'btnExport
@@ -98,6 +98,7 @@ Partial Class MenuItems
         'btnToggleAvailability
         '
         Me.btnToggleAvailability.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(193, Byte), Integer), CType(CType(7, Byte), Integer))
+        Me.btnToggleAvailability.FlatAppearance.BorderSize = 0
         Me.btnToggleAvailability.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnToggleAvailability.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold)
         Me.btnToggleAvailability.ForeColor = System.Drawing.Color.Black
@@ -111,6 +112,7 @@ Partial Class MenuItems
         'btnRefresh
         '
         Me.btnRefresh.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.btnRefresh.FlatAppearance.BorderSize = 0
         Me.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnRefresh.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold)
         Me.btnRefresh.ForeColor = System.Drawing.Color.White
@@ -163,8 +165,8 @@ Partial Class MenuItems
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel3.Location = New System.Drawing.Point(0, 122)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Padding = New System.Windows.Forms.Padding(9, 9, 9, 9)
-        Me.Panel3.Size = New System.Drawing.Size(1174, 48)
+        Me.Panel3.Padding = New System.Windows.Forms.Padding(9)
+        Me.Panel3.Size = New System.Drawing.Size(1219, 48)
         Me.Panel3.TabIndex = 2
         '
         'Category
@@ -215,7 +217,7 @@ Partial Class MenuItems
         Me.DataGridMenu.RowHeadersWidth = 51
         Me.DataGridMenu.RowTemplate.Height = 40
         Me.DataGridMenu.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridMenu.Size = New System.Drawing.Size(1174, 444)
+        Me.DataGridMenu.Size = New System.Drawing.Size(1219, 444)
         Me.DataGridMenu.TabIndex = 3
         '
         'Panel4
@@ -225,7 +227,7 @@ Partial Class MenuItems
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel4.Location = New System.Drawing.Point(0, 614)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1174, 35)
+        Me.Panel4.Size = New System.Drawing.Size(1219, 35)
         Me.Panel4.TabIndex = 4
         '
         'lblTotalItems
@@ -243,7 +245,7 @@ Partial Class MenuItems
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1174, 649)
+        Me.ClientSize = New System.Drawing.Size(1219, 649)
         Me.Controls.Add(Me.DataGridMenu)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel3)

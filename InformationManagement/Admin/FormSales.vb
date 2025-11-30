@@ -289,18 +289,10 @@ Public Class FormSales
         Label11.Text = $"₱{totalInventoryCost:N2}"
         Label14.Text = $"₱{tPro:N2}"
 
-        UpdateTrendIndicator(PictureBox1, tRev)
-        UpdateTrendIndicator(PictureBox7, totalInventoryCost)
-        UpdateTrendIndicator(PictureBox9, tPro)
+
     End Sub
 
-    Private Sub UpdateTrendIndicator(pic As PictureBox, val As Decimal)
-        If val > 0 Then
-            pic.BackColor = Color.FromArgb(220, 252, 231)
-        Else
-            pic.BackColor = Color.FromArgb(254, 226, 226)
-        End If
-    End Sub
+
 
     ' =======================================================================
     ' GET TOTAL INVENTORY COST
