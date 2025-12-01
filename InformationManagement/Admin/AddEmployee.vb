@@ -35,11 +35,12 @@ Public Class AddEmployee
             cmd.ExecuteNonQuery()
             closeConn()
 
-            MessageBox.Show("Employee added successfully!", "Success")
+            MessageBox.Show("Employee Added Successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-            ' === REFRESH MAIN EMPLOYEE GRID ===
-            If Application.OpenForms().OfType(Of Employee).Any() Then
-                Dim empForm = Application.OpenForms().OfType(Of Employee)().First()
+            If Application.OpenForms().OfType(Of Employee).Any Then
+                Dim empForm As Employee = Application.OpenForms().OfType(Of Employee).First()
+                empForm.LoadEmployees()
+                empForm.BringToFront()
             End If
 
             Me.Close()

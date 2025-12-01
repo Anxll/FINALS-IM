@@ -10,7 +10,7 @@ Public Class Employee
     '====================================
     ' MAIN LOADER
     '====================================
-    Private Sub LoadEmployees(Optional condition As String = "")
+    Public Sub LoadEmployees(Optional condition As String = "")
         Try
             Dim query As String =
                 "SELECT EmployeeID, FirstName, LastName, Gender, DateOfBirth, ContactNumber, Email, Address, HireDate, Position, MaritalStatus, EmploymentStatus, EmploymentType, EmergencyContact, WorkShift, Salary FROM employee"

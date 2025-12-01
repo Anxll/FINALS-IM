@@ -1,38 +1,92 @@
 ﻿Imports System.Security.Policy
+Imports MySqlConnector
 
 Public Class UsersAccounts
     Private Sub UsersAccounts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        LoadUsers()
         UpdateUserCounts()
+    End Sub
 
+    Public Sub LoadUsers()
+        Try
+            openConn()
+            ' UNION query with FirstName, LastName separate and proper date fields
+            Dim query As String = "
+                SELECT 
+                    CustomerID as ID,
+                    FirstName COLLATE utf8mb4_general_ci as FirstName,
+                    LastName COLLATE utf8mb4_general_ci as LastName,
+                    'Customer' COLLATE utf8mb4_general_ci as Role,
+                    AccountStatus COLLATE utf8mb4_general_ci as Status,
+                    CreatedDate as DateCreated
+                FROM customers
+                UNION ALL
+                SELECT 
+                    EmployeeID as ID,
+                    FirstName COLLATE utf8mb4_general_ci as FirstName,
+                    LastName COLLATE utf8mb4_general_ci as LastName,
+                    Position COLLATE utf8mb4_general_ci as Role,
+                    EmploymentStatus COLLATE utf8mb4_general_ci as Status,
+                    HireDate as DateCreated
+                FROM employee
+                ORDER BY DateCreated DESC"
+            
+            Dim cmd As New MySqlCommand(query, conn)
+            Dim adapter As New MySqlDataAdapter(cmd)
+            Dim dt As New DataTable()
+            adapter.Fill(dt)
+
+            UsersAccountData.Rows.Clear()
+            For Each row As DataRow In dt.Rows
+                Dim rowIndex As Integer = UsersAccountData.Rows.Add()
+                Dim newRow As DataGridViewRow = UsersAccountData.Rows(rowIndex)
+                
+                ' Combine FirstName and LastName for display
+                Dim fullName As String = ""
+                If row("FirstName") IsNot DBNull.Value Then
+                    fullName = row("FirstName").ToString()
+                End If
+                If row("LastName") IsNot DBNull.Value Then
+                    If fullName <> "" Then fullName &= " "
+                    fullName &= row("LastName").ToString()
+                End If
+                
+                ' Use correct column names from Designer: txtName and colJoinDate
+                newRow.Cells("txtName").Value = fullName
+                newRow.Cells("colRole").Value = If(row("Role") IsNot DBNull.Value, row("Role").ToString(), "")
+                newRow.Cells("colStatus").Value = If(row("Status") IsNot DBNull.Value, row("Status").ToString(), "")
+                newRow.Cells("colJoinDate").Value = If(row("DateCreated") IsNot DBNull.Value, Convert.ToDateTime(row("DateCreated")).ToString("MMMM dd, yyyy"), "")
+                
+                ' Store ID and Role type for edit/delete operations
+                newRow.Tag = New With {.ID = row("ID"), .Role = row("Role").ToString()}
+            Next
+
+        Catch ex As Exception
+            MessageBox.Show("Error loading users: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            closeConn()
+        End Try
     End Sub
 
     Private Sub UsersAccountData_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles UsersAccountData.CellContentClick
         If e.RowIndex >= 0 Then
             Dim selectedRow As DataGridViewRow = UsersAccountData.Rows(e.RowIndex)
-            Dim username As String = selectedRow.Cells("Name").Value.ToString()
+            Dim username As String = If(selectedRow.Cells("txtName").Value IsNot Nothing, selectedRow.Cells("txtName").Value.ToString(), "Unknown")
+            
+            Dim userInfo As Object = selectedRow.Tag
+            Dim userID As Integer = 0
+            Dim userRole As String = ""
+            
+            If userInfo IsNot Nothing Then
+                userID = userInfo.ID
+                userRole = userInfo.Role.ToString()
+            End If
 
             ' --- EDIT BUTTON ---
             If e.ColumnIndex = UsersAccountData.Columns("colEdit").Index Then
-                Dim editForm As New FormEditUser()
+                MessageBox.Show("Edit functionality coming soon!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                ' Pass data to edit form
-                editForm.txtFullName.Text = selectedRow.Cells("Name").Value.ToString()
-                editForm.cmbRole.Text = selectedRow.Cells("colRole").Value.ToString()
-                editForm.cmbStatus.Text = selectedRow.Cells("colStatus").Value.ToString()
-
-                ' Show form centered
-                editForm.StartPosition = FormStartPosition.CenterParent
-                editForm.ShowDialog()
-
-                ' OPTIONAL: Update DataGridView if form was saved
-                If editForm.DialogResult = DialogResult.OK Then
-                    selectedRow.Cells("Name").Value = editForm.txtFullName.Text
-                    selectedRow.Cells("colRole").Value = editForm.cmbRole.Text
-                    selectedRow.Cells("colStatus").Value = editForm.cmbStatus.Text
-                End If
-
-                ' --- DELETE BUTTON ---
+            ' --- DELETE BUTTON ---
             ElseIf e.ColumnIndex = UsersAccountData.Columns("colDelete").Index Then
                 Dim result As DialogResult = MessageBox.Show(
                     "Are you sure you want to delete " & username & "?",
@@ -42,14 +96,35 @@ Public Class UsersAccounts
                 )
 
                 If result = DialogResult.Yes Then
-                    UsersAccountData.Rows.RemoveAt(e.RowIndex)
+                    Try
+                        openConn()
+                        Dim query As String = ""
+                        
+                        ' Determine which table to delete from based on role
+                        If userRole.ToLower() = "customer" Then
+                            query = "DELETE FROM customers WHERE CustomerID = @id"
+                        Else
+                            query = "DELETE FROM employee WHERE EmployeeID = @id"
+                        End If
+                        
+                        Dim cmd As New MySqlCommand(query, conn)
+                        cmd.Parameters.AddWithValue("@id", userID)
+                        cmd.ExecuteNonQuery()
+                        closeConn()
+                        
+                        LoadUsers()
+                        MessageBox.Show("User deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Catch ex As Exception
+                        MessageBox.Show("Error deleting user: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Finally
+                        closeConn()
+                    End Try
                 End If
             End If
         End If
     End Sub
-    ' Helper to apply rounded corners and active style
+
     Private Sub SetActiveButton(activeBtn As Button)
-        ' Reset all buttons to default
         Dim buttons() As Button = {AllUsersbtn, Staffbtn, Employeesbtn, Customerbtn}
 
         For Each btn As Button In buttons
@@ -58,11 +133,9 @@ Public Class UsersAccounts
             btn.FlatAppearance.BorderSize = 0
         Next
 
-        ' Highlight the active button
-        activeBtn.BackColor = Color.FromArgb(25, 25, 35) ' Dark background
+        activeBtn.BackColor = Color.FromArgb(25, 25, 35)
         activeBtn.ForeColor = Color.White
     End Sub
-
 
     Private Sub AllUsersbtn_Click(sender As Object, e As EventArgs) Handles AllUsersbtn.Click
         SetActiveButton(AllUsersbtn)
@@ -74,26 +147,31 @@ Public Class UsersAccounts
     Private Sub Staffbtn_Click(sender As Object, e As EventArgs) Handles Staffbtn.Click
         SetActiveButton(Staffbtn)
         For Each row As DataGridViewRow In UsersAccountData.Rows
-            Dim role As String = row.Cells("colRole").Value.ToString().ToLower()
-            row.Visible = (role = "staff")
+            If row.Cells("colRole").Value IsNot Nothing Then
+                Dim role As String = row.Cells("colRole").Value.ToString().ToLower()
+                row.Visible = (role.Contains("staff"))
+            End If
         Next
     End Sub
 
     Private Sub Employeesbtn_Click(sender As Object, e As EventArgs) Handles Employeesbtn.Click
         SetActiveButton(Employeesbtn)
         For Each row As DataGridViewRow In UsersAccountData.Rows
-            Dim role As String = row.Cells("colRole").Value.ToString().ToLower()
-            row.Visible = (role = "employee" Or role = "employees")
+            If row.Cells("colRole").Value IsNot Nothing Then
+                Dim role As String = row.Cells("colRole").Value.ToString().ToLower()
+                row.Visible = (Not role = "customer")
+            End If
         Next
     End Sub
 
     Private Sub Customerbtn_Click(sender As Object, e As EventArgs) Handles Customerbtn.Click
         SetActiveButton(Customerbtn)
         For Each row As DataGridViewRow In UsersAccountData.Rows
-            Dim role As String = row.Cells("colRole").Value.ToString().ToLower()
-            row.Visible = (role = "customer" Or role = "customers")
+            If row.Cells("colRole").Value IsNot Nothing Then
+                Dim role As String = row.Cells("colRole").Value.ToString().ToLower()
+                row.Visible = (role = "customer")
+            End If
         Next
-
     End Sub
 
     Private Sub UpdateUserCounts()
@@ -102,23 +180,20 @@ Public Class UsersAccounts
         Dim employeeCount As Integer = 0
         Dim customerCount As Integer = 0
 
-        ' Loop through the DataGridView rows
         For Each row As DataGridViewRow In UsersAccountData.Rows
-            If Not row.IsNewRow Then
+            If Not row.IsNewRow AndAlso row.Cells("colRole").Value IsNot Nothing Then
                 Dim role As String = row.Cells("colRole").Value.ToString().ToLower()
 
-                Select Case role
-                    Case "staff"
-                        staffCount += 1
-                    Case "employee"
-                        employeeCount += 1
-                    Case "customer"
-                        customerCount += 1
-                End Select
+                If role.Contains("staff") Then
+                    staffCount += 1
+                ElseIf role = "customer" Then
+                    customerCount += 1
+                Else
+                    employeeCount += 1
+                End If
             End If
         Next
 
-        ' Update labels
         lblTotalUsers.Text = totalUsers.ToString()
         lblStaffs.Text = staffCount.ToString()
         lblEmployees.Text = employeeCount.ToString()
@@ -132,6 +207,7 @@ Public Class UsersAccounts
     Private Sub UsersAccountData_RowsRemoved(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles UsersAccountData.RowsRemoved
         UpdateUserCounts()
     End Sub
+
     Private Sub RoundButton(btn As Button)
         Dim radius As Integer = 12
         Dim path As New Drawing2D.GraphicsPath()
@@ -149,21 +225,16 @@ Public Class UsersAccounts
         RoundButton(Staffbtn)
         RoundButton(Employeesbtn)
         RoundButton(Customerbtn)
-        SetActiveButton(AllUsersbtn) ' Default active
+        SetActiveButton(AllUsersbtn)
         RoundButton(Adduserbtn)
     End Sub
 
     Private Sub Adduserbtn_Click(sender As Object, e As EventArgs) Handles Adduserbtn.Click
-
         With FormAddUser
             .StartPosition = FormStartPosition.CenterScreen
             .Show()
             .BringToFront()
-
         End With
-
-
     End Sub
-
 
 End Class

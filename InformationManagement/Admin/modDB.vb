@@ -126,4 +126,54 @@ Module modDB
         End Try
     End Sub
 
+    ' ✔ Check and Create Tables
+    Public Sub CheckAndCreateTables()
+        Try
+            openConn()
+
+            ' 1. Create user_accounts table
+            Dim sqlUser As String = "
+                CREATE TABLE IF NOT EXISTS user_accounts (
+                    UserID INT PRIMARY KEY AUTO_INCREMENT,
+                    FullName VARCHAR(100) NOT NULL,
+                    Username VARCHAR(50) UNIQUE NOT NULL,
+                    PasswordHash VARCHAR(255) NOT NULL,
+                    Role ENUM('Admin', 'Manager', 'Staff', 'Employee', 'Customer') NOT NULL DEFAULT 'Staff',
+                    Status ENUM('Active', 'Inactive', 'Suspended') DEFAULT 'Active',
+                    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    LastLoginDate DATETIME NULL
+                )"
+            Dim cmdUser As New MySqlCommand(sqlUser, conn)
+            cmdUser.ExecuteNonQuery()
+
+            ' 2. Create payroll table
+            Dim sqlPayroll As String = "
+                CREATE TABLE IF NOT EXISTS payroll (
+                    PayrollID INT PRIMARY KEY AUTO_INCREMENT,
+                    EmployeeID INT NOT NULL,
+                    PayPeriodStart DATE NOT NULL,
+                    PayPeriodEnd DATE NOT NULL,
+                    BasicSalary DECIMAL(10,2) NOT NULL,
+                    Overtime DECIMAL(10,2) DEFAULT 0,
+                    Deductions DECIMAL(10,2) DEFAULT 0,
+                    Bonuses DECIMAL(10,2) DEFAULT 0,
+                    NetPay DECIMAL(10,2) GENERATED ALWAYS AS (BasicSalary + Overtime + Bonuses - Deductions) STORED,
+                    Status ENUM('Pending', 'Approved', 'Paid') DEFAULT 'Pending',
+                    ProcessedBy INT NULL,
+                    ProcessedDate DATETIME NULL,
+                    Notes TEXT NULL,
+                    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (EmployeeID) REFERENCES employee(EmployeeID) ON DELETE CASCADE
+                )"
+            Dim cmdPayroll As New MySqlCommand(sqlPayroll, conn)
+            cmdPayroll.ExecuteNonQuery()
+
+        Catch ex As Exception
+            MsgBox("Error initializing database tables: " & ex.Message, MsgBoxStyle.Critical)
+        Finally
+            closeConn()
+        End Try
+    End Sub
+
 End Module

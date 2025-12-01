@@ -17,7 +17,8 @@ Public Class Adminlogin
     End Sub
 
     Private Sub Adminlogin_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Form is now the startup form - no need to sync with Login
+        ' Initialize database tables
+        CheckAndCreateTables()
     End Sub
 
 
@@ -44,6 +45,7 @@ Public Class Adminlogin
         ' Encrypt typed password
         Dim encryptedPass As String = Encrypt(pass)
 
+        ' Query using original schema (lowercase column names)
         Dim query As String = "SELECT * FROM user_accounts WHERE username=@user AND password=@pass LIMIT 1"
 
         Try
@@ -56,7 +58,7 @@ Public Class Adminlogin
             Dim reader = cmd.ExecuteReader()
 
             If reader.Read() Then
-                ' Store logged user
+                ' Store logged user using original schema columns
                 CurrentLoggedUser.id = reader("id")
                 CurrentLoggedUser.name = reader("name").ToString()
                 CurrentLoggedUser.username = reader("username").ToString()
