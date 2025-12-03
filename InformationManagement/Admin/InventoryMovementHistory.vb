@@ -737,7 +737,15 @@ Public Class InventoryMovementHistory
             closeConn()
         End Try
     End Sub
+    Private Sub ComboBox_DrawItem(sender As Object, e As DrawItemEventArgs) _
+        Handles cmbSource.DrawItem, cmbChangeType.DrawItem
 
+        If e.Index < 0 Then Return
+        Dim cmb As ComboBox = DirectCast(sender, ComboBox)
+        e.DrawBackground()
+        e.Graphics.DrawString(cmb.Items(e.Index).ToString(), cmb.Font, Brushes.Black, e.Bounds)
+        e.DrawFocusRectangle()
+    End Sub
     Private Sub lblOverallTotalCost_Click(sender As Object, e As EventArgs) Handles lblOverallTotalCost.Click
 
     End Sub
