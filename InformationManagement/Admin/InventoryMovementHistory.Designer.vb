@@ -17,9 +17,9 @@ Partial Class InventoryMovementHistory
 
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.pnlMain = New System.Windows.Forms.Panel()
         Me.pnlGrid = New System.Windows.Forms.Panel()
         Me.dgvMovements = New System.Windows.Forms.DataGridView()
@@ -55,7 +55,6 @@ Partial Class InventoryMovementHistory
         Me.pnlFilterButtons = New System.Windows.Forms.Panel()
         Me.btnApplyFilters = New System.Windows.Forms.Button()
         Me.btnResetFilters = New System.Windows.Forms.Button()
-        Me.pnlHeader = New System.Windows.Forms.Panel()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.lblSubtitle = New System.Windows.Forms.Label()
         Me.pnlActions = New System.Windows.Forms.Panel()
@@ -64,6 +63,7 @@ Partial Class InventoryMovementHistory
         Me.btnExport = New System.Windows.Forms.Button()
         Me.btnRefresh = New System.Windows.Forms.Button()
         Me.btnClose = New System.Windows.Forms.Button()
+        Me.pnlHeader = New System.Windows.Forms.Panel()
         Me.pnlMain.SuspendLayout()
         Me.pnlGrid.SuspendLayout()
         CType(Me.dgvMovements, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -77,13 +77,13 @@ Partial Class InventoryMovementHistory
         Me.grpDateRange.SuspendLayout()
         Me.grpCategories.SuspendLayout()
         Me.pnlFilterButtons.SuspendLayout()
-        Me.pnlHeader.SuspendLayout()
         Me.pnlActions.SuspendLayout()
+        Me.pnlHeader.SuspendLayout()
         Me.SuspendLayout()
         '
         'pnlMain
         '
-        Me.pnlMain.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(245, Byte), Integer))
+        Me.pnlMain.BackColor = System.Drawing.Color.GhostWhite
         Me.pnlMain.Controls.Add(Me.pnlGrid)
         Me.pnlMain.Controls.Add(Me.pnlStats)
         Me.pnlMain.Controls.Add(Me.pnlFilters)
@@ -93,7 +93,7 @@ Partial Class InventoryMovementHistory
         Me.pnlMain.Location = New System.Drawing.Point(0, 0)
         Me.pnlMain.Name = "pnlMain"
         Me.pnlMain.Padding = New System.Windows.Forms.Padding(20)
-        Me.pnlMain.Size = New System.Drawing.Size(1316, 800)
+        Me.pnlMain.Size = New System.Drawing.Size(1316, 749)
         Me.pnlMain.TabIndex = 0
         '
         'pnlGrid
@@ -101,42 +101,42 @@ Partial Class InventoryMovementHistory
         Me.pnlGrid.BackColor = System.Drawing.Color.White
         Me.pnlGrid.Controls.Add(Me.dgvMovements)
         Me.pnlGrid.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pnlGrid.Location = New System.Drawing.Point(20, 440)
+        Me.pnlGrid.Location = New System.Drawing.Point(20, 436)
         Me.pnlGrid.Name = "pnlGrid"
         Me.pnlGrid.Padding = New System.Windows.Forms.Padding(20)
-        Me.pnlGrid.Size = New System.Drawing.Size(1276, 270)
+        Me.pnlGrid.Size = New System.Drawing.Size(1276, 223)
         Me.pnlGrid.TabIndex = 0
         '
         'dgvMovements
         '
         Me.dgvMovements.AllowUserToAddRows = False
         Me.dgvMovements.AllowUserToDeleteRows = False
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(250, Byte), Integer))
-        Me.dgvMovements.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.dgvMovements.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvMovements.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dgvMovements.BackgroundColor = System.Drawing.Color.White
         Me.dgvMovements.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.dgvMovements.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         Me.dgvMovements.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(250, Byte), Integer))
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(73, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(87, Byte), Integer))
-        DataGridViewCellStyle5.Padding = New System.Windows.Forms.Padding(10)
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvMovements.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(250, Byte), Integer))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(73, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(87, Byte), Integer))
+        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(10)
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvMovements.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         Me.dgvMovements.ColumnHeadersHeight = 45
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(33, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(41, Byte), Integer))
-        DataGridViewCellStyle6.Padding = New System.Windows.Forms.Padding(10, 5, 10, 5)
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(255, Byte), Integer))
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvMovements.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(33, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(41, Byte), Integer))
+        DataGridViewCellStyle3.Padding = New System.Windows.Forms.Padding(10, 5, 10, 5)
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(255, Byte), Integer))
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvMovements.DefaultCellStyle = DataGridViewCellStyle3
         Me.dgvMovements.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvMovements.EnableHeadersVisualStyles = False
         Me.dgvMovements.Font = New System.Drawing.Font("Segoe UI", 9.0!)
@@ -147,7 +147,7 @@ Partial Class InventoryMovementHistory
         Me.dgvMovements.RowHeadersVisible = False
         Me.dgvMovements.RowTemplate.Height = 35
         Me.dgvMovements.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvMovements.Size = New System.Drawing.Size(1236, 230)
+        Me.dgvMovements.Size = New System.Drawing.Size(1236, 183)
         Me.dgvMovements.TabIndex = 0
         '
         'pnlStats
@@ -156,7 +156,7 @@ Partial Class InventoryMovementHistory
         Me.pnlStats.Controls.Add(Me.lblStatsTitle)
         Me.pnlStats.Controls.Add(Me.pnlStatCards)
         Me.pnlStats.Dock = System.Windows.Forms.DockStyle.Top
-        Me.pnlStats.Location = New System.Drawing.Point(20, 300)
+        Me.pnlStats.Location = New System.Drawing.Point(20, 296)
         Me.pnlStats.Name = "pnlStats"
         Me.pnlStats.Padding = New System.Windows.Forms.Padding(0, 15, 0, 15)
         Me.pnlStats.Size = New System.Drawing.Size(1276, 140)
@@ -211,7 +211,7 @@ Partial Class InventoryMovementHistory
         Me.lblTotalLabel.AutoSize = True
         Me.lblTotalLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblTotalLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.lblTotalLabel.Location = New System.Drawing.Point(20, 55)
+        Me.lblTotalLabel.Location = New System.Drawing.Point(17, 60)
         Me.lblTotalLabel.Name = "lblTotalLabel"
         Me.lblTotalLabel.Size = New System.Drawing.Size(99, 15)
         Me.lblTotalLabel.TabIndex = 1
@@ -244,7 +244,7 @@ Partial Class InventoryMovementHistory
         Me.lblPOSLabel.AutoSize = True
         Me.lblPOSLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblPOSLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.lblPOSLabel.Location = New System.Drawing.Point(20, 55)
+        Me.lblPOSLabel.Location = New System.Drawing.Point(23, 60)
         Me.lblPOSLabel.Name = "lblPOSLabel"
         Me.lblPOSLabel.Size = New System.Drawing.Size(98, 15)
         Me.lblPOSLabel.TabIndex = 1
@@ -277,7 +277,7 @@ Partial Class InventoryMovementHistory
         Me.lblWebLabel.AutoSize = True
         Me.lblWebLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblWebLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(220, Byte), Integer))
-        Me.lblWebLabel.Location = New System.Drawing.Point(20, 55)
+        Me.lblWebLabel.Location = New System.Drawing.Point(23, 60)
         Me.lblWebLabel.Name = "lblWebLabel"
         Me.lblWebLabel.Size = New System.Drawing.Size(87, 15)
         Me.lblWebLabel.TabIndex = 1
@@ -310,7 +310,7 @@ Partial Class InventoryMovementHistory
         Me.lblAdminLabel.AutoSize = True
         Me.lblAdminLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblAdminLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(225, Byte), Integer))
-        Me.lblAdminLabel.Location = New System.Drawing.Point(20, 55)
+        Me.lblAdminLabel.Location = New System.Drawing.Point(18, 60)
         Me.lblAdminLabel.Name = "lblAdminLabel"
         Me.lblAdminLabel.Size = New System.Drawing.Size(92, 15)
         Me.lblAdminLabel.TabIndex = 1
@@ -324,7 +324,7 @@ Partial Class InventoryMovementHistory
         Me.pnlFilters.Controls.Add(Me.grpCategories)
         Me.pnlFilters.Controls.Add(Me.pnlFilterButtons)
         Me.pnlFilters.Dock = System.Windows.Forms.DockStyle.Top
-        Me.pnlFilters.Location = New System.Drawing.Point(20, 100)
+        Me.pnlFilters.Location = New System.Drawing.Point(20, 96)
         Me.pnlFilters.Margin = New System.Windows.Forms.Padding(0, 15, 0, 0)
         Me.pnlFilters.Name = "pnlFilters"
         Me.pnlFilters.Padding = New System.Windows.Forms.Padding(20)
@@ -417,10 +417,14 @@ Partial Class InventoryMovementHistory
         '
         'cmbSource
         '
+        Me.cmbSource.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.cmbSource.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
         Me.cmbSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbSource.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.cmbSource.ItemHeight = 20
         Me.cmbSource.Location = New System.Drawing.Point(15, 48)
         Me.cmbSource.Name = "cmbSource"
-        Me.cmbSource.Size = New System.Drawing.Size(150, 23)
+        Me.cmbSource.Size = New System.Drawing.Size(150, 26)
         Me.cmbSource.TabIndex = 1
         '
         'lblChangeType
@@ -434,10 +438,14 @@ Partial Class InventoryMovementHistory
         '
         'cmbChangeType
         '
+        Me.cmbChangeType.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.cmbChangeType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
         Me.cmbChangeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbChangeType.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.cmbChangeType.ItemHeight = 20
         Me.cmbChangeType.Location = New System.Drawing.Point(185, 48)
         Me.cmbChangeType.Name = "cmbChangeType"
-        Me.cmbChangeType.Size = New System.Drawing.Size(150, 23)
+        Me.cmbChangeType.Size = New System.Drawing.Size(150, 26)
         Me.cmbChangeType.TabIndex = 3
         '
         'lblSearch
@@ -495,24 +503,12 @@ Partial Class InventoryMovementHistory
         Me.btnResetFilters.Text = "Reset Filters"
         Me.btnResetFilters.UseVisualStyleBackColor = False
         '
-        'pnlHeader
-        '
-        Me.pnlHeader.BackColor = System.Drawing.Color.White
-        Me.pnlHeader.Controls.Add(Me.lblTitle)
-        Me.pnlHeader.Controls.Add(Me.lblSubtitle)
-        Me.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top
-        Me.pnlHeader.Location = New System.Drawing.Point(20, 20)
-        Me.pnlHeader.Name = "pnlHeader"
-        Me.pnlHeader.Padding = New System.Windows.Forms.Padding(20, 15, 20, 15)
-        Me.pnlHeader.Size = New System.Drawing.Size(1276, 80)
-        Me.pnlHeader.TabIndex = 3
-        '
         'lblTitle
         '
         Me.lblTitle.AutoSize = True
         Me.lblTitle.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
         Me.lblTitle.ForeColor = System.Drawing.Color.FromArgb(CType(CType(33, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(41, Byte), Integer))
-        Me.lblTitle.Location = New System.Drawing.Point(20, 15)
+        Me.lblTitle.Location = New System.Drawing.Point(14, 15)
         Me.lblTitle.Name = "lblTitle"
         Me.lblTitle.Size = New System.Drawing.Size(347, 32)
         Me.lblTitle.TabIndex = 0
@@ -523,7 +519,7 @@ Partial Class InventoryMovementHistory
         Me.lblSubtitle.AutoSize = True
         Me.lblSubtitle.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.lblSubtitle.Location = New System.Drawing.Point(20, 48)
+        Me.lblSubtitle.Location = New System.Drawing.Point(17, 50)
         Me.lblSubtitle.Name = "lblSubtitle"
         Me.lblSubtitle.Size = New System.Drawing.Size(318, 15)
         Me.lblSubtitle.TabIndex = 1
@@ -538,7 +534,7 @@ Partial Class InventoryMovementHistory
         Me.pnlActions.Controls.Add(Me.btnRefresh)
         Me.pnlActions.Controls.Add(Me.btnClose)
         Me.pnlActions.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.pnlActions.Location = New System.Drawing.Point(20, 710)
+        Me.pnlActions.Location = New System.Drawing.Point(20, 659)
         Me.pnlActions.Name = "pnlActions"
         Me.pnlActions.Padding = New System.Windows.Forms.Padding(20, 15, 20, 15)
         Me.pnlActions.Size = New System.Drawing.Size(1276, 70)
@@ -617,12 +613,24 @@ Partial Class InventoryMovementHistory
         Me.btnClose.Text = "Close"
         Me.btnClose.UseVisualStyleBackColor = False
         '
+        'pnlHeader
+        '
+        Me.pnlHeader.BackColor = System.Drawing.Color.White
+        Me.pnlHeader.Controls.Add(Me.lblSubtitle)
+        Me.pnlHeader.Controls.Add(Me.lblTitle)
+        Me.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top
+        Me.pnlHeader.Location = New System.Drawing.Point(20, 20)
+        Me.pnlHeader.Name = "pnlHeader"
+        Me.pnlHeader.Padding = New System.Windows.Forms.Padding(20, 15, 20, 15)
+        Me.pnlHeader.Size = New System.Drawing.Size(1276, 76)
+        Me.pnlHeader.TabIndex = 3
+        '
         'InventoryMovementHistory
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(245, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1316, 800)
+        Me.ClientSize = New System.Drawing.Size(1316, 749)
         Me.Controls.Add(Me.pnlMain)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.MinimumSize = New System.Drawing.Size(1024, 600)
@@ -650,18 +658,16 @@ Partial Class InventoryMovementHistory
         Me.grpCategories.ResumeLayout(False)
         Me.grpCategories.PerformLayout()
         Me.pnlFilterButtons.ResumeLayout(False)
-        Me.pnlHeader.ResumeLayout(False)
-        Me.pnlHeader.PerformLayout()
         Me.pnlActions.ResumeLayout(False)
         Me.pnlActions.PerformLayout()
+        Me.pnlHeader.ResumeLayout(False)
+        Me.pnlHeader.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
 
     '==== Declare controls ====
     Friend WithEvents pnlMain As Panel
-
-    Friend WithEvents pnlHeader As Panel
     Friend WithEvents lblTitle As Label
     Friend WithEvents lblSubtitle As Label
 
@@ -708,4 +714,5 @@ Partial Class InventoryMovementHistory
     Friend WithEvents btnRefresh As Button
     Friend WithEvents btnclear As Button
     Friend WithEvents lblOverallTotalCost As Label
+    Friend WithEvents pnlHeader As Panel
 End Class

@@ -140,7 +140,7 @@ Public Class FormAddNewPayrollRecord
             
             ' Refresh Payroll Grid if open
             If Application.OpenForms().OfType(Of Payroll).Any() Then
-                Application.OpenForms().OfType(Of Payroll)().First().LoadPayroll()
+                Application.OpenForms().OfType(Of Payroll)().First().LoadEmployees()
             End If
 
             Me.Close()

@@ -180,7 +180,7 @@ Partial Class Payroll
         Me.Actions.ReadOnly = True
         Me.Actions.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.Actions.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.Actions.UseColumnTextForButtonValue = True
+        Me.Actions.UseColumnTextForButtonValue = False
         Me.Actions.Width = 150
         '
         'Label3

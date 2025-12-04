@@ -45,7 +45,7 @@ Partial Class FormAddUser
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 14.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(18, 23)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(177, 32)
+        Me.Label1.Size = New System.Drawing.Size(139, 25)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Add New User"
         '
@@ -131,7 +131,7 @@ Partial Class FormAddUser
         Me.Label7.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(29, 66)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(95, 23)
+        Me.Label7.Size = New System.Drawing.Size(75, 17)
         Me.Label7.TabIndex = 19
         Me.Label7.Text = "User Name"
         '
@@ -141,7 +141,7 @@ Partial Class FormAddUser
         Me.Label8.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.Location = New System.Drawing.Point(26, 212)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(44, 23)
+        Me.Label8.Size = New System.Drawing.Size(34, 17)
         Me.Label8.TabIndex = 21
         Me.Label8.Text = "Role"
         '
@@ -151,7 +151,7 @@ Partial Class FormAddUser
         Me.Label9.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.Location = New System.Drawing.Point(28, 138)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(82, 23)
+        Me.Label9.Size = New System.Drawing.Size(66, 17)
         Me.Label9.TabIndex = 22
         Me.Label9.Text = "Password"
         '
@@ -161,7 +161,7 @@ Partial Class FormAddUser
         Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(27, 279)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(57, 23)
+        Me.Label3.Size = New System.Drawing.Size(46, 17)
         Me.Label3.TabIndex = 23
         Me.Label3.Text = "Status"
         '
@@ -188,6 +188,7 @@ Partial Class FormAddUser
         Me.txtFullName.Name = "txtFullName"
         Me.txtFullName.NormalBorderColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
         Me.txtFullName.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
+        Me.txtFullName.ReadOnly = False
         Me.txtFullName.Size = New System.Drawing.Size(421, 40)
         Me.txtFullName.TabIndex = 25
         Me.txtFullName.TextBoxBackColor = System.Drawing.Color.WhiteSmoke
@@ -206,6 +207,7 @@ Partial Class FormAddUser
         Me.txtPhone.Name = "txtPhone"
         Me.txtPhone.NormalBorderColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
         Me.txtPhone.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
+        Me.txtPhone.ReadOnly = False
         Me.txtPhone.Size = New System.Drawing.Size(419, 40)
         Me.txtPhone.TabIndex = 26
         Me.txtPhone.TextBoxBackColor = System.Drawing.Color.WhiteSmoke
@@ -214,7 +216,7 @@ Partial Class FormAddUser
         '
         'FormAddUser
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 19.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.White

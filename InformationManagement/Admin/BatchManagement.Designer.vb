@@ -260,7 +260,7 @@
         Me.Panel2.FillColor = System.Drawing.Color.White
         Me.Panel2.Location = New System.Drawing.Point(25, 100)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(200, 100)
+        Me.Panel2.Size = New System.Drawing.Size(263, 100)
         Me.Panel2.TabIndex = 10
         '
         'Panel3
@@ -271,9 +271,9 @@
         Me.Panel3.Controls.Add(Me.Label5)
         Me.Panel3.CornerRadius = 15
         Me.Panel3.FillColor = System.Drawing.Color.White
-        Me.Panel3.Location = New System.Drawing.Point(240, 100)
+        Me.Panel3.Location = New System.Drawing.Point(338, 100)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(200, 100)
+        Me.Panel3.Size = New System.Drawing.Size(263, 100)
         Me.Panel3.TabIndex = 11
         '
         'Panel4
@@ -284,9 +284,9 @@
         Me.Panel4.Controls.Add(Me.Label7)
         Me.Panel4.CornerRadius = 15
         Me.Panel4.FillColor = System.Drawing.Color.White
-        Me.Panel4.Location = New System.Drawing.Point(464, 100)
+        Me.Panel4.Location = New System.Drawing.Point(655, 100)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(240, 100)
+        Me.Panel4.Size = New System.Drawing.Size(263, 100)
         Me.Panel4.TabIndex = 12
         '
         'Panel5
@@ -297,9 +297,9 @@
         Me.Panel5.Controls.Add(Me.lblExpiringCount)
         Me.Panel5.CornerRadius = 15
         Me.Panel5.FillColor = System.Drawing.Color.White
-        Me.Panel5.Location = New System.Drawing.Point(732, 100)
+        Me.Panel5.Location = New System.Drawing.Point(970, 100)
         Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(200, 100)
+        Me.Panel5.Size = New System.Drawing.Size(263, 100)
         Me.Panel5.TabIndex = 13
         '
         'BatchManagement
@@ -337,7 +337,6 @@
         Me.Panel5.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
 
     End Sub
 

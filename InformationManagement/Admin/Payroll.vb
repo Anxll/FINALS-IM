@@ -2,39 +2,109 @@ Imports MySqlConnector
 
 Public Class Payroll
     Private Sub Payroll_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        LoadPayroll()
+        ' Hide the Add New Payroll Record button
+        If Me.Controls.Contains(AddNewPayrollRecordbtn) Then
+            AddNewPayrollRecordbtn.Visible = False
+        End If
+
+        ' Make DataGridView responsive
+        ConfigureResponsiveGrid()
+
+        LoadEmployees()
     End Sub
 
-    Public Sub LoadPayroll()
+    Private Sub ConfigureResponsiveGrid()
+        Try
+            ' STEP 1: Unfreeze all columns FIRST (must do before setting AutoSize mode)
+            If DataGridView1.Columns.Count > 0 Then
+                For Each col As DataGridViewColumn In DataGridView1.Columns
+                    col.Frozen = False
+                Next
+            End If
+
+            ' STEP 2: Now set AutoSize mode (after unfreezing)
+            DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+
+            ' STEP 3: Set grid to fill available space
+            DataGridView1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+
+            ' STEP 4: Set individual column fill weights for better distribution
+            If DataGridView1.Columns.Count > 0 Then
+                ' Set fill weights (relative widths) - check if columns exist first
+                If DataGridView1.Columns.Contains("Employee") Then DataGridView1.Columns("Employee").FillWeight = 25
+                If DataGridView1.Columns.Contains("Position") Then DataGridView1.Columns("Position").FillWeight = 12
+                If DataGridView1.Columns.Contains("Hours") Then DataGridView1.Columns("Hours").FillWeight = 10
+                If DataGridView1.Columns.Contains("HourlyRate") Then DataGridView1.Columns("HourlyRate").FillWeight = 13
+                If DataGridView1.Columns.Contains("Overtime") Then DataGridView1.Columns("Overtime").FillWeight = 12
+                If DataGridView1.Columns.Contains("GrossPay") Then DataGridView1.Columns("GrossPay").FillWeight = 13
+                If DataGridView1.Columns.Contains("NetPay") Then DataGridView1.Columns("NetPay").FillWeight = 13
+                If DataGridView1.Columns.Contains("Status") Then DataGridView1.Columns("Status").FillWeight = 12
+
+                ' Actions column uses absolute width
+                If DataGridView1.Columns.Contains("Actions") Then
+                    DataGridView1.Columns("Actions").AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+                    DataGridView1.Columns("Actions").Width = 150
+                    DataGridView1.Columns("Actions").ReadOnly = False ' Ensure clickable
+                End If
+            End If
+        Catch ex As Exception
+            ' Log error but don't crash the form
+            MessageBox.Show("Error configuring grid layout: " & ex.Message & vbCrLf & "The grid will use default settings.",
+                          "Grid Configuration Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End Try
+    End Sub
+
+    ' Helper function to format currency as Philippine Peso
+    Private Function FormatPeso(amount As Decimal) As String
+        Return "₱" & amount.ToString("N2")
+    End Function
+
+    Public Sub LoadEmployees()
         Try
             openConn()
-            
-            ' Try to check if new columns exist
-            Dim checkQuery As String = "SHOW COLUMNS FROM payroll LIKE 'HoursWorked'"
-            Dim checkCmd As New MySqlCommand(checkQuery, conn)
-            Dim hasNewColumns As Boolean = checkCmd.ExecuteScalar() IsNot Nothing
-            
-            Dim query As String = ""
-            If hasNewColumns Then
-                ' New schema with HoursWorked and HourlyRate
-                query = "SELECT p.PayrollID, CONCAT(e.FirstName, ' ', e.LastName) AS EmployeeName, e.Position, 
-                          p.HoursWorked, p.HourlyRate, p.BasicSalary, p.Overtime, p.NetPay, p.Status,
-                          p.PayPeriodStart, p.PayPeriodEnd, 
-                          IFNULL(p.Deductions, 0) as Deductions, IFNULL(p.Bonuses, 0) as Bonuses
-                          FROM payroll p
-                          JOIN employee e ON p.EmployeeID = e.EmployeeID
-                          ORDER BY p.CreatedDate DESC"
-            Else
-                ' Old schema without new columns
-                query = "SELECT p.PayrollID, CONCAT(e.FirstName, ' ', e.LastName) AS EmployeeName, e.Position, 
-                          p.BasicSalary, p.Overtime, p.NetPay, p.Status,
-                          p.PayPeriodStart, p.PayPeriodEnd
-                          FROM payroll p
-                          JOIN employee e ON p.EmployeeID = e.EmployeeID
-                          ORDER BY p.CreatedDate DESC"
-            End If
-            
+
+            ' Get current month's date range for attendance
+            Dim startOfMonth As Date = New Date(DateTime.Now.Year, DateTime.Now.Month, 1)
+            Dim endOfMonth As Date = startOfMonth.AddMonths(1).AddDays(-1)
+
+            ' Load all employees with attendance hours for current month
+            Dim query As String = "SELECT 
+                e.EmployeeID,
+                CONCAT(e.FirstName, ' ', e.LastName) AS EmployeeName,
+                e.Position,
+                e.Salary,
+                -- Calculate total hours from attendance for current month
+                IFNULL(SUM(CASE WHEN a.AttendanceDate BETWEEN @startDate AND @endDate THEN a.WorkHours ELSE 0 END), 0) as TotalHours,
+                -- Calculate hourly rate from monthly salary (assuming 160 hours/month)
+                IFNULL(e.Salary / 160, 0) as HourlyRate,
+                -- Get latest payroll info
+                IFNULL(p.BasicSalary, 0) as BasicSalary,
+                IFNULL(p.Overtime, 0) as Overtime,
+                IFNULL(p.Deductions, 0) as Deductions,
+                IFNULL(p.Bonuses, 0) as Bonuses,
+                IFNULL(p.NetPay, 0) as NetPay,
+                IFNULL(p.Status, 'No Record') as Status,
+                p.PayrollID
+                FROM employee e
+                LEFT JOIN employee_attendance a ON e.EmployeeID = a.EmployeeID
+                LEFT JOIN (
+                    SELECT p1.*
+                    FROM payroll p1
+                    INNER JOIN (
+                        SELECT EmployeeID, MAX(CreatedDate) as MaxDate
+                        FROM payroll
+                        GROUP BY EmployeeID
+                    ) p2 ON p1.EmployeeID = p2.EmployeeID AND p1.CreatedDate = p2.MaxDate
+                ) p ON e.EmployeeID = p.EmployeeID
+                WHERE e.EmploymentStatus = 'Active'
+                GROUP BY e.EmployeeID, e.FirstName, e.LastName, e.Position, e.Salary, 
+                         p.BasicSalary, p.Overtime, p.Deductions, p.Bonuses, p.NetPay, p.Status, p.PayrollID
+                ORDER BY e.FirstName, e.LastName"
+
             Dim cmd As New MySqlCommand(query, conn)
+            cmd.Parameters.AddWithValue("@startDate", startOfMonth)
+            cmd.Parameters.AddWithValue("@endDate", endOfMonth)
+
             Dim adapter As New MySqlDataAdapter(cmd)
             Dim dt As New DataTable()
             adapter.Fill(dt)
@@ -48,50 +118,85 @@ Public Class Payroll
             For Each row As DataRow In dt.Rows
                 Dim rowIndex As Integer = DataGridView1.Rows.Add()
                 Dim newRow As DataGridViewRow = DataGridView1.Rows(rowIndex)
-                
+
                 newRow.Cells("Employee").Value = row("EmployeeName").ToString()
                 newRow.Cells("Position").Value = row("Position").ToString()
-                
-                ' Display hours and rate if available
-                If hasNewColumns Then
-                    Dim hours As Decimal = If(row("HoursWorked") IsNot DBNull.Value, Convert.ToDecimal(row("HoursWorked")), 0)
-                    Dim rate As Decimal = If(row("HourlyRate") IsNot DBNull.Value, Convert.ToDecimal(row("HourlyRate")), 0)
-                    
-                    newRow.Cells("Hours").Value = hours.ToString("F2")
-                    newRow.Cells("HourlyRate").Value = rate.ToString("C2")
-                    sumHours += hours
-                Else
-                    newRow.Cells("Hours").Value = "N/A"
-                    newRow.Cells("HourlyRate").Value = "N/A"
-                End If
-                
-                newRow.Cells("Overtime").Value = Convert.ToDecimal(row("Overtime")).ToString("C2")
-                
-                Dim gross As Decimal = Convert.ToDecimal(row("BasicSalary")) + Convert.ToDecimal(row("Overtime"))
-                newRow.Cells("GrossPay").Value = gross.ToString("C2")
-                newRow.Cells("NetPay").Value = Convert.ToDecimal(row("NetPay")).ToString("C2")
-                newRow.Cells("Status").Value = row("Status").ToString()
-                newRow.Cells("Actions").Value = "Edit"
-                
-                ' Store PayrollID in Tag for editing
-                newRow.Tag = row("PayrollID")
-                
-                totalGross += gross
-                totalNet += Convert.ToDecimal(row("NetPay"))
+
+                ' Get hours from attendance
+                Dim hours As Decimal = If(row("TotalHours") IsNot DBNull.Value, Convert.ToDecimal(row("TotalHours")), 0)
+                Dim rate As Decimal = If(row("HourlyRate") IsNot DBNull.Value, Convert.ToDecimal(row("HourlyRate")), 0)
+
+                newRow.Cells("Hours").Value = If(hours > 0, hours.ToString("F2"), "-")
+                newRow.Cells("HourlyRate").Value = If(rate > 0, FormatPeso(rate), "-")
+
+                ' Calculate pay from attendance hours
+                Dim calculatedPay As Decimal = hours * rate
+
+                Dim overtime As Decimal = If(row("Overtime") IsNot DBNull.Value, Convert.ToDecimal(row("Overtime")), 0)
+                newRow.Cells("Overtime").Value = If(overtime > 0, FormatPeso(overtime), "-")
+
+                ' Use calculated pay if no payroll record, otherwise use payroll record
+                Dim basicSalary As Decimal = If(row("BasicSalary") IsNot DBNull.Value AndAlso Convert.ToDecimal(row("BasicSalary")) > 0,
+                                                Convert.ToDecimal(row("BasicSalary")),
+                                                calculatedPay)
+
+                Dim gross As Decimal = basicSalary + overtime
+                newRow.Cells("GrossPay").Value = If(gross > 0, FormatPeso(gross), If(calculatedPay > 0, FormatPeso(calculatedPay), "-"))
+
+                Dim netPay As Decimal = If(row("NetPay") IsNot DBNull.Value, Convert.ToDecimal(row("NetPay")), calculatedPay)
+                newRow.Cells("NetPay").Value = If(netPay > 0, FormatPeso(netPay), "-")
+
+                Dim status As String = row("Status").ToString()
+                newRow.Cells("Status").Value = status
+
+                ' Color code rows based on status
+                Select Case status.ToLower()
+                    Case "paid"
+                        newRow.DefaultCellStyle.BackColor = Color.LightGreen
+                    Case "pending", "approved"
+                        newRow.DefaultCellStyle.BackColor = Color.LightYellow
+                    Case "no record"
+                        If hours > 0 Then
+                            newRow.DefaultCellStyle.BackColor = Color.LightCoral ' Has hours but no payroll
+                        End If
+                End Select
+
+                ' Smart Actions button based on status
+                Dim actionText As String = "View"
+                Select Case status.ToLower()
+                    Case "no record"
+                        actionText = If(hours > 0, "Generate", "-")
+                    Case "pending"
+                        actionText = "Edit | Approve"
+                    Case "approved"
+                        actionText = "Mark as Paid"
+                    Case "paid"
+                        actionText = "Completed"
+                End Select
+
+                newRow.Cells("Actions").Value = actionText
+
+                ' Store EmployeeID and PayrollID in Tag
+                newRow.Tag = New With {
+                    .EmployeeID = row("EmployeeID"),
+                    .PayrollID = If(row("PayrollID") IsNot DBNull.Value, Convert.ToInt32(row("PayrollID")), 0),
+                    .Hours = hours,
+                    .Rate = rate,
+                    .CalculatedPay = calculatedPay
+                }
+
+                totalGross += If(gross > 0, gross, calculatedPay)
+                totalNet += netPay
+                sumHours += hours
             Next
-            
-            lblTotalGrossPay.Text = totalGross.ToString("C2")
-            lblTotalNetPay.Text = totalNet.ToString("C2")
-            TotalHours.Text = If(hasNewColumns, sumHours.ToString("F2") & " hrs", "N/A")
+
+            lblTotalGrossPay.Text = FormatPeso(totalGross)
+            lblTotalNetPay.Text = FormatPeso(totalNet)
+            TotalHours.Text = sumHours.ToString("F2") & " hrs"
             E.Text = empCount.ToString()
-            
-            If empCount = 0 Then
-                ' Optional: Uncomment to debug if needed, but might be annoying on load if just empty
-                ' MessageBox.Show("No payroll records found. Please add a new record.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            End If
 
         Catch ex As Exception
-            MessageBox.Show("Error loading payroll: " & ex.Message & vbCrLf & vbCrLf & 
+            MessageBox.Show("Error loading employees: " & ex.Message & vbCrLf & vbCrLf &
                           "Stack Trace: " & ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             closeConn()
@@ -99,30 +204,175 @@ Public Class Payroll
     End Sub
 
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-        If e.RowIndex >= 0 Then
-            Dim selectedRow As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
-            Dim payrollID As Integer = If(selectedRow.Tag IsNot Nothing, Convert.ToInt32(selectedRow.Tag), 0)
-            Dim status As String = If(selectedRow.Cells("Status").Value IsNot Nothing, selectedRow.Cells("Status").Value.ToString(), "")
-            
-            ' Check if Edit button clicked (assuming you have an Edit button column)
-            ' For now, we'll use row double-click for edit
+        Try
+            ' Check if valid row and Actions column clicked
+            If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
+                If DataGridView1.Columns(e.ColumnIndex).Name = "Actions" Then
+                    Dim selectedRow As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
+                    
+                    ' Check if row has tag data
+                    If selectedRow.Tag Is Nothing Then
+                        Return
+                    End If
+                    
+                    Dim tagData = selectedRow.Tag
+                    
+                    ' Safely get button text
+                    Dim buttonText As String = ""
+                    If selectedRow.Cells("Actions").Value IsNot Nothing Then
+                        buttonText = selectedRow.Cells("Actions").Value.ToString()
+                    End If
+                    
+                    ' Skip if no action or just "-"
+                    If String.IsNullOrEmpty(buttonText) OrElse buttonText = "-" Then
+                        Return
+                    End If
+                    
+                    ' Safely get employee name
+                    Dim employeeName As String = "Unknown"
+                    If selectedRow.Cells("Employee").Value IsNot Nothing Then
+                        employeeName = selectedRow.Cells("Employee").Value.ToString()
+                    End If
+                    
+                    ' Extract data from tag
+                    Dim employeeID As Integer = If(tagData.EmployeeID IsNot Nothing, tagData.EmployeeID, 0)
+                    Dim payrollID As Integer = If(tagData.PayrollID IsNot Nothing, tagData.PayrollID, 0)
+                    Dim hours As Decimal = If(tagData.Hours IsNot Nothing, tagData.Hours, 0)
+                    Dim rate As Decimal = If(tagData.Rate IsNot Nothing, tagData.Rate, 0)
+                    Dim calculatedPay As Decimal = If(tagData.CalculatedPay IsNot Nothing, tagData.CalculatedPay, 0)
+                    
+                    ' Handle different actions
+                    If buttonText.Contains("Generate") Then
+                        HandleGenerateAction(employeeID, hours, rate, calculatedPay)
+                        
+                    ElseIf buttonText = "Edit | Approve" Then
+                        ' Ask user what they want to do
+                        Dim result As DialogResult = MessageBox.Show(
+                            $"Select action for {employeeName}:" & vbCrLf & vbCrLf &
+                            "[Yes] - Approve for Payment" & vbCrLf &
+                            "[No] - Edit Details" & vbCrLf &
+                            "[Cancel] - Do nothing",
+                            "Pending Payroll Action",
+                            MessageBoxButtons.YesNoCancel,
+                            MessageBoxIcon.Question)
+                            
+                        If result = DialogResult.Yes Then
+                            HandleApproveAction(payrollID, employeeName)
+                        ElseIf result = DialogResult.No Then
+                            HandleEditAction(payrollID, employeeID, employeeName)
+                        End If
+                        
+                    ElseIf buttonText.Contains("Edit") Then
+                        HandleEditAction(payrollID, employeeID, employeeName)
+                        
+                    ElseIf buttonText.Contains("Approve") Then
+                        HandleApproveAction(payrollID, employeeName)
+                        
+                    ElseIf buttonText.Contains("Mark as Paid") Then
+                        HandleMarkAsPaidAction(payrollID, employeeName)
+                        
+                    ElseIf buttonText = "Completed" Then
+                        ' Do nothing, just show as completed
+                        Return
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Error processing action: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub HandleGenerateAction(employeeID As Integer, hours As Decimal, rate As Decimal, calculatedPay As Decimal)
+        Dim result As DialogResult = MessageBox.Show(
+            $"Generate payroll for this employee?" & vbCrLf & vbCrLf &
+            $"Hours worked: {hours:F2}" & vbCrLf &
+            $"Hourly rate: {FormatPeso(rate)}" & vbCrLf &
+            $"Calculated pay: {FormatPeso(calculatedPay)}",
+            "Generate Payroll",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question)
+
+        If result = DialogResult.Yes Then
+            GeneratePayrollFromAttendance(employeeID, hours, rate, calculatedPay)
         End If
     End Sub
 
-    Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
-        If e.RowIndex >= 0 Then
-            Dim selectedRow As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
-            Dim payrollID As Integer = If(selectedRow.Tag IsNot Nothing, Convert.ToInt32(selectedRow.Tag), 0)
-            Dim status As String = If(selectedRow.Cells("Status").Value IsNot Nothing, selectedRow.Cells("Status").Value.ToString(), "")
-            
-            If status.ToLower() = "paid" Then
-                MessageBox.Show("Cannot edit a payroll record that has already been paid.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
-            
-            ' TODO: Open edit form when created
-            MessageBox.Show("Edit functionality coming soon! PayrollID: " & payrollID, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    Private Sub HandleEditAction(payrollID As Integer, employeeID As Integer, employeeName As String)
+        If payrollID > 0 Then
+            ' Edit form is now available!
+            Dim editForm As New FormEditPayroll(payrollID, employeeID, employeeName)
+            editForm.ShowDialog()
+        Else
+            MessageBox.Show("No payroll record to edit.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
+    End Sub
+
+    Private Sub HandleApproveAction(payrollID As Integer, employeeName As String)
+        Dim result As DialogResult = MessageBox.Show(
+            $"Approve payroll for {employeeName}?" & vbCrLf & vbCrLf &
+            "This will change status to 'Approved' and allow payment processing.",
+            "Approve Payroll",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question)
+
+        If result = DialogResult.Yes Then
+            UpdatePayrollStatus(payrollID, "Approved")
+        End If
+    End Sub
+
+    Private Sub HandleMarkAsPaidAction(payrollID As Integer, employeeName As String)
+        Dim result As DialogResult = MessageBox.Show(
+            $"Mark payroll as PAID for {employeeName}?" & vbCrLf & vbCrLf &
+            "⚠️ This action marks the payroll as completed." & vbCrLf &
+            "Make sure payment has been processed!",
+            "Mark as Paid",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Warning)
+
+        If result = DialogResult.Yes Then
+            UpdatePayrollStatus(payrollID, "Paid")
+        End If
+    End Sub
+
+    Private Sub HandleViewReceiptAction(payrollID As Integer, employeeName As String)
+        ' TODO: Implement receipt viewing/printing
+        MessageBox.Show($"Payroll receipt for {employeeName}" & vbCrLf &
+                      $"Payroll ID: {payrollID}" & vbCrLf & vbCrLf &
+                      "Receipt viewing/printing coming soon!",
+                      "Payroll Receipt", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub GeneratePayrollFromAttendance(employeeID As Integer, hours As Decimal, rate As Decimal, calculatedPay As Decimal)
+        Try
+            openConn()
+
+            Dim startOfMonth As Date = New Date(DateTime.Now.Year, DateTime.Now.Month, 1)
+            Dim endOfMonth As Date = startOfMonth.AddMonths(1).AddDays(-1)
+
+            Dim query As String = "INSERT INTO payroll 
+                (EmployeeID, PayPeriodStart, PayPeriodEnd, HoursWorked, HourlyRate, BasicSalary, 
+                 Overtime, Deductions, Bonuses, Status, CreatedDate) 
+                VALUES (@empID, @start, @end, @hours, @rate, @basicSalary, 0, 0, 0, 'Pending', NOW())"
+
+            Dim cmd As New MySqlCommand(query, conn)
+            cmd.Parameters.AddWithValue("@empID", employeeID)
+            cmd.Parameters.AddWithValue("@start", startOfMonth)
+            cmd.Parameters.AddWithValue("@end", endOfMonth)
+            cmd.Parameters.AddWithValue("@hours", hours)
+            cmd.Parameters.AddWithValue("@rate", rate)
+            cmd.Parameters.AddWithValue("@basicSalary", calculatedPay)
+
+            cmd.ExecuteNonQuery()
+            closeConn()
+
+            MessageBox.Show("Payroll generated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            LoadEmployees() ' Refresh
+
+        Catch ex As Exception
+            MessageBox.Show("Error generating payroll: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            closeConn()
+        End Try
     End Sub
 
     Public Sub UpdatePayrollStatus(payrollID As Integer, newStatus As String)
@@ -135,17 +385,12 @@ Public Class Payroll
             cmd.ExecuteNonQuery()
             closeConn()
             
-            LoadPayroll()
+            LoadEmployees()
             MessageBox.Show("Payroll status updated to " & newStatus & "!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Catch ex As Exception
             MessageBox.Show("Error updating status: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             closeConn()
         End Try
-    End Sub
-
-    Private Sub AddNewPayrollRecordbtn_Click(sender As Object, e As EventArgs) Handles AddNewPayrollRecordbtn.Click
-        Dim form As New FormAddNewPayrollRecord()
-        form.ShowDialog()
     End Sub
 End Class
