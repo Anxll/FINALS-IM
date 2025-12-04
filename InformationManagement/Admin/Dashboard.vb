@@ -619,60 +619,69 @@ Public Class Dashboard
 
     Private Sub LoadPendingOrders()
         Try
-            ' Clear existing order panels except the template
-            For i = flpOrders.Controls.Count - 1 To 0 Step -1
-                If TypeOf flpOrders.Controls(i) Is Panel AndAlso
-                   flpOrders.Controls(i).Name <> "pnlOrders" Then
-                    flpOrders.Controls.RemoveAt(i)
+            ' Clear existing order panels except the template and labels
+            Dim controlsToRemove As New List(Of Control)
+            For Each ctrl As Control In flpOrders.Controls
+                If TypeOf ctrl Is Panel AndAlso ctrl.Name.StartsWith("orderPanel") Then
+                    controlsToRemove.Add(ctrl)
                 End If
+                ' Also remove any "no data" labels from previous loads
+                If TypeOf ctrl Is Label AndAlso ctrl.Name = "lblNoPendingOrders" Then
+                    controlsToRemove.Add(ctrl)
+                End If
+            Next
+            For Each ctrl In controlsToRemove
+                flpOrders.Controls.Remove(ctrl)
+                ctrl.Dispose()
             Next
 
             openConn()
             cmd = New MySqlCommand("
-                SELECT 
-                    o.OrderID,
-                    o.ReceiptNumber,
-                    o.OrderType,
-                    o.TotalAmount,
-                    o.OrderDate,
-                    o.OrderTime,
-                    TIMESTAMPDIFF(MINUTE, CONCAT(o.OrderDate, ' ', o.OrderTime), NOW()) as MinutesAgo,
-                    o.OrderSource
-                FROM orders o
-                WHERE o.OrderStatus = 'Preparing'
-                ORDER BY o.OrderDate DESC, o.OrderTime DESC
-                LIMIT 5", conn)
+            SELECT 
+                o.OrderID,
+                o.ReceiptNumber,
+                o.OrderType,
+                o.TotalAmount,
+                o.OrderDate,
+                o.OrderTime,
+                TIMESTAMPDIFF(MINUTE, CONCAT(o.OrderDate, ' ', o.OrderTime), NOW()) as MinutesAgo,
+                o.OrderSource
+            FROM orders o
+            WHERE o.OrderStatus = 'Preparing'
+            ORDER BY o.OrderDate DESC, o.OrderTime DESC
+            LIMIT 20", conn)
 
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
             Dim yPosition As Integer = 62
             Dim itemCount As Integer = 0
 
-            While reader.Read() AndAlso itemCount < 5
+            While reader.Read()
                 Dim orderPanel As New Panel With {
-                    .BackColor = Color.PeachPuff,
-                    .Size = New Size(456, 58),
-                    .Location = New Point(18, yPosition),
-                    .Name = "orderPanel" & itemCount
-                }
+                .BackColor = Color.FromArgb(255, 218, 185),
+                .Size = New Size(456, 71),
+                .Location = New Point(18, yPosition),
+                .Name = "orderPanel" & itemCount
+            }
 
-                ' Order ID
+                ' Order ID / Receipt Number
                 Dim lblOrderId As New Label With {
-                    .AutoSize = True,
-                    .BackColor = Color.Transparent,
-                    .Font = New Font("Segoe UI Semibold", 11.25!, FontStyle.Bold),
-                    .Location = New Point(17, 9),
-                    .Text = reader("ReceiptNumber").ToString()
-                }
+                .AutoSize = True,
+                .BackColor = Color.Transparent,
+                .Font = New Font("Segoe UI Semibold", 11.25!, FontStyle.Bold),
+                .Location = New Point(17, 9),
+                .Text = reader("ReceiptNumber").ToString()
+            }
 
                 ' Order Type
+                Dim orderType As String = reader("OrderType").ToString()
                 Dim lblOrderType As New Label With {
-                    .AutoSize = True,
-                    .BackColor = Color.Transparent,
-                    .Font = New Font("Segoe UI", 9.75!),
-                    .ForeColor = SystemColors.ControlDarkDark,
-                    .Location = New Point(20, 29),
-                    .Text = reader("OrderType").ToString() & " •"
-                }
+                .AutoSize = True,
+                .BackColor = Color.Transparent,
+                .Font = New Font("Segoe UI", 9.75!),
+                .ForeColor = SystemColors.ControlDarkDark,
+                .Location = New Point(20, 35),
+                .Text = orderType & " •"
+            }
 
                 ' Time ago
                 Dim minutesAgo As Integer = If(IsDBNull(reader("MinutesAgo")), 0, Convert.ToInt32(reader("MinutesAgo")))
@@ -685,49 +694,54 @@ Public Class Dashboard
                 End If
 
                 Dim lblOrderTime As New Label With {
-                    .AutoSize = True,
-                    .BackColor = Color.Transparent,
-                    .Font = New Font("Segoe UI", 9.75!),
-                    .ForeColor = SystemColors.ControlDarkDark,
-                    .Location = New Point(110, 29),
-                    .Text = timeText
-                }
+                .AutoSize = True,
+                .BackColor = Color.Transparent,
+                .Font = New Font("Segoe UI", 9.75!),
+                .ForeColor = SystemColors.ControlDarkDark,
+                .Location = New Point(95, 35),
+                .Text = timeText
+            }
 
                 ' Price
                 Dim lblPrice As New Label With {
-                    .AutoSize = True,
-                    .BackColor = Color.Transparent,
-                    .Font = New Font("Segoe UI", 11.25!, FontStyle.Bold),
-                    .Location = New Point(350, 17),
-                    .Text = "₱" & Convert.ToDecimal(reader("TotalAmount")).ToString("N2")
-                }
+                .AutoSize = True,
+                .BackColor = Color.Transparent,
+                .Font = New Font("Segoe UI", 11.25!, FontStyle.Bold),
+                .Location = New Point(350, 23),
+                .Text = "₱" & Convert.ToDecimal(reader("TotalAmount")).ToString("N2")
+            }
 
                 orderPanel.Controls.AddRange({lblOrderId, lblOrderType, lblOrderTime, lblPrice})
                 flpOrders.Controls.Add(orderPanel)
                 orderPanel.BringToFront()
 
-                yPosition += 73
+                yPosition += 85
                 itemCount += 1
             End While
 
             reader.Close()
             closeConn()
 
-            ' If no pending orders
-            If itemCount = 0 Then
+            ' Adjust panel height to fit all items (same pattern as Recent Reservations)
+            If itemCount > 0 Then
+                flpOrders.Height = yPosition + 30
+            Else
+                ' If no pending orders
                 Dim noDataLabel As New Label With {
-                    .Text = "No pending orders",
-                    .Font = New Font("Segoe UI", 10),
-                    .ForeColor = Color.Gray,
-                    .Location = New Point(18, 62),
-                    .AutoSize = True,
-                    .BackColor = Color.Transparent
-                }
+                .Name = "lblNoPendingOrders",
+                .Text = "No pending orders",
+                .Font = New Font("Segoe UI", 10),
+                .ForeColor = Color.Gray,
+                .Location = New Point(18, 62),
+                .AutoSize = True,
+                .BackColor = Color.Transparent
+            }
                 flpOrders.Controls.Add(noDataLabel)
+                flpOrders.Height = 150
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Error loading pending orders: " & ex.Message)
+            MessageBox.Show("Error loading pending orders: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             closeConn()
         End Try
     End Sub
@@ -785,5 +799,9 @@ Public Class Dashboard
             Dim newY As Integer = PanelMenu.Location.Y + PanelMenu.Height + 20
             pendingOrdersPanel.Location = New Point(pendingOrdersPanel.Location.X, newY)
         End If
+    End Sub
+
+    Private Sub RoundedPane21_Paint(sender As Object, e As PaintEventArgs) Handles RoundedPane21.Paint
+
     End Sub
 End Class
