@@ -358,6 +358,12 @@
     <Compile Include="Admin\Payroll.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Admin\ProductIngredientUsageHistory.Designer.vb">
+      <DependentUpon>ProductIngredientUsageHistory.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ProductIngredientUsageHistory.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Admin\Reports.Designer.vb">
       <DependentUpon>Reports.vb</DependentUpon>
     </Compile>
