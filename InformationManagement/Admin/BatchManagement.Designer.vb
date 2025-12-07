@@ -19,8 +19,8 @@
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.lblIngredientName = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -51,7 +51,7 @@
         '
         'Panel1
         '
-        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.Panel1.BackColor = System.Drawing.Color.White
         Me.Panel1.Controls.Add(Me.lblIngredientName)
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
@@ -64,8 +64,8 @@
         '
         Me.lblIngredientName.AutoSize = True
         Me.lblIngredientName.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblIngredientName.ForeColor = System.Drawing.Color.White
-        Me.lblIngredientName.Location = New System.Drawing.Point(17, 35)
+        Me.lblIngredientName.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(54, Byte), Integer))
+        Me.lblIngredientName.Location = New System.Drawing.Point(23, 33)
         Me.lblIngredientName.Name = "lblIngredientName"
         Me.lblIngredientName.Size = New System.Drawing.Size(208, 32)
         Me.lblIngredientName.TabIndex = 1
@@ -75,7 +75,7 @@
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.ForeColor = System.Drawing.Color.LightGray
+        Me.Label1.ForeColor = System.Drawing.Color.DimGray
         Me.Label1.Location = New System.Drawing.Point(22, 9)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(129, 15)
@@ -182,22 +182,22 @@
         Me.dgvBatches.BackgroundColor = System.Drawing.Color.White
         Me.dgvBatches.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.dgvBatches.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvBatches.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvBatches.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.dgvBatches.ColumnHeadersHeight = 40
         Me.dgvBatches.EnableHeadersVisualStyles = False
         Me.dgvBatches.Location = New System.Drawing.Point(25, 265)
         Me.dgvBatches.Name = "dgvBatches"
         Me.dgvBatches.ReadOnly = True
         Me.dgvBatches.RowHeadersVisible = False
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.dgvBatches.RowsDefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.dgvBatches.RowsDefaultCellStyle = DataGridViewCellStyle4
         Me.dgvBatches.Size = New System.Drawing.Size(1350, 380)
         Me.dgvBatches.TabIndex = 5
         '
@@ -258,9 +258,9 @@
         Me.Panel2.Controls.Add(Me.Label3)
         Me.Panel2.CornerRadius = 15
         Me.Panel2.FillColor = System.Drawing.Color.White
-        Me.Panel2.Location = New System.Drawing.Point(25, 100)
+        Me.Panel2.Location = New System.Drawing.Point(31, 104)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(200, 100)
+        Me.Panel2.Size = New System.Drawing.Size(234, 96)
         Me.Panel2.TabIndex = 10
         '
         'Panel3
@@ -271,9 +271,9 @@
         Me.Panel3.Controls.Add(Me.Label5)
         Me.Panel3.CornerRadius = 15
         Me.Panel3.FillColor = System.Drawing.Color.White
-        Me.Panel3.Location = New System.Drawing.Point(240, 100)
+        Me.Panel3.Location = New System.Drawing.Point(293, 104)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(200, 100)
+        Me.Panel3.Size = New System.Drawing.Size(234, 96)
         Me.Panel3.TabIndex = 11
         '
         'Panel4
@@ -284,9 +284,9 @@
         Me.Panel4.Controls.Add(Me.Label7)
         Me.Panel4.CornerRadius = 15
         Me.Panel4.FillColor = System.Drawing.Color.White
-        Me.Panel4.Location = New System.Drawing.Point(464, 100)
+        Me.Panel4.Location = New System.Drawing.Point(560, 104)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(240, 100)
+        Me.Panel4.Size = New System.Drawing.Size(259, 96)
         Me.Panel4.TabIndex = 12
         '
         'Panel5
@@ -297,9 +297,9 @@
         Me.Panel5.Controls.Add(Me.lblExpiringCount)
         Me.Panel5.CornerRadius = 15
         Me.Panel5.FillColor = System.Drawing.Color.White
-        Me.Panel5.Location = New System.Drawing.Point(732, 100)
+        Me.Panel5.Location = New System.Drawing.Point(851, 104)
         Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(200, 100)
+        Me.Panel5.Size = New System.Drawing.Size(234, 96)
         Me.Panel5.TabIndex = 13
         '
         'BatchManagement
@@ -337,7 +337,6 @@
         Me.Panel5.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
 
     End Sub
 

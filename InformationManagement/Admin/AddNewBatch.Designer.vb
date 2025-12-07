@@ -79,7 +79,7 @@ Partial Class AddNewBatch
         '
         Me.lblIngredientName.AutoSize = True
         Me.lblIngredientName.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.lblIngredientName.ForeColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.lblIngredientName.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.lblIngredientName.Location = New System.Drawing.Point(108, 84)
         Me.lblIngredientName.Name = "lblIngredientName"
         Me.lblIngredientName.Size = New System.Drawing.Size(110, 15)
@@ -206,7 +206,7 @@ Partial Class AddNewBatch
         Me.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSave.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnSave.ForeColor = System.Drawing.Color.White
-        Me.btnSave.Location = New System.Drawing.Point(318, 421)
+        Me.btnSave.Location = New System.Drawing.Point(320, 451)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(85, 34)
         Me.btnSave.TabIndex = 18
@@ -221,7 +221,7 @@ Partial Class AddNewBatch
         Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnCancel.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnCancel.ForeColor = System.Drawing.Color.White
-        Me.btnCancel.Location = New System.Drawing.Point(405, 421)
+        Me.btnCancel.Location = New System.Drawing.Point(423, 449)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(85, 34)
         Me.btnCancel.TabIndex = 19
@@ -254,7 +254,7 @@ Partial Class AddNewBatch
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(520, 475)
+        Me.ClientSize = New System.Drawing.Size(520, 497)
         Me.Controls.Add(Me.cmbStorageLocation)
         Me.Controls.Add(Me.lblStorageLocation)
         Me.Controls.Add(Me.btnCancel)
@@ -282,7 +282,6 @@ Partial Class AddNewBatch
         Me.MinimizeBox = False
         Me.Name = "AddNewBatch"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Add New Batch"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

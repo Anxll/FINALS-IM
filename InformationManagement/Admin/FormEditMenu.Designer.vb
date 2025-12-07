@@ -58,14 +58,14 @@ Partial Class FormEditMenu
         '
         'Panel1
         '
-        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
+        Me.Panel1.BackColor = System.Drawing.Color.White
         Me.Panel1.Controls.Add(Me.btnClose)
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(862, 52)
+        Me.Panel1.Size = New System.Drawing.Size(862, 66)
         Me.Panel1.TabIndex = 0
         '
         'btnClose
@@ -76,7 +76,7 @@ Partial Class FormEditMenu
         Me.btnClose.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold)
         Me.btnClose.ForeColor = System.Drawing.Color.White
         Me.btnClose.Location = New System.Drawing.Point(823, 9)
-        Me.btnClose.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnClose.Margin = New System.Windows.Forms.Padding(2)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(34, 35)
         Me.btnClose.TabIndex = 25
@@ -86,12 +86,12 @@ Partial Class FormEditMenu
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 16.0!, System.Drawing.FontStyle.Bold)
-        Me.Label1.ForeColor = System.Drawing.Color.White
-        Me.Label1.Location = New System.Drawing.Point(13, 13)
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label1.Location = New System.Drawing.Point(19, 12)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(173, 30)
+        Me.Label1.Size = New System.Drawing.Size(190, 32)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Edit Menu Item"
         '
@@ -126,18 +126,18 @@ Partial Class FormEditMenu
         Me.Panel2.Controls.Add(Me.Label4)
         Me.Panel2.Controls.Add(Me.Label2)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel2.Location = New System.Drawing.Point(0, 52)
-        Me.Panel2.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Panel2.Location = New System.Drawing.Point(0, 66)
+        Me.Panel2.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Padding = New System.Windows.Forms.Padding(17, 17, 17, 17)
-        Me.Panel2.Size = New System.Drawing.Size(862, 488)
+        Me.Panel2.Padding = New System.Windows.Forms.Padding(17)
+        Me.Panel2.Size = New System.Drawing.Size(862, 474)
         Me.Panel2.TabIndex = 1
         '
         'PictureBox1
         '
         Me.PictureBox1.BackColor = System.Drawing.Color.WhiteSmoke
         Me.PictureBox1.Location = New System.Drawing.Point(440, 290)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(370, 32)
         Me.PictureBox1.TabIndex = 59
@@ -151,7 +151,7 @@ Partial Class FormEditMenu
         Me.cmbMealTime.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.cmbMealTime.FormattingEnabled = True
         Me.cmbMealTime.Location = New System.Drawing.Point(440, 419)
-        Me.cmbMealTime.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.cmbMealTime.Margin = New System.Windows.Forms.Padding(2)
         Me.cmbMealTime.Name = "cmbMealTime"
         Me.cmbMealTime.Size = New System.Drawing.Size(371, 25)
         Me.cmbMealTime.TabIndex = 58
@@ -172,7 +172,7 @@ Partial Class FormEditMenu
         Me.DateTimePicker1.Enabled = False
         Me.DateTimePicker1.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.DateTimePicker1.Location = New System.Drawing.Point(22, 419)
-        Me.DateTimePicker1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.DateTimePicker1.Margin = New System.Windows.Forms.Padding(2)
         Me.DateTimePicker1.Name = "DateTimePicker1"
         Me.DateTimePicker1.Size = New System.Drawing.Size(232, 25)
         Me.DateTimePicker1.TabIndex = 55
@@ -193,7 +193,7 @@ Partial Class FormEditMenu
         Me.PrepTime.BackColor = System.Drawing.Color.WhiteSmoke
         Me.PrepTime.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.PrepTime.Location = New System.Drawing.Point(440, 362)
-        Me.PrepTime.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PrepTime.Margin = New System.Windows.Forms.Padding(2)
         Me.PrepTime.Name = "PrepTime"
         Me.PrepTime.Size = New System.Drawing.Size(371, 25)
         Me.PrepTime.TabIndex = 9
@@ -215,7 +215,7 @@ Partial Class FormEditMenu
         Me.OrderCount.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.OrderCount.ForeColor = System.Drawing.Color.Gray
         Me.OrderCount.Location = New System.Drawing.Point(440, 74)
-        Me.OrderCount.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.OrderCount.Margin = New System.Windows.Forms.Padding(2)
         Me.OrderCount.Name = "OrderCount"
         Me.OrderCount.ReadOnly = True
         Me.OrderCount.Size = New System.Drawing.Size(371, 25)
@@ -226,7 +226,7 @@ Partial Class FormEditMenu
         Me.ServingSize.BackColor = System.Drawing.Color.WhiteSmoke
         Me.ServingSize.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ServingSize.Location = New System.Drawing.Point(22, 339)
-        Me.ServingSize.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ServingSize.Margin = New System.Windows.Forms.Padding(2)
         Me.ServingSize.Name = "ServingSize"
         Me.ServingSize.Size = New System.Drawing.Size(371, 25)
         Me.ServingSize.TabIndex = 5
@@ -247,7 +247,7 @@ Partial Class FormEditMenu
         Me.ProductCode.BackColor = System.Drawing.Color.WhiteSmoke
         Me.ProductCode.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ProductCode.Location = New System.Drawing.Point(22, 479)
-        Me.ProductCode.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ProductCode.Margin = New System.Windows.Forms.Padding(2)
         Me.ProductCode.Name = "ProductCode"
         Me.ProductCode.Size = New System.Drawing.Size(371, 25)
         Me.ProductCode.TabIndex = 6
@@ -257,7 +257,7 @@ Partial Class FormEditMenu
         Me.Description.BackColor = System.Drawing.Color.WhiteSmoke
         Me.Description.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Description.Location = New System.Drawing.Point(22, 211)
-        Me.Description.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Description.Margin = New System.Windows.Forms.Padding(2)
         Me.Description.Multiline = True
         Me.Description.Name = "Description"
         Me.Description.Size = New System.Drawing.Size(371, 87)
@@ -290,7 +290,7 @@ Partial Class FormEditMenu
         Me.txtProductName.BackColor = System.Drawing.Color.WhiteSmoke
         Me.txtProductName.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.txtProductName.Location = New System.Drawing.Point(22, 135)
-        Me.txtProductName.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtProductName.Margin = New System.Windows.Forms.Padding(2)
         Me.txtProductName.Name = "txtProductName"
         Me.txtProductName.Size = New System.Drawing.Size(371, 25)
         Me.txtProductName.TabIndex = 1
@@ -301,7 +301,7 @@ Partial Class FormEditMenu
         Me.ProductID.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.ProductID.ForeColor = System.Drawing.Color.Gray
         Me.ProductID.Location = New System.Drawing.Point(22, 74)
-        Me.ProductID.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ProductID.Margin = New System.Windows.Forms.Padding(2)
         Me.ProductID.Name = "ProductID"
         Me.ProductID.ReadOnly = True
         Me.ProductID.Size = New System.Drawing.Size(371, 25)
@@ -324,7 +324,7 @@ Partial Class FormEditMenu
         Me.numericPrice.DecimalPlaces = 2
         Me.numericPrice.Font = New System.Drawing.Font("Segoe UI", 11.0!)
         Me.numericPrice.Location = New System.Drawing.Point(440, 135)
-        Me.numericPrice.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.numericPrice.Margin = New System.Windows.Forms.Padding(2)
         Me.numericPrice.Maximum = New Decimal(New Integer() {999999, 0, 0, 0})
         Me.numericPrice.Name = "numericPrice"
         Me.numericPrice.Size = New System.Drawing.Size(370, 27)
@@ -338,7 +338,7 @@ Partial Class FormEditMenu
         Me.cmbCategory.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.cmbCategory.FormattingEnabled = True
         Me.cmbCategory.Location = New System.Drawing.Point(440, 237)
-        Me.cmbCategory.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.cmbCategory.Margin = New System.Windows.Forms.Padding(2)
         Me.cmbCategory.Name = "cmbCategory"
         Me.cmbCategory.Size = New System.Drawing.Size(371, 25)
         Me.cmbCategory.TabIndex = 7
@@ -351,7 +351,7 @@ Partial Class FormEditMenu
         Me.Availability.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.Availability.FormattingEnabled = True
         Me.Availability.Location = New System.Drawing.Point(440, 186)
-        Me.Availability.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Availability.Margin = New System.Windows.Forms.Padding(2)
         Me.Availability.Name = "Availability"
         Me.Availability.Size = New System.Drawing.Size(371, 25)
         Me.Availability.TabIndex = 4
@@ -428,9 +428,9 @@ Partial Class FormEditMenu
         Me.Panel3.Controls.Add(Me.btnUpdateItem)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel3.Location = New System.Drawing.Point(0, 540)
-        Me.Panel3.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Panel3.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Padding = New System.Windows.Forms.Padding(17, 17, 17, 17)
+        Me.Panel3.Padding = New System.Windows.Forms.Padding(17)
         Me.Panel3.Size = New System.Drawing.Size(862, 69)
         Me.Panel3.TabIndex = 2
         '
@@ -442,7 +442,7 @@ Partial Class FormEditMenu
         Me.btnUpdateItem.Font = New System.Drawing.Font("Segoe UI", 11.0!, System.Drawing.FontStyle.Bold)
         Me.btnUpdateItem.ForeColor = System.Drawing.Color.White
         Me.btnUpdateItem.Location = New System.Drawing.Point(440, 17)
-        Me.btnUpdateItem.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnUpdateItem.Margin = New System.Windows.Forms.Padding(2)
         Me.btnUpdateItem.Name = "btnUpdateItem"
         Me.btnUpdateItem.Size = New System.Drawing.Size(403, 39)
         Me.btnUpdateItem.TabIndex = 10
@@ -460,14 +460,13 @@ Partial Class FormEditMenu
         Me.Controls.Add(Me.Panel1)
         Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "FormEditMenu"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Edit Menu Item - Tabeya"
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)

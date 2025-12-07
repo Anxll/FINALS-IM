@@ -25,6 +25,7 @@ Public Class Dashboard
         LoadPendingOrders()
         LoadRecentReservations()
         LoadTotalOrders()
+        LoadReservationChart()
     End Sub
 
     Private Sub LoadDashboardData()
@@ -40,6 +41,8 @@ Public Class Dashboard
             LoadRecentReservations()
             LoadPendingOrders()
             LoadQuickStats()
+            LoadReservationChart()
+            ConfigureChart2Clickable()
 
         Catch ex As Exception
             MessageBox.Show("Error loading dashboard: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -246,7 +249,7 @@ Public Class Dashboard
             ' Clear existing items except the label
             Dim controlsToRemove As New List(Of Control)
             For Each ctrl As Control In PanelMenu.Controls
-                If TypeOf ctrl Is RoundedPane2 AndAlso ctrl.Name.StartsWith("itemPanel") Then
+                If TypeOf ctrl Is RoundedPane2 AndAlso ctrl.Name.StartsWith("pnlMenus") Then
                     controlsToRemove.Add(ctrl)
                 End If
                 ' Also remove any "no data" labels from previous loads
@@ -287,8 +290,8 @@ Public Class Dashboard
             .CornerRadius = 15,
             .FillColor = Color.White,
             .Size = New Size(456, 67),
-            .Location = New Point(20, yPosition),
-            .Name = "itemPanel" & itemCount
+            .Location = New Point(35, yPosition),
+            .Name = "pnlMenus" & itemCount
         }
 
                 ' Icon
@@ -352,7 +355,7 @@ Public Class Dashboard
                 .Text = "No menu items data available",
                 .Font = New Font("Segoe UI", 12, FontStyle.Bold),
                 .ForeColor = Color.Gray,
-                .Location = New Point(20, 61),
+                .Location = New Point(35, 61),
                 .Size = New Size(456, 100),
                 .TextAlign = ContentAlignment.MiddleCenter,
                 .BackColor = Color.Transparent,
@@ -622,13 +625,10 @@ Public Class Dashboard
             ' Clear existing order panels except the template and labels
             Dim controlsToRemove As New List(Of Control)
             For Each ctrl As Control In flpOrders.Controls
-                If TypeOf ctrl Is Panel AndAlso ctrl.Name.StartsWith("orderPanel") Then
+                If TypeOf ctrl Is Panel AndAlso ctrl.Name.StartsWith("pnlOrders") Then
                     controlsToRemove.Add(ctrl)
                 End If
-                ' Also remove any "no data" labels from previous loads
-                If TypeOf ctrl Is Label AndAlso ctrl.Name = "lblNoPendingOrders" Then
-                    controlsToRemove.Add(ctrl)
-                End If
+
             Next
             For Each ctrl In controlsToRemove
                 flpOrders.Controls.Remove(ctrl)
@@ -659,8 +659,8 @@ Public Class Dashboard
                 Dim orderPanel As New Panel With {
                 .BackColor = Color.FromArgb(255, 218, 185),
                 .Size = New Size(456, 71),
-                .Location = New Point(18, yPosition),
-                .Name = "orderPanel" & itemCount
+                .Location = New Point(41, yPosition),
+                .Name = "pnlOrders" & itemCount
             }
 
                 ' Order ID / Receipt Number
@@ -728,7 +728,6 @@ Public Class Dashboard
             Else
                 ' If no pending orders
                 Dim noDataLabel As New Label With {
-                .Name = "lblNoPendingOrders",
                 .Text = "No pending orders",
                 .Font = New Font("Segoe UI", 10),
                 .ForeColor = Color.Gray,
@@ -800,8 +799,195 @@ Public Class Dashboard
             pendingOrdersPanel.Location = New Point(pendingOrdersPanel.Location.X, newY)
         End If
     End Sub
+    ' ============================================
+    ' RESERVATION STATUS CHART
+    ' ============================================
 
+    Private Sub LoadReservationChart()
+        Try
+            openConn()
+
+            ' Get reservation counts by status for current month
+            cmd = New MySqlCommand("
+            SELECT 
+                ReservationStatus,
+                COUNT(*) AS StatusCount
+            FROM reservations
+            WHERE MONTH(EventDate) = MONTH(CURDATE()) 
+            AND YEAR(EventDate) = YEAR(CURDATE())
+            GROUP BY ReservationStatus", conn)
+
+            Dim reader As MySqlDataReader = cmd.ExecuteReader()
+
+            Dim pending As Integer = 0
+            Dim confirmed As Integer = 0
+            Dim cancelled As Integer = 0
+            Dim completed As Integer = 0
+
+            While reader.Read()
+                Dim status As String = reader("ReservationStatus").ToString()
+                Dim count As Integer = Convert.ToInt32(reader("StatusCount"))
+
+                Select Case status.ToLower()
+                    Case "pending"
+                        pending = count
+                    Case "confirmed"
+                        confirmed = count
+                    Case "cancelled"
+                        cancelled = count
+                    Case "completed"
+                        completed = count
+                End Select
+            End While
+            reader.Close()
+            closeConn()
+
+            ' Clear and update chart
+            ChartReservations.Series("ReservationStatus").Points.Clear()
+
+            If pending > 0 OrElse confirmed > 0 OrElse cancelled > 0 OrElse completed > 0 Then
+                ' Add Pending
+                If pending > 0 Then
+                    Dim point1 As New DataVisualization.Charting.DataPoint()
+                    point1.SetValueXY("Pending", pending)
+                    point1.Color = Color.FromArgb(251, 146, 60) ' Orange
+                    point1.BorderColor = Color.White
+                    point1.BorderWidth = 2
+                    point1.Label = pending.ToString()
+                    point1.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+                    point1.LabelForeColor = Color.White
+                    ChartReservations.Series("ReservationStatus").Points.Add(point1)
+                End If
+
+                ' Add Confirmed
+                If confirmed > 0 Then
+                    Dim point2 As New DataVisualization.Charting.DataPoint()
+                    point2.SetValueXY("Confirmed", confirmed)
+                    point2.Color = Color.FromArgb(34, 197, 94) ' Green
+                    point2.BorderColor = Color.White
+                    point2.BorderWidth = 2
+                    point2.Label = confirmed.ToString()
+                    point2.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+                    point2.LabelForeColor = Color.White
+                    ChartReservations.Series("ReservationStatus").Points.Add(point2)
+                End If
+
+                ' Add Cancelled
+                If cancelled > 0 Then
+                    Dim point3 As New DataVisualization.Charting.DataPoint()
+                    point3.SetValueXY("Cancelled", cancelled)
+                    point3.Color = Color.FromArgb(239, 68, 68) ' Red
+                    point3.BorderColor = Color.White
+                    point3.BorderWidth = 2
+                    point3.Label = cancelled.ToString()
+                    point3.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+                    point3.LabelForeColor = Color.White
+                    ChartReservations.Series("ReservationStatus").Points.Add(point3)
+                End If
+
+                ' Add Completed
+                If completed > 0 Then
+                    Dim point4 As New DataVisualization.Charting.DataPoint()
+                    point4.SetValueXY("Completed", completed)
+                    point4.Color = Color.FromArgb(59, 130, 246) ' Blue
+                    point4.BorderColor = Color.White
+                    point4.BorderWidth = 2
+                    point4.Label = completed.ToString()
+                    point4.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+                    point4.LabelForeColor = Color.White
+                    ChartReservations.Series("ReservationStatus").Points.Add(point4)
+                End If
+            Else
+                ' No data - show placeholder
+                ChartReservations.Annotations.Clear()
+                Dim noDataAnnotation As New TextAnnotation()
+                noDataAnnotation.Text = "No Reservation Data"
+                noDataAnnotation.Font = New Font("Segoe UI", 12, FontStyle.Bold)
+                noDataAnnotation.ForeColor = Color.Gray
+                noDataAnnotation.X = 50
+                noDataAnnotation.Y = 50
+                noDataAnnotation.Alignment = ContentAlignment.MiddleCenter
+                ChartReservations.Annotations.Add(noDataAnnotation)
+            End If
+
+            ' Enable 3D effect (optional)
+            ChartReservations.ChartAreas(0).Area3DStyle.Enable3D = True
+            ChartReservations.ChartAreas(0).Area3DStyle.Inclination = 15
+            ChartReservations.ChartAreas(0).Area3DStyle.Rotation = 10
+
+        Catch ex As Exception
+            MessageBox.Show("Error loading reservation chart: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            closeConn()
+        End Try
+    End Sub
+
+    ' ============================================
+    ' CHART CLICK EVENT - Navigate to Reservation Reports
+    ' ============================================
+    Private Sub ConfigureChart2Clickable()
+        ' Make the chart cursor indicate it's clickable
+        ChartReservations.Cursor = Cursors.Hand
+
+        ' Add tooltip to indicate it's clickable
+        Dim tooltip As New ToolTip()
+        tooltip.SetToolTip(Chart2, "Click to view detailed Catering Reservations report")
+    End Sub
+
+    Private Sub ChartReservations_Click(sender As Object, e As EventArgs) Handles ChartReservations.Click
+        Try
+            ' Get reference to AdminDashboard (parent form)
+            Dim adminDashboard As AdminDashboard = TryCast(Me.ParentForm, AdminDashboard)
+
+            If adminDashboard IsNot Nothing Then
+                ' First, load the Reports form in AdminDashboard
+                adminDashboard.btnReports.PerformClick()
+
+                ' Give UI time to load
+                Application.DoEvents()
+
+                ' Then load the Catering Reservations report
+                If Reports IsNot Nothing Then
+                    Reports.LoadCateringReservationReport()
+                End If
+            Else
+                MessageBox.Show("Unable to navigate to Reports section.", "Navigation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error navigating to catering reservations: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+
+    ' Add visual feedback when hovering over the chart
+    Private Sub Chart2_MouseEnter(sender As Object, e As EventArgs) Handles Chart2.MouseEnter
+        Chart2.Cursor = Cursors.Hand
+        RoundedPane28.BackColor = Color.FromArgb(248, 248, 250)
+    End Sub
+
+    Private Sub Chart2_MouseLeave(sender As Object, e As EventArgs) Handles Chart2.MouseLeave
+        Chart2.Cursor = Cursors.Default
+        RoundedPane28.BackColor = Color.White
+    End Sub
+
+    ' Add visual feedback when hovering over the chart
+
+
+    ' Add visual feedback when hovering over the chart
+    Private Sub ChartReservations_MouseEnter(sender As Object, e As EventArgs) Handles ChartReservations.MouseEnter
+        Chart2.Cursor = Cursors.Hand
+        ChartReservations.BackColor = Color.FromArgb(245, 245, 245)
+    End Sub
+
+    Private Sub ChartReservations_MouseLeave(sender As Object, e As EventArgs) Handles ChartReservations.MouseLeave
+        Chart2.Cursor = Cursors.Default
+        ChartReservations.BackColor = Color.White
+    End Sub
     Private Sub RoundedPane21_Paint(sender As Object, e As PaintEventArgs) Handles RoundedPane21.Paint
+
+    End Sub
+
+    Private Sub Chart2_Click(sender As Object, e As EventArgs)
 
     End Sub
 End Class

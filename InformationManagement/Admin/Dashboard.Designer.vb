@@ -22,6 +22,7 @@ Partial Class Dashboard
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim LegendCellColumn1 As System.Windows.Forms.DataVisualization.Charting.LegendCellColumn = New System.Windows.Forms.DataVisualization.Charting.LegendCellColumn()
@@ -31,6 +32,12 @@ Partial Class Dashboard
         Dim DataPoint3 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 10.0R)
         Dim Title1 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Dashboard))
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim DataPoint4 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 12.0R)
+        Dim DataPoint5 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 28.0R)
+        Dim DataPoint6 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 5.0R)
         Me.Label1 = New System.Windows.Forms.Label()
         Me.RoundedPane28 = New InformationManagement.RoundedPane2()
         Me.FlowLegends = New System.Windows.Forms.FlowLayoutPanel()
@@ -61,14 +68,6 @@ Partial Class Dashboard
         Me.PictureBox6 = New System.Windows.Forms.PictureBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
-        Me.PanelReservations = New InformationManagement.RoundedPane2()
-        Me.pnlReservations = New InformationManagement.RoundedPane2()
-        Me.icon = New System.Windows.Forms.PictureBox()
-        Me.lblStatus = New System.Windows.Forms.Label()
-        Me.lblGuests = New System.Windows.Forms.Label()
-        Me.lblDate = New System.Windows.Forms.Label()
-        Me.lblEvent = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
         Me.flpOrders = New InformationManagement.RoundedPane2()
         Me.pnlOrders = New System.Windows.Forms.Panel()
         Me.lblprice = New System.Windows.Forms.Label()
@@ -77,6 +76,18 @@ Partial Class Dashboard
         Me.lblOrderId = New System.Windows.Forms.Label()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
         Me.Label5 = New System.Windows.Forms.Label()
+        Me.PanelReservations = New InformationManagement.RoundedPane2()
+        Me.pnlReservations = New InformationManagement.RoundedPane2()
+        Me.icon = New System.Windows.Forms.PictureBox()
+        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.lblGuests = New System.Windows.Forms.Label()
+        Me.lblDate = New System.Windows.Forms.Label()
+        Me.lblEvent = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.RoundedPane22 = New InformationManagement.RoundedPane2()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
         Me.PanelMenu = New InformationManagement.RoundedPane2()
         Me.pnlMenus = New InformationManagement.RoundedPane2()
         Me.lblTotalOrderPrice = New System.Windows.Forms.Label()
@@ -84,10 +95,6 @@ Partial Class Dashboard
         Me.lblTotalOrders = New System.Windows.Forms.Label()
         Me.lblMenu = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.RoundedPane22 = New InformationManagement.RoundedPane2()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
         Me.RoundedPane23 = New InformationManagement.RoundedPane2()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.Label15 = New System.Windows.Forms.Label()
@@ -96,6 +103,21 @@ Partial Class Dashboard
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.lblTotalRevenue = New System.Windows.Forms.Label()
+        Me.ChartReservations = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.BindingNavigator1 = New System.Windows.Forms.BindingNavigator(Me.components)
+        Me.BindingNavigatorMoveFirstItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorMovePreviousItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorSeparator = New System.Windows.Forms.ToolStripSeparator()
+        Me.BindingNavigatorPositionItem = New System.Windows.Forms.ToolStripTextBox()
+        Me.BindingNavigatorCountItem = New System.Windows.Forms.ToolStripLabel()
+        Me.BindingNavigatorSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BindingNavigatorMoveNextItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorMoveLastItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BindingNavigatorAddNewItem = New System.Windows.Forms.ToolStripButton()
+        Me.BindingNavigatorDeleteItem = New System.Windows.Forms.ToolStripButton()
+        Me.RoundedPane25 = New InformationManagement.RoundedPane2()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.RoundedPane28.SuspendLayout()
         Me.FlowLegends.SuspendLayout()
         Me.RoundedPane29.SuspendLayout()
@@ -106,21 +128,25 @@ Partial Class Dashboard
         CType(Me.PictureBox13, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.PanelReservations.SuspendLayout()
-        Me.pnlReservations.SuspendLayout()
-        CType(Me.icon, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.flpOrders.SuspendLayout()
         Me.pnlOrders.SuspendLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelReservations.SuspendLayout()
+        Me.pnlReservations.SuspendLayout()
+        CType(Me.icon, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.RoundedPane22.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMenu.SuspendLayout()
         Me.pnlMenus.SuspendLayout()
         CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.RoundedPane22.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane23.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane21.SuspendLayout()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ChartReservations, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.BindingNavigator1.SuspendLayout()
+        Me.RoundedPane25.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -128,7 +154,7 @@ Partial Class Dashboard
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 21.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(26, 28)
+        Me.Label1.Location = New System.Drawing.Point(53, 32)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(304, 40)
         Me.Label1.TabIndex = 0
@@ -142,7 +168,7 @@ Partial Class Dashboard
         Me.RoundedPane28.Controls.Add(Me.Chart2)
         Me.RoundedPane28.CornerRadius = 15
         Me.RoundedPane28.FillColor = System.Drawing.Color.White
-        Me.RoundedPane28.Location = New System.Drawing.Point(60, 271)
+        Me.RoundedPane28.Location = New System.Drawing.Point(78, 254)
         Me.RoundedPane28.Name = "RoundedPane28"
         Me.RoundedPane28.Size = New System.Drawing.Size(1119, 357)
         Me.RoundedPane28.TabIndex = 22
@@ -407,9 +433,9 @@ Partial Class Dashboard
         Me.RoundedPane24.Controls.Add(Me.Label9)
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
-        Me.RoundedPane24.Location = New System.Drawing.Point(659, 878)
+        Me.RoundedPane24.Location = New System.Drawing.Point(654, 993)
         Me.RoundedPane24.Name = "RoundedPane24"
-        Me.RoundedPane24.Size = New System.Drawing.Size(520, 188)
+        Me.RoundedPane24.Size = New System.Drawing.Size(520, 199)
         Me.RoundedPane24.TabIndex = 15
         '
         'Label39
@@ -519,6 +545,100 @@ Partial Class Dashboard
         Me.Label9.TabIndex = 10
         Me.Label9.Text = "Active Staff"
         '
+        'flpOrders
+        '
+        Me.flpOrders.AutoSize = True
+        Me.flpOrders.BorderColor = System.Drawing.Color.LightGray
+        Me.flpOrders.BorderThickness = 1
+        Me.flpOrders.Controls.Add(Me.pnlOrders)
+        Me.flpOrders.Controls.Add(Me.PictureBox5)
+        Me.flpOrders.Controls.Add(Me.Label5)
+        Me.flpOrders.CornerRadius = 15
+        Me.flpOrders.FillColor = System.Drawing.Color.White
+        Me.flpOrders.Location = New System.Drawing.Point(81, 992)
+        Me.flpOrders.Name = "flpOrders"
+        Me.flpOrders.Size = New System.Drawing.Size(544, 188)
+        Me.flpOrders.TabIndex = 20
+        '
+        'pnlOrders
+        '
+        Me.pnlOrders.BackColor = System.Drawing.Color.PeachPuff
+        Me.pnlOrders.Controls.Add(Me.lblprice)
+        Me.pnlOrders.Controls.Add(Me.lblOrderTime)
+        Me.pnlOrders.Controls.Add(Me.lblOrderType)
+        Me.pnlOrders.Controls.Add(Me.lblOrderId)
+        Me.pnlOrders.Location = New System.Drawing.Point(41, 63)
+        Me.pnlOrders.Name = "pnlOrders"
+        Me.pnlOrders.Size = New System.Drawing.Size(456, 71)
+        Me.pnlOrders.TabIndex = 10
+        '
+        'lblprice
+        '
+        Me.lblprice.AutoSize = True
+        Me.lblprice.BackColor = System.Drawing.Color.Transparent
+        Me.lblprice.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblprice.Location = New System.Drawing.Point(362, 17)
+        Me.lblprice.Name = "lblprice"
+        Me.lblprice.Size = New System.Drawing.Size(81, 20)
+        Me.lblprice.TabIndex = 18
+        Me.lblprice.Text = "₱1,850.00"
+        '
+        'lblOrderTime
+        '
+        Me.lblOrderTime.AutoSize = True
+        Me.lblOrderTime.BackColor = System.Drawing.Color.Transparent
+        Me.lblOrderTime.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblOrderTime.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.lblOrderTime.Location = New System.Drawing.Point(77, 29)
+        Me.lblOrderTime.Name = "lblOrderTime"
+        Me.lblOrderTime.Size = New System.Drawing.Size(80, 17)
+        Me.lblOrderTime.TabIndex = 13
+        Me.lblOrderTime.Text = "10 mins ago"
+        '
+        'lblOrderType
+        '
+        Me.lblOrderType.AutoSize = True
+        Me.lblOrderType.BackColor = System.Drawing.Color.Transparent
+        Me.lblOrderType.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblOrderType.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.lblOrderType.Location = New System.Drawing.Point(20, 29)
+        Me.lblOrderType.Name = "lblOrderType"
+        Me.lblOrderType.Size = New System.Drawing.Size(57, 17)
+        Me.lblOrderType.TabIndex = 12
+        Me.lblOrderType.Text = "Dine In -"
+        '
+        'lblOrderId
+        '
+        Me.lblOrderId.AutoSize = True
+        Me.lblOrderId.BackColor = System.Drawing.Color.Transparent
+        Me.lblOrderId.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblOrderId.Location = New System.Drawing.Point(17, 9)
+        Me.lblOrderId.Name = "lblOrderId"
+        Me.lblOrderId.Size = New System.Drawing.Size(62, 20)
+        Me.lblOrderId.TabIndex = 1
+        Me.lblOrderId.Text = "ORD001"
+        '
+        'PictureBox5
+        '
+        Me.PictureBox5.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
+        Me.PictureBox5.Location = New System.Drawing.Point(25, 22)
+        Me.PictureBox5.Name = "PictureBox5"
+        Me.PictureBox5.Size = New System.Drawing.Size(25, 18)
+        Me.PictureBox5.TabIndex = 9
+        Me.PictureBox5.TabStop = False
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.BackColor = System.Drawing.Color.Transparent
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(58, 20)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(110, 20)
+        Me.Label5.TabIndex = 8
+        Me.Label5.Text = "Pending Orders"
+        '
         'PanelReservations
         '
         Me.PanelReservations.AutoSize = True
@@ -529,7 +649,7 @@ Partial Class Dashboard
         Me.PanelReservations.Controls.Add(Me.Label7)
         Me.PanelReservations.CornerRadius = 15
         Me.PanelReservations.FillColor = System.Drawing.Color.White
-        Me.PanelReservations.Location = New System.Drawing.Point(659, 686)
+        Me.PanelReservations.Location = New System.Drawing.Point(66, 808)
         Me.PanelReservations.Name = "PanelReservations"
         Me.PanelReservations.Size = New System.Drawing.Size(520, 153)
         Me.PanelReservations.TabIndex = 21
@@ -619,99 +739,53 @@ Partial Class Dashboard
         Me.Label7.TabIndex = 9
         Me.Label7.Text = "Recent Reservations"
         '
-        'flpOrders
+        'RoundedPane22
         '
-        Me.flpOrders.AutoSize = True
-        Me.flpOrders.BorderColor = System.Drawing.Color.LightGray
-        Me.flpOrders.BorderThickness = 1
-        Me.flpOrders.Controls.Add(Me.pnlOrders)
-        Me.flpOrders.Controls.Add(Me.PictureBox5)
-        Me.flpOrders.Controls.Add(Me.Label5)
-        Me.flpOrders.CornerRadius = 15
-        Me.flpOrders.FillColor = System.Drawing.Color.White
-        Me.flpOrders.Location = New System.Drawing.Point(60, 878)
-        Me.flpOrders.Name = "flpOrders"
-        Me.flpOrders.Size = New System.Drawing.Size(544, 188)
-        Me.flpOrders.TabIndex = 20
+        Me.RoundedPane22.BorderColor = System.Drawing.Color.LightGray
+        Me.RoundedPane22.BorderThickness = 1
+        Me.RoundedPane22.Controls.Add(Me.PictureBox2)
+        Me.RoundedPane22.Controls.Add(Me.Label13)
+        Me.RoundedPane22.Controls.Add(Me.Label14)
+        Me.RoundedPane22.CornerRadius = 15
+        Me.RoundedPane22.FillColor = System.Drawing.Color.White
+        Me.RoundedPane22.Location = New System.Drawing.Point(849, 99)
+        Me.RoundedPane22.Name = "RoundedPane22"
+        Me.RoundedPane22.Size = New System.Drawing.Size(348, 120)
+        Me.RoundedPane22.TabIndex = 16
         '
-        'pnlOrders
+        'PictureBox2
         '
-        Me.pnlOrders.BackColor = System.Drawing.Color.PeachPuff
-        Me.pnlOrders.Controls.Add(Me.lblprice)
-        Me.pnlOrders.Controls.Add(Me.lblOrderTime)
-        Me.pnlOrders.Controls.Add(Me.lblOrderType)
-        Me.pnlOrders.Controls.Add(Me.lblOrderId)
-        Me.pnlOrders.Location = New System.Drawing.Point(25, 63)
-        Me.pnlOrders.Name = "pnlOrders"
-        Me.pnlOrders.Size = New System.Drawing.Size(482, 58)
-        Me.pnlOrders.TabIndex = 10
+        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
+        Me.PictureBox2.Location = New System.Drawing.Point(286, 15)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(26, 26)
+        Me.PictureBox2.TabIndex = 1
+        Me.PictureBox2.TabStop = False
         '
-        'lblprice
+        'Label13
         '
-        Me.lblprice.AutoSize = True
-        Me.lblprice.BackColor = System.Drawing.Color.Transparent
-        Me.lblprice.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblprice.Location = New System.Drawing.Point(362, 17)
-        Me.lblprice.Name = "lblprice"
-        Me.lblprice.Size = New System.Drawing.Size(81, 20)
-        Me.lblprice.TabIndex = 18
-        Me.lblprice.Text = "₱1,850.00"
+        Me.Label13.AutoSize = True
+        Me.Label13.BackColor = System.Drawing.Color.Transparent
+        Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
+        Me.Label13.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Label13.Location = New System.Drawing.Point(17, 21)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(94, 16)
+        Me.Label13.TabIndex = 0
+        Me.Label13.Text = "Total Orders"
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lblOrderTime
+        'Label14
         '
-        Me.lblOrderTime.AutoSize = True
-        Me.lblOrderTime.BackColor = System.Drawing.Color.Transparent
-        Me.lblOrderTime.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblOrderTime.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.lblOrderTime.Location = New System.Drawing.Point(77, 29)
-        Me.lblOrderTime.Name = "lblOrderTime"
-        Me.lblOrderTime.Size = New System.Drawing.Size(80, 17)
-        Me.lblOrderTime.TabIndex = 13
-        Me.lblOrderTime.Text = "10 mins ago"
-        '
-        'lblOrderType
-        '
-        Me.lblOrderType.AutoSize = True
-        Me.lblOrderType.BackColor = System.Drawing.Color.Transparent
-        Me.lblOrderType.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblOrderType.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.lblOrderType.Location = New System.Drawing.Point(20, 29)
-        Me.lblOrderType.Name = "lblOrderType"
-        Me.lblOrderType.Size = New System.Drawing.Size(57, 17)
-        Me.lblOrderType.TabIndex = 12
-        Me.lblOrderType.Text = "Dine In -"
-        '
-        'lblOrderId
-        '
-        Me.lblOrderId.AutoSize = True
-        Me.lblOrderId.BackColor = System.Drawing.Color.Transparent
-        Me.lblOrderId.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblOrderId.Location = New System.Drawing.Point(17, 9)
-        Me.lblOrderId.Name = "lblOrderId"
-        Me.lblOrderId.Size = New System.Drawing.Size(62, 20)
-        Me.lblOrderId.TabIndex = 1
-        Me.lblOrderId.Text = "ORD001"
-        '
-        'PictureBox5
-        '
-        Me.PictureBox5.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
-        Me.PictureBox5.Location = New System.Drawing.Point(18, 22)
-        Me.PictureBox5.Name = "PictureBox5"
-        Me.PictureBox5.Size = New System.Drawing.Size(25, 18)
-        Me.PictureBox5.TabIndex = 9
-        Me.PictureBox5.TabStop = False
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.BackColor = System.Drawing.Color.Transparent
-        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(50, 20)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(110, 20)
-        Me.Label5.TabIndex = 8
-        Me.Label5.Text = "Pending Orders"
+        Me.Label14.AutoSize = True
+        Me.Label14.BackColor = System.Drawing.Color.Transparent
+        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 13.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
+        Me.Label14.Location = New System.Drawing.Point(16, 76)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(60, 22)
+        Me.Label14.TabIndex = 3
+        Me.Label14.Text = "2,340"
         '
         'PanelMenu
         '
@@ -722,7 +796,7 @@ Partial Class Dashboard
         Me.PanelMenu.Controls.Add(Me.Label6)
         Me.PanelMenu.CornerRadius = 15
         Me.PanelMenu.FillColor = System.Drawing.Color.White
-        Me.PanelMenu.Location = New System.Drawing.Point(60, 686)
+        Me.PanelMenu.Location = New System.Drawing.Point(26, 635)
         Me.PanelMenu.Name = "PanelMenu"
         Me.PanelMenu.Size = New System.Drawing.Size(544, 153)
         Me.PanelMenu.TabIndex = 19
@@ -738,7 +812,7 @@ Partial Class Dashboard
         Me.pnlMenus.Controls.Add(Me.lblMenu)
         Me.pnlMenus.CornerRadius = 15
         Me.pnlMenus.FillColor = System.Drawing.Color.White
-        Me.pnlMenus.Location = New System.Drawing.Point(20, 61)
+        Me.pnlMenus.Location = New System.Drawing.Point(35, 61)
         Me.pnlMenus.Name = "pnlMenus"
         Me.pnlMenus.Size = New System.Drawing.Size(456, 67)
         Me.pnlMenus.TabIndex = 11
@@ -798,54 +872,6 @@ Partial Class Dashboard
         Me.Label6.TabIndex = 8
         Me.Label6.Text = "Top Menu Items"
         '
-        'RoundedPane22
-        '
-        Me.RoundedPane22.BorderColor = System.Drawing.Color.LightGray
-        Me.RoundedPane22.BorderThickness = 1
-        Me.RoundedPane22.Controls.Add(Me.PictureBox2)
-        Me.RoundedPane22.Controls.Add(Me.Label13)
-        Me.RoundedPane22.Controls.Add(Me.Label14)
-        Me.RoundedPane22.CornerRadius = 15
-        Me.RoundedPane22.FillColor = System.Drawing.Color.White
-        Me.RoundedPane22.Location = New System.Drawing.Point(443, 96)
-        Me.RoundedPane22.Name = "RoundedPane22"
-        Me.RoundedPane22.Size = New System.Drawing.Size(348, 120)
-        Me.RoundedPane22.TabIndex = 16
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
-        Me.PictureBox2.Location = New System.Drawing.Point(286, 15)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(26, 26)
-        Me.PictureBox2.TabIndex = 1
-        Me.PictureBox2.TabStop = False
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.BackColor = System.Drawing.Color.Transparent
-        Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
-        Me.Label13.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Label13.Location = New System.Drawing.Point(17, 21)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(94, 16)
-        Me.Label13.TabIndex = 0
-        Me.Label13.Text = "Total Orders"
-        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.BackColor = System.Drawing.Color.Transparent
-        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 13.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
-        Me.Label14.Location = New System.Drawing.Point(16, 76)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(60, 22)
-        Me.Label14.TabIndex = 3
-        Me.Label14.Text = "2,340"
-        '
         'RoundedPane23
         '
         Me.RoundedPane23.BorderColor = System.Drawing.Color.LightGray
@@ -855,7 +881,7 @@ Partial Class Dashboard
         Me.RoundedPane23.Controls.Add(Me.Label16)
         Me.RoundedPane23.CornerRadius = 15
         Me.RoundedPane23.FillColor = System.Drawing.Color.White
-        Me.RoundedPane23.Location = New System.Drawing.Point(831, 96)
+        Me.RoundedPane23.Location = New System.Drawing.Point(462, 99)
         Me.RoundedPane23.Name = "RoundedPane23"
         Me.RoundedPane23.Size = New System.Drawing.Size(348, 120)
         Me.RoundedPane23.TabIndex = 17
@@ -903,7 +929,7 @@ Partial Class Dashboard
         Me.RoundedPane21.Controls.Add(Me.lblTotalRevenue)
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
-        Me.RoundedPane21.Location = New System.Drawing.Point(60, 96)
+        Me.RoundedPane21.Location = New System.Drawing.Point(78, 99)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(348, 120)
         Me.RoundedPane21.TabIndex = 15
@@ -942,19 +968,182 @@ Partial Class Dashboard
         Me.lblTotalRevenue.TabIndex = 3
         Me.lblTotalRevenue.Text = "16, 400, 00.00"
         '
+        'ChartReservations
+        '
+        ChartArea2.Name = "ChartArea1"
+        Me.ChartReservations.ChartAreas.Add(ChartArea2)
+        Legend2.Enabled = False
+        Legend2.Name = "Legend1"
+        Me.ChartReservations.Legends.Add(Legend2)
+        Me.ChartReservations.Location = New System.Drawing.Point(16, 26)
+        Me.ChartReservations.Name = "ChartReservations"
+        Me.ChartReservations.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel
+        Series2.ChartArea = "ChartArea1"
+        Series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
+        Series2.IsValueShownAsLabel = True
+        Series2.Legend = "Legend1"
+        Series2.Name = "ReservationStatus"
+        DataPoint4.AxisLabel = "Pending"
+        DataPoint4.Color = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
+        DataPoint4.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint5.AxisLabel = "Confirmed"
+        DataPoint5.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        DataPoint5.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint6.AxisLabel = "Cancelled"
+        DataPoint6.Color = System.Drawing.Color.Red
+        DataPoint6.LabelForeColor = System.Drawing.Color.Transparent
+        Series2.Points.Add(DataPoint4)
+        Series2.Points.Add(DataPoint5)
+        Series2.Points.Add(DataPoint6)
+        Me.ChartReservations.Series.Add(Series2)
+        Me.ChartReservations.Size = New System.Drawing.Size(515, 195)
+        Me.ChartReservations.TabIndex = 23
+        Me.ChartReservations.Text = "Chart1"
+        '
+        'BindingNavigator1
+        '
+        Me.BindingNavigator1.AddNewItem = Me.BindingNavigatorAddNewItem
+        Me.BindingNavigator1.CountItem = Me.BindingNavigatorCountItem
+        Me.BindingNavigator1.DeleteItem = Me.BindingNavigatorDeleteItem
+        Me.BindingNavigator1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BindingNavigatorMoveFirstItem, Me.BindingNavigatorMovePreviousItem, Me.BindingNavigatorSeparator, Me.BindingNavigatorPositionItem, Me.BindingNavigatorCountItem, Me.BindingNavigatorSeparator1, Me.BindingNavigatorMoveNextItem, Me.BindingNavigatorMoveLastItem, Me.BindingNavigatorSeparator2, Me.BindingNavigatorAddNewItem, Me.BindingNavigatorDeleteItem})
+        Me.BindingNavigator1.Location = New System.Drawing.Point(0, 0)
+        Me.BindingNavigator1.MoveFirstItem = Me.BindingNavigatorMoveFirstItem
+        Me.BindingNavigator1.MoveLastItem = Me.BindingNavigatorMoveLastItem
+        Me.BindingNavigator1.MoveNextItem = Me.BindingNavigatorMoveNextItem
+        Me.BindingNavigator1.MovePreviousItem = Me.BindingNavigatorMovePreviousItem
+        Me.BindingNavigator1.Name = "BindingNavigator1"
+        Me.BindingNavigator1.PositionItem = Me.BindingNavigatorPositionItem
+        Me.BindingNavigator1.Size = New System.Drawing.Size(1197, 25)
+        Me.BindingNavigator1.TabIndex = 24
+        Me.BindingNavigator1.Text = "BindingNavigator1"
+        '
+        'BindingNavigatorMoveFirstItem
+        '
+        Me.BindingNavigatorMoveFirstItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorMoveFirstItem.Image = CType(resources.GetObject("BindingNavigatorMoveFirstItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorMoveFirstItem.Name = "BindingNavigatorMoveFirstItem"
+        Me.BindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorMoveFirstItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorMoveFirstItem.Text = "Move first"
+        '
+        'BindingNavigatorMovePreviousItem
+        '
+        Me.BindingNavigatorMovePreviousItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorMovePreviousItem.Image = CType(resources.GetObject("BindingNavigatorMovePreviousItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorMovePreviousItem.Name = "BindingNavigatorMovePreviousItem"
+        Me.BindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorMovePreviousItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorMovePreviousItem.Text = "Move previous"
+        '
+        'BindingNavigatorSeparator
+        '
+        Me.BindingNavigatorSeparator.Name = "BindingNavigatorSeparator"
+        Me.BindingNavigatorSeparator.Size = New System.Drawing.Size(6, 25)
+        '
+        'BindingNavigatorPositionItem
+        '
+        Me.BindingNavigatorPositionItem.AccessibleName = "Position"
+        Me.BindingNavigatorPositionItem.AutoSize = False
+        Me.BindingNavigatorPositionItem.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.BindingNavigatorPositionItem.Name = "BindingNavigatorPositionItem"
+        Me.BindingNavigatorPositionItem.Size = New System.Drawing.Size(50, 23)
+        Me.BindingNavigatorPositionItem.Text = "0"
+        Me.BindingNavigatorPositionItem.ToolTipText = "Current position"
+        '
+        'BindingNavigatorCountItem
+        '
+        Me.BindingNavigatorCountItem.Name = "BindingNavigatorCountItem"
+        Me.BindingNavigatorCountItem.Size = New System.Drawing.Size(35, 22)
+        Me.BindingNavigatorCountItem.Text = "of {0}"
+        Me.BindingNavigatorCountItem.ToolTipText = "Total number of items"
+        '
+        'BindingNavigatorSeparator1
+        '
+        Me.BindingNavigatorSeparator1.Name = "BindingNavigatorSeparator"
+        Me.BindingNavigatorSeparator1.Size = New System.Drawing.Size(6, 25)
+        '
+        'BindingNavigatorMoveNextItem
+        '
+        Me.BindingNavigatorMoveNextItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorMoveNextItem.Image = CType(resources.GetObject("BindingNavigatorMoveNextItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorMoveNextItem.Name = "BindingNavigatorMoveNextItem"
+        Me.BindingNavigatorMoveNextItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorMoveNextItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorMoveNextItem.Text = "Move next"
+        '
+        'BindingNavigatorMoveLastItem
+        '
+        Me.BindingNavigatorMoveLastItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorMoveLastItem.Image = CType(resources.GetObject("BindingNavigatorMoveLastItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorMoveLastItem.Name = "BindingNavigatorMoveLastItem"
+        Me.BindingNavigatorMoveLastItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorMoveLastItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorMoveLastItem.Text = "Move last"
+        '
+        'BindingNavigatorSeparator2
+        '
+        Me.BindingNavigatorSeparator2.Name = "BindingNavigatorSeparator"
+        Me.BindingNavigatorSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
+        'BindingNavigatorAddNewItem
+        '
+        Me.BindingNavigatorAddNewItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorAddNewItem.Image = CType(resources.GetObject("BindingNavigatorAddNewItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorAddNewItem.Name = "BindingNavigatorAddNewItem"
+        Me.BindingNavigatorAddNewItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorAddNewItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorAddNewItem.Text = "Add new"
+        '
+        'BindingNavigatorDeleteItem
+        '
+        Me.BindingNavigatorDeleteItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BindingNavigatorDeleteItem.Image = CType(resources.GetObject("BindingNavigatorDeleteItem.Image"), System.Drawing.Image)
+        Me.BindingNavigatorDeleteItem.Name = "BindingNavigatorDeleteItem"
+        Me.BindingNavigatorDeleteItem.RightToLeftAutoMirrorImage = True
+        Me.BindingNavigatorDeleteItem.Size = New System.Drawing.Size(23, 22)
+        Me.BindingNavigatorDeleteItem.Text = "Delete"
+        '
+        'RoundedPane25
+        '
+        Me.RoundedPane25.BorderColor = System.Drawing.Color.LightGray
+        Me.RoundedPane25.BorderThickness = 1
+        Me.RoundedPane25.Controls.Add(Me.Label11)
+        Me.RoundedPane25.Controls.Add(Me.ChartReservations)
+        Me.RoundedPane25.CornerRadius = 15
+        Me.RoundedPane25.FillColor = System.Drawing.Color.White
+        Me.RoundedPane25.Location = New System.Drawing.Point(654, 635)
+        Me.RoundedPane25.Name = "RoundedPane25"
+        Me.RoundedPane25.Size = New System.Drawing.Size(543, 239)
+        Me.RoundedPane25.TabIndex = 25
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.BackColor = System.Drawing.Color.Transparent
+        Me.Label11.Font = New System.Drawing.Font("Segoe UI", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label11.Location = New System.Drawing.Point(12, 17)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(208, 20)
+        Me.Label11.TabIndex = 24
+        Me.Label11.Text = "Reservation Status Breakdown"
+        '
         'Dashboard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
+        Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1079, 660)
+        Me.ClientSize = New System.Drawing.Size(1193, 711)
+        Me.Controls.Add(Me.RoundedPane25)
+        Me.Controls.Add(Me.BindingNavigator1)
         Me.Controls.Add(Me.RoundedPane28)
         Me.Controls.Add(Me.RoundedPane24)
-        Me.Controls.Add(Me.PanelReservations)
         Me.Controls.Add(Me.flpOrders)
-        Me.Controls.Add(Me.PanelMenu)
+        Me.Controls.Add(Me.PanelReservations)
         Me.Controls.Add(Me.RoundedPane22)
+        Me.Controls.Add(Me.PanelMenu)
         Me.Controls.Add(Me.RoundedPane23)
         Me.Controls.Add(Me.RoundedPane21)
         Me.Controls.Add(Me.Label1)
@@ -977,30 +1166,36 @@ Partial Class Dashboard
         CType(Me.PictureBox13, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.PanelReservations.ResumeLayout(False)
-        Me.PanelReservations.PerformLayout()
-        Me.pnlReservations.ResumeLayout(False)
-        Me.pnlReservations.PerformLayout()
-        CType(Me.icon, System.ComponentModel.ISupportInitialize).EndInit()
         Me.flpOrders.ResumeLayout(False)
         Me.flpOrders.PerformLayout()
         Me.pnlOrders.ResumeLayout(False)
         Me.pnlOrders.PerformLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelReservations.ResumeLayout(False)
+        Me.PanelReservations.PerformLayout()
+        Me.pnlReservations.ResumeLayout(False)
+        Me.pnlReservations.PerformLayout()
+        CType(Me.icon, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.RoundedPane22.ResumeLayout(False)
+        Me.RoundedPane22.PerformLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMenu.ResumeLayout(False)
         Me.PanelMenu.PerformLayout()
         Me.pnlMenus.ResumeLayout(False)
         Me.pnlMenus.PerformLayout()
         CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.RoundedPane22.ResumeLayout(False)
-        Me.RoundedPane22.PerformLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane23.ResumeLayout(False)
         Me.RoundedPane23.PerformLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane21.ResumeLayout(False)
         Me.RoundedPane21.PerformLayout()
         CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ChartReservations, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.BindingNavigator1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.BindingNavigator1.ResumeLayout(False)
+        Me.BindingNavigator1.PerformLayout()
+        Me.RoundedPane25.ResumeLayout(False)
+        Me.RoundedPane25.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1071,4 +1266,19 @@ Partial Class Dashboard
     Friend WithEvents lblOrderTime As Label
     Friend WithEvents lblOrderType As Label
     Friend WithEvents lblOrderId As Label
+    Friend WithEvents ChartReservations As DataVisualization.Charting.Chart
+    Friend WithEvents BindingNavigator1 As BindingNavigator
+    Friend WithEvents BindingNavigatorAddNewItem As ToolStripButton
+    Friend WithEvents BindingNavigatorCountItem As ToolStripLabel
+    Friend WithEvents BindingNavigatorDeleteItem As ToolStripButton
+    Friend WithEvents BindingNavigatorMoveFirstItem As ToolStripButton
+    Friend WithEvents BindingNavigatorMovePreviousItem As ToolStripButton
+    Friend WithEvents BindingNavigatorSeparator As ToolStripSeparator
+    Friend WithEvents BindingNavigatorPositionItem As ToolStripTextBox
+    Friend WithEvents BindingNavigatorSeparator1 As ToolStripSeparator
+    Friend WithEvents BindingNavigatorMoveNextItem As ToolStripButton
+    Friend WithEvents BindingNavigatorMoveLastItem As ToolStripButton
+    Friend WithEvents BindingNavigatorSeparator2 As ToolStripSeparator
+    Friend WithEvents RoundedPane25 As RoundedPane2
+    Friend WithEvents Label11 As Label
 End Class

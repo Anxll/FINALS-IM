@@ -5,6 +5,7 @@ Public Class Employee
 
     Private Sub Employee_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadEmployees()
+
     End Sub
 
     '====================================
@@ -143,5 +144,6 @@ Public Class Employee
             MessageBox.Show("Error deleting employee: " & ex.Message)
         End Try
     End Sub
+
 
 End Class

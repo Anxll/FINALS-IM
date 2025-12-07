@@ -221,5 +221,35 @@ Public Class Reports
                 Return dateValue.ToString()
         End Select
     End Function
+    ' === PUBLIC METHOD TO LOAD CATERING RESERVATIONS FROM EXTERNAL CALL ===
+    ' ============================================
+    ' PUBLIC METHOD - Load Catering Reservations Report from Dashboard
+    ' ============================================
 
+    ' === PUBLIC METHOD TO LOAD CATERING RESERVATIONS FROM EXTERNAL CALL ===
+    Public Sub LoadCateringReservationReport()
+        Try
+            ' Load FormCateringReservations into Panel1
+            LoadFormIntoPanel(New FormReservationStatus())
+
+            ' Highlight the Catering Reservations button as active
+            HighlightActiveButton(btnCatering)
+
+            ' Scroll to top of the panel
+            Panel1.AutoScrollPosition = New Point(0, 0)
+
+            ' Bring Reports form to front and focus
+            Me.BringToFront()
+            Me.Activate()
+            Me.Focus()
+
+            ' Optional: Set the period dropdown to Daily
+            If reportPeriod.Items.Contains("Daily") Then
+                reportPeriod.SelectedItem = "Daily"
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error loading catering reservation report: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 End Class

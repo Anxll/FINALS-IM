@@ -171,4 +171,5 @@ Public Class Customer
         LoadCustomerData(txtSearch.Text)
     End Sub
 
+
 End Class

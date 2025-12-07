@@ -57,7 +57,7 @@ Partial Class AddNewItems
         Me.AddItem.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.AddItem.ForeColor = System.Drawing.SystemColors.ButtonHighlight
         Me.AddItem.Image = CType(resources.GetObject("AddItem.Image"), System.Drawing.Image)
-        Me.AddItem.Location = New System.Drawing.Point(393, 499)
+        Me.AddItem.Location = New System.Drawing.Point(388, 473)
         Me.AddItem.Margin = New System.Windows.Forms.Padding(2)
         Me.AddItem.Name = "AddItem"
         Me.AddItem.Size = New System.Drawing.Size(129, 38)
@@ -74,7 +74,7 @@ Partial Class AddNewItems
         Me.Cancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Cancel.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Cancel.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Cancel.Location = New System.Drawing.Point(296, 499)
+        Me.Cancel.Location = New System.Drawing.Point(283, 473)
         Me.Cancel.Margin = New System.Windows.Forms.Padding(2)
         Me.Cancel.Name = "Cancel"
         Me.Cancel.Size = New System.Drawing.Size(88, 38)
@@ -84,41 +84,42 @@ Partial Class AddNewItems
         '
         'DateTimePicker1
         '
-        Me.DateTimePicker1.Location = New System.Drawing.Point(296, 364)
+        Me.DateTimePicker1.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.DateTimePicker1.Location = New System.Drawing.Point(296, 347)
         Me.DateTimePicker1.Margin = New System.Windows.Forms.Padding(2)
         Me.DateTimePicker1.Name = "DateTimePicker1"
-        Me.DateTimePicker1.Size = New System.Drawing.Size(204, 20)
+        Me.DateTimePicker1.Size = New System.Drawing.Size(204, 29)
         Me.DateTimePicker1.TabIndex = 54
         '
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Label8.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label8.Location = New System.Drawing.Point(292, 340)
+        Me.Label8.Location = New System.Drawing.Point(296, 318)
         Me.Label8.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(145, 20)
+        Me.Label8.Size = New System.Drawing.Size(120, 21)
         Me.Label8.TabIndex = 53
-        Me.Label8.Text = "Last Restocked :"
+        Me.Label8.Text = "Last Restocked"
         '
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Label7.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label7.Location = New System.Drawing.Point(10, 340)
+        Me.Label7.Location = New System.Drawing.Point(25, 318)
         Me.Label7.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(125, 20)
+        Me.Label7.Size = New System.Drawing.Size(106, 21)
         Me.Label7.TabIndex = 52
-        Me.Label7.Text = "Cost per Unit :"
+        Me.Label7.Text = "Cost per Unit"
         '
         'RoundedTextBox1
         '
         Me.RoundedTextBox1.BackColor = System.Drawing.Color.Transparent
         Me.RoundedTextBox1.FocusBorderColor = System.Drawing.Color.DarkGray
-        Me.RoundedTextBox1.Location = New System.Drawing.Point(14, 364)
+        Me.RoundedTextBox1.Location = New System.Drawing.Point(26, 340)
         Me.RoundedTextBox1.MaxLength = 32767
         Me.RoundedTextBox1.MinimumSize = New System.Drawing.Size(50, 20)
         Me.RoundedTextBox1.Multiline = False
@@ -134,19 +135,20 @@ Partial Class AddNewItems
         '
         'Unit
         '
+        Me.Unit.Font = New System.Drawing.Font("Segoe UI", 12.0!)
         Me.Unit.FormattingEnabled = True
         Me.Unit.Items.AddRange(New Object() {"kg", "liters", "pieces", "boxes", "grams", "bottles"})
-        Me.Unit.Location = New System.Drawing.Point(296, 211)
+        Me.Unit.Location = New System.Drawing.Point(296, 203)
         Me.Unit.Margin = New System.Windows.Forms.Padding(2)
         Me.Unit.Name = "Unit"
-        Me.Unit.Size = New System.Drawing.Size(188, 21)
+        Me.Unit.Size = New System.Drawing.Size(188, 29)
         Me.Unit.TabIndex = 51
         '
         'Quantity
         '
         Me.Quantity.BackColor = System.Drawing.Color.Transparent
         Me.Quantity.FocusBorderColor = System.Drawing.Color.DarkGray
-        Me.Quantity.Location = New System.Drawing.Point(14, 211)
+        Me.Quantity.Location = New System.Drawing.Point(29, 196)
         Me.Quantity.MaxLength = 32767
         Me.Quantity.MinimumSize = New System.Drawing.Size(50, 20)
         Me.Quantity.Multiline = False
@@ -163,32 +165,32 @@ Partial Class AddNewItems
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Label6.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label6.Location = New System.Drawing.Point(10, 188)
+        Me.Label6.Location = New System.Drawing.Point(25, 171)
         Me.Label6.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(137, 20)
+        Me.Label6.Size = New System.Drawing.Size(121, 21)
         Me.Label6.TabIndex = 50
-        Me.Label6.Text = "Stock Quantity :"
+        Me.Label6.Text = "Stock Quantity "
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Label5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label5.Location = New System.Drawing.Point(292, 188)
+        Me.Label5.Location = New System.Drawing.Point(296, 171)
         Me.Label5.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(52, 20)
+        Me.Label5.Size = New System.Drawing.Size(40, 21)
         Me.Label5.TabIndex = 49
-        Me.Label5.Text = "Unit :"
+        Me.Label5.Text = "Unit"
         '
         'txtFullName
         '
         Me.txtFullName.BackColor = System.Drawing.Color.Transparent
         Me.txtFullName.FocusBorderColor = System.Drawing.Color.DarkGray
-        Me.txtFullName.Location = New System.Drawing.Point(14, 132)
+        Me.txtFullName.Location = New System.Drawing.Point(29, 117)
         Me.txtFullName.MaxLength = 32767
         Me.txtFullName.MinimumSize = New System.Drawing.Size(50, 20)
         Me.txtFullName.Multiline = False
@@ -205,21 +207,21 @@ Partial Class AddNewItems
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label3.Location = New System.Drawing.Point(10, 108)
+        Me.Label3.Location = New System.Drawing.Point(25, 90)
         Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(106, 20)
+        Me.Label3.Size = New System.Drawing.Size(91, 21)
         Me.Label3.TabIndex = 42
-        Me.Label3.Text = "Item Name :"
+        Me.Label3.Text = "Item Name"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label2.Location = New System.Drawing.Point(11, 60)
+        Me.Label2.Location = New System.Drawing.Point(23, 54)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(321, 15)
@@ -231,7 +233,7 @@ Partial Class AddNewItems
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label1.Location = New System.Drawing.Point(9, 34)
+        Me.Label1.Location = New System.Drawing.Point(20, 19)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(267, 26)
@@ -240,56 +242,59 @@ Partial Class AddNewItems
         '
         'DateTimePicker2
         '
-        Me.DateTimePicker2.Location = New System.Drawing.Point(296, 444)
+        Me.DateTimePicker2.CalendarForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.DateTimePicker2.CalendarTitleForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.DateTimePicker2.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.DateTimePicker2.Location = New System.Drawing.Point(296, 411)
         Me.DateTimePicker2.Margin = New System.Windows.Forms.Padding(2)
         Me.DateTimePicker2.Name = "DateTimePicker2"
-        Me.DateTimePicker2.Size = New System.Drawing.Size(204, 20)
+        Me.DateTimePicker2.Size = New System.Drawing.Size(204, 29)
         Me.DateTimePicker2.TabIndex = 63
         '
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Label11.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label11.Location = New System.Drawing.Point(292, 421)
+        Me.Label11.Location = New System.Drawing.Point(296, 388)
         Me.Label11.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(143, 20)
+        Me.Label11.Size = New System.Drawing.Size(125, 21)
         Me.Label11.TabIndex = 62
-        Me.Label11.Text = "Expiration Date :"
+        Me.Label11.Text = "Expiration Date "
         '
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Label9.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label9.Location = New System.Drawing.Point(10, 269)
+        Me.Label9.Location = New System.Drawing.Point(25, 248)
         Me.Label9.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(145, 20)
+        Me.Label9.Size = New System.Drawing.Size(129, 21)
         Me.Label9.TabIndex = 55
-        Me.Label9.Text = "Min Stock Level :"
+        Me.Label9.Text = "Min Stock Level "
         '
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Label10.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label10.Location = New System.Drawing.Point(292, 269)
+        Me.Label10.Location = New System.Drawing.Point(296, 248)
         Me.Label10.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(149, 20)
+        Me.Label10.Size = New System.Drawing.Size(128, 21)
         Me.Label10.TabIndex = 56
-        Me.Label10.Text = "Max Stock Level :"
+        Me.Label10.Text = "Max Stock Level"
         '
         'NumericUpDown1
         '
         Me.NumericUpDown1.BackColor = System.Drawing.Color.WhiteSmoke
         Me.NumericUpDown1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.NumericUpDown1.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NumericUpDown1.Location = New System.Drawing.Point(14, 292)
+        Me.NumericUpDown1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NumericUpDown1.Location = New System.Drawing.Point(29, 273)
         Me.NumericUpDown1.Name = "NumericUpDown1"
-        Me.NumericUpDown1.Size = New System.Drawing.Size(180, 21)
+        Me.NumericUpDown1.Size = New System.Drawing.Size(180, 25)
         Me.NumericUpDown1.TabIndex = 57
         Me.NumericUpDown1.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
@@ -297,33 +302,34 @@ Partial Class AddNewItems
         '
         Me.NumericUpDown2.BackColor = System.Drawing.Color.WhiteSmoke
         Me.NumericUpDown2.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.NumericUpDown2.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NumericUpDown2.Location = New System.Drawing.Point(296, 292)
+        Me.NumericUpDown2.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NumericUpDown2.Location = New System.Drawing.Point(296, 273)
         Me.NumericUpDown2.Name = "NumericUpDown2"
-        Me.NumericUpDown2.Size = New System.Drawing.Size(180, 21)
+        Me.NumericUpDown2.Size = New System.Drawing.Size(180, 25)
         Me.NumericUpDown2.TabIndex = 58
         Me.NumericUpDown2.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label4.Location = New System.Drawing.Point(292, 108)
+        Me.Label4.Location = New System.Drawing.Point(292, 90)
         Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(97, 20)
+        Me.Label4.Size = New System.Drawing.Size(88, 21)
         Me.Label4.TabIndex = 44
-        Me.Label4.Text = "Catergory :"
+        Me.Label4.Text = "Catergory "
         '
         'Category
         '
+        Me.Category.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Category.FormattingEnabled = True
         Me.Category.Items.AddRange(New Object() {"Meat & Poultry", "Vegetables", "Dairy", "Dry Goods", "Oils & Condiments", "Herbs & Spices", "Beverages", "Seafood"})
-        Me.Category.Location = New System.Drawing.Point(296, 132)
+        Me.Category.Location = New System.Drawing.Point(296, 117)
         Me.Category.Margin = New System.Windows.Forms.Padding(2)
         Me.Category.Name = "Category"
-        Me.Category.Size = New System.Drawing.Size(188, 21)
+        Me.Category.Size = New System.Drawing.Size(188, 29)
         Me.Category.TabIndex = 47
         '
         'AddNewItems
@@ -331,7 +337,7 @@ Partial Class AddNewItems
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(548, 617)
+        Me.ClientSize = New System.Drawing.Size(548, 519)
         Me.Controls.Add(Me.DateTimePicker2)
         Me.Controls.Add(Me.Label11)
         Me.Controls.Add(Me.AddItem)

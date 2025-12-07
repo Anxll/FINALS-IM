@@ -83,7 +83,7 @@ Partial Class Reports
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(12, 85)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(10, 5, 10, 5)
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2515, 50)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2840, 50)
         Me.FlowLayoutPanel1.TabIndex = 4
         Me.FlowLayoutPanel1.WrapContents = False
         '
@@ -272,7 +272,7 @@ Partial Class Reports
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label2.Location = New System.Drawing.Point(1033, 20)
+        Me.Label2.Location = New System.Drawing.Point(1147, 21)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(57, 17)
         Me.Label2.TabIndex = 5
@@ -282,11 +282,12 @@ Partial Class Reports
         '
         Me.reportPeriod.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
         Me.reportPeriod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.reportPeriod.DropDownWidth = 115
         Me.reportPeriod.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.reportPeriod.FormattingEnabled = True
         Me.reportPeriod.ItemHeight = 20
         Me.reportPeriod.Items.AddRange(New Object() {"Daily", "Weekly", "Montly", "Yearly"})
-        Me.reportPeriod.Location = New System.Drawing.Point(1102, 20)
+        Me.reportPeriod.Location = New System.Drawing.Point(1220, 20)
         Me.reportPeriod.Name = "reportPeriod"
         Me.reportPeriod.Size = New System.Drawing.Size(121, 26)
         Me.reportPeriod.TabIndex = 6
@@ -298,7 +299,7 @@ Partial Class Reports
         Me.AutoScroll = True
         Me.AutoSize = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1028, 609)
+        Me.ClientSize = New System.Drawing.Size(1370, 609)
         Me.Controls.Add(Me.reportPeriod)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.FlowLayoutPanel1)
