@@ -1,7 +1,14 @@
 ﻿Imports MySqlConnector
 Imports System.Data
+Imports System.IO
+Imports System.Net
 
 Public Class OrderPayment
+
+    ' =============================================================
+    ' CONFIGURATION: Set your XAMPP htdocs path and localhost URL
+    ' =============================================================
+    Private Const WEB_BASE_URL As String = "http://localhost/TrialWeb/TrialWorkIM/Tabeya/"
 
     Private Sub OrderPayment_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadPayments()
@@ -9,7 +16,7 @@ Public Class OrderPayment
     End Sub
 
     ' =================================================
-    ' LOAD PAYMENTS WITH CUSTOMER INFO
+    ' LOAD PAYMENTS WITH CUSTOMER INFO AND PROOF OF PAYMENT
     ' =================================================
     Private Sub LoadPayments(Optional condition As String = "")
         Try
@@ -30,6 +37,8 @@ Public Class OrderPayment
                 p.PaymentStatus,
                 p.AmountPaid,
                 p.PaymentSource,
+                p.ProofOfPayment,
+                p.ReceiptFileName,
                 p.TransactionID,
                 p.Notes
              FROM payments p
@@ -44,6 +53,7 @@ Public Class OrderPayment
 
             LoadToDGV(query, Order, "")
             FormatGrid()
+            AddViewButtonColumn()
 
         Catch ex As Exception
             MessageBox.Show("Error loading payments: " & ex.Message)
@@ -53,6 +63,33 @@ Public Class OrderPayment
     ' Dummy wrapper to call modDB loader
     Private Sub LoadToDGV(query As String, dgv As DataGridView, filter As String)
         modDB.LoadToDGV(query, dgv, filter)
+    End Sub
+
+    ' =============================================================
+    ' ADD VIEW BUTTON COLUMN FOR PROOF OF PAYMENT
+    ' =============================================================
+    Private Sub AddViewButtonColumn()
+        ' Remove existing button column if it exists
+        If Order.Columns.Contains("ViewProof") Then
+            Order.Columns.Remove("ViewProof")
+        End If
+
+        ' Create button column
+        Dim btnCol As New DataGridViewButtonColumn()
+        btnCol.Name = "ViewProof"
+        btnCol.HeaderText = "Proof of Payment"
+        btnCol.Text = "View"
+        btnCol.UseColumnTextForButtonValue = True
+        btnCol.Width = 120
+        btnCol.DefaultCellStyle.BackColor = Color.FromArgb(0, 123, 255)
+        btnCol.DefaultCellStyle.ForeColor = Color.White
+        btnCol.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 105, 217)
+        btnCol.DefaultCellStyle.SelectionForeColor = Color.White
+        btnCol.FlatStyle = FlatStyle.Flat
+
+        ' Add column at the end
+        Order.Columns.Add(btnCol)
+        btnCol.DisplayIndex = Order.Columns.Count - 1
     End Sub
 
     ' =================================================
@@ -66,7 +103,9 @@ Public Class OrderPayment
             "PaymentID",
             "OrderID",
             "CustomerID",
-            "TransactionID"
+            "TransactionID",
+            "ProofOfPayment",
+            "ReceiptFileName"
         }
 
         For Each colName In hideCols
@@ -172,6 +211,152 @@ Public Class OrderPayment
         FormatCustomerData()
     End Sub
 
+    ' =============================================================
+    ' HANDLE BUTTON CLICK FOR VIEWING PROOF OF PAYMENT
+    ' =============================================================
+    Private Sub Order_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles Order.CellContentClick
+        ' Check if the clicked cell is the View button
+        If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
+            If Order.Columns(e.ColumnIndex).Name = "ViewProof" Then
+                Dim row As DataGridViewRow = Order.Rows(e.RowIndex)
+                Dim proofPath As String = If(row.Cells("ProofOfPayment").Value?.ToString(), "")
+                Dim receiptFileName As String = If(row.Cells("ReceiptFileName").Value?.ToString(), "")
+
+                If String.IsNullOrEmpty(proofPath) Then
+                    MessageBox.Show("No proof of payment available for this record.", "No Image", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Return
+                End If
+
+                ' Show the image in fullscreen
+                ShowProofOfPayment(proofPath, receiptFileName)
+            End If
+        End If
+    End Sub
+
+    ' =============================================================
+    ' SHOW PROOF OF PAYMENT IN FULLSCREEN
+    ' =============================================================
+    Private Sub ShowProofOfPayment(imagePath As String, fileName As String)
+        Try
+            ' Create fullscreen form
+            Dim imageForm As New Form()
+            imageForm.Text = "Proof of Payment - " & fileName
+            imageForm.WindowState = FormWindowState.Maximized
+            imageForm.BackColor = Color.Black
+            imageForm.FormBorderStyle = FormBorderStyle.None
+            imageForm.StartPosition = FormStartPosition.CenterScreen
+            imageForm.KeyPreview = True
+
+            ' Create PictureBox to display image
+            Dim pictureBox As New PictureBox()
+            pictureBox.Dock = DockStyle.Fill
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom
+            pictureBox.BackColor = Color.Black
+
+            ' Create panel for controls
+            Dim controlPanel As New Panel()
+            controlPanel.Dock = DockStyle.Top
+            controlPanel.Height = 50
+            controlPanel.BackColor = Color.FromArgb(200, 30, 30, 30)
+
+            ' Create close button
+            Dim btnClose As New Button()
+            btnClose.Text = "✕ Close (ESC)"
+            btnClose.Location = New Point(10, 10)
+            btnClose.Size = New Size(120, 30)
+            btnClose.BackColor = Color.FromArgb(220, 53, 69)
+            btnClose.ForeColor = Color.White
+            btnClose.FlatStyle = FlatStyle.Flat
+            btnClose.FlatAppearance.BorderSize = 0
+            btnClose.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+            AddHandler btnClose.Click, Sub() imageForm.Close()
+
+            ' Create label for filename
+            Dim lblFileName As New Label()
+            lblFileName.Text = fileName
+            lblFileName.Location = New Point(150, 15)
+            lblFileName.AutoSize = True
+            lblFileName.ForeColor = Color.White
+            lblFileName.Font = New Font("Segoe UI", 11, FontStyle.Bold)
+
+            controlPanel.Controls.Add(btnClose)
+            controlPanel.Controls.Add(lblFileName)
+
+            ' Add controls to form
+            imageForm.Controls.Add(pictureBox)
+            imageForm.Controls.Add(controlPanel)
+
+            ' Handle ESC key to close
+            AddHandler imageForm.KeyDown, Sub(s, e)
+                                              If e.KeyCode = Keys.Escape Then
+                                                  imageForm.Close()
+                                              End If
+                                          End Sub
+
+            ' Convert path to URL
+            Dim finalUrl As String = ConvertToWebUrl(imagePath)
+
+            ' Load image from URL
+            Try
+                Dim webClient As New WebClient()
+                Dim imageBytes() As Byte = webClient.DownloadData(finalUrl)
+                Using ms As New MemoryStream(imageBytes)
+                    pictureBox.Image = Image.FromStream(ms)
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error loading image from server." & vbCrLf & vbCrLf &
+                              "URL: " & finalUrl & vbCrLf & vbCrLf &
+                              "Error: " & ex.Message & vbCrLf & vbCrLf &
+                              "Please ensure:" & vbCrLf &
+                              "1. XAMPP Apache is running" & vbCrLf &
+                              "2. The file exists at: D:\XAMPP\htdocs\TrialWeb\TrialWorkIM\Tabeya\" & imagePath,
+                              "Error Loading Image", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                imageForm.Close()
+                Return
+            End Try
+
+            ' Show the form
+            imageForm.ShowDialog()
+
+            ' Dispose image after closing
+            If pictureBox.Image IsNot Nothing Then
+                pictureBox.Image.Dispose()
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error displaying proof of payment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' =============================================================
+    ' CONVERT FILE PATH TO WEB URL
+    ' =============================================================
+    Private Function ConvertToWebUrl(imagePath As String) As String
+        ' If already a URL, return as-is
+        If imagePath.StartsWith("http://") OrElse imagePath.StartsWith("https://") Then
+            Return imagePath
+        End If
+
+        ' If path contains full system path with htdocs
+        If imagePath.Contains(":\") AndAlso imagePath.ToLower().Contains("htdocs") Then
+            Dim htdocsIndex As Integer = imagePath.ToLower().IndexOf("htdocs")
+            If htdocsIndex > 0 Then
+                Dim webPath As String = imagePath.Substring(htdocsIndex + 7) ' Skip "htdocs\"
+                webPath = webPath.Replace("\", "/")
+                Return "http://localhost/" & webPath
+            End If
+        End If
+
+        ' If relative path (like "uploads/order_receipts/...")
+        ' Combine with base URL
+        Dim cleanPath As String = imagePath.Replace("\", "/")
+        If cleanPath.StartsWith("/") Then
+            cleanPath = cleanPath.Substring(1)
+        End If
+
+        Return WEB_BASE_URL & cleanPath
+    End Function
+
     ' =================================================
     ' FORMAT CUSTOMER DATA - Show only when CustomerID matches
     ' =================================================
@@ -229,6 +414,7 @@ Public Class OrderPayment
     ' =================================================
     Private Sub Order_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles Order.DataBindingComplete
         FormatGrid()
+        AddViewButtonColumn()
     End Sub
 
     ' =================================================

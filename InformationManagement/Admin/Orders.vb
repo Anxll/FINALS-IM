@@ -17,7 +17,7 @@ Public Class Orders
     End Sub
 
     ' ============================================================
-    ' LOAD ORDERS WITH CUSTOMER INFO (only when CustomerID matches)
+    ' LOAD ORDERS WITH CUSTOMER INFO AND PRODUCTS
     ' ============================================================
     Private Sub LoadOrders(Optional condition As String = "")
         Try
@@ -40,11 +40,12 @@ Public Class Orders
                 o.TotalAmount,
                 o.OrderStatus,
                 o.Remarks,
-                o.OrderPriority,
-                o.PreparationTimeEstimate,
                 o.SpecialRequestFlag,
                 o.CreatedDate,
-                o.UpdatedDate
+                o.UpdatedDate,
+                (SELECT GROUP_CONCAT(CONCAT(oi.ProductName, ' (', oi.Quantity, ')') SEPARATOR ', ')
+                 FROM order_items oi 
+                 WHERE oi.OrderID = o.OrderID) AS OrderedProducts
              FROM orders o
              LEFT JOIN customers c ON o.CustomerID = c.CustomerID"
 
@@ -135,42 +136,40 @@ Public Class Orders
                     .Columns("ItemsOrderedCount").DisplayIndex = 10
                 End If
 
+                ' NEW: Ordered Products Column
+                If .Columns.Contains("OrderedProducts") Then
+                    .Columns("OrderedProducts").HeaderText = "Ordered Products"
+                    .Columns("OrderedProducts").Width = 250
+                    .Columns("OrderedProducts").DefaultCellStyle.WrapMode = DataGridViewTriState.True
+                    .Columns("OrderedProducts").DisplayIndex = 11
+                End If
+
                 If .Columns.Contains("TotalAmount") Then
                     .Columns("TotalAmount").HeaderText = "Total Amount"
                     .Columns("TotalAmount").Width = 120
                     .Columns("TotalAmount").DefaultCellStyle.Format = "₱#,##0.00"
                     .Columns("TotalAmount").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
-                    .Columns("TotalAmount").DisplayIndex = 11
+                    .Columns("TotalAmount").DisplayIndex = 12
                 End If
 
                 If .Columns.Contains("OrderStatus") Then
                     .Columns("OrderStatus").HeaderText = "Status"
                     .Columns("OrderStatus").Width = 100
-                    .Columns("OrderStatus").DisplayIndex = 12
+                    .Columns("OrderStatus").DisplayIndex = 13
                 End If
 
-                If .Columns.Contains("OrderPriority") Then
-                    .Columns("OrderPriority").HeaderText = "Priority"
-                    .Columns("OrderPriority").Width = 80
-                    .Columns("OrderPriority").DisplayIndex = 13
-                End If
-
-                If .Columns.Contains("PreparationTimeEstimate") Then
-                    .Columns("PreparationTimeEstimate").HeaderText = "Prep Time"
-                    .Columns("PreparationTimeEstimate").Width = 90
-                    .Columns("PreparationTimeEstimate").DisplayIndex = 14
-                End If
+                ' REMOVED: PreparationTimeEstimate column is now hidden/removed
 
                 If .Columns.Contains("SpecialRequestFlag") Then
                     .Columns("SpecialRequestFlag").HeaderText = "Special Request"
                     .Columns("SpecialRequestFlag").Width = 110
-                    .Columns("SpecialRequestFlag").DisplayIndex = 15
+                    .Columns("SpecialRequestFlag").DisplayIndex = 14
                 End If
 
                 If .Columns.Contains("Remarks") Then
                     .Columns("Remarks").HeaderText = "Remarks"
                     .Columns("Remarks").Width = 150
-                    .Columns("Remarks").DisplayIndex = 16
+                    .Columns("Remarks").DisplayIndex = 15
                 End If
 
                 ' Disable auto-sizing
@@ -229,6 +228,13 @@ Public Class Orders
                     row.Cells("LastName").Style.ForeColor = Color.Gray
                     row.Cells("Email").Style.ForeColor = Color.Gray
                     row.Cells("CustomerContact").Style.ForeColor = Color.Gray
+                End If
+
+                ' Format OrderedProducts cell
+                If row.Cells("OrderedProducts").Value Is Nothing OrElse
+                   String.IsNullOrEmpty(row.Cells("OrderedProducts").Value.ToString()) Then
+                    row.Cells("OrderedProducts").Value = "No items"
+                    row.Cells("OrderedProducts").Style.ForeColor = Color.Gray
                 End If
             Next
         Catch ex As Exception
@@ -315,8 +321,15 @@ Public Class Orders
             Using conn As New MySqlConnection("Server=127.0.0.1;User=root;Password=;Database=tabeya_system")
                 conn.Open()
 
-                Dim query As String = "DELETE FROM orders WHERE OrderID = @orderID"
+                ' Delete order items first (child records)
+                Dim deleteItemsQuery As String = "DELETE FROM order_items WHERE OrderID = @orderID"
+                Using cmd As New MySqlCommand(deleteItemsQuery, conn)
+                    cmd.Parameters.AddWithValue("@orderID", orderID)
+                    cmd.ExecuteNonQuery()
+                End Using
 
+                ' Then delete the order
+                Dim query As String = "DELETE FROM orders WHERE OrderID = @orderID"
                 Using cmd As New MySqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@orderID", orderID)
                     cmd.ExecuteNonQuery()
@@ -446,6 +459,7 @@ Public Class Orders
             Dim customerName As String = GetCustomerName(row)
             Dim email As String = If(row.Cells("Email").Value?.ToString(), "N/A")
             Dim contact As String = If(row.Cells("CustomerContact").Value?.ToString(), "N/A")
+            Dim orderedProducts As String = If(row.Cells("OrderedProducts").Value?.ToString(), "No items")
 
             Dim details As String = $"Order Details:" & vbCrLf & vbCrLf &
                                    $"Order ID: {orderID}" & vbCrLf &
@@ -464,9 +478,9 @@ Public Class Orders
                       $"Order Date: {row.Cells("OrderDate").Value}" & vbCrLf &
                       $"Order Time: {row.Cells("OrderTime").Value}" & vbCrLf &
                       $"Items Ordered: {row.Cells("ItemsOrderedCount").Value}" & vbCrLf &
+                      $"Ordered Products: {orderedProducts}" & vbCrLf &
                       $"Total Amount: ₱{CDec(row.Cells("TotalAmount").Value):N2}" & vbCrLf &
                       $"Status: {row.Cells("OrderStatus").Value}" & vbCrLf &
-                      $"Priority: {row.Cells("OrderPriority").Value}" & vbCrLf &
                       $"Remarks: {row.Cells("Remarks").Value}"
 
             MessageBox.Show(details, "Order Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
