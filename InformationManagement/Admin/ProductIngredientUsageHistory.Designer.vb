@@ -14,8 +14,8 @@
     End Sub
 
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.pnlMain = New System.Windows.Forms.Panel()
         Me.pnlGrid = New System.Windows.Forms.Panel()
         Me.dgvUsageHistory = New System.Windows.Forms.DataGridView()
@@ -49,7 +49,7 @@
         '
         'pnlMain
         '
-        Me.pnlMain.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(245, Byte), Integer))
+        Me.pnlMain.BackColor = System.Drawing.Color.GhostWhite
         Me.pnlMain.Controls.Add(Me.pnlGrid)
         Me.pnlMain.Controls.Add(Me.pnlFilters)
         Me.pnlMain.Controls.Add(Me.pnlHeader)
@@ -76,22 +76,22 @@
         '
         Me.dgvUsageHistory.AllowUserToAddRows = False
         Me.dgvUsageHistory.AllowUserToDeleteRows = False
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(250, Byte), Integer))
-        Me.dgvUsageHistory.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.dgvUsageHistory.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle3
         Me.dgvUsageHistory.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dgvUsageHistory.BackgroundColor = System.Drawing.Color.White
         Me.dgvUsageHistory.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.dgvUsageHistory.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         Me.dgvUsageHistory.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(8)
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvUsageHistory.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle4.Padding = New System.Windows.Forms.Padding(8)
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvUsageHistory.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.dgvUsageHistory.ColumnHeadersHeight = 38
         Me.dgvUsageHistory.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvUsageHistory.EnableHeadersVisualStyles = False
@@ -193,7 +193,7 @@
         Me.lblSearch.AutoSize = True
         Me.lblSearch.Location = New System.Drawing.Point(400, 22)
         Me.lblSearch.Name = "lblSearch"
-        Me.lblSearch.Size = New System.Drawing.Size(105, 15)
+        Me.lblSearch.Size = New System.Drawing.Size(102, 15)
         Me.lblSearch.TabIndex = 6
         Me.lblSearch.Text = "Search Ingredient:"
         '
@@ -234,7 +234,7 @@
         '
         'pnlHeader
         '
-        Me.pnlHeader.BackColor = System.Drawing.Color.White
+        Me.pnlHeader.BackColor = System.Drawing.Color.GhostWhite
         Me.pnlHeader.Controls.Add(Me.lblTitle)
         Me.pnlHeader.Controls.Add(Me.lblSubtitle)
         Me.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top
@@ -251,7 +251,7 @@
         Me.lblTitle.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.lblTitle.Location = New System.Drawing.Point(10, 8)
         Me.lblTitle.Name = "lblTitle"
-        Me.lblTitle.Size = New System.Drawing.Size(237, 25)
+        Me.lblTitle.Size = New System.Drawing.Size(236, 25)
         Me.lblTitle.TabIndex = 0
         Me.lblTitle.Text = "Ingredient Usage History"
         '
@@ -262,7 +262,7 @@
         Me.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
         Me.lblSubtitle.Location = New System.Drawing.Point(12, 33)
         Me.lblSubtitle.Name = "lblSubtitle"
-        Me.lblSubtitle.Size = New System.Drawing.Size(308, 15)
+        Me.lblSubtitle.Size = New System.Drawing.Size(313, 15)
         Me.lblSubtitle.TabIndex = 1
         Me.lblSubtitle.Text = "Track which ingredients were used by products and orders"
         '

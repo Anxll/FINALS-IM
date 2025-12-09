@@ -44,21 +44,21 @@ Partial Class Reservations
         '
         'Panel1
         '
-        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.Panel1.BackColor = System.Drawing.Color.GhostWhite
         Me.Panel1.Controls.Add(Me.lblTitle)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1028, 72)
+        Me.Panel1.Size = New System.Drawing.Size(1028, 79)
         Me.Panel1.TabIndex = 0
         '
         'lblTitle
         '
         Me.lblTitle.AutoSize = True
         Me.lblTitle.Font = New System.Drawing.Font("Segoe UI", 21.75!, System.Drawing.FontStyle.Bold)
-        Me.lblTitle.ForeColor = System.Drawing.Color.White
-        Me.lblTitle.Location = New System.Drawing.Point(10, 13)
+        Me.lblTitle.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblTitle.Location = New System.Drawing.Point(22, 21)
         Me.lblTitle.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblTitle.Name = "lblTitle"
         Me.lblTitle.Size = New System.Drawing.Size(385, 40)
@@ -67,14 +67,15 @@ Partial Class Reservations
         '
         'Panel2
         '
-        Me.Panel2.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.Panel2.BackColor = System.Drawing.Color.GhostWhite
         Me.Panel2.Controls.Add(Me.btnUpdateStatus)
         Me.Panel2.Controls.Add(Me.btnDelete)
         Me.Panel2.Controls.Add(Me.btnRefresh)
         Me.Panel2.Controls.Add(Me.txtSearch)
         Me.Panel2.Controls.Add(Me.lblSearch)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel2.Location = New System.Drawing.Point(0, 72)
+        Me.Panel2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Panel2.Location = New System.Drawing.Point(0, 79)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Padding = New System.Windows.Forms.Padding(11)
@@ -158,7 +159,7 @@ Partial Class Reservations
         Me.Panel3.Controls.Add(Me.btnViewPending)
         Me.Panel3.Controls.Add(Me.lblFilter)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel3.Location = New System.Drawing.Point(0, 136)
+        Me.Panel3.Location = New System.Drawing.Point(0, 143)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Padding = New System.Windows.Forms.Padding(11)
@@ -229,6 +230,7 @@ Partial Class Reservations
         '
         Me.lblFilter.AutoSize = True
         Me.lblFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
+        Me.lblFilter.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.lblFilter.Location = New System.Drawing.Point(11, 13)
         Me.lblFilter.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblFilter.Name = "lblFilter"
@@ -258,7 +260,7 @@ Partial Class Reservations
         Me.Reservation.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.Reservation.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Reservation.EnableHeadersVisualStyles = False
-        Me.Reservation.Location = New System.Drawing.Point(0, 189)
+        Me.Reservation.Location = New System.Drawing.Point(0, 196)
         Me.Reservation.Margin = New System.Windows.Forms.Padding(2)
         Me.Reservation.Name = "Reservation"
         Me.Reservation.ReadOnly = True
@@ -266,7 +268,7 @@ Partial Class Reservations
         Me.Reservation.RowHeadersWidth = 51
         Me.Reservation.RowTemplate.Height = 35
         Me.Reservation.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.Reservation.Size = New System.Drawing.Size(1028, 357)
+        Me.Reservation.Size = New System.Drawing.Size(1028, 350)
         Me.Reservation.TabIndex = 3
         '
         'Panel4

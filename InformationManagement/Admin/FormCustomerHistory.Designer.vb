@@ -49,14 +49,14 @@ Partial Class FormCustomerHistory
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
         Me.RoundedPane21.Location = New System.Drawing.Point(33, 21)
         Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(1045, 429)
+        Me.RoundedPane21.Size = New System.Drawing.Size(1137, 429)
         Me.RoundedPane21.TabIndex = 0
         '
         'Export
         '
         Me.Export.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Export.Image = CType(resources.GetObject("Export.Image"), System.Drawing.Image)
-        Me.Export.Location = New System.Drawing.Point(921, 21)
+        Me.Export.Location = New System.Drawing.Point(1010, 18)
         Me.Export.Name = "Export"
         Me.Export.Size = New System.Drawing.Size(104, 30)
         Me.Export.TabIndex = 9
@@ -96,12 +96,12 @@ Partial Class FormCustomerHistory
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeight = 40
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.dateid, Me.Orderid, Me.Type, Me.Items, Me.Amount, Me.Status})
-        Me.DataGridView1.Location = New System.Drawing.Point(47, 101)
+        Me.DataGridView1.Location = New System.Drawing.Point(15, 54)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowHeadersWidth = 51
-        Me.DataGridView1.Size = New System.Drawing.Size(948, 311)
+        Me.DataGridView1.Size = New System.Drawing.Size(1099, 358)
         Me.DataGridView1.TabIndex = 0
         '
         'dateid
@@ -123,21 +123,21 @@ Partial Class FormCustomerHistory
         Me.Type.HeaderText = "Type"
         Me.Type.MinimumWidth = 6
         Me.Type.Name = "Type"
-        Me.Type.Width = 150
+        Me.Type.Width = 220
         '
         'Items
         '
         Me.Items.HeaderText = "Items"
         Me.Items.MinimumWidth = 6
         Me.Items.Name = "Items"
-        Me.Items.Width = 200
+        Me.Items.Width = 230
         '
         'Amount
         '
         Me.Amount.HeaderText = "Amount"
         Me.Amount.MinimumWidth = 6
         Me.Amount.Name = "Amount"
-        Me.Amount.Width = 150
+        Me.Amount.Width = 220
         '
         'Status
         '
@@ -152,7 +152,7 @@ Partial Class FormCustomerHistory
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1028, 609)
+        Me.ClientSize = New System.Drawing.Size(1329, 609)
         Me.Controls.Add(Me.RoundedPane21)
         Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Name = "FormCustomerHistory"
@@ -166,12 +166,12 @@ Partial Class FormCustomerHistory
 
     Friend WithEvents RoundedPane21 As RoundedPane2
     Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Export As Button
     Friend WithEvents dateid As DataGridViewTextBoxColumn
     Friend WithEvents Orderid As DataGridViewTextBoxColumn
     Friend WithEvents Type As DataGridViewTextBoxColumn
     Friend WithEvents Items As DataGridViewTextBoxColumn
     Friend WithEvents Amount As DataGridViewTextBoxColumn
     Friend WithEvents Status As DataGridViewTextBoxColumn
-    Friend WithEvents Label1 As Label
-    Friend WithEvents Export As Button
 End Class

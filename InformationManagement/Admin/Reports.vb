@@ -221,6 +221,12 @@ Public Class Reports
                 Return dateValue.ToString()
         End Select
     End Function
+
+    Private Sub LoadDefaultForm()
+        LoadFormIntoPanel(New FormSales())
+        HighlightActiveButton(btnSales)
+    End Sub
+
     ' === PUBLIC METHOD TO LOAD CATERING RESERVATIONS FROM EXTERNAL CALL ===
     ' ============================================
     ' PUBLIC METHOD - Load Catering Reservations Report from Dashboard
@@ -233,7 +239,7 @@ Public Class Reports
             LoadFormIntoPanel(New FormReservationStatus())
 
             ' Highlight the Catering Reservations button as active
-            HighlightActiveButton(btnCatering)
+            HighlightActiveButton(btnStatus)
 
             ' Scroll to top of the panel
             Panel1.AutoScrollPosition = New Point(0, 0)
@@ -252,4 +258,69 @@ Public Class Reports
             MessageBox.Show("Error loading catering reservation report: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+    Public Sub LoadOrderTrends()
+        Try
+            ' Load FormCateringReservations into Panel1
+            LoadFormIntoPanel(New FormOrders())
+
+            ' Highlight the Catering Reservations button as active
+            HighlightActiveButton(btnOrders)
+
+            ' Scroll to top of the panel
+            Panel1.AutoScrollPosition = New Point(0, 0)
+
+            ' Bring Reports form to front and focus
+            Me.BringToFront()
+            Me.Activate()
+            Me.Focus()
+
+            ' Optional: Set the period dropdown to Daily
+            If reportPeriod.Items.Contains("Daily") Then
+                reportPeriod.SelectedItem = "Daily"
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error loading catering reservation report: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Public Sub LoadSalesReport()
+        Try
+            ' Load FormCateringReservations into Panel1
+            LoadFormIntoPanel(New FormSales())
+
+            ' Highlight the Catering Reservations button as active
+            HighlightActiveButton(btnSales)
+
+            ' Scroll to top of the panel
+            Panel1.AutoScrollPosition = New Point(0, 0)
+
+            ' Bring Reports form to front and focus
+            Me.BringToFront()
+            Me.Activate()
+            Me.Focus()
+        Catch ex As Exception
+            MessageBox.Show("Error loading catering reservation report: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    Public Sub LoadProductPerformanceReport()
+        Try
+            ' Load FormCateringReservations into Panel1
+            LoadFormIntoPanel(New FormProductPerformance())
+
+            ' Highlight the Catering Reservations button as active
+            HighlightActiveButton(btnProductsPerformance)
+
+            ' Scroll to top of the panel
+            Panel1.AutoScrollPosition = New Point(0, 0)
+
+            ' Bring Reports form to front and focus
+            Me.BringToFront()
+            Me.Activate()
+            Me.Focus()
+        Catch ex As Exception
+            MessageBox.Show("Error loading catering reservation report: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
 End Class

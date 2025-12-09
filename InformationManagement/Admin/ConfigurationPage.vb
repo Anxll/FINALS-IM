@@ -302,7 +302,6 @@ Public Class ConfigurationPage
         lblServerStatus.ForeColor = Color.Gray
     End Sub
 
-    Private Sub txtServer_TextChanged(sender As Object, e As EventArgs)
 
-    End Sub
+
 End Class

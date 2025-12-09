@@ -1,4 +1,5 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.Drawing.Drawing2D
+Imports MySql.Data.MySqlClient
 
 Public Class Customer
 
@@ -11,6 +12,8 @@ Public Class Customer
     Private Sub Customer_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitializeDatabase()
         LoadCustomerData()
+
+
     End Sub
 
     Private Sub InitializeDatabase()
@@ -170,6 +173,8 @@ Public Class Customer
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
         LoadCustomerData(txtSearch.Text)
     End Sub
+
+
 
 
 End Class

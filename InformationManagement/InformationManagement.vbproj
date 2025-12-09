@@ -370,6 +370,7 @@
     <Compile Include="Admin\Reports.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Admin\ReservationChartHelper.vb" />
     <Compile Include="Admin\ReservationPayment.Designer.vb">
       <DependentUpon>ReservationPayment.vb</DependentUpon>
     </Compile>
@@ -584,6 +585,9 @@
     <EmbeddedResource Include="Admin\Payroll.resx">
       <DependentUpon>Payroll.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ProductIngredientUsageHistory.resx">
+      <DependentUpon>ProductIngredientUsageHistory.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Admin\Reports.resx">
       <DependentUpon>Reports.vb</DependentUpon>
     </EmbeddedResource>
@@ -670,6 +674,8 @@
     <None Include="Resources\calendar_icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\arrow.png" />
+    <None Include="Resources\arrow-down.png" />
     <Content Include="Resources\search_icon.png" />
     <None Include="Resources\search_icon1.png" />
   </ItemGroup>

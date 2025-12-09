@@ -24,7 +24,6 @@ Partial Class ConfigurationPage
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConfigurationPage))
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
-        Me.lblServerStatus = New System.Windows.Forms.Label()
         Me.txtServer = New InformationManagement.RoundedTextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -39,6 +38,7 @@ Partial Class ConfigurationPage
         Me.btnTestConnection = New System.Windows.Forms.Button()
         Me.txtUsername = New InformationManagement.RoundedTextBox()
         Me.btnSaveAndContinue = New System.Windows.Forms.Button()
+        Me.lblServerStatus = New System.Windows.Forms.Label()
         Me.RoundedPane21.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -64,23 +64,12 @@ Partial Class ConfigurationPage
         Me.RoundedPane21.Controls.Add(Me.btnTestConnection)
         Me.RoundedPane21.Controls.Add(Me.txtUsername)
         Me.RoundedPane21.Controls.Add(Me.btnSaveAndContinue)
-        Me.RoundedPane21.CornerRadius = 15
+        Me.RoundedPane21.CornerRadius = 12
         Me.RoundedPane21.FillColor = System.Drawing.SystemColors.ActiveCaption
         Me.RoundedPane21.Location = New System.Drawing.Point(183, 29)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(494, 508)
         Me.RoundedPane21.TabIndex = 11
-        '
-        'lblServerStatus
-        '
-        Me.lblServerStatus.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.lblServerStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Italic)
-        Me.lblServerStatus.ForeColor = System.Drawing.Color.Gray
-        Me.lblServerStatus.Location = New System.Drawing.Point(90, 400)
-        Me.lblServerStatus.Name = "lblServerStatus"
-        Me.lblServerStatus.Size = New System.Drawing.Size(314, 35)
-        Me.lblServerStatus.TabIndex = 12
-        Me.lblServerStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'txtServer
         '
@@ -284,6 +273,17 @@ Partial Class ConfigurationPage
         Me.btnSaveAndContinue.TabIndex = 10
         Me.btnSaveAndContinue.Text = "Save && Continue"
         Me.btnSaveAndContinue.UseVisualStyleBackColor = False
+        '
+        'lblServerStatus
+        '
+        Me.lblServerStatus.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.lblServerStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Italic)
+        Me.lblServerStatus.ForeColor = System.Drawing.Color.Gray
+        Me.lblServerStatus.Location = New System.Drawing.Point(90, 400)
+        Me.lblServerStatus.Name = "lblServerStatus"
+        Me.lblServerStatus.Size = New System.Drawing.Size(314, 35)
+        Me.lblServerStatus.TabIndex = 12
+        Me.lblServerStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ConfigurationPage
         '

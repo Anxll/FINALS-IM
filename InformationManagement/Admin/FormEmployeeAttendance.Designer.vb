@@ -114,16 +114,16 @@ Partial Class FormEmployeeAttendance
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
         Me.RoundedPane21.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.RoundedPane21.Location = New System.Drawing.Point(31, 22)
+        Me.RoundedPane21.Location = New System.Drawing.Point(31, 26)
         Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(1045, 306)
+        Me.RoundedPane21.Size = New System.Drawing.Size(1196, 306)
         Me.RoundedPane21.TabIndex = 0
         '
         'Button1
         '
         Me.Button1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(918, 18)
+        Me.Button1.Location = New System.Drawing.Point(1066, 24)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(104, 30)
         Me.Button1.TabIndex = 9
@@ -148,7 +148,7 @@ Partial Class FormEmployeeAttendance
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1028, 609)
+        Me.ClientSize = New System.Drawing.Size(1256, 609)
         Me.Controls.Add(Me.RoundedPane21)
         Me.Name = "FormEmployeeAttendance"
         Me.Text = "FormEmployeeAttendance"

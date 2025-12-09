@@ -184,7 +184,7 @@ Partial Class FormSales
         Me.RoundedPane23.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.RoundedPane23.Location = New System.Drawing.Point(745, 27)
         Me.RoundedPane23.Name = "RoundedPane23"
-        Me.RoundedPane23.Size = New System.Drawing.Size(335, 138)
+        Me.RoundedPane23.Size = New System.Drawing.Size(275, 138)
         Me.RoundedPane23.TabIndex = 8
         '
         'Label13
@@ -278,7 +278,7 @@ Partial Class FormSales
         Me.Panel1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1080, 592)
+        Me.Panel1.Size = New System.Drawing.Size(1080, 626)
         Me.Panel1.TabIndex = 11
         '
         'PictureBox8
@@ -337,7 +337,7 @@ Partial Class FormSales
         Me.AutoScroll = True
         Me.AutoSize = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1028, 609)
+        Me.ClientSize = New System.Drawing.Size(1028, 643)
         Me.Controls.Add(Me.RoundedPane24)
         Me.Controls.Add(Me.RoundedPane23)
         Me.Controls.Add(Me.RoundedPane22)

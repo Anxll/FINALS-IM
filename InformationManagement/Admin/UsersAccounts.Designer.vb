@@ -74,9 +74,9 @@ Partial Class UsersAccounts
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 21.75!, System.Drawing.FontStyle.Bold)
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(30, 20)
+        Me.Label1.Location = New System.Drawing.Point(26, 28)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(269, 50)
+        Me.Label1.Size = New System.Drawing.Size(213, 40)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "User Accounts"
         '
@@ -294,7 +294,7 @@ Partial Class UsersAccounts
         Me.lblCustomers.ForeColor = System.Drawing.Color.DarkViolet
         Me.lblCustomers.Location = New System.Drawing.Point(25, 52)
         Me.lblCustomers.Name = "lblCustomers"
-        Me.lblCustomers.Size = New System.Drawing.Size(33, 37)
+        Me.lblCustomers.Size = New System.Drawing.Size(26, 30)
         Me.lblCustomers.TabIndex = 3
         Me.lblCustomers.Text = "2"
         '
@@ -306,7 +306,7 @@ Partial Class UsersAccounts
         Me.Label8.ForeColor = System.Drawing.Color.DarkViolet
         Me.Label8.Location = New System.Drawing.Point(14, 19)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(91, 23)
+        Me.Label8.Size = New System.Drawing.Size(75, 19)
         Me.Label8.TabIndex = 0
         Me.Label8.Text = "Customers"
         '
@@ -342,7 +342,7 @@ Partial Class UsersAccounts
         Me.lblEmployees.ForeColor = System.Drawing.Color.ForestGreen
         Me.lblEmployees.Location = New System.Drawing.Point(31, 52)
         Me.lblEmployees.Name = "lblEmployees"
-        Me.lblEmployees.Size = New System.Drawing.Size(33, 37)
+        Me.lblEmployees.Size = New System.Drawing.Size(26, 30)
         Me.lblEmployees.TabIndex = 3
         Me.lblEmployees.Text = "1"
         '
@@ -354,7 +354,7 @@ Partial Class UsersAccounts
         Me.Label7.ForeColor = System.Drawing.Color.ForestGreen
         Me.Label7.Location = New System.Drawing.Point(14, 19)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(92, 23)
+        Me.Label7.Size = New System.Drawing.Size(75, 19)
         Me.Label7.TabIndex = 0
         Me.Label7.Text = "Employees"
         '
@@ -390,7 +390,7 @@ Partial Class UsersAccounts
         Me.lblStaffs.ForeColor = System.Drawing.Color.RoyalBlue
         Me.lblStaffs.Location = New System.Drawing.Point(26, 52)
         Me.lblStaffs.Name = "lblStaffs"
-        Me.lblStaffs.Size = New System.Drawing.Size(33, 37)
+        Me.lblStaffs.Size = New System.Drawing.Size(26, 30)
         Me.lblStaffs.TabIndex = 3
         Me.lblStaffs.Text = "2"
         '
@@ -402,7 +402,7 @@ Partial Class UsersAccounts
         Me.Label6.ForeColor = System.Drawing.Color.RoyalBlue
         Me.Label6.Location = New System.Drawing.Point(14, 19)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(123, 23)
+        Me.Label6.Size = New System.Drawing.Size(101, 19)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Staff Members"
         '
@@ -447,7 +447,7 @@ Partial Class UsersAccounts
         Me.lblTotalUsers.Font = New System.Drawing.Font("Segoe UI", 16.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTotalUsers.Location = New System.Drawing.Point(22, 52)
         Me.lblTotalUsers.Name = "lblTotalUsers"
-        Me.lblTotalUsers.Size = New System.Drawing.Size(33, 37)
+        Me.lblTotalUsers.Size = New System.Drawing.Size(26, 30)
         Me.lblTotalUsers.TabIndex = 2
         Me.lblTotalUsers.Text = "5"
         '
@@ -459,17 +459,17 @@ Partial Class UsersAccounts
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.Label2.Location = New System.Drawing.Point(14, 19)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(92, 23)
+        Me.Label2.Size = New System.Drawing.Size(78, 19)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Total Users"
         '
         'UsersAccounts
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 17.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1265, 527)
+        Me.ClientSize = New System.Drawing.Size(1265, 544)
         Me.Controls.Add(Me.AddEdit)
         Me.Controls.Add(Me.RoundedPane24)
         Me.Controls.Add(Me.RoundedPane23)

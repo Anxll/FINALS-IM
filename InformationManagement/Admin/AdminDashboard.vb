@@ -1,6 +1,7 @@
 ﻿Imports Org.BouncyCastle.Math.EC
 
 Public Class AdminDashboard
+    Private ReportsInstance As Reports = Nothing
     Public Sub New()
         InitializeComponent()
         Me.DoubleBuffered = True
@@ -115,6 +116,8 @@ Public Class AdminDashboard
 
     Private Sub btnReports_Click(sender As Object, e As EventArgs) Handles btnReports.Click
         HighlightButton(btnReports)
+        ' Dispose old Reports instance if exists
+
         With Reports
             .TopLevel = False
             .FormBorderStyle = FormBorderStyle.None
@@ -269,7 +272,10 @@ Public Class AdminDashboard
 
     End Sub
 
+
     Private Sub AdminDashboard_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
         Application.Exit()
     End Sub
+
+
 End Class
