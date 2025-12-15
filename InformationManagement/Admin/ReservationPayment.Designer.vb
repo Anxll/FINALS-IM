@@ -116,94 +116,24 @@ Partial Class ReservationPayment
         Me.btnRefresh.Size = New System.Drawing.Size(100, 30)
         Me.btnRefresh.TabIndex = 2
         Me.btnRefresh.Text = "Refresh"
-        Me.btnRefresh.UseVisualStyleBackColor = False
+        Me.btnRefresh.TextAlignment = System.Drawing.StringAlignment.Center
         '
         'txtSearch
         '
-        Me.txtSearch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.txtSearch.Location = New System.Drawing.Point(80, 17)
+        Me.txtSearch.BackColor = System.Drawing.Color.Transparent
+        Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.txtSearch.Image = Nothing
+        Me.txtSearch.Location = New System.Drawing.Point(38, 23)
+        Me.txtSearch.MaxLength = 32767
+        Me.txtSearch.Multiline = False
         Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(630, 25)
-        Me.txtSearch.TabIndex = 1
-        '
-        'lblSearch
-        '
-        Me.lblSearch.AutoSize = True
-        Me.lblSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
-        Me.lblSearch.Location = New System.Drawing.Point(13, 20)
-        Me.lblSearch.Name = "lblSearch"
-        Me.lblSearch.Size = New System.Drawing.Size(58, 19)
-        Me.lblSearch.TabIndex = 0
-        Me.lblSearch.Text = "Search:"
-        '
-        'Reservation
-        '
-        Me.Reservation.AllowUserToAddRows = False
-        Me.Reservation.AllowUserToDeleteRows = False
-        Me.Reservation.AllowUserToResizeRows = False
-        Me.Reservation.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells
-        Me.Reservation.BackgroundColor = System.Drawing.Color.White
-        Me.Reservation.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.Reservation.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
-        Me.Reservation.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.Reservation.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
-        Me.Reservation.ColumnHeadersHeight = 40
-        Me.Reservation.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.Reservation.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Reservation.EnableHeadersVisualStyles = False
-        Me.Reservation.Location = New System.Drawing.Point(0, 140)
-        Me.Reservation.Name = "Reservation"
-        Me.Reservation.ReadOnly = True
-        Me.Reservation.RowHeadersVisible = False
-        Me.Reservation.RowHeadersWidth = 51
-        Me.Reservation.RowTemplate.Height = 35
-        Me.Reservation.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.Reservation.Size = New System.Drawing.Size(1028, 392)
-        Me.Reservation.TabIndex = 2
-        '
-        'Panel4
-        '
-        Me.Panel4.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.Panel4.Controls.Add(Me.lblTotalRecords)
-        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel4.Location = New System.Drawing.Point(0, 532)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1028, 30)
-        Me.Panel4.TabIndex = 3
-        '
-        'lblTotalRecords
-        '
-        Me.lblTotalRecords.AutoSize = True
-        Me.lblTotalRecords.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.lblTotalRecords.Location = New System.Drawing.Point(12, 7)
-        Me.lblTotalRecords.Name = "lblTotalRecords"
-        Me.lblTotalRecords.Size = New System.Drawing.Size(95, 15)
-        Me.lblTotalRecords.TabIndex = 0
-        Me.lblTotalRecords.Text = "Total Records: 0"
-        '
-        'ReservationPayment
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1028, 562)
-        Me.Controls.Add(Me.Reservation)
-        Me.Controls.Add(Me.Panel4)
-        Me.Controls.Add(Me.Panel2)
-        Me.Controls.Add(Me.Panel1)
-        Me.Margin = New System.Windows.Forms.Padding(2)
-        Me.MinimumSize = New System.Drawing.Size(804, 591)
-        Me.Name = "ReservationPayment"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Reservation Payment - Tabeya"
+        Me.txtSearch.ReadOnly = False
+        Me.txtSearch.Size = New System.Drawing.Size(688, 38)
+        Me.txtSearch.TabIndex = 10
+        Me.txtSearch.Text = "Search..."
+        Me.txtSearch.TextAlignment = System.Windows.Forms.HorizontalAlignment.Left
+        Me.txtSearch.UseSystemPasswordChar = False
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
