@@ -11,40 +11,26 @@ Public Class RoundedPane2
 
     ' Constructor with double buffering
     Public Sub New()
-        MyBase.New()
-
         ' Enable double buffering to reduce flickering
         Me.DoubleBuffered = True
         Me.SetStyle(ControlStyles.UserPaint Or
                     ControlStyles.AllPaintingInWmPaint Or
-                    ControlStyles.OptimizedDoubleBuffer Or
-                    ControlStyles.ResizeRedraw Or
-                    ControlStyles.SupportsTransparentBackColor, True)
+                    ControlStyles.OptimizedDoubleBuffer, True)
         Me.UpdateStyles()
-
-        ' Set default background to transparent for better rendering
-        Me.BackColor = Color.Transparent
     End Sub
 
-    <Browsable(True)>
-    <Category("Appearance")>
-    <Description("The radius of the rounded corners")>
-    <DefaultValue(15)>
+    <Browsable(True), Category("Appearance")>
     Public Property CornerRadius As Integer
         Get
             Return _cornerRadius
         End Get
         Set(value As Integer)
-            If value >= 0 Then
-                _cornerRadius = value
-                Me.Invalidate()
-            End If
+            _cornerRadius = value
+            Me.Invalidate()
         End Set
     End Property
 
-    <Browsable(True)>
-    <Category("Appearance")>
-    <Description("The color of the border")>
+    <Browsable(True), Category("Appearance")>
     Public Property BorderColor As Color
         Get
             Return _borderColor
@@ -55,25 +41,18 @@ Public Class RoundedPane2
         End Set
     End Property
 
-    <Browsable(True)>
-    <Category("Appearance")>
-    <Description("The thickness of the border")>
-    <DefaultValue(1)>
+    <Browsable(True), Category("Appearance")>
     Public Property BorderThickness As Integer
         Get
             Return _borderThickness
         End Get
         Set(value As Integer)
-            If value >= 0 Then
-                _borderThickness = value
-                Me.Invalidate()
-            End If
+            _borderThickness = value
+            Me.Invalidate()
         End Set
     End Property
 
-    <Browsable(True)>
-    <Category("Appearance")>
-    <Description("The fill color of the panel")>
+    <Browsable(True), Category("Appearance")>
     Public Property FillColor As Color
         Get
             Return _fillColor
@@ -86,29 +65,10 @@ Public Class RoundedPane2
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
-
-        If Me.Width <= 0 OrElse Me.Height <= 0 Then
-            Return
-        End If
-
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias
-        e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality
 
-        ' Calculate rectangle with proper bounds for Any CPU compatibility
-        Dim halfBorder As Integer = CInt(Math.Ceiling(_borderThickness / 2.0))
-        Dim rect As New Rectangle(
-            halfBorder,
-            halfBorder,
-            Me.Width - _borderThickness - 1,
-            Me.Height - _borderThickness - 1
-        )
+        Dim rect As Rectangle = New Rectangle(0, 0, Me.Width - 1, Me.Height - 1)
 
-        ' Ensure rectangle has valid dimensions
-        If rect.Width <= 0 OrElse rect.Height <= 0 Then
-            Return
-        End If
-
-        ' Use proper disposal pattern for Any CPU compatibility
         Using path As GraphicsPath = GetRoundedPath(rect, _cornerRadius)
             ' Fill background
             Using brush As New SolidBrush(_fillColor)
@@ -116,77 +76,23 @@ Public Class RoundedPane2
             End Using
 
             ' Draw border
-            If _borderThickness > 0 Then
-                Using pen As New Pen(_borderColor, CSng(_borderThickness))
-                    pen.Alignment = Drawing2D.PenAlignment.Inset
-                    e.Graphics.DrawPath(pen, path)
-                End Using
-            End If
+            Using pen As New Pen(_borderColor, _borderThickness)
+                e.Graphics.DrawPath(pen, path)
+            End Using
         End Using
     End Sub
 
     Private Function GetRoundedPath(rect As Rectangle, radius As Integer) As GraphicsPath
         Dim path As New GraphicsPath()
+        Dim diameter As Integer = radius * 2
 
-        ' Ensure radius doesn't exceed half the smallest dimension
-        Dim actualRadius As Integer = Math.Min(radius, Math.Min(rect.Width, rect.Height) \ 2)
-        Dim diameter As Integer = actualRadius * 2
-
-        ' Prevent negative or zero dimensions
-        If diameter <= 0 OrElse rect.Width <= 0 OrElse rect.Height <= 0 Then
-            path.AddRectangle(rect)
-            Return path
-        End If
-
-        Try
-            path.StartFigure()
-
-            ' Top-left corner
-            If actualRadius > 0 Then
-                path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90)
-            Else
-                path.AddLine(rect.X, rect.Y, rect.X, rect.Y)
-            End If
-
-            ' Top-right corner
-            If actualRadius > 0 Then
-                path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90)
-            Else
-                path.AddLine(rect.Right, rect.Y, rect.Right, rect.Y)
-            End If
-
-            ' Bottom-right corner
-            If actualRadius > 0 Then
-                path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90)
-            Else
-                path.AddLine(rect.Right, rect.Bottom, rect.Right, rect.Bottom)
-            End If
-
-            ' Bottom-left corner
-            If actualRadius > 0 Then
-                path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90)
-            Else
-                path.AddLine(rect.X, rect.Bottom, rect.X, rect.Bottom)
-            End If
-
-            path.CloseFigure()
-
-        Catch ex As Exception
-            ' Fallback to rectangle if path creation fails
-            path.Reset()
-            path.AddRectangle(rect)
-        End Try
+        path.StartFigure()
+        path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90)
+        path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90)
+        path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90)
+        path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90)
+        path.CloseFigure()
 
         Return path
     End Function
-
-    Protected Overrides Sub OnResize(e As EventArgs)
-        MyBase.OnResize(e)
-        Me.Invalidate()
-    End Sub
-
-    Protected Overrides Sub OnBackColorChanged(e As EventArgs)
-        MyBase.OnBackColorChanged(e)
-        Me.Invalidate()
-    End Sub
 End Class

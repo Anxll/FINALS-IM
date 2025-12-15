@@ -204,8 +204,8 @@ Public Class OrderPayment
         Order.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
         Order.ScrollBars = ScrollBars.Both
         Order.RowHeadersVisible = False
-        Order.DefaultCellStyle.Font = New Font("Segoe UI", 8.5)
-        Order.ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI Bold", 9)
+        Order.DefaultCellStyle.Font = New Font("Segoe UI", 10)
+        Order.ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI Semibold", 10)
 
         ' Format customer data for walk-in customers
         FormatCustomerData()

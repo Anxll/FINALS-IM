@@ -1,6 +1,4 @@
-﻿Imports InformationManagement.InformationManagement
-
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class PanelCreateReservation
     Inherits System.Windows.Forms.Form
 
@@ -162,7 +160,7 @@ Partial Class PanelCreateReservation
         Me.btnCreateReservation.Size = New System.Drawing.Size(173, 33)
         Me.btnCreateReservation.TabIndex = 12
         Me.btnCreateReservation.Text = "Create Reservation"
-        Me.btnCreateReservation.UseVisualStyleBackColor = False
+        Me.btnCreateReservation.UseVisualStyleBackColor = True
         '
         'cmbEventType
         '
@@ -185,12 +183,11 @@ Partial Class PanelCreateReservation
         Me.DateTimePicker1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.DateTimePicker1.Location = New System.Drawing.Point(22, 346)
-        Me.DateTimePicker1.MaxDate = New Date(2030, 12, 31, 0, 0, 0, 0)
-        Me.DateTimePicker1.MinDate = New Date(2024, 1, 1, 0, 0, 0, 0)
+        Me.DateTimePicker1.MaxDate = New Date(2025, 10, 31, 0, 0, 0, 0)
         Me.DateTimePicker1.Name = "DateTimePicker1"
         Me.DateTimePicker1.Size = New System.Drawing.Size(182, 25)
         Me.DateTimePicker1.TabIndex = 17
-        Me.DateTimePicker1.Value = New Date(2025, 12, 12, 0, 0, 0, 0)
+        Me.DateTimePicker1.Value = New Date(2025, 10, 31, 0, 0, 0, 0)
         '
         'NumericUpDown1
         '
@@ -198,7 +195,6 @@ Partial Class PanelCreateReservation
         Me.NumericUpDown1.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.NumericUpDown1.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.NumericUpDown1.Location = New System.Drawing.Point(24, 279)
-        Me.NumericUpDown1.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown1.Name = "NumericUpDown1"
         Me.NumericUpDown1.Size = New System.Drawing.Size(180, 21)
         Me.NumericUpDown1.TabIndex = 18
@@ -207,13 +203,15 @@ Partial Class PanelCreateReservation
         'DateTimePicker2
         '
         Me.DateTimePicker2.CalendarMonthBackground = System.Drawing.Color.WhiteSmoke
+        Me.DateTimePicker2.CustomFormat = "dd/MM/yyyy"
         Me.DateTimePicker2.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.DateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Time
         Me.DateTimePicker2.Location = New System.Drawing.Point(270, 346)
+        Me.DateTimePicker2.MaxDate = New Date(2025, 10, 31, 0, 0, 0, 0)
         Me.DateTimePicker2.Name = "DateTimePicker2"
-        Me.DateTimePicker2.ShowUpDown = True
         Me.DateTimePicker2.Size = New System.Drawing.Size(192, 25)
         Me.DateTimePicker2.TabIndex = 20
+        Me.DateTimePicker2.Value = New Date(2025, 10, 31, 0, 0, 0, 0)
         '
         'btnClose
         '
@@ -229,7 +227,6 @@ Partial Class PanelCreateReservation
         'txtNote
         '
         Me.txtNote.BackColor = System.Drawing.Color.Transparent
-        Me.txtNote.BorderRadius = 8
         Me.txtNote.FocusBorderColor = System.Drawing.Color.DarkGray
         Me.txtNote.Location = New System.Drawing.Point(24, 401)
         Me.txtNote.MaxLength = 32767
@@ -240,7 +237,6 @@ Partial Class PanelCreateReservation
         Me.txtNote.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
         Me.txtNote.Size = New System.Drawing.Size(438, 91)
         Me.txtNote.TabIndex = 25
-        Me.txtNote.Text = ""
         Me.txtNote.TextBoxBackColor = System.Drawing.Color.WhiteSmoke
         Me.txtNote.TextColor = System.Drawing.Color.Black
         Me.txtNote.TextFont = New System.Drawing.Font("Segoe UI", 10.0!)
@@ -248,7 +244,6 @@ Partial Class PanelCreateReservation
         'txtPhone
         '
         Me.txtPhone.BackColor = System.Drawing.Color.Transparent
-        Me.txtPhone.BorderRadius = 8
         Me.txtPhone.FocusBorderColor = System.Drawing.Color.DarkGray
         Me.txtPhone.Location = New System.Drawing.Point(24, 202)
         Me.txtPhone.MaxLength = 32767
@@ -259,7 +254,6 @@ Partial Class PanelCreateReservation
         Me.txtPhone.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
         Me.txtPhone.Size = New System.Drawing.Size(438, 40)
         Me.txtPhone.TabIndex = 24
-        Me.txtPhone.Text = ""
         Me.txtPhone.TextBoxBackColor = System.Drawing.Color.WhiteSmoke
         Me.txtPhone.TextColor = System.Drawing.Color.Black
         Me.txtPhone.TextFont = New System.Drawing.Font("Segoe UI", 10.0!)
@@ -267,7 +261,6 @@ Partial Class PanelCreateReservation
         'txtEmail
         '
         Me.txtEmail.BackColor = System.Drawing.Color.Transparent
-        Me.txtEmail.BorderRadius = 8
         Me.txtEmail.FocusBorderColor = System.Drawing.Color.DarkGray
         Me.txtEmail.Location = New System.Drawing.Point(24, 135)
         Me.txtEmail.MaxLength = 32767
@@ -278,7 +271,6 @@ Partial Class PanelCreateReservation
         Me.txtEmail.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
         Me.txtEmail.Size = New System.Drawing.Size(438, 40)
         Me.txtEmail.TabIndex = 23
-        Me.txtEmail.Text = ""
         Me.txtEmail.TextBoxBackColor = System.Drawing.Color.WhiteSmoke
         Me.txtEmail.TextColor = System.Drawing.Color.Black
         Me.txtEmail.TextFont = New System.Drawing.Font("Segoe UI", 10.0!)
@@ -286,7 +278,6 @@ Partial Class PanelCreateReservation
         'txtFullName
         '
         Me.txtFullName.BackColor = System.Drawing.Color.Transparent
-        Me.txtFullName.BorderRadius = 8
         Me.txtFullName.FocusBorderColor = System.Drawing.Color.DarkGray
         Me.txtFullName.Location = New System.Drawing.Point(24, 66)
         Me.txtFullName.MaxLength = 32767
@@ -297,7 +288,6 @@ Partial Class PanelCreateReservation
         Me.txtFullName.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
         Me.txtFullName.Size = New System.Drawing.Size(438, 40)
         Me.txtFullName.TabIndex = 22
-        Me.txtFullName.Text = ""
         Me.txtFullName.TextBoxBackColor = System.Drawing.Color.WhiteSmoke
         Me.txtFullName.TextColor = System.Drawing.Color.Black
         Me.txtFullName.TextFont = New System.Drawing.Font("Segoe UI", 10.0!)

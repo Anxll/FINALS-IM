@@ -19,37 +19,38 @@
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.pnlMain = New System.Windows.Forms.Panel()
         Me.pnlGrid = New System.Windows.Forms.Panel()
-        Me.dtpStartDate = New ReaLTaiizor.Controls.PoisonDateTime()
+        Me.PoisonDateTime1 = New ReaLTaiizor.Controls.PoisonDateTime()
         Me.dgvUsageHistory = New System.Windows.Forms.DataGridView()
         Me.pnlFilters = New System.Windows.Forms.Panel()
+        Me.grpFilters = New System.Windows.Forms.GroupBox()
         Me.cmbSource = New ReaLTaiizor.Controls.ComboBoxEdit()
         Me.lblStartDate = New System.Windows.Forms.Label()
+        Me.dtpStartDate = New System.Windows.Forms.DateTimePicker()
         Me.txtSearch = New ReaLTaiizor.Controls.BigTextBox()
         Me.lblEndDate = New System.Windows.Forms.Label()
+        Me.dtpEndDate = New System.Windows.Forms.DateTimePicker()
         Me.lblSource = New System.Windows.Forms.Label()
         Me.lblSearch = New System.Windows.Forms.Label()
+        Me.btnApplyFilters = New System.Windows.Forms.Button()
+        Me.btnResetFilters = New System.Windows.Forms.Button()
         Me.pnlHeader = New System.Windows.Forms.Panel()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.lblSubtitle = New System.Windows.Forms.Label()
         Me.pnlActions = New System.Windows.Forms.Panel()
-        Me.btnClearHistory = New ReaLTaiizor.Controls.Button()
-        Me.btnRefresh = New ReaLTaiizor.Controls.Button()
-        Me.btnClose = New ReaLTaiizor.Controls.Button()
-        Me.btnResetFilters = New ReaLTaiizor.Controls.Button()
-        Me.btnApplyFilters = New ReaLTaiizor.Controls.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.dtpEndDate = New ReaLTaiizor.Controls.PoisonDateTime()
+        Me.btnClearHistory = New System.Windows.Forms.Button()
+        Me.btnRefresh = New System.Windows.Forms.Button()
+        Me.btnClose = New System.Windows.Forms.Button()
         Me.pnlMain.SuspendLayout()
         Me.pnlGrid.SuspendLayout()
         CType(Me.dgvUsageHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlFilters.SuspendLayout()
+        Me.grpFilters.SuspendLayout()
         Me.pnlHeader.SuspendLayout()
         Me.pnlActions.SuspendLayout()
         Me.SuspendLayout()
         '
         'pnlMain
         '
-        Me.pnlMain.AutoSize = True
         Me.pnlMain.BackColor = System.Drawing.Color.GhostWhite
         Me.pnlMain.Controls.Add(Me.pnlGrid)
         Me.pnlMain.Controls.Add(Me.pnlFilters)
@@ -59,29 +60,29 @@
         Me.pnlMain.Location = New System.Drawing.Point(0, 0)
         Me.pnlMain.Name = "pnlMain"
         Me.pnlMain.Padding = New System.Windows.Forms.Padding(15)
-        Me.pnlMain.Size = New System.Drawing.Size(1084, 661)
+        Me.pnlMain.Size = New System.Drawing.Size(900, 600)
         Me.pnlMain.TabIndex = 0
         '
         'pnlGrid
         '
         Me.pnlGrid.BackColor = System.Drawing.Color.White
+        Me.pnlGrid.Controls.Add(Me.PoisonDateTime1)
         Me.pnlGrid.Controls.Add(Me.dgvUsageHistory)
         Me.pnlGrid.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pnlGrid.Location = New System.Drawing.Point(15, 175)
         Me.pnlGrid.Name = "pnlGrid"
         Me.pnlGrid.Padding = New System.Windows.Forms.Padding(10)
-        Me.pnlGrid.Size = New System.Drawing.Size(1054, 423)
+        Me.pnlGrid.Size = New System.Drawing.Size(870, 350)
         Me.pnlGrid.TabIndex = 0
         '
-        'dtpStartDate
+        'PoisonDateTime1
         '
-        Me.dtpStartDate.FontSize = ReaLTaiizor.Extension.Poison.PoisonDateTimeSize.Medium
-        Me.dtpStartDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dtpStartDate.Location = New System.Drawing.Point(30, 57)
-        Me.dtpStartDate.MinimumSize = New System.Drawing.Size(0, 29)
-        Me.dtpStartDate.Name = "dtpStartDate"
-        Me.dtpStartDate.Size = New System.Drawing.Size(200, 29)
-        Me.dtpStartDate.TabIndex = 9
+        Me.PoisonDateTime1.FontSize = ReaLTaiizor.Extension.Poison.PoisonDateTimeSize.Medium
+        Me.PoisonDateTime1.Location = New System.Drawing.Point(446, 34)
+        Me.PoisonDateTime1.MinimumSize = New System.Drawing.Size(0, 29)
+        Me.PoisonDateTime1.Name = "PoisonDateTime1"
+        Me.PoisonDateTime1.Size = New System.Drawing.Size(200, 29)
+        Me.PoisonDateTime1.TabIndex = 9
         '
         'dgvUsageHistory
         '
@@ -95,7 +96,7 @@
         Me.dgvUsageHistory.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         DataGridViewCellStyle2.ForeColor = System.Drawing.Color.White
         DataGridViewCellStyle2.Padding = New System.Windows.Forms.Padding(8)
         DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
@@ -111,37 +112,49 @@
         DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgvUsageHistory.DefaultCellStyle = DataGridViewCellStyle3
+        Me.dgvUsageHistory.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvUsageHistory.EnableHeadersVisualStyles = False
         Me.dgvUsageHistory.GridColor = System.Drawing.Color.FromArgb(CType(CType(222, Byte), Integer), CType(CType(226, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.dgvUsageHistory.Location = New System.Drawing.Point(30, 0)
+        Me.dgvUsageHistory.Location = New System.Drawing.Point(10, 10)
         Me.dgvUsageHistory.Name = "dgvUsageHistory"
         Me.dgvUsageHistory.ReadOnly = True
         Me.dgvUsageHistory.RowHeadersVisible = False
         Me.dgvUsageHistory.RowTemplate.Height = 35
         Me.dgvUsageHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvUsageHistory.Size = New System.Drawing.Size(991, 417)
+        Me.dgvUsageHistory.Size = New System.Drawing.Size(850, 330)
         Me.dgvUsageHistory.TabIndex = 0
         '
         'pnlFilters
         '
         Me.pnlFilters.BackColor = System.Drawing.Color.White
-        Me.pnlFilters.Controls.Add(Me.lblSource)
-        Me.pnlFilters.Controls.Add(Me.lblSearch)
-        Me.pnlFilters.Controls.Add(Me.txtSearch)
-        Me.pnlFilters.Controls.Add(Me.dtpEndDate)
-        Me.pnlFilters.Controls.Add(Me.Label1)
-        Me.pnlFilters.Controls.Add(Me.btnResetFilters)
-        Me.pnlFilters.Controls.Add(Me.btnApplyFilters)
-        Me.pnlFilters.Controls.Add(Me.dtpStartDate)
-        Me.pnlFilters.Controls.Add(Me.cmbSource)
-        Me.pnlFilters.Controls.Add(Me.lblEndDate)
-        Me.pnlFilters.Controls.Add(Me.lblStartDate)
+        Me.pnlFilters.Controls.Add(Me.grpFilters)
         Me.pnlFilters.Dock = System.Windows.Forms.DockStyle.Top
         Me.pnlFilters.Location = New System.Drawing.Point(15, 70)
         Me.pnlFilters.Name = "pnlFilters"
         Me.pnlFilters.Padding = New System.Windows.Forms.Padding(10)
-        Me.pnlFilters.Size = New System.Drawing.Size(1054, 105)
+        Me.pnlFilters.Size = New System.Drawing.Size(870, 105)
         Me.pnlFilters.TabIndex = 1
+        '
+        'grpFilters
+        '
+        Me.grpFilters.Controls.Add(Me.cmbSource)
+        Me.grpFilters.Controls.Add(Me.lblStartDate)
+        Me.grpFilters.Controls.Add(Me.dtpStartDate)
+        Me.grpFilters.Controls.Add(Me.txtSearch)
+        Me.grpFilters.Controls.Add(Me.lblEndDate)
+        Me.grpFilters.Controls.Add(Me.dtpEndDate)
+        Me.grpFilters.Controls.Add(Me.lblSource)
+        Me.grpFilters.Controls.Add(Me.lblSearch)
+        Me.grpFilters.Controls.Add(Me.btnApplyFilters)
+        Me.grpFilters.Controls.Add(Me.btnResetFilters)
+        Me.grpFilters.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.grpFilters.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.grpFilters.Location = New System.Drawing.Point(10, 10)
+        Me.grpFilters.Name = "grpFilters"
+        Me.grpFilters.Size = New System.Drawing.Size(850, 85)
+        Me.grpFilters.TabIndex = 0
+        Me.grpFilters.TabStop = False
+        Me.grpFilters.Text = "Filter Options"
         '
         'cmbSource
         '
@@ -155,21 +168,29 @@
         Me.cmbSource.FormattingEnabled = True
         Me.cmbSource.HoverSelectionColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.cmbSource.IntegralHeight = False
-        Me.cmbSource.ItemHeight = 26
-        Me.cmbSource.Location = New System.Drawing.Point(470, 54)
+        Me.cmbSource.ItemHeight = 30
+        Me.cmbSource.Location = New System.Drawing.Point(231, 49)
         Me.cmbSource.Name = "cmbSource"
-        Me.cmbSource.Size = New System.Drawing.Size(202, 32)
+        Me.cmbSource.Size = New System.Drawing.Size(135, 36)
         Me.cmbSource.StartIndex = 0
         Me.cmbSource.TabIndex = 8
         '
         'lblStartDate
         '
         Me.lblStartDate.AutoSize = True
-        Me.lblStartDate.Location = New System.Drawing.Point(27, 42)
+        Me.lblStartDate.Location = New System.Drawing.Point(10, 22)
         Me.lblStartDate.Name = "lblStartDate"
-        Me.lblStartDate.Size = New System.Drawing.Size(61, 13)
+        Me.lblStartDate.Size = New System.Drawing.Size(61, 15)
         Me.lblStartDate.TabIndex = 0
         Me.lblStartDate.Text = "Start Date:"
+        '
+        'dtpStartDate
+        '
+        Me.dtpStartDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpStartDate.Location = New System.Drawing.Point(10, 42)
+        Me.dtpStartDate.Name = "dtpStartDate"
+        Me.dtpStartDate.Size = New System.Drawing.Size(120, 23)
+        Me.dtpStartDate.TabIndex = 1
         '
         'txtSearch
         '
@@ -177,7 +198,7 @@
         Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.txtSearch.Image = Nothing
-        Me.txtSearch.Location = New System.Drawing.Point(690, 52)
+        Me.txtSearch.Location = New System.Drawing.Point(372, 42)
         Me.txtSearch.MaxLength = 32767
         Me.txtSearch.Multiline = False
         Me.txtSearch.Name = "txtSearch"
@@ -191,29 +212,65 @@
         'lblEndDate
         '
         Me.lblEndDate.AutoSize = True
-        Me.lblEndDate.Location = New System.Drawing.Point(252, 41)
+        Me.lblEndDate.Location = New System.Drawing.Point(140, 22)
         Me.lblEndDate.Name = "lblEndDate"
-        Me.lblEndDate.Size = New System.Drawing.Size(57, 13)
+        Me.lblEndDate.Size = New System.Drawing.Size(57, 15)
         Me.lblEndDate.TabIndex = 2
         Me.lblEndDate.Text = "End Date:"
+        '
+        'dtpEndDate
+        '
+        Me.dtpEndDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpEndDate.Location = New System.Drawing.Point(140, 42)
+        Me.dtpEndDate.Name = "dtpEndDate"
+        Me.dtpEndDate.Size = New System.Drawing.Size(120, 23)
+        Me.dtpEndDate.TabIndex = 3
         '
         'lblSource
         '
         Me.lblSource.AutoSize = True
-        Me.lblSource.Location = New System.Drawing.Point(467, 40)
+        Me.lblSource.Location = New System.Drawing.Point(270, 22)
         Me.lblSource.Name = "lblSource"
-        Me.lblSource.Size = New System.Drawing.Size(45, 13)
+        Me.lblSource.Size = New System.Drawing.Size(46, 15)
         Me.lblSource.TabIndex = 4
         Me.lblSource.Text = "Source:"
         '
         'lblSearch
         '
         Me.lblSearch.AutoSize = True
-        Me.lblSearch.Location = New System.Drawing.Point(687, 36)
+        Me.lblSearch.Location = New System.Drawing.Point(400, 22)
         Me.lblSearch.Name = "lblSearch"
-        Me.lblSearch.Size = New System.Drawing.Size(101, 13)
+        Me.lblSearch.Size = New System.Drawing.Size(102, 15)
         Me.lblSearch.TabIndex = 6
         Me.lblSearch.Text = "Search Ingredient:"
+        '
+        'btnApplyFilters
+        '
+        Me.btnApplyFilters.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnApplyFilters.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnApplyFilters.FlatAppearance.BorderSize = 0
+        Me.btnApplyFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnApplyFilters.ForeColor = System.Drawing.Color.White
+        Me.btnApplyFilters.Location = New System.Drawing.Point(575, 38)
+        Me.btnApplyFilters.Name = "btnApplyFilters"
+        Me.btnApplyFilters.Size = New System.Drawing.Size(100, 30)
+        Me.btnApplyFilters.TabIndex = 8
+        Me.btnApplyFilters.Text = "Apply"
+        Me.btnApplyFilters.UseVisualStyleBackColor = False
+        '
+        'btnResetFilters
+        '
+        Me.btnResetFilters.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.btnResetFilters.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnResetFilters.FlatAppearance.BorderSize = 0
+        Me.btnResetFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnResetFilters.ForeColor = System.Drawing.Color.White
+        Me.btnResetFilters.Location = New System.Drawing.Point(685, 38)
+        Me.btnResetFilters.Name = "btnResetFilters"
+        Me.btnResetFilters.Size = New System.Drawing.Size(100, 30)
+        Me.btnResetFilters.TabIndex = 9
+        Me.btnResetFilters.Text = "Reset"
+        Me.btnResetFilters.UseVisualStyleBackColor = False
         '
         'pnlHeader
         '
@@ -224,7 +281,7 @@
         Me.pnlHeader.Location = New System.Drawing.Point(15, 15)
         Me.pnlHeader.Name = "pnlHeader"
         Me.pnlHeader.Padding = New System.Windows.Forms.Padding(15, 10, 15, 10)
-        Me.pnlHeader.Size = New System.Drawing.Size(1054, 55)
+        Me.pnlHeader.Size = New System.Drawing.Size(870, 55)
         Me.pnlHeader.TabIndex = 2
         '
         'lblTitle
@@ -252,146 +309,66 @@
         'pnlActions
         '
         Me.pnlActions.BackColor = System.Drawing.Color.White
-        Me.pnlActions.Controls.Add(Me.btnClose)
-        Me.pnlActions.Controls.Add(Me.btnRefresh)
         Me.pnlActions.Controls.Add(Me.btnClearHistory)
+        Me.pnlActions.Controls.Add(Me.btnRefresh)
+        Me.pnlActions.Controls.Add(Me.btnClose)
         Me.pnlActions.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.pnlActions.Location = New System.Drawing.Point(15, 598)
+        Me.pnlActions.Location = New System.Drawing.Point(15, 525)
         Me.pnlActions.Name = "pnlActions"
         Me.pnlActions.Padding = New System.Windows.Forms.Padding(10)
-        Me.pnlActions.Size = New System.Drawing.Size(1054, 48)
+        Me.pnlActions.Size = New System.Drawing.Size(870, 60)
         Me.pnlActions.TabIndex = 3
         '
         'btnClearHistory
         '
-        Me.btnClearHistory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnClearHistory.BackColor = System.Drawing.Color.Transparent
-        Me.btnClearHistory.BorderColor = System.Drawing.Color.Transparent
+        Me.btnClearHistory.BackColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(69, Byte), Integer))
         Me.btnClearHistory.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnClearHistory.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnClearHistory.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnClearHistory.FlatAppearance.BorderSize = 0
+        Me.btnClearHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnClearHistory.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.btnClearHistory.Image = Nothing
-        Me.btnClearHistory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnClearHistory.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(69, Byte), Integer))
-        Me.btnClearHistory.Location = New System.Drawing.Point(30, 9)
+        Me.btnClearHistory.ForeColor = System.Drawing.Color.White
+        Me.btnClearHistory.Location = New System.Drawing.Point(10, 10)
         Me.btnClearHistory.Name = "btnClearHistory"
-        Me.btnClearHistory.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnClearHistory.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnClearHistory.Size = New System.Drawing.Size(124, 36)
-        Me.btnClearHistory.TabIndex = 15
-        Me.btnClearHistory.Text = "Clear History"
-        Me.btnClearHistory.TextAlignment = System.Drawing.StringAlignment.Center
+        Me.btnClearHistory.Size = New System.Drawing.Size(130, 38)
+        Me.btnClearHistory.TabIndex = 0
+        Me.btnClearHistory.Text = "🗑️ Clear History"
+        Me.btnClearHistory.UseVisualStyleBackColor = False
         '
         'btnRefresh
         '
-        Me.btnRefresh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnRefresh.BackColor = System.Drawing.Color.Transparent
-        Me.btnRefresh.BorderColor = System.Drawing.Color.Transparent
+        Me.btnRefresh.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.btnRefresh.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnRefresh.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnRefresh.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnRefresh.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.btnRefresh.Image = Nothing
-        Me.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnRefresh.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.btnRefresh.Location = New System.Drawing.Point(769, 9)
+        Me.btnRefresh.FlatAppearance.BorderSize = 0
+        Me.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnRefresh.ForeColor = System.Drawing.Color.White
+        Me.btnRefresh.Location = New System.Drawing.Point(150, 10)
         Me.btnRefresh.Name = "btnRefresh"
-        Me.btnRefresh.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnRefresh.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnRefresh.Size = New System.Drawing.Size(124, 36)
-        Me.btnRefresh.TabIndex = 16
-        Me.btnRefresh.Text = "Refresh"
-        Me.btnRefresh.TextAlignment = System.Drawing.StringAlignment.Center
+        Me.btnRefresh.Size = New System.Drawing.Size(110, 38)
+        Me.btnRefresh.TabIndex = 1
+        Me.btnRefresh.Text = "🔄 Refresh"
+        Me.btnRefresh.UseVisualStyleBackColor = False
         '
         'btnClose
         '
-        Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnClose.BackColor = System.Drawing.Color.Transparent
-        Me.btnClose.BorderColor = System.Drawing.Color.Transparent
+        Me.btnClose.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.btnClose.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
         Me.btnClose.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnClose.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnClose.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnClose.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.btnClose.Image = Nothing
-        Me.btnClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnClose.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.btnClose.Location = New System.Drawing.Point(897, 9)
+        Me.btnClose.FlatAppearance.BorderSize = 0
+        Me.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnClose.ForeColor = System.Drawing.Color.White
+        Me.btnClose.Location = New System.Drawing.Point(750, 10)
         Me.btnClose.Name = "btnClose"
-        Me.btnClose.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnClose.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnClose.Size = New System.Drawing.Size(124, 36)
-        Me.btnClose.TabIndex = 17
+        Me.btnClose.Size = New System.Drawing.Size(110, 38)
+        Me.btnClose.TabIndex = 2
         Me.btnClose.Text = "Close"
-        Me.btnClose.TextAlignment = System.Drawing.StringAlignment.Center
-        '
-        'btnResetFilters
-        '
-        Me.btnResetFilters.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnResetFilters.BackColor = System.Drawing.Color.Transparent
-        Me.btnResetFilters.BorderColor = System.Drawing.Color.Transparent
-        Me.btnResetFilters.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnResetFilters.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnResetFilters.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnResetFilters.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.btnResetFilters.Image = Nothing
-        Me.btnResetFilters.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnResetFilters.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.btnResetFilters.Location = New System.Drawing.Point(897, 57)
-        Me.btnResetFilters.Name = "btnResetFilters"
-        Me.btnResetFilters.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnResetFilters.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnResetFilters.Size = New System.Drawing.Size(124, 36)
-        Me.btnResetFilters.TabIndex = 18
-        Me.btnResetFilters.Text = "Reset"
-        Me.btnResetFilters.TextAlignment = System.Drawing.StringAlignment.Center
-        '
-        'btnApplyFilters
-        '
-        Me.btnApplyFilters.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnApplyFilters.BackColor = System.Drawing.Color.Transparent
-        Me.btnApplyFilters.BorderColor = System.Drawing.Color.Transparent
-        Me.btnApplyFilters.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnApplyFilters.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnApplyFilters.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnApplyFilters.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.btnApplyFilters.Image = Nothing
-        Me.btnApplyFilters.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnApplyFilters.InactiveColor = System.Drawing.Color.RoyalBlue
-        Me.btnApplyFilters.Location = New System.Drawing.Point(897, 13)
-        Me.btnApplyFilters.Name = "btnApplyFilters"
-        Me.btnApplyFilters.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnApplyFilters.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
-        Me.btnApplyFilters.Size = New System.Drawing.Size(124, 36)
-        Me.btnApplyFilters.TabIndex = 19
-        Me.btnApplyFilters.Text = "Apply"
-        Me.btnApplyFilters.TextAlignment = System.Drawing.StringAlignment.Center
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(27, 15)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(78, 13)
-        Me.Label1.TabIndex = 10
-        Me.Label1.Text = "Filter Options"
-        '
-        'dtpEndDate
-        '
-        Me.dtpEndDate.FontSize = ReaLTaiizor.Extension.Poison.PoisonDateTimeSize.Medium
-        Me.dtpEndDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dtpEndDate.Location = New System.Drawing.Point(255, 57)
-        Me.dtpEndDate.MinimumSize = New System.Drawing.Size(0, 29)
-        Me.dtpEndDate.Name = "dtpEndDate"
-        Me.dtpEndDate.Size = New System.Drawing.Size(200, 29)
-        Me.dtpEndDate.TabIndex = 11
+        Me.btnClose.UseVisualStyleBackColor = False
         '
         'ProductIngredientUsageHistory
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(245, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1084, 661)
+        Me.ClientSize = New System.Drawing.Size(900, 600)
         Me.Controls.Add(Me.pnlMain)
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -404,12 +381,12 @@
         Me.pnlGrid.ResumeLayout(False)
         CType(Me.dgvUsageHistory, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnlFilters.ResumeLayout(False)
-        Me.pnlFilters.PerformLayout()
+        Me.grpFilters.ResumeLayout(False)
+        Me.grpFilters.PerformLayout()
         Me.pnlHeader.ResumeLayout(False)
         Me.pnlHeader.PerformLayout()
         Me.pnlActions.ResumeLayout(False)
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
@@ -418,21 +395,22 @@
     Friend WithEvents lblTitle As Label
     Friend WithEvents lblSubtitle As Label
     Friend WithEvents pnlFilters As Panel
+    Friend WithEvents grpFilters As GroupBox
     Friend WithEvents lblStartDate As Label
+    Friend WithEvents dtpStartDate As DateTimePicker
     Friend WithEvents lblEndDate As Label
+    Friend WithEvents dtpEndDate As DateTimePicker
     Friend WithEvents lblSource As Label
     Friend WithEvents lblSearch As Label
+    Friend WithEvents btnApplyFilters As Button
+    Friend WithEvents btnResetFilters As Button
     Friend WithEvents pnlGrid As Panel
     Friend WithEvents dgvUsageHistory As DataGridView
     Friend WithEvents pnlActions As Panel
+    Friend WithEvents btnClearHistory As Button
+    Friend WithEvents btnRefresh As Button
+    Friend WithEvents btnClose As Button
     Friend WithEvents txtSearch As ReaLTaiizor.Controls.BigTextBox
-    Friend WithEvents dtpStartDate As ReaLTaiizor.Controls.PoisonDateTime
+    Friend WithEvents PoisonDateTime1 As ReaLTaiizor.Controls.PoisonDateTime
     Friend WithEvents cmbSource As ReaLTaiizor.Controls.ComboBoxEdit
-    Friend WithEvents btnApplyFilters As ReaLTaiizor.Controls.Button
-    Friend WithEvents btnResetFilters As ReaLTaiizor.Controls.Button
-    Friend WithEvents btnClose As ReaLTaiizor.Controls.Button
-    Friend WithEvents btnRefresh As ReaLTaiizor.Controls.Button
-    Friend WithEvents btnClearHistory As ReaLTaiizor.Controls.Button
-    Friend WithEvents Label1 As Label
-    Friend WithEvents dtpEndDate As ReaLTaiizor.Controls.PoisonDateTime
 End Class

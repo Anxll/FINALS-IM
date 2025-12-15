@@ -45,6 +45,8 @@ Partial Class ConfigurationPage
         Me.RoundedPane21.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.RoundedPane21.BackColor = System.Drawing.Color.Transparent
         Me.RoundedPane21.BorderColor = System.Drawing.Color.Transparent
+        Me.RoundedPane21.BorderThickness = 1
+        Me.RoundedPane21.Controls.Add(Me.lblServerStatus)
         Me.RoundedPane21.Controls.Add(Me.txtServer)
         Me.RoundedPane21.Controls.Add(Me.Label2)
         Me.RoundedPane21.Controls.Add(Me.Label6)
@@ -292,12 +294,13 @@ Partial Class ConfigurationPage
     Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
-    Friend WithEvents txtServer As New InformationManagement.RoundedTextBox
-    Friend WithEvents txtUsername As New InformationManagement.RoundedTextBox
-    Friend WithEvents txtDatabasename As New InformationManagement.RoundedTextBox
-    Friend WithEvents txtPassword As New InformationManagement.RoundedTextBox
-    Friend WithEvents txtPort As New InformationManagement.RoundedTextBox
+    Friend WithEvents txtServer As RoundedTextBox
+    Friend WithEvents txtUsername As RoundedTextBox
+    Friend WithEvents txtDatabasename As RoundedTextBox
+    Friend WithEvents txtPassword As RoundedTextBox
+    Friend WithEvents txtPort As RoundedTextBox
     Friend WithEvents btnTestConnection As Button
     Friend WithEvents RoundedPane21 As RoundedPane2
     Friend WithEvents btnSaveAndContinue As Button
+    Friend WithEvents lblServerStatus As Label
 End Class

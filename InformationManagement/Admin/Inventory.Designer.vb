@@ -64,7 +64,7 @@ Partial Class Inventory
         Me.InventoryGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
         DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
         DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
         DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
@@ -263,6 +263,7 @@ Partial Class Inventory
         '
         Me.RoundedPane21.BackColor = System.Drawing.Color.Transparent
         Me.RoundedPane21.BorderColor = System.Drawing.Color.LightGray
+        Me.RoundedPane21.BorderThickness = 1
         Me.RoundedPane21.Controls.Add(Me.Label5)
         Me.RoundedPane21.Controls.Add(Me.Label3)
         Me.RoundedPane21.CornerRadius = 20
@@ -296,8 +297,8 @@ Partial Class Inventory
         '
         'RoundedPane22
         '
-        Me.RoundedPane22.BackColor = System.Drawing.Color.Transparent
         Me.RoundedPane22.BorderColor = System.Drawing.Color.LightGray
+        Me.RoundedPane22.BorderThickness = 1
         Me.RoundedPane22.Controls.Add(Me.Label4)
         Me.RoundedPane22.Controls.Add(Me.Label10)
         Me.RoundedPane22.Controls.Add(Me.Label11)

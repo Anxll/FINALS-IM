@@ -325,7 +325,6 @@ Partial Class FormPayroll
     Friend WithEvents RoundedPane21 As RoundedPane2
     Friend WithEvents RoundedPane22 As RoundedPane2
     Friend WithEvents RoundedPane23 As RoundedPane2
-    Friend WithEvents RoundedPane24 As RoundedPane2
     Friend WithEvents Label7 As Label
     Friend WithEvents Label6 As Label
     Friend WithEvents Label5 As Label
@@ -333,6 +332,7 @@ Partial Class FormPayroll
     Friend WithEvents Label9 As Label
     Friend WithEvents Label8 As Label
     Friend WithEvents Chart1 As DataVisualization.Charting.Chart
+    Friend WithEvents RoundedPane24 As RoundedPane2
     Friend WithEvents Label10 As Label
     Friend WithEvents Button1 As Button
 End Class

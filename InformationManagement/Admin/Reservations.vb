@@ -367,16 +367,15 @@ Public Class Reservations
     ' ==========================================
     ' VIEW ALL
     ' ==========================================
-    Private Sub BtnViewAll_Click(sender As Object, e As EventArgs)
+    Private Sub btnViewAll_Click(sender As Object, e As EventArgs) Handles btnViewAll.Click
         LoadReservations()
         lblFilter.Text = "Showing: All Reservations"
     End Sub
 
-
     ' ==========================================
     ' VIEW PENDING
     ' ==========================================
-    Private Sub btnViewPending_Click(sender As Object, e As EventArgs)
+    Private Sub btnViewPending_Click(sender As Object, e As EventArgs) Handles btnViewPending.Click
         LoadReservations("ReservationStatus = 'Pending'")
         lblFilter.Text = "Showing: Pending"
     End Sub
@@ -384,7 +383,7 @@ Public Class Reservations
     ' ==========================================
     ' VIEW CONFIRMED
     ' ==========================================
-    Private Sub btnViewConfirmed_Click(sender As Object, e As EventArgs)
+    Private Sub btnViewConfirmed_Click(sender As Object, e As EventArgs) Handles btnViewConfirmed.Click
         LoadReservations("ReservationStatus = 'Confirmed'")
         lblFilter.Text = "Showing: Confirmed"
     End Sub
@@ -392,7 +391,7 @@ Public Class Reservations
     ' ==========================================
     ' VIEW CANCELLED
     ' ==========================================
-    Private Sub btnViewCancelled_Click(sender As Object, e As EventArgs)
+    Private Sub btnViewCancelled_Click(sender As Object, e As EventArgs) Handles btnViewCancelled.Click
         LoadReservations("ReservationStatus = 'Cancelled'")
         lblFilter.Text = "Showing: Cancelled"
     End Sub
@@ -425,7 +424,7 @@ Public Class Reservations
     ' ==========================================
     ' DELETE RESERVATION
     ' ==========================================
-    Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
+    Private Sub btnDelete_Click(sender As Object, e As EventArgs)
 
         If Reservation.SelectedRows.Count = 0 Then
             MessageBox.Show("Select a reservation to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)

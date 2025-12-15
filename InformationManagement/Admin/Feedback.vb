@@ -5,6 +5,8 @@ Public Class Feedback
     ' Database connection string
     Private connectionString As String = "Server=localhost;Database=tabeya_system;Uid=root;Pwd=;"
     Private conn As MySqlConnection
+    Private adapter As MySqlDataAdapter
+    Private dt As DataTable
 
     ' Form Load Event
     Private Sub Feedback_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -16,9 +18,7 @@ Public Class Feedback
     ' Initialize Database Connection
     Private Sub InitializeConnection()
         Try
-            If conn Is Nothing Then
-                conn = New MySqlConnection(connectionString)
-            End If
+            conn = New MySqlConnection(connectionString)
         Catch ex As Exception
             MessageBox.Show("Connection Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -26,48 +26,37 @@ Public Class Feedback
 
     ' Setup DataGridView Appearance
     Private Sub SetupDataGridView()
-        Try
-            If DataGridView1 Is Nothing Then Return
+        With DataGridView1
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+            .SelectionMode = DataGridViewSelectionMode.FullRowSelect
+            .ReadOnly = True
+            .AllowUserToAddRows = False
+            .RowHeadersVisible = False
 
-            With DataGridView1
-                .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-                .SelectionMode = DataGridViewSelectionMode.FullRowSelect
-                .ReadOnly = True
-                .AllowUserToAddRows = False
-                .RowHeadersVisible = False
+            ' Add Action Buttons if not exists
+            If Not .Columns.Contains("Approve") Then
+                Dim btnApprove As New DataGridViewButtonColumn()
+                btnApprove.Name = "Approve"
+                btnApprove.HeaderText = "Approve"
+                btnApprove.Text = "Approve"
+                btnApprove.UseColumnTextForButtonValue = True
+                .Columns.Add(btnApprove)
+            End If
 
-                ' Add Action Buttons if not exists
-                If Not .Columns.Contains("Approve") Then
-                    Dim btnApprove As New DataGridViewButtonColumn()
-                    btnApprove.Name = "Approve"
-                    btnApprove.HeaderText = "Approve"
-                    btnApprove.Text = "Approve"
-                    btnApprove.UseColumnTextForButtonValue = True
-                    .Columns.Add(btnApprove)
-                End If
-
-                If Not .Columns.Contains("Reject") Then
-                    Dim btnReject As New DataGridViewButtonColumn()
-                    btnReject.Name = "Reject"
-                    btnReject.HeaderText = "Reject"
-                    btnReject.Text = "Reject"
-                    btnReject.UseColumnTextForButtonValue = True
-                    .Columns.Add(btnReject)
-                End If
-            End With
-        Catch ex As Exception
-            MessageBox.Show("Error setting up DataGridView: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+            If Not .Columns.Contains("Reject") Then
+                Dim btnReject As New DataGridViewButtonColumn()
+                btnReject.Name = "Reject"
+                btnReject.HeaderText = "Reject"
+                btnReject.Text = "Reject"
+                btnReject.UseColumnTextForButtonValue = True
+                .Columns.Add(btnReject)
+            End If
+        End With
     End Sub
 
     ' Load All Feedback from Database
     Private Sub LoadFeedback(Optional status As String = "")
         Try
-            ' Initialize connection if needed
-            If conn Is Nothing Then
-                InitializeConnection()
-            End If
-
             ' Ensure connection is closed before opening
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -102,13 +91,13 @@ Public Class Feedback
 
             query &= " ORDER BY cf.CreatedDate DESC"
 
-            Dim adapter As New MySqlDataAdapter(query, conn)
+            adapter = New MySqlDataAdapter(query, conn)
 
             If status <> "" Then
                 adapter.SelectCommand.Parameters.AddWithValue("@status", status)
             End If
 
-            Dim dt As New DataTable()
+            dt = New DataTable()
             adapter.Fill(dt)
 
             DataGridView1.DataSource = dt
@@ -122,7 +111,7 @@ Public Class Feedback
         Catch ex As Exception
             MessageBox.Show("Error loading feedback: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
-            If conn IsNot Nothing AndAlso conn.State = ConnectionState.Open Then
+            If conn.State = ConnectionState.Open Then
                 conn.Close()
             End If
         End Try
@@ -130,90 +119,75 @@ Public Class Feedback
 
     ' Format DataGridView Columns
     Private Sub FormatColumns()
-        Try
-            If DataGridView1 Is Nothing Then Return
+        With DataGridView1
 
-            With DataGridView1
+            ' ✅ HIDE INTERNAL IDS
+            If .Columns.Contains("FeedbackID") Then .Columns("FeedbackID").Visible = False
+            If .Columns.Contains("CustomerID") Then .Columns("CustomerID").Visible = False
+            If .Columns.Contains("OrderID") Then .Columns("OrderID").Visible = False
+            If .Columns.Contains("ReservationID") Then .Columns("ReservationID").Visible = False
 
-                ' ✅ HIDE INTERNAL IDS
-                If .Columns.Contains("FeedbackID") Then .Columns("FeedbackID").Visible = False
-                If .Columns.Contains("CustomerID") Then .Columns("CustomerID").Visible = False
-                If .Columns.Contains("OrderID") Then .Columns("OrderID").Visible = False
-                If .Columns.Contains("ReservationID") Then .Columns("ReservationID").Visible = False
+            ' ✅ RENAME HEADERS
+            If .Columns.Contains("CustomerName") Then .Columns("CustomerName").HeaderText = "Customer Name"
+            If .Columns.Contains("FeedbackType") Then .Columns("FeedbackType").HeaderText = "Type"
+            If .Columns.Contains("OverallRating") Then .Columns("OverallRating").HeaderText = "Overall Rating"
+            If .Columns.Contains("FoodTasteRating") Then .Columns("FoodTasteRating").HeaderText = "Food"
+            If .Columns.Contains("PortionSizeRating") Then .Columns("PortionSizeRating").HeaderText = "Portion"
+            If .Columns.Contains("ServiceRating") Then .Columns("ServiceRating").HeaderText = "Service"
+            If .Columns.Contains("AmbienceRating") Then .Columns("AmbienceRating").HeaderText = "Ambience"
+            If .Columns.Contains("CleanlinessRating") Then .Columns("CleanlinessRating").HeaderText = "Cleanliness"
+            If .Columns.Contains("ReviewMessage") Then .Columns("ReviewMessage").HeaderText = "Review Message"
+            If .Columns.Contains("IsAnonymous") Then .Columns("IsAnonymous").HeaderText = "Anonymous"
+            If .Columns.Contains("Status") Then .Columns("Status").HeaderText = "Status"
+            If .Columns.Contains("CreatedDate") Then .Columns("CreatedDate").HeaderText = "Date Created"
+            If .Columns.Contains("ApprovedDate") Then .Columns("ApprovedDate").HeaderText = "Date Approved"
 
-                ' ✅ RENAME HEADERS
-                If .Columns.Contains("CustomerName") Then .Columns("CustomerName").HeaderText = "Customer Name"
-                If .Columns.Contains("FeedbackType") Then .Columns("FeedbackType").HeaderText = "Type"
-                If .Columns.Contains("OverallRating") Then .Columns("OverallRating").HeaderText = "Overall Rating"
-                If .Columns.Contains("FoodTasteRating") Then .Columns("FoodTasteRating").HeaderText = "Food"
-                If .Columns.Contains("PortionSizeRating") Then .Columns("PortionSizeRating").HeaderText = "Portion"
-                If .Columns.Contains("ServiceRating") Then .Columns("ServiceRating").HeaderText = "Service"
-                If .Columns.Contains("AmbienceRating") Then .Columns("AmbienceRating").HeaderText = "Ambience"
-                If .Columns.Contains("CleanlinessRating") Then .Columns("CleanlinessRating").HeaderText = "Cleanliness"
-                If .Columns.Contains("ReviewMessage") Then .Columns("ReviewMessage").HeaderText = "Review Message"
-                If .Columns.Contains("IsAnonymous") Then .Columns("IsAnonymous").HeaderText = "Anonymous"
-                If .Columns.Contains("Status") Then .Columns("Status").HeaderText = "Status"
-                If .Columns.Contains("CreatedDate") Then .Columns("CreatedDate").HeaderText = "Date Created"
-                If .Columns.Contains("ApprovedDate") Then .Columns("ApprovedDate").HeaderText = "Date Approved"
+            ' ✅ OPTIONAL FORMATTING
+            If .Columns.Contains("CreatedDate") Then .Columns("CreatedDate").DefaultCellStyle.Format = "yyyy-MM-dd HH:mm"
+            If .Columns.Contains("ApprovedDate") Then .Columns("ApprovedDate").DefaultCellStyle.Format = "yyyy-MM-dd HH:mm"
 
-                ' ✅ OPTIONAL FORMATTING
-                If .Columns.Contains("CreatedDate") Then .Columns("CreatedDate").DefaultCellStyle.Format = "yyyy-MM-dd HH:mm"
-                If .Columns.Contains("ApprovedDate") Then .Columns("ApprovedDate").DefaultCellStyle.Format = "yyyy-MM-dd HH:mm"
+            ' ✅ GRID BEHAVIOR
+            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+            .SelectionMode = DataGridViewSelectionMode.FullRowSelect
+            .MultiSelect = False
+            .ReadOnly = True
 
-                ' ✅ GRID BEHAVIOR
-                .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-                .SelectionMode = DataGridViewSelectionMode.FullRowSelect
-                .MultiSelect = False
-                .ReadOnly = True
-
-            End With
-        Catch ex As Exception
-            ' Silently handle formatting errors
-        End Try
+        End With
     End Sub
 
     ' DataGridView Cell Click Event (for action buttons)
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-        Try
-            If e.RowIndex < 0 Then Return
+        If e.RowIndex < 0 Then Return
 
-            Dim columnName As String = DataGridView1.Columns(e.ColumnIndex).Name
-            Dim feedbackId As Integer = Convert.ToInt32(DataGridView1.Rows(e.RowIndex).Cells("FeedbackID").Value)
-            Dim currentStatus As String = DataGridView1.Rows(e.RowIndex).Cells("Status").Value.ToString()
+        Dim columnName As String = DataGridView1.Columns(e.ColumnIndex).Name
+        Dim feedbackId As Integer = Convert.ToInt32(DataGridView1.Rows(e.RowIndex).Cells("FeedbackID").Value)
+        Dim currentStatus As String = DataGridView1.Rows(e.RowIndex).Cells("Status").Value.ToString()
 
-            If columnName = "Approve" Then
-                If currentStatus = "Approved" Then
-                    MessageBox.Show("This feedback is already approved.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    Return
-                End If
-
-                If MessageBox.Show("Are you sure you want to approve this feedback?", "Confirm Approval", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                    UpdateFeedbackStatus(feedbackId, "Approved")
-                End If
-
-            ElseIf columnName = "Reject" Then
-                If currentStatus = "Rejected" Then
-                    MessageBox.Show("This feedback is already rejected.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    Return
-                End If
-
-                If MessageBox.Show("Are you sure you want to reject this feedback?", "Confirm Rejection", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                    UpdateFeedbackStatus(feedbackId, "Rejected")
-                End If
+        If columnName = "Approve" Then
+            If currentStatus = "Approved" Then
+                MessageBox.Show("This feedback is already approved.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Return
             End If
-        Catch ex As Exception
-            MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+
+            If MessageBox.Show("Are you sure you want to approve this feedback?", "Confirm Approval", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                UpdateFeedbackStatus(feedbackId, "Approved")
+            End If
+
+        ElseIf columnName = "Reject" Then
+            If currentStatus = "Rejected" Then
+                MessageBox.Show("This feedback is already rejected.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Return
+            End If
+
+            If MessageBox.Show("Are you sure you want to reject this feedback?", "Confirm Rejection", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                UpdateFeedbackStatus(feedbackId, "Rejected")
+            End If
+        End If
     End Sub
 
     ' Update Feedback Status (Approve/Reject)
     Private Sub UpdateFeedbackStatus(feedbackId As Integer, status As String)
         Try
-            ' Initialize connection if needed
-            If conn Is Nothing Then
-                InitializeConnection()
-            End If
-
             ' Ensure connection is closed before opening
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -243,7 +217,7 @@ Public Class Feedback
         Catch ex As Exception
             MessageBox.Show("Error updating feedback: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
-            If conn IsNot Nothing AndAlso conn.State = ConnectionState.Open Then
+            If conn.State = ConnectionState.Open Then
                 conn.Close()
             End If
         End Try
@@ -257,11 +231,6 @@ Public Class Feedback
                               MessageBoxButtons.YesNo,
                               MessageBoxIcon.Warning) = DialogResult.No Then
                 Return
-            End If
-
-            ' Initialize connection if needed
-            If conn Is Nothing Then
-                InitializeConnection()
             End If
 
             ' Ensure connection is closed before opening
@@ -287,7 +256,7 @@ Public Class Feedback
         Catch ex As Exception
             MessageBox.Show("Error deleting feedback: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
-            If conn IsNot Nothing AndAlso conn.State = ConnectionState.Open Then
+            If conn.State = ConnectionState.Open Then
                 conn.Close()
             End If
         End Try
@@ -296,11 +265,6 @@ Public Class Feedback
     ' View Feedback Details
     Private Sub ViewFeedbackDetails(feedbackId As Integer)
         Try
-            ' Initialize connection if needed
-            If conn Is Nothing Then
-                InitializeConnection()
-            End If
-
             ' Ensure connection is closed before opening
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -336,6 +300,11 @@ Public Class Feedback
                                        $"Cleanliness: {If(IsDBNull(reader("CleanlinessRating")), "N/A", reader("CleanlinessRating").ToString())}" & vbCrLf & vbCrLf &
                                        $"Comments:" & vbCrLf &
                                        $"Review Message: {If(IsDBNull(reader("ReviewMessage")), "None", reader("ReviewMessage").ToString())}" & vbCrLf &
+                                       $"Food: {If(IsDBNull(reader("FoodTasteComment")), "None", reader("FoodTasteComment").ToString())}" & vbCrLf &
+                                       $"Portion: {If(IsDBNull(reader("PortionSizeComment")), "None", reader("PortionSizeComment").ToString())}" & vbCrLf &
+                                       $"Service: {If(IsDBNull(reader("ServiceComment")), "None", reader("ServiceComment").ToString())}" & vbCrLf &
+                                       $"Ambience: {If(IsDBNull(reader("AmbienceComment")), "None", reader("AmbienceComment").ToString())}" & vbCrLf &
+                                       $"Cleanliness: {If(IsDBNull(reader("CleanlinessComment")), "None", reader("CleanlinessComment").ToString())}" & vbCrLf & vbCrLf &
                                        $"Status: {reader("Status")}" & vbCrLf &
                                        $"Created: {reader("CreatedDate")}" & vbCrLf &
                                        $"Approved: {If(IsDBNull(reader("ApprovedDate")), "Not yet approved", reader("ApprovedDate").ToString())}"
@@ -348,7 +317,7 @@ Public Class Feedback
         Catch ex As Exception
             MessageBox.Show("Error viewing details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
-            If conn IsNot Nothing AndAlso conn.State = ConnectionState.Open Then
+            If conn.State = ConnectionState.Open Then
                 conn.Close()
             End If
         End Try
@@ -357,11 +326,6 @@ Public Class Feedback
     ' Search Feedback
     Private Sub SearchFeedback(searchTerm As String)
         Try
-            ' Initialize connection if needed
-            If conn Is Nothing Then
-                InitializeConnection()
-            End If
-
             ' Ensure connection is closed before opening
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -395,10 +359,10 @@ Public Class Feedback
                 OR cf.FeedbackType LIKE @search
                 ORDER BY cf.CreatedDate DESC"
 
-            Dim adapter As New MySqlDataAdapter(query, conn)
+            adapter = New MySqlDataAdapter(query, conn)
             adapter.SelectCommand.Parameters.AddWithValue("@search", "%" & searchTerm & "%")
 
-            Dim dt As New DataTable()
+            dt = New DataTable()
             adapter.Fill(dt)
 
             DataGridView1.DataSource = dt
@@ -409,7 +373,7 @@ Public Class Feedback
         Catch ex As Exception
             MessageBox.Show("Error searching: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
-            If conn IsNot Nothing AndAlso conn.State = ConnectionState.Open Then
+            If conn.State = ConnectionState.Open Then
                 conn.Close()
             End If
         End Try
@@ -437,56 +401,34 @@ Public Class Feedback
     End Sub
 
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
-        Try
-            If txtSearch.Text.Trim() <> "" AndAlso txtSearch.Text.Trim() <> "Search..." Then
-                SearchFeedback(txtSearch.Text.Trim())
-            Else
-                LoadFeedback()
-            End If
-        Catch ex As Exception
-            ' Ignore errors during typing
-        End Try
+        If txtSearch.Text.Trim() <> "" Then
+            SearchFeedback(txtSearch.Text.Trim())
+        Else
+            LoadFeedback()
+        End If
     End Sub
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
-        Try
-            If DataGridView1.SelectedRows.Count > 0 Then
-                Dim feedbackId As Integer = Convert.ToInt32(DataGridView1.SelectedRows(0).Cells("FeedbackID").Value)
-                DeleteFeedback(feedbackId)
-            Else
-                MessageBox.Show("Please select a feedback to delete.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        If DataGridView1.SelectedRows.Count > 0 Then
+            Dim feedbackId As Integer = Convert.ToInt32(DataGridView1.SelectedRows(0).Cells("FeedbackID").Value)
+            DeleteFeedback(feedbackId)
+        Else
+            MessageBox.Show("Please select a feedback to delete.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
     End Sub
 
     Private Sub btnViewDetails_Click(sender As Object, e As EventArgs) Handles btnViewDetails.Click
-        Try
-            If DataGridView1.SelectedRows.Count > 0 Then
-                Dim feedbackId As Integer = Convert.ToInt32(DataGridView1.SelectedRows(0).Cells("FeedbackID").Value)
-                ViewFeedbackDetails(feedbackId)
-            Else
-                MessageBox.Show("Please select a feedback to view details.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        If DataGridView1.SelectedRows.Count > 0 Then
+            Dim feedbackId As Integer = Convert.ToInt32(DataGridView1.SelectedRows(0).Cells("FeedbackID").Value)
+            ViewFeedbackDetails(feedbackId)
+        Else
+            MessageBox.Show("Please select a feedback to view details.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
     End Sub
 
     ' Export to CSV (Optional)
     Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
         Try
-            ' Create a fresh DataTable from the current DataGridView
-            Dim dt As New DataTable()
-
-            If DataGridView1.DataSource IsNot Nothing Then
-                dt = CType(DataGridView1.DataSource, DataTable)
-            Else
-                MessageBox.Show("No data to export.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Return
-            End If
-
             Dim saveFileDialog As New SaveFileDialog()
             saveFileDialog.Filter = "CSV Files (*.csv)|*.csv"
             saveFileDialog.FileName = $"Feedback_Export_{DateTime.Now:yyyyMMdd}.csv"

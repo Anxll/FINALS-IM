@@ -19,7 +19,6 @@ Partial Class ReservationPayment
     Private Sub InitializeComponent()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.btnConfirm = New ReaLTaiizor.Controls.Button()
@@ -42,7 +41,7 @@ Partial Class ReservationPayment
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1113, 79)
+        Me.Panel1.Size = New System.Drawing.Size(1028, 79)
         Me.Panel1.TabIndex = 0
         '
         'lblTitle
@@ -161,7 +160,7 @@ Partial Class ReservationPayment
         Me.txtSearch.Multiline = False
         Me.txtSearch.Name = "txtSearch"
         Me.txtSearch.ReadOnly = False
-        Me.txtSearch.Size = New System.Drawing.Size(688, 38)
+        Me.txtSearch.Size = New System.Drawing.Size(488, 38)
         Me.txtSearch.TabIndex = 10
         Me.txtSearch.Text = "Search..."
         Me.txtSearch.TextAlignment = System.Windows.Forms.HorizontalAlignment.Left
@@ -207,14 +206,14 @@ Partial Class ReservationPayment
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.Reservation.DefaultCellStyle = DataGridViewCellStyle2
         Me.Reservation.EnableHeadersVisualStyles = False
-        Me.Reservation.Location = New System.Drawing.Point(41, 175)
+        Me.Reservation.Location = New System.Drawing.Point(0, 140)
         Me.Reservation.Name = "Reservation"
         Me.Reservation.ReadOnly = True
         Me.Reservation.RowHeadersVisible = False
         Me.Reservation.RowHeadersWidth = 51
         Me.Reservation.RowTemplate.Height = 35
         Me.Reservation.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.Reservation.Size = New System.Drawing.Size(1039, 488)
+        Me.Reservation.Size = New System.Drawing.Size(1031, 523)
         Me.Reservation.TabIndex = 2
         '
         'Panel4
@@ -224,15 +223,14 @@ Partial Class ReservationPayment
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel4.Location = New System.Drawing.Point(0, 682)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1113, 30)
+        Me.Panel4.Size = New System.Drawing.Size(1028, 30)
         Me.Panel4.TabIndex = 3
         '
         'lblTotalRecords
         '
         Me.lblTotalRecords.AutoSize = True
         Me.lblTotalRecords.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.lblTotalRecords.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.lblTotalRecords.Location = New System.Drawing.Point(35, 6)
+        Me.lblTotalRecords.Location = New System.Drawing.Point(12, 7)
         Me.lblTotalRecords.Name = "lblTotalRecords"
         Me.lblTotalRecords.Size = New System.Drawing.Size(95, 15)
         Me.lblTotalRecords.TabIndex = 0
@@ -244,6 +242,7 @@ Partial Class ReservationPayment
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.GhostWhite
         Me.ClientSize = New System.Drawing.Size(1113, 712)
+        Me.Controls.Add(Me.lblTitle)
         Me.Controls.Add(Me.Reservation)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel2)
@@ -264,7 +263,9 @@ Partial Class ReservationPayment
     End Sub
     Friend WithEvents lblTitle As Label
     Friend WithEvents Panel2 As Panel
+    Friend WithEvents txtSearch As TextBox
     Friend WithEvents lblSearch As Label
+    Friend WithEvents btnRefresh As Button
     Friend WithEvents Reservation As DataGridView
     Friend WithEvents Panel4 As Panel
     Friend WithEvents lblTotalRecords As Label
