@@ -22,11 +22,11 @@ Partial Class UsersAccounts
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(UsersAccounts))
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.AllUsersbtn = New System.Windows.Forms.Button()
         Me.Staffbtn = New System.Windows.Forms.Button()
@@ -52,6 +52,13 @@ Partial Class UsersAccounts
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.lblTotalUsers = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colRole = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colStatus = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colJoinDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colEdit = New System.Windows.Forms.DataGridViewImageColumn()
+        Me.colDelete = New System.Windows.Forms.DataGridViewImageColumn()
+        Me.AddEdit = New Guna.UI2.WinForms.Guna2Button()
         CType(Me.UsersAccountData, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane24.SuspendLayout()
         CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -132,31 +139,30 @@ Partial Class UsersAccounts
         Me.UsersAccountData.AllowUserToDeleteRows = False
         Me.UsersAccountData.AllowUserToResizeColumns = False
         Me.UsersAccountData.AllowUserToResizeRows = False
-        Me.UsersAccountData.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.UsersAccountData.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
         Me.UsersAccountData.BackgroundColor = System.Drawing.Color.White
         Me.UsersAccountData.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.UsersAccountData.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         Me.UsersAccountData.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.UsersAccountData.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle13.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle13.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
+        DataGridViewCellStyle13.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.UsersAccountData.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle13
         Me.UsersAccountData.ColumnHeadersHeight = 40
         Me.UsersAccountData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.UsersAccountData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.txtName, Me.colRole, Me.colStatus, Me.colJoinDate, Me.colEdit, Me.colDelete})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.White
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.UsersAccountData.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
+        DataGridViewCellStyle15.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.White
+        DataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.UsersAccountData.DefaultCellStyle = DataGridViewCellStyle15
         Me.UsersAccountData.EnableHeadersVisualStyles = False
         Me.UsersAccountData.GridColor = System.Drawing.Color.LightGray
         Me.UsersAccountData.Location = New System.Drawing.Point(47, 267)
@@ -166,13 +172,13 @@ Partial Class UsersAccounts
         Me.UsersAccountData.RowHeadersVisible = False
         Me.UsersAccountData.RowHeadersWidth = 55
         Me.UsersAccountData.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.White
-        Me.UsersAccountData.RowsDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle16.BackColor = System.Drawing.Color.White
+        Me.UsersAccountData.RowsDefaultCellStyle = DataGridViewCellStyle16
         Me.UsersAccountData.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.White
         Me.UsersAccountData.RowTemplate.Height = 35
         Me.UsersAccountData.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
         Me.UsersAccountData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.UsersAccountData.Size = New System.Drawing.Size(1214, 219)
+        Me.UsersAccountData.Size = New System.Drawing.Size(1026, 219)
         Me.UsersAccountData.TabIndex = 9
         '
         'txtName
@@ -460,13 +466,86 @@ Partial Class UsersAccounts
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Total Users"
         '
+        'txtName
+        '
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.txtName.DefaultCellStyle = DataGridViewCellStyle14
+        Me.txtName.HeaderText = "Name"
+        Me.txtName.MinimumWidth = 6
+        Me.txtName.Name = "txtName"
+        Me.txtName.ReadOnly = True
+        Me.txtName.Width = 220
+        '
+        'colRole
+        '
+        Me.colRole.HeaderText = "Role"
+        Me.colRole.MinimumWidth = 6
+        Me.colRole.Name = "colRole"
+        Me.colRole.ReadOnly = True
+        Me.colRole.Width = 200
+        '
+        'colStatus
+        '
+        Me.colStatus.HeaderText = "Status"
+        Me.colStatus.MinimumWidth = 6
+        Me.colStatus.Name = "colStatus"
+        Me.colStatus.ReadOnly = True
+        Me.colStatus.Width = 200
+        '
+        'colJoinDate
+        '
+        Me.colJoinDate.HeaderText = "Join Date"
+        Me.colJoinDate.MinimumWidth = 6
+        Me.colJoinDate.Name = "colJoinDate"
+        Me.colJoinDate.ReadOnly = True
+        Me.colJoinDate.Width = 220
+        '
+        'colEdit
+        '
+        Me.colEdit.HeaderText = "Actions"
+        Me.colEdit.Image = Global.InformationManagement.My.Resources.Resources.edit
+        Me.colEdit.MinimumWidth = 6
+        Me.colEdit.Name = "colEdit"
+        Me.colEdit.ReadOnly = True
+        Me.colEdit.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.colEdit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.colEdit.Width = 200
+        '
+        'colDelete
+        '
+        Me.colDelete.HeaderText = ""
+        Me.colDelete.Image = Global.InformationManagement.My.Resources.Resources.delete
+        Me.colDelete.MinimumWidth = 6
+        Me.colDelete.Name = "colDelete"
+        Me.colDelete.ReadOnly = True
+        Me.colDelete.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.colDelete.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.colDelete.Width = 200
+        '
+        'AddEdit
+        '
+        Me.AddEdit.BorderRadius = 8
+        Me.AddEdit.DisabledState.BorderColor = System.Drawing.Color.DarkGray
+        Me.AddEdit.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray
+        Me.AddEdit.DisabledState.FillColor = System.Drawing.Color.FromArgb(CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer))
+        Me.AddEdit.DisabledState.ForeColor = System.Drawing.Color.FromArgb(CType(CType(141, Byte), Integer), CType(CType(141, Byte), Integer), CType(CType(141, Byte), Integer))
+        Me.AddEdit.FillColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.AddEdit.FocusedColor = System.Drawing.Color.DarkSlateGray
+        Me.AddEdit.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold)
+        Me.AddEdit.ForeColor = System.Drawing.Color.White
+        Me.AddEdit.Location = New System.Drawing.Point(916, 28)
+        Me.AddEdit.Name = "AddEdit"
+        Me.AddEdit.Size = New System.Drawing.Size(153, 46)
+        Me.AddEdit.TabIndex = 15
+        Me.AddEdit.Text = "+   Add New User"
+        '
         'UsersAccounts
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 17.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1265, 544)
+        Me.ClientSize = New System.Drawing.Size(1110, 544)
         Me.Controls.Add(Me.AddEdit)
         Me.Controls.Add(Me.RoundedPane24)
         Me.Controls.Add(Me.RoundedPane23)
@@ -525,11 +604,11 @@ Partial Class UsersAccounts
     Friend WithEvents AddEdit As ReaLTaiizor.Controls.Button
     Friend WithEvents DataGridViewImageColumn1 As DataGridViewImageColumn
     Friend WithEvents DataGridViewImageColumn2 As DataGridViewImageColumn
-    Friend WithEvents AddEdit As Guna.UI2.WinForms.Guna2Button
     Friend WithEvents txtName As DataGridViewTextBoxColumn
     Friend WithEvents colRole As DataGridViewTextBoxColumn
     Friend WithEvents colStatus As DataGridViewTextBoxColumn
     Friend WithEvents colJoinDate As DataGridViewTextBoxColumn
     Friend WithEvents colEdit As DataGridViewImageColumn
     Friend WithEvents colDelete As DataGridViewImageColumn
+    Friend WithEvents AddEdit As Guna.UI2.WinForms.Guna2Button
 End Class

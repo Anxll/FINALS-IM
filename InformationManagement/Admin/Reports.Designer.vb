@@ -52,20 +52,20 @@ Partial Class Reports
         '
         'Panel1
         '
-        Me.Panel1.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Panel1.AutoScroll = True
         Me.Panel1.AutoSize = True
         Me.Panel1.Cursor = System.Windows.Forms.Cursors.Default
         Me.Panel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(-4, 166)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1681, 787)
+        Me.Panel1.Size = New System.Drawing.Size(951, 639)
         Me.Panel1.TabIndex = 3
         '
         'FlowLayoutPanel1
         '
         Me.FlowLayoutPanel1.AccessibleRole = System.Windows.Forms.AccessibleRole.PageTabList
-        Me.FlowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.FlowLayoutPanel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.FlowLayoutPanel1.AutoScroll = True
         Me.FlowLayoutPanel1.BackColor = System.Drawing.Color.LightGray
         Me.FlowLayoutPanel1.Controls.Add(Me.btnSales)
@@ -79,10 +79,11 @@ Partial Class Reports
         Me.FlowLayoutPanel1.Controls.Add(Me.btnEmployeeAttendance)
         Me.FlowLayoutPanel1.Controls.Add(Me.btnProductsPerformance)
         Me.FlowLayoutPanel1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(12, 85)
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(9, 69)
+        Me.FlowLayoutPanel1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(10, 5, 10, 5)
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2840, 50)
+        Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(8, 4, 8, 4)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2113, 41)
         Me.FlowLayoutPanel1.TabIndex = 4
         Me.FlowLayoutPanel1.WrapContents = False
         '
@@ -278,9 +279,10 @@ Partial Class Reports
         Me.reportPeriod.ForeColor = System.Drawing.Color.FromArgb(CType(CType(68, Byte), Integer), CType(CType(88, Byte), Integer), CType(CType(112, Byte), Integer))
         Me.reportPeriod.ItemHeight = 30
         Me.reportPeriod.Items.AddRange(New Object() {"Daily", "Weekly", "Montly", "Yearly"})
-        Me.reportPeriod.Location = New System.Drawing.Point(1220, 20)
+        Me.reportPeriod.Location = New System.Drawing.Point(915, 16)
+        Me.reportPeriod.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.reportPeriod.Name = "reportPeriod"
-        Me.reportPeriod.Size = New System.Drawing.Size(121, 36)
+        Me.reportPeriod.Size = New System.Drawing.Size(92, 36)
         Me.reportPeriod.TabIndex = 6
         '
         'Reports
@@ -290,7 +292,7 @@ Partial Class Reports
         Me.AutoScroll = True
         Me.AutoSize = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1563, 609)
+        Me.ClientSize = New System.Drawing.Size(1028, 495)
         Me.Controls.Add(Me.reportPeriod)
         Me.Controls.Add(Me.FlowLayoutPanel1)
         Me.Controls.Add(Me.Panel1)
