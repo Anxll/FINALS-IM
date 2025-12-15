@@ -75,12 +75,18 @@ Public Class AdminDashboard
 
     Private Sub btnUserAccounts_Click(sender As Object, e As EventArgs) Handles btnUserAccounts.Click
         HighlightButton(btnUserAccounts)
-        With UsersAccounts
+
+        ' Clear the panel first
+        Panel1.Controls.Clear()
+
+        ' Create a NEW instance of the form each time
+        Dim userAccountsForm As New UsersAccounts()
+
+        With userAccountsForm
             .TopLevel = False
             .FormBorderStyle = FormBorderStyle.None
             .Dock = DockStyle.Fill
-            Panel1.Controls.Clear()
-            Panel1.Controls.Add(UsersAccounts)
+            Panel1.Controls.Add(userAccountsForm)
             .BringToFront()
             .Show()
         End With
@@ -276,6 +282,4 @@ Public Class AdminDashboard
     Private Sub AdminDashboard_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
         Application.Exit()
     End Sub
-
-
 End Class

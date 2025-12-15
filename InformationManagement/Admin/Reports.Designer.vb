@@ -35,7 +35,8 @@ Partial Class Reports
         Me.btnCustomerHistory = New System.Windows.Forms.Button()
         Me.btnEmployeeAttendance = New System.Windows.Forms.Button()
         Me.btnProductsPerformance = New System.Windows.Forms.Button()
-        Me.reportPeriod = New Guna.UI2.WinForms.Guna2ComboBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.reportPeriod = New System.Windows.Forms.ComboBox()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -58,7 +59,7 @@ Partial Class Reports
         Me.Panel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(-4, 166)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(951, 639)
+        Me.Panel1.Size = New System.Drawing.Size(1355, 787)
         Me.Panel1.TabIndex = 3
         '
         'FlowLayoutPanel1
@@ -79,11 +80,10 @@ Partial Class Reports
         Me.FlowLayoutPanel1.Controls.Add(Me.btnEmployeeAttendance)
         Me.FlowLayoutPanel1.Controls.Add(Me.btnProductsPerformance)
         Me.FlowLayoutPanel1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(9, 69)
-        Me.FlowLayoutPanel1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(12, 80)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(8, 4, 8, 4)
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2113, 41)
+        Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(10, 5, 10, 5)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2433, 50)
         Me.FlowLayoutPanel1.TabIndex = 4
         Me.FlowLayoutPanel1.WrapContents = False
         '
@@ -96,7 +96,7 @@ Partial Class Reports
         Me.btnSales.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnSales.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnSales.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.btnSales.Location = New System.Drawing.Point(14, 4)
+        Me.btnSales.Location = New System.Drawing.Point(16, 5)
         Me.btnSales.Margin = New System.Windows.Forms.Padding(6, 0, 6, 0)
         Me.btnSales.Name = "btnSales"
         Me.btnSales.Padding = New System.Windows.Forms.Padding(12, 6, 12, 6)
@@ -114,7 +114,7 @@ Partial Class Reports
         Me.btnOrders.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnOrders.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnOrders.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.btnOrders.Location = New System.Drawing.Point(147, 4)
+        Me.btnOrders.Location = New System.Drawing.Point(149, 5)
         Me.btnOrders.Margin = New System.Windows.Forms.Padding(6, 0, 6, 0)
         Me.btnOrders.Name = "btnOrders"
         Me.btnOrders.Padding = New System.Windows.Forms.Padding(12, 6, 12, 6)
@@ -132,7 +132,7 @@ Partial Class Reports
         Me.btnPayroll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnPayroll.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnPayroll.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.btnPayroll.Location = New System.Drawing.Point(280, 4)
+        Me.btnPayroll.Location = New System.Drawing.Point(282, 5)
         Me.btnPayroll.Margin = New System.Windows.Forms.Padding(6, 0, 6, 0)
         Me.btnPayroll.Name = "btnPayroll"
         Me.btnPayroll.Padding = New System.Windows.Forms.Padding(12, 6, 12, 6)
@@ -150,7 +150,7 @@ Partial Class Reports
         Me.btnCatering.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnCatering.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnCatering.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.btnCatering.Location = New System.Drawing.Point(413, 4)
+        Me.btnCatering.Location = New System.Drawing.Point(415, 5)
         Me.btnCatering.Margin = New System.Windows.Forms.Padding(6, 0, 6, 0)
         Me.btnCatering.Name = "btnCatering"
         Me.btnCatering.Padding = New System.Windows.Forms.Padding(12, 6, 12, 6)
@@ -168,7 +168,7 @@ Partial Class Reports
         Me.btnStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnStatus.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnStatus.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.btnStatus.Location = New System.Drawing.Point(644, 4)
+        Me.btnStatus.Location = New System.Drawing.Point(646, 5)
         Me.btnStatus.Margin = New System.Windows.Forms.Padding(6, 0, 6, 0)
         Me.btnStatus.Name = "btnStatus"
         Me.btnStatus.Padding = New System.Windows.Forms.Padding(12, 6, 12, 6)
@@ -186,7 +186,7 @@ Partial Class Reports
         Me.btnDineIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnDineIn.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnDineIn.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.btnDineIn.Location = New System.Drawing.Point(849, 4)
+        Me.btnDineIn.Location = New System.Drawing.Point(851, 5)
         Me.btnDineIn.Margin = New System.Windows.Forms.Padding(6, 0, 6, 0)
         Me.btnDineIn.Name = "btnDineIn"
         Me.btnDineIn.Padding = New System.Windows.Forms.Padding(12, 6, 12, 6)
@@ -204,7 +204,7 @@ Partial Class Reports
         Me.btnTakeout.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnTakeout.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnTakeout.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.btnTakeout.Location = New System.Drawing.Point(1023, 4)
+        Me.btnTakeout.Location = New System.Drawing.Point(1025, 5)
         Me.btnTakeout.Margin = New System.Windows.Forms.Padding(6, 0, 6, 0)
         Me.btnTakeout.Name = "btnTakeout"
         Me.btnTakeout.Padding = New System.Windows.Forms.Padding(12, 6, 12, 6)
@@ -222,7 +222,7 @@ Partial Class Reports
         Me.btnCustomerHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnCustomerHistory.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnCustomerHistory.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.btnCustomerHistory.Location = New System.Drawing.Point(1202, 4)
+        Me.btnCustomerHistory.Location = New System.Drawing.Point(1204, 5)
         Me.btnCustomerHistory.Margin = New System.Windows.Forms.Padding(6, 0, 6, 0)
         Me.btnCustomerHistory.Name = "btnCustomerHistory"
         Me.btnCustomerHistory.Padding = New System.Windows.Forms.Padding(12, 6, 12, 6)
@@ -240,7 +240,7 @@ Partial Class Reports
         Me.btnEmployeeAttendance.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnEmployeeAttendance.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnEmployeeAttendance.ForeColor = System.Drawing.Color.Black
-        Me.btnEmployeeAttendance.Location = New System.Drawing.Point(1399, 4)
+        Me.btnEmployeeAttendance.Location = New System.Drawing.Point(1401, 5)
         Me.btnEmployeeAttendance.Margin = New System.Windows.Forms.Padding(6, 0, 6, 0)
         Me.btnEmployeeAttendance.Name = "btnEmployeeAttendance"
         Me.btnEmployeeAttendance.Padding = New System.Windows.Forms.Padding(12, 6, 12, 6)
@@ -258,7 +258,7 @@ Partial Class Reports
         Me.btnProductsPerformance.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnProductsPerformance.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnProductsPerformance.ForeColor = System.Drawing.Color.Black
-        Me.btnProductsPerformance.Location = New System.Drawing.Point(1630, 4)
+        Me.btnProductsPerformance.Location = New System.Drawing.Point(1632, 5)
         Me.btnProductsPerformance.Margin = New System.Windows.Forms.Padding(6, 0, 6, 0)
         Me.btnProductsPerformance.Name = "btnProductsPerformance"
         Me.btnProductsPerformance.Padding = New System.Windows.Forms.Padding(12, 6, 12, 6)
@@ -267,22 +267,29 @@ Partial Class Reports
         Me.btnProductsPerformance.Text = "Products Performance"
         Me.btnProductsPerformance.UseVisualStyleBackColor = False
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
+        Me.Label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.Label2.Location = New System.Drawing.Point(978, 23)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(57, 17)
+        Me.Label2.TabIndex = 5
+        Me.Label2.Text = "Period :"
+        '
         'reportPeriod
         '
-        Me.reportPeriod.BackColor = System.Drawing.Color.Transparent
-        Me.reportPeriod.BorderRadius = 6
         Me.reportPeriod.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
         Me.reportPeriod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.reportPeriod.FocusedColor = System.Drawing.Color.FromArgb(CType(CType(94, Byte), Integer), CType(CType(148, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.reportPeriod.FocusedState.BorderColor = System.Drawing.Color.FromArgb(CType(CType(94, Byte), Integer), CType(CType(148, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.reportPeriod.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.reportPeriod.ForeColor = System.Drawing.Color.FromArgb(CType(CType(68, Byte), Integer), CType(CType(88, Byte), Integer), CType(CType(112, Byte), Integer))
-        Me.reportPeriod.ItemHeight = 30
+        Me.reportPeriod.DropDownWidth = 106
+        Me.reportPeriod.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.reportPeriod.FormattingEnabled = True
+        Me.reportPeriod.ItemHeight = 14
         Me.reportPeriod.Items.AddRange(New Object() {"Daily", "Weekly", "Montly", "Yearly"})
-        Me.reportPeriod.Location = New System.Drawing.Point(915, 16)
-        Me.reportPeriod.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.reportPeriod.Location = New System.Drawing.Point(1068, 23)
         Me.reportPeriod.Name = "reportPeriod"
-        Me.reportPeriod.Size = New System.Drawing.Size(92, 36)
+        Me.reportPeriod.Size = New System.Drawing.Size(121, 20)
         Me.reportPeriod.TabIndex = 6
         '
         'Reports
@@ -292,8 +299,9 @@ Partial Class Reports
         Me.AutoScroll = True
         Me.AutoSize = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1028, 495)
+        Me.ClientSize = New System.Drawing.Size(1370, 609)
         Me.Controls.Add(Me.reportPeriod)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.FlowLayoutPanel1)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Label1)
@@ -322,5 +330,6 @@ Partial Class Reports
     Friend WithEvents btnCustomerHistory As Button
     Friend WithEvents btnEmployeeAttendance As Button
     Friend WithEvents btnProductsPerformance As Button
-    Friend WithEvents reportPeriod As Guna.UI2.WinForms.Guna2ComboBox
+    Friend WithEvents Label2 As Label
+    Friend WithEvents reportPeriod As ComboBox
 End Class

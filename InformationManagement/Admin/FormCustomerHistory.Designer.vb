@@ -47,18 +47,20 @@ Partial Class FormCustomerHistory
         Me.RoundedPane21.Controls.Add(Me.DataGridView1)
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
-        Me.RoundedPane21.Location = New System.Drawing.Point(33, 21)
+        Me.RoundedPane21.Location = New System.Drawing.Point(44, 26)
+        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(1137, 429)
+        Me.RoundedPane21.Size = New System.Drawing.Size(1516, 695)
         Me.RoundedPane21.TabIndex = 0
         '
         'Export
         '
         Me.Export.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Export.Image = CType(resources.GetObject("Export.Image"), System.Drawing.Image)
-        Me.Export.Location = New System.Drawing.Point(1010, 18)
+        Me.Export.Location = New System.Drawing.Point(1347, 22)
+        Me.Export.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Export.Name = "Export"
-        Me.Export.Size = New System.Drawing.Size(104, 30)
+        Me.Export.Size = New System.Drawing.Size(139, 37)
         Me.Export.TabIndex = 9
         Me.Export.Text = "   Export"
         Me.Export.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -70,9 +72,10 @@ Partial Class FormCustomerHistory
         Me.Label1.AutoSize = True
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(30, 31)
+        Me.Label1.Location = New System.Drawing.Point(40, 38)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(214, 20)
+        Me.Label1.Size = New System.Drawing.Size(271, 25)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Customer Order History Report"
         '
@@ -96,12 +99,13 @@ Partial Class FormCustomerHistory
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeight = 40
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.dateid, Me.Orderid, Me.Type, Me.Items, Me.Amount, Me.Status})
-        Me.DataGridView1.Location = New System.Drawing.Point(15, 54)
+        Me.DataGridView1.Location = New System.Drawing.Point(21, 67)
+        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowHeadersWidth = 51
-        Me.DataGridView1.Size = New System.Drawing.Size(1099, 358)
+        Me.DataGridView1.Size = New System.Drawing.Size(1465, 608)
         Me.DataGridView1.TabIndex = 0
         '
         'dateid
@@ -148,13 +152,14 @@ Partial Class FormCustomerHistory
         '
         'FormCustomerHistory
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1329, 609)
+        Me.ClientSize = New System.Drawing.Size(1772, 750)
         Me.Controls.Add(Me.RoundedPane21)
         Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "FormCustomerHistory"
         Me.Text = "FormCustomerHistory"
         Me.RoundedPane21.ResumeLayout(False)

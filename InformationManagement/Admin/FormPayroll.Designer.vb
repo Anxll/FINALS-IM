@@ -65,18 +65,20 @@ Partial Class FormPayroll
         Me.RoundedPane24.Controls.Add(Me.Chart1)
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
-        Me.RoundedPane24.Location = New System.Drawing.Point(30, 197)
+        Me.RoundedPane24.Location = New System.Drawing.Point(40, 242)
+        Me.RoundedPane24.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.RoundedPane24.Name = "RoundedPane24"
-        Me.RoundedPane24.Size = New System.Drawing.Size(1045, 393)
+        Me.RoundedPane24.Size = New System.Drawing.Size(1393, 607)
         Me.RoundedPane24.TabIndex = 7
         '
         'Button1
         '
         Me.Button1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(903, 20)
+        Me.Button1.Location = New System.Drawing.Point(1204, 25)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(104, 30)
+        Me.Button1.Size = New System.Drawing.Size(139, 37)
         Me.Button1.TabIndex = 10
         Me.Button1.Text = "   Export"
         Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -89,9 +91,10 @@ Partial Class FormPayroll
         Me.Label10.BackColor = System.Drawing.Color.Transparent
         Me.Label10.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label10.ImageAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.Label10.Location = New System.Drawing.Point(32, 26)
+        Me.Label10.Location = New System.Drawing.Point(43, 32)
+        Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(112, 17)
+        Me.Label10.Size = New System.Drawing.Size(141, 23)
         Me.Label10.TabIndex = 7
         Me.Label10.Text = "Payroll Summary"
         '
@@ -105,7 +108,8 @@ Partial Class FormPayroll
         Legend1.Name = "Legend1"
         Legend1.TitleForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Chart1.Legends.Add(Legend1)
-        Me.Chart1.Location = New System.Drawing.Point(24, 63)
+        Me.Chart1.Location = New System.Drawing.Point(32, 78)
+        Me.Chart1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Chart1.Name = "Chart1"
         Series1.ChartArea = "ChartArea1"
         Series1.Color = System.Drawing.Color.MediumSlateBlue
@@ -127,7 +131,7 @@ Partial Class FormPayroll
         Series1.YValueMembers = "650000"
         Series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Int64
         Me.Chart1.Series.Add(Series1)
-        Me.Chart1.Size = New System.Drawing.Size(999, 300)
+        Me.Chart1.Size = New System.Drawing.Size(1332, 475)
         Me.Chart1.TabIndex = 6
         Me.Chart1.Text = "Chart1"
         '
@@ -140,9 +144,10 @@ Partial Class FormPayroll
         Me.RoundedPane23.Controls.Add(Me.Label3)
         Me.RoundedPane23.CornerRadius = 15
         Me.RoundedPane23.FillColor = System.Drawing.Color.White
-        Me.RoundedPane23.Location = New System.Drawing.Point(738, 21)
+        Me.RoundedPane23.Location = New System.Drawing.Point(984, 26)
+        Me.RoundedPane23.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.RoundedPane23.Name = "RoundedPane23"
-        Me.RoundedPane23.Size = New System.Drawing.Size(337, 149)
+        Me.RoundedPane23.Size = New System.Drawing.Size(449, 183)
         Me.RoundedPane23.TabIndex = 5
         '
         'Label9
@@ -151,9 +156,10 @@ Partial Class FormPayroll
         Me.Label9.BackColor = System.Drawing.Color.Transparent
         Me.Label9.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.ForeColor = System.Drawing.Color.DimGray
-        Me.Label9.Location = New System.Drawing.Point(24, 111)
+        Me.Label9.Location = New System.Drawing.Point(32, 137)
+        Me.Label9.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(64, 13)
+        Me.Label9.Size = New System.Drawing.Size(78, 19)
         Me.Label9.TabIndex = 4
         Me.Label9.Text = "This month"
         '
@@ -162,9 +168,10 @@ Partial Class FormPayroll
         Me.Label7.AutoSize = True
         Me.Label7.BackColor = System.Drawing.Color.Transparent
         Me.Label7.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(22, 81)
+        Me.Label7.Location = New System.Drawing.Point(29, 100)
+        Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(37, 30)
+        Me.Label7.Size = New System.Drawing.Size(49, 37)
         Me.Label7.TabIndex = 3
         Me.Label7.Text = "18"
         '
@@ -173,9 +180,10 @@ Partial Class FormPayroll
         Me.Label3.AutoSize = True
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(23, 21)
+        Me.Label3.Location = New System.Drawing.Point(31, 26)
+        Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(114, 17)
+        Me.Label3.Size = New System.Drawing.Size(144, 23)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "Active Employees"
         '
@@ -188,9 +196,10 @@ Partial Class FormPayroll
         Me.RoundedPane22.Controls.Add(Me.Label2)
         Me.RoundedPane22.CornerRadius = 15
         Me.RoundedPane22.FillColor = System.Drawing.Color.White
-        Me.RoundedPane22.Location = New System.Drawing.Point(385, 21)
+        Me.RoundedPane22.Location = New System.Drawing.Point(513, 26)
+        Me.RoundedPane22.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.RoundedPane22.Name = "RoundedPane22"
-        Me.RoundedPane22.Size = New System.Drawing.Size(337, 149)
+        Me.RoundedPane22.Size = New System.Drawing.Size(449, 183)
         Me.RoundedPane22.TabIndex = 4
         '
         'Label8
@@ -199,9 +208,10 @@ Partial Class FormPayroll
         Me.Label8.BackColor = System.Drawing.Color.Transparent
         Me.Label8.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.ForeColor = System.Drawing.Color.DimGray
-        Me.Label8.Location = New System.Drawing.Point(25, 111)
+        Me.Label8.Location = New System.Drawing.Point(33, 137)
+        Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(64, 13)
+        Me.Label8.Size = New System.Drawing.Size(78, 19)
         Me.Label8.TabIndex = 3
         Me.Label8.Text = "This month"
         '
@@ -210,9 +220,10 @@ Partial Class FormPayroll
         Me.Label6.AutoSize = True
         Me.Label6.BackColor = System.Drawing.Color.Transparent
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(23, 81)
+        Me.Label6.Location = New System.Drawing.Point(31, 100)
+        Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(67, 30)
+        Me.Label6.Size = New System.Drawing.Size(88, 37)
         Me.Label6.TabIndex = 2
         Me.Label6.Text = "2,340"
         '
@@ -221,9 +232,10 @@ Partial Class FormPayroll
         Me.Label2.AutoSize = True
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(24, 23)
+        Me.Label2.Location = New System.Drawing.Point(32, 28)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(78, 17)
+        Me.Label2.Size = New System.Drawing.Size(97, 23)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Total Hours"
         '
@@ -237,9 +249,10 @@ Partial Class FormPayroll
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
         Me.RoundedPane21.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.RoundedPane21.Location = New System.Drawing.Point(30, 21)
+        Me.RoundedPane21.Location = New System.Drawing.Point(40, 26)
+        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(337, 149)
+        Me.RoundedPane21.Size = New System.Drawing.Size(449, 183)
         Me.RoundedPane21.TabIndex = 3
         '
         'Label5
@@ -248,9 +261,10 @@ Partial Class FormPayroll
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.Color.DimGray
-        Me.Label5.Location = New System.Drawing.Point(21, 111)
+        Me.Label5.Location = New System.Drawing.Point(28, 137)
+        Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(64, 13)
+        Me.Label5.Size = New System.Drawing.Size(78, 19)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "This month"
         '
@@ -259,9 +273,10 @@ Partial Class FormPayroll
         Me.Label4.AutoSize = True
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(19, 81)
+        Me.Label4.Location = New System.Drawing.Point(25, 100)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(152, 30)
+        Me.Label4.Size = New System.Drawing.Size(199, 37)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "₱2,280,000.00"
         '
@@ -270,24 +285,26 @@ Partial Class FormPayroll
         Me.Label1.AutoSize = True
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(20, 23)
+        Me.Label1.Location = New System.Drawing.Point(27, 28)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(82, 17)
+        Me.Label1.Size = New System.Drawing.Size(103, 23)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Total Payroll"
         '
         'FormPayroll
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1129, 638)
+        Me.ClientSize = New System.Drawing.Size(1505, 785)
         Me.Controls.Add(Me.RoundedPane24)
         Me.Controls.Add(Me.RoundedPane23)
         Me.Controls.Add(Me.RoundedPane22)
         Me.Controls.Add(Me.RoundedPane21)
         Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "FormPayroll"
         Me.Text = "FormPayroll"
         Me.RoundedPane24.ResumeLayout(False)

@@ -6,6 +6,7 @@ Public Class FormProductPerformance
 
     Private ReadOnly currencyCulture As CultureInfo = CultureInfo.GetCultureInfo("en-PH")
     Private summaryTiles As List(Of SummaryTile)
+    Private topProductsLimit As Integer = 10 ' Default to top 10
 
     Private Class SummaryTile
         Public Property NameLabel As Label
@@ -43,6 +44,18 @@ Public Class FormProductPerformance
             .AxisX.Interval = 1
             .AxisX.MajorGrid.Enabled = False
             .AxisX.LabelStyle.Font = New Font("Segoe UI", 9.0F)
+            .AxisX.LabelStyle.Angle = -45
+            .AxisX.IsLabelAutoFit = True
+
+            ' Enable scrolling for many products
+            .AxisX.ScaleView.Zoomable = True
+            .AxisX.ScrollBar.Enabled = True
+            .AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll
+            .AxisX.ScrollBar.Size = 15
+
+            ' Show only 15 products at a time in the view
+            .AxisX.ScaleView.Size = 15
+
             .AxisY.LabelStyle.Format = "₱#,##0"
             .AxisY.LabelStyle.Font = New Font("Segoe UI", 9.0F)
             .AxisY.MajorGrid.LineColor = Color.LightGray
@@ -57,7 +70,8 @@ Public Class FormProductPerformance
             .BorderWidth = 0
             .IsValueShownAsLabel = True
             .LabelFormat = "₱#,##0"
-            .Font = New Font("Segoe UI", 9.0F, FontStyle.Bold)
+            .Font = New Font("Segoe UI", 8.0F, FontStyle.Bold)
+            .LabelAngle = -90
         End With
 
         Chart1.Titles.Add(New Title With {
@@ -79,6 +93,7 @@ Public Class FormProductPerformance
     End Sub
 
     Private Function FetchProductPerformanceData() As DataTable
+        ' Build the query with optional LIMIT
         Dim query As String =
 "SELECT ProductName,
         SUM(Quantity) AS TotalOrders,
@@ -103,7 +118,15 @@ Public Class FormProductPerformance
         WHERE o.OrderStatus IN ('Served', 'Completed')
       ) AS combined
  GROUP BY ProductName
- ORDER BY Revenue DESC;"
+ ORDER BY Revenue DESC"
+
+        ' Add LIMIT clause based on topProductsLimit
+        ' If you want to show all products, set topProductsLimit to a very high number or 0
+        If topProductsLimit > 0 Then
+            query &= " LIMIT " & topProductsLimit
+        End If
+
+        query &= ";"
 
         Dim dt As New DataTable()
 
@@ -133,6 +156,9 @@ Public Class FormProductPerformance
             Dim revenue = If(IsDBNull(row("Revenue")), 0D, Convert.ToDecimal(row("Revenue")))
             series.Points.AddXY(productName, revenue)
         Next
+
+        ' Update chart title to show count
+        Chart1.Titles(0).Text = $"Revenue by Product (Completed Orders) - Showing {data.Rows.Count} Products"
     End Sub
 
     Private Sub UpdateSummaryTiles(data As DataTable)

@@ -54,12 +54,13 @@ Partial Class FormEmployeeAttendance
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeight = 40
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Employee, Me.Position, Me.RegularHours, Me.OvertimeHours, Me.Absences, Me.Status})
-        Me.DataGridView1.Location = New System.Drawing.Point(25, 118)
+        Me.DataGridView1.Location = New System.Drawing.Point(33, 145)
+        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowHeadersWidth = 51
-        Me.DataGridView1.Size = New System.Drawing.Size(997, 150)
+        Me.DataGridView1.Size = New System.Drawing.Size(1482, 531)
         Me.DataGridView1.TabIndex = 10
         '
         'Employee
@@ -114,18 +115,20 @@ Partial Class FormEmployeeAttendance
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
         Me.RoundedPane21.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.RoundedPane21.Location = New System.Drawing.Point(31, 26)
+        Me.RoundedPane21.Location = New System.Drawing.Point(41, 32)
+        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(1196, 306)
+        Me.RoundedPane21.Size = New System.Drawing.Size(1595, 705)
         Me.RoundedPane21.TabIndex = 0
         '
         'Button1
         '
         Me.Button1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(1066, 24)
+        Me.Button1.Location = New System.Drawing.Point(1421, 30)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(104, 30)
+        Me.Button1.Size = New System.Drawing.Size(139, 37)
         Me.Button1.TabIndex = 9
         Me.Button1.Text = "   Export"
         Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -137,19 +140,21 @@ Partial Class FormEmployeeAttendance
         Me.Label1.AutoSize = True
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(21, 28)
+        Me.Label1.Location = New System.Drawing.Point(28, 34)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(204, 20)
+        Me.Label1.Size = New System.Drawing.Size(255, 25)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Employee Attendance Report"
         '
         'FormEmployeeAttendance
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1256, 609)
+        Me.ClientSize = New System.Drawing.Size(1675, 750)
         Me.Controls.Add(Me.RoundedPane21)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "FormEmployeeAttendance"
         Me.Text = "FormEmployeeAttendance"
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()

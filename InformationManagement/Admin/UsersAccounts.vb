@@ -9,18 +9,12 @@ Public Class UsersAccounts
 
     Public Sub LoadUsers()
         Try
+            ' Suspend layout to prevent flickering and improve performance
+            UsersAccountData.SuspendLayout()
+
             openConn()
-            ' UNION query with FirstName, LastName separate and proper date fields
+            ' Query only employees (staff and admin)
             Dim query As String = "
-                SELECT 
-                    CustomerID as ID,
-                    FirstName COLLATE utf8mb4_general_ci as FirstName,
-                    LastName COLLATE utf8mb4_general_ci as LastName,
-                    'Customer' COLLATE utf8mb4_general_ci as Role,
-                    AccountStatus COLLATE utf8mb4_general_ci as Status,
-                    CreatedDate as DateCreated
-                FROM customers
-                UNION ALL
                 SELECT 
                     e.EmployeeID as ID,
                     e.FirstName COLLATE utf8mb4_general_ci as FirstName,
@@ -52,7 +46,6 @@ Public Class UsersAccounts
                     fullName &= row("LastName").ToString()
                 End If
 
-                ' Use correct column names from Designer: txtName and colJoinDate
                 newRow.Cells("txtName").Value = fullName
                 newRow.Cells("colRole").Value = If(row("Role") IsNot DBNull.Value, row("Role").ToString(), "")
                 newRow.Cells("colStatus").Value = If(row("Status") IsNot DBNull.Value, row("Status").ToString(), "")
@@ -61,6 +54,9 @@ Public Class UsersAccounts
                 ' Store ID and Role type for edit/delete operations
                 newRow.Tag = New With {.ID = row("ID"), .Role = row("Role").ToString()}
             Next
+
+            ' Resume layout
+            UsersAccountData.ResumeLayout()
 
         Catch ex As Exception
             MessageBox.Show("Error loading users: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -85,22 +81,15 @@ Public Class UsersAccounts
 
             ' --- EDIT BUTTON ---
             If e.ColumnIndex = UsersAccountData.Columns("colEdit").Index Then
-                ' Open edit form and pass the user information
-                If userRole.ToLower() = "customer" Then
-                    ' Edit customer
-                    MessageBox.Show("Customer edit functionality coming soon!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Else
-                    ' Edit employee (Staff/Admin only appear in this list)
-                    ' FIXED: Create instance of FormEdit and pass parameters
-                    Dim editForm As New FormEdit()
-                    editForm.LoadUserData(userID, username, userRole)
-                    editForm.StartPosition = FormStartPosition.CenterScreen
+                ' Edit employee (Staff/Admin)
+                Dim editForm As New FormEdit()
+                editForm.LoadUserData(userID, username, userRole)
+                editForm.StartPosition = FormStartPosition.CenterScreen
 
-                    If editForm.ShowDialog() = DialogResult.OK Then
-                        ' Refresh the list after editing
-                        LoadUsers()
-                        UpdateUserCounts()
-                    End If
+                If editForm.ShowDialog() = DialogResult.OK Then
+                    ' Refresh the list after editing
+                    LoadUsers()
+                    UpdateUserCounts()
                 End If
 
                 ' --- DELETE BUTTON ---
@@ -116,23 +105,15 @@ Public Class UsersAccounts
                     Try
                         openConn()
 
-                        ' Determine which table to delete from based on role
-                        If userRole.ToLower() = "customer" Then
-                            Dim query As String = "DELETE FROM customers WHERE CustomerID = @id"
-                            Dim cmd As New MySqlCommand(query, conn)
-                            cmd.Parameters.AddWithValue("@id", userID)
-                            cmd.ExecuteNonQuery()
-                        Else
-                            ' For employees (staff/admin), delete from both employee and user_accounts
-                            Dim cmdEmployee As New MySqlCommand("DELETE FROM employee WHERE EmployeeID = @id", conn)
-                            cmdEmployee.Parameters.AddWithValue("@id", userID)
-                            cmdEmployee.ExecuteNonQuery()
+                        ' Delete from employee table
+                        Dim cmdEmployee As New MySqlCommand("DELETE FROM employee WHERE EmployeeID = @id", conn)
+                        cmdEmployee.Parameters.AddWithValue("@id", userID)
+                        cmdEmployee.ExecuteNonQuery()
 
-                            ' Also delete from user_accounts if exists
-                            Dim cmdUser As New MySqlCommand("DELETE FROM user_accounts WHERE username IN (SELECT CONCAT(FirstName, LastName) FROM employee WHERE EmployeeID = @id)", conn)
-                            cmdUser.Parameters.AddWithValue("@id", userID)
-                            cmdUser.ExecuteNonQuery()
-                        End If
+                        ' Also delete from user_accounts if exists
+                        Dim cmdUser As New MySqlCommand("DELETE FROM user_accounts WHERE username IN (SELECT CONCAT(FirstName, LastName) FROM employee WHERE EmployeeID = @id)", conn)
+                        cmdUser.Parameters.AddWithValue("@id", userID)
+                        cmdUser.ExecuteNonQuery()
 
                         closeConn()
 
@@ -224,7 +205,7 @@ Public Class UsersAccounts
     End Sub
 
     Private Sub SetActiveButton(activeBtn As Button)
-        Dim buttons() As Button = {AllUsersbtn, Staffbtn, Employeesbtn, Customerbtn}
+        Dim buttons() As Button = {AllUsersbtn, Staffbtn, Employeesbtn}
 
         For Each btn As Button In buttons
             btn.BackColor = Color.White
@@ -256,20 +237,7 @@ Public Class UsersAccounts
     Private Sub Employeesbtn_Click(sender As Object, e As EventArgs) Handles Employeesbtn.Click
         SetActiveButton(Employeesbtn)
         For Each row As DataGridViewRow In UsersAccountData.Rows
-            If row.Cells("colRole").Value IsNot Nothing Then
-                Dim role As String = row.Cells("colRole").Value.ToString().ToLower()
-                row.Visible = (Not role = "customer")
-            End If
-        Next
-    End Sub
-
-    Private Sub Customerbtn_Click(sender As Object, e As EventArgs) Handles Customerbtn.Click
-        SetActiveButton(Customerbtn)
-        For Each row As DataGridViewRow In UsersAccountData.Rows
-            If row.Cells("colRole").Value IsNot Nothing Then
-                Dim role As String = row.Cells("colRole").Value.ToString().ToLower()
-                row.Visible = (role = "customer")
-            End If
+            row.Visible = True ' Show all employees (no customers to filter out)
         Next
     End Sub
 
@@ -277,7 +245,6 @@ Public Class UsersAccounts
         Dim totalUsers As Integer = UsersAccountData.Rows.Count
         Dim staffCount As Integer = 0
         Dim employeeCount As Integer = 0
-        Dim customerCount As Integer = 0
 
         For Each row As DataGridViewRow In UsersAccountData.Rows
             If Not row.IsNewRow AndAlso row.Cells("colRole").Value IsNot Nothing Then
@@ -285,8 +252,6 @@ Public Class UsersAccounts
 
                 If role.Contains("staff") Then
                     staffCount += 1
-                ElseIf role = "customer" Then
-                    customerCount += 1
                 Else
                     employeeCount += 1
                 End If
@@ -296,16 +261,10 @@ Public Class UsersAccounts
         lblTotalUsers.Text = totalUsers.ToString()
         lblStaffs.Text = staffCount.ToString()
         lblEmployees.Text = employeeCount.ToString()
-        lblCustomers.Text = customerCount.ToString()
     End Sub
 
-    Private Sub UsersAccountData_RowsAdded(sender As Object, e As DataGridViewRowsAddedEventArgs) Handles UsersAccountData.RowsAdded
-        UpdateUserCounts()
-    End Sub
-
-    Private Sub UsersAccountData_RowsRemoved(sender As Object, e As DataGridViewRowsRemovedEventArgs) Handles UsersAccountData.RowsRemoved
-        UpdateUserCounts()
-    End Sub
+    ' Removed RowsAdded and RowsRemoved events to prevent infinite loops
+    ' UpdateUserCounts is called manually after LoadUsers()
 
     Private Sub RoundButton(btn As Button)
         Dim radius As Integer = 12
@@ -323,8 +282,8 @@ Public Class UsersAccounts
         RoundButton(AllUsersbtn)
         RoundButton(Staffbtn)
         RoundButton(Employeesbtn)
-        RoundButton(Customerbtn)
         SetActiveButton(AllUsersbtn)
+        RoundButton(AddEdit)
     End Sub
 
     Private Sub AddEdit_Click(sender As Object, e As EventArgs) Handles AddEdit.Click
