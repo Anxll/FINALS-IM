@@ -192,8 +192,10 @@ Public Class FormAddNewmenuItem
             ' ===================== SAVE IMAGE AS FILE PATH =====================
             Dim imagePath As String = SaveImageToFolder()
 
-            If imagePath IsNot Nothing Then
-                cmd.Parameters.AddWithValue("@Image", imagePath)
+            ' ===================== IMAGE SAVE LOGIC =====================
+            ' Use stored image bytes if available
+            If SelectedImageBytes IsNot Nothing Then
+                cmd.Parameters.Add("@Image", MySqlDbType.LongBlob).Value = SelectedImageBytes
             Else
                 cmd.Parameters.AddWithValue("@Image", DBNull.Value)
             End If
@@ -206,9 +208,7 @@ Public Class FormAddNewmenuItem
                 updateCmd.Parameters.AddWithValue("@ProductID", insertedId)
                 updateCmd.ExecuteNonQuery()
 
-                MessageBox.Show("Menu item added successfully!" & vbCrLf &
-                          If(imagePath IsNot Nothing, "Image saved to: " & imagePath, "No image uploaded"),
-                          "Success")
+                MessageBox.Show("Menu item added successfully!", "Success")
 
                 MessageBox.Show("Menu item saved! ID: " & insertedId)
                 ClearForm()
