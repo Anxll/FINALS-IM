@@ -179,23 +179,23 @@ Public Class ProductIngredientUsageHistory
         End Try
     End Sub
 
-    Private Sub btnApplyFilters_Click(sender As Object, e As EventArgs) Handles btnApplyFilters.Click
+    Private Sub btnApplyFilters_Click(sender As Object, e As EventArgs)
         LoadUsageHistory()
     End Sub
 
-    Private Sub btnResetFilters_Click(sender As Object, e As EventArgs) Handles btnResetFilters.Click
+    Private Sub btnResetFilters_Click(sender As Object, e As EventArgs)
         dtpStartDate.Value = Date.Now.AddDays(-7)
         dtpEndDate.Value = Date.Now
         cmbSource.SelectedIndex = 0
-        txtSearch.Clear()
+        txtSearch.Text = ""
         LoadUsageHistory()
     End Sub
 
-    Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
+    Private Sub btnRefresh_Click(sender As Object, e As EventArgs)
         LoadUsageHistory()
     End Sub
 
-    Private Sub btnClearHistory_Click(sender As Object, e As EventArgs) Handles btnClearHistory.Click
+    Private Sub btnClearHistory_Click(sender As Object, e As EventArgs)
         Try
             Dim result As DialogResult = MessageBox.Show(
                 "Are you sure you want to clear the ingredient usage history?" & vbCrLf & vbCrLf &
@@ -250,7 +250,7 @@ Public Class ProductIngredientUsageHistory
         End Try
     End Sub
 
-    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+    Private Sub btnClose_Click(sender As Object, e As EventArgs)
         Me.Close()
     End Sub
 

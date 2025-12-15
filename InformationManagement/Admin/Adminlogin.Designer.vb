@@ -46,7 +46,7 @@ Partial Class Adminlogin
         'RoundedPanel1
         '
         Me.RoundedPanel1.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.RoundedPanel1.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.RoundedPanel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.RoundedPanel1.Controls.Add(Me.chkShowPassword)
         Me.RoundedPanel1.Controls.Add(Me.txtPassword)
         Me.RoundedPanel1.Controls.Add(Me.txtUsername)
@@ -66,7 +66,7 @@ Partial Class Adminlogin
         Me.chkShowPassword.BackColor = System.Drawing.Color.Transparent
         Me.chkShowPassword.Cursor = System.Windows.Forms.Cursors.Hand
         Me.chkShowPassword.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkShowPassword.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.chkShowPassword.ForeColor = System.Drawing.Color.White
         Me.chkShowPassword.Location = New System.Drawing.Point(55, 240)
         Me.chkShowPassword.Margin = New System.Windows.Forms.Padding(2)
         Me.chkShowPassword.Name = "chkShowPassword"
@@ -121,7 +121,7 @@ Partial Class Adminlogin
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 22.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.Label1.ForeColor = System.Drawing.Color.White
         Me.Label1.Location = New System.Drawing.Point(82, 34)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
@@ -132,12 +132,12 @@ Partial Class Adminlogin
         '
         'adminlog
         '
-        Me.adminlog.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.adminlog.BackColor = System.Drawing.Color.White
         Me.adminlog.Cursor = System.Windows.Forms.Cursors.Hand
         Me.adminlog.FlatAppearance.BorderSize = 0
         Me.adminlog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue
         Me.adminlog.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.adminlog.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.adminlog.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.adminlog.ForeColor = System.Drawing.Color.White
         Me.adminlog.Location = New System.Drawing.Point(55, 296)
         Me.adminlog.Margin = New System.Windows.Forms.Padding(2)
@@ -152,7 +152,7 @@ Partial Class Adminlogin
         Me.Label2.AutoSize = True
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label2.ForeColor = System.Drawing.Color.White
         Me.Label2.Location = New System.Drawing.Point(56, 101)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
@@ -164,7 +164,7 @@ Partial Class Adminlogin
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label3.ForeColor = System.Drawing.Color.White
         Me.Label3.Location = New System.Drawing.Point(56, 175)
         Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label3.Name = "Label3"

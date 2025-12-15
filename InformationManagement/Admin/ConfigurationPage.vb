@@ -1,123 +1,108 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports MySql.Data.MySqlClient
-Imports Org.BouncyCastle.Tls
 
 Public Class ConfigurationPage
-    Private configFolderPath As String = Path.Combine(Application.StartupPath, "Config")
-    Private mainServerConfigPath As String = ""
+    Private ReadOnly configFolderPath As String = Path.Combine(Application.StartupPath, "Config")
+    Private ReadOnly mainServerConfigPath As String = Path.Combine(Application.StartupPath, "Config", "MainServer.config")
 
+    ' ==============================
+    ' FORM LOAD
+    ' ==============================
     Private Sub ConfigurationPage_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Initialize configuration path
         InitializeConfigPath()
-
-        ' Load existing configuration if available
         LoadConfiguration()
-
-        ' Set default values if fields are empty
-        If String.IsNullOrWhiteSpace(txtServer.Text) Then
-            SetDefaultValues()
-        End If
-        ' Optional (for true fullscreen
     End Sub
 
+    ' ==============================
+    ' INITIALIZE CONFIG FOLDER
+    ' ==============================
     Private Sub InitializeConfigPath()
-        ' Create Config folder if it doesn't exist
-        If Not Directory.Exists(configFolderPath) Then
-            Directory.CreateDirectory(configFolderPath)
-        End If
-
-        ' Set configuration file path
-        mainServerConfigPath = Path.Combine(configFolderPath, "MainServer.config")
+        Try
+            If Not Directory.Exists(configFolderPath) Then
+                Directory.CreateDirectory(configFolderPath)
+            End If
+        Catch ex As Exception
+            MessageBox.Show($"Error creating config folder: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
-    Private Sub SetDefaultValues()
-        ' Set default XAMPP values
-        txtServer.Text = "localhost"
-        txtPort.Text = "3306"
-        txtUsername.Text = "root"
-        txtPassword.Text = ""
-        txtDatabasename.Text = ""
-    End Sub
-
+    ' ==============================
+    ' LOAD CONFIGURATION FROM FILE
+    ' ==============================
     Private Sub LoadConfiguration()
-        ' Load from file if exists
-        If File.Exists(mainServerConfigPath) Then
-            Try
-                Dim lines As String() = File.ReadAllLines(mainServerConfigPath)
-                For Each line As String In lines
-                    If line.Contains("=") Then
-                        Dim parts As String() = line.Split("="c)
-                        If parts.Length = 2 Then
-                            Dim key As String = parts(0).Trim()
-                            Dim value As String = parts(1).Trim()
-
-                            Select Case key.ToUpper()
-                                Case "SERVER", "IP"
-                                    txtServer.Text = value
-                                Case "PORT"
-                                    txtPort.Text = value
-                                Case "DATABASE"
-                                    txtDatabasename.Text = value
-                                Case "USERNAME"
-                                    txtUsername.Text = value
-                                Case "PASSWORD"
-                                    txtPassword.Text = DecryptPassword(value)
-                            End Select
-                        End If
-                    End If
-                Next
-
-                ' Update status label
-                lblServerStatus.Text = "Configuration loaded successfully"
-                lblServerStatus.ForeColor = Color.Green
-            Catch ex As Exception
-                MessageBox.Show($"Error loading configuration: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                SetDefaultValues()
-                lblServerStatus.Text = "Failed to load configuration"
-                lblServerStatus.ForeColor = Color.Red
-            End Try
-        Else
-            lblServerStatus.Text = "No saved configuration found"
-            lblServerStatus.ForeColor = Color.Gray
+        If Not File.Exists(mainServerConfigPath) Then
+            Return ' No saved config, leave fields empty
         End If
+
+        Try
+            Dim lines As String() = File.ReadAllLines(mainServerConfigPath)
+            For Each line As String In lines
+                If String.IsNullOrWhiteSpace(line) OrElse Not line.Contains("=") Then
+                    Continue For
+                End If
+
+                Dim parts As String() = line.Split(New Char() {"="c}, 2)
+                If parts.Length <> 2 Then Continue For
+
+                Dim key As String = parts(0).Trim().ToUpper()
+                Dim value As String = parts(1).Trim()
+
+                Select Case key
+                    Case "SERVER", "IP"
+                        txtServer.Text = value
+                    Case "PORT"
+                        txtPort.Text = value
+                    Case "DATABASE"
+                        txtDatabasename.Text = value
+                    Case "USERNAME"
+                        txtUsername.Text = value
+                    Case "PASSWORD"
+                        txtPassword.Text = DecryptPassword(value)
+                End Select
+            Next
+
+            MessageBox.Show("Configuration loaded successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+        Catch ex As Exception
+            MessageBox.Show($"Error loading configuration: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
+    ' ==============================
+    ' SAVE CONFIGURATION TO FILE
+    ' ==============================
     Private Sub SaveConfiguration()
-        ' Validate fields
         If Not ValidateFields() Then
             Return
         End If
 
         Try
-            ' Build configuration content
             Dim sb As New StringBuilder()
-            sb.AppendLine($"CONNECTION_TYPE=DATABASE")
-            sb.AppendLine($"SERVER={txtServer.Text}")
-            sb.AppendLine($"PORT={txtPort.Text}")
-            sb.AppendLine($"DATABASE={txtDatabasename.Text}")
-            sb.AppendLine($"USERNAME={txtUsername.Text}")
+            sb.AppendLine("CONNECTION_TYPE=DATABASE")
+            sb.AppendLine($"SERVER={txtServer.Text.Trim()}")
+            sb.AppendLine($"PORT={txtPort.Text.Trim()}")
+            sb.AppendLine($"DATABASE={txtDatabasename.Text.Trim()}")
+            sb.AppendLine($"USERNAME={txtUsername.Text.Trim()}")
             sb.AppendLine($"PASSWORD={EncryptPassword(txtPassword.Text)}")
-            sb.AppendLine($"SAVED_DATE={DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}")
+            sb.AppendLine($"SAVED_DATE={DateTime.Now:yyyy-MM-dd HH:mm:ss}")
 
-            ' Save to file
             File.WriteAllText(mainServerConfigPath, sb.ToString())
 
-            lblServerStatus.Text = "Configuration saved successfully ✓"
-            lblServerStatus.ForeColor = Color.Green
+            MessageBox.Show("Configuration saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-            MessageBox.Show("Main Server configuration saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Catch ex As Exception
-            lblServerStatus.Text = "Failed to save configuration"
-            lblServerStatus.ForeColor = Color.Red
             MessageBox.Show($"Error saving configuration: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
+    ' ==============================
+    ' VALIDATE INPUT FIELDS
+    ' ==============================
     Private Function ValidateFields() As Boolean
-        ' Validate Server IP
+        ' Validate Server
         If String.IsNullOrWhiteSpace(txtServer.Text) Then
-            MessageBox.Show("Please enter Server IP address.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Please enter Server IP address or hostname.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             txtServer.Focus()
             Return False
         End If
@@ -129,7 +114,6 @@ Public Class ConfigurationPage
             Return False
         End If
 
-        ' Validate Port is numeric
         Dim portNumber As Integer
         If Not Integer.TryParse(txtPort.Text, portNumber) Then
             MessageBox.Show("Port must be a valid number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -137,7 +121,6 @@ Public Class ConfigurationPage
             Return False
         End If
 
-        ' Validate Port range
         If portNumber < 1 OrElse portNumber > 65535 Then
             MessageBox.Show("Port must be between 1 and 65535.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             txtPort.Focus()
@@ -161,16 +144,9 @@ Public Class ConfigurationPage
         Return True
     End Function
 
-    Private Sub ClearFields()
-        txtServer.Text = ""
-        txtPort.Text = "3306"
-        txtDatabasename.Text = ""
-        txtUsername.Text = "root"
-        txtPassword.Text = ""
-        lblServerStatus.Text = ""
-    End Sub
-
-    ' Simple encryption/decryption (use stronger encryption in production)
+    ' ==============================
+    ' PASSWORD ENCRYPTION/DECRYPTION
+    ' ==============================
     Private Function EncryptPassword(password As String) As String
         If String.IsNullOrEmpty(password) Then Return ""
         Try
@@ -191,9 +167,10 @@ Public Class ConfigurationPage
         End Try
     End Function
 
-    ' Test database connection
+    ' ==============================
+    ' TEST DATABASE CONNECTION
+    ' ==============================
     Private Sub TestConnection()
-        ' Validate fields first
         If Not ValidateFields() Then
             Return
         End If
@@ -201,56 +178,66 @@ Public Class ConfigurationPage
         Dim connectionString As String = BuildConnectionString()
 
         Try
-            Using conn As New MySqlConnection(connectionString)
-                Me.Cursor = Cursors.WaitCursor
-                lblServerStatus.Text = "Testing connection..."
-                lblServerStatus.ForeColor = Color.Orange
-                Application.DoEvents()
+            Me.Cursor = Cursors.WaitCursor
 
+            Using conn As New MySqlConnection(connectionString)
                 conn.Open()
 
                 Me.Cursor = Cursors.Default
-                lblServerStatus.Text = "Connection successful ✓"
-                lblServerStatus.ForeColor = Color.Green
 
-                MessageBox.Show("Connection to Main Server successful!" & vbCrLf & vbCrLf &
+                MessageBox.Show("Connection to database successful!" & vbCrLf & vbCrLf &
                               $"Server: {txtServer.Text}" & vbCrLf &
-                              $"Database: {txtDatabasename.Text}",
+                              $"Port: {txtPort.Text}" & vbCrLf &
+                              $"Database: {txtDatabasename.Text}" & vbCrLf &
+                              $"Username: {txtUsername.Text}",
                               "Connection Successful", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-                conn.Close()
             End Using
+
         Catch ex As MySqlException
             Me.Cursor = Cursors.Default
-            lblServerStatus.Text = "Connection failed ✗"
-            lblServerStatus.ForeColor = Color.Red
 
-            MessageBox.Show($"Connection failed!" & vbCrLf & vbCrLf &
-                          $"Error: {ex.Message}" & vbCrLf & vbCrLf &
-                          "Please check your server settings.",
-                          "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Dim errorMessage As String = "Connection failed!" & vbCrLf & vbCrLf
+
+            Select Case ex.Number
+                Case 0
+                    errorMessage &= "Cannot connect to MySQL server." & vbCrLf &
+                                  "Please check if MySQL is running and the server address is correct."
+                Case 1045
+                    errorMessage &= "Access denied." & vbCrLf &
+                                  "Please check your username and password."
+                Case 1049
+                    errorMessage &= "Unknown database." & vbCrLf &
+                                  $"Database '{txtDatabasename.Text}' does not exist."
+                Case Else
+                    errorMessage &= $"Error Code: {ex.Number}" & vbCrLf &
+                                  $"Error: {ex.Message}"
+            End Select
+
+            MessageBox.Show(errorMessage, "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
         Catch ex As Exception
             Me.Cursor = Cursors.Default
-            lblServerStatus.Text = "Connection failed ✗"
-            lblServerStatus.ForeColor = Color.Red
-
-            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show($"Unexpected error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
+    ' ==============================
+    ' BUILD CONNECTION STRING
+    ' ==============================
     Private Function BuildConnectionString() As String
-        Return $"Server={txtServer.Text};Port={txtPort.Text};Database={txtDatabasename.Text};Uid={txtUsername.Text};Pwd={txtPassword.Text};"
+        Return $"Server={txtServer.Text.Trim()};Port={txtPort.Text.Trim()};Database={txtDatabasename.Text.Trim()};Uid={txtUsername.Text.Trim()};Pwd={txtPassword.Text};"
     End Function
 
-    ' Button Event Handlers
+    ' ==============================
+    ' BUTTON: TEST CONNECTION
+    ' ==============================
     Private Sub btnTestConnection_Click(sender As Object, e As EventArgs) Handles btnTestConnection.Click
         TestConnection()
     End Sub
 
-    Private Sub btnSave_Click(sender As Object, e As EventArgs)
-        SaveConfiguration()
-    End Sub
-
+    ' ==============================
+    ' BUTTON: SAVE AND CONTINUE
+    ' ==============================
     Private Sub btnSaveAndContinue_Click(sender As Object, e As EventArgs) Handles btnSaveAndContinue.Click
         SaveConfiguration()
 
@@ -258,12 +245,12 @@ Public Class ConfigurationPage
             Dim loginForm As New Adminlogin()
             loginForm.Show()
             Me.Hide()
-            ' Prevent app from closing
         End If
     End Sub
 
-
-    ' Optional: Add keyboard shortcuts
+    ' ==============================
+    ' KEYBOARD SHORTCUTS
+    ' ==============================
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean
         If keyData = (Keys.Control Or Keys.S) Then
             SaveConfiguration()
@@ -271,37 +258,8 @@ Public Class ConfigurationPage
         ElseIf keyData = (Keys.Control Or Keys.T) Then
             TestConnection()
             Return True
-            Return True
         End If
         Return MyBase.ProcessCmdKey(msg, keyData)
     End Function
-
-    ' Show configuration info in status label on focus
-    Private Sub txtServer_Enter(sender As Object, e As EventArgs) Handles txtServer.Enter
-        lblServerStatus.Text = "Enter the IP address or hostname of your MySQL server"
-        lblServerStatus.ForeColor = Color.Gray
-    End Sub
-
-    Private Sub txtPort_Enter(sender As Object, e As EventArgs) Handles txtPort.Enter
-        lblServerStatus.Text = "Default MySQL port is 3306"
-        lblServerStatus.ForeColor = Color.Gray
-    End Sub
-
-    Private Sub txtDatabasename_Enter(sender As Object, e As EventArgs) Handles txtDatabasename.Enter
-        lblServerStatus.Text = "Enter the name of your database"
-        lblServerStatus.ForeColor = Color.Gray
-    End Sub
-
-    Private Sub txtUsername_Enter(sender As Object, e As EventArgs) Handles txtUsername.Enter
-        lblServerStatus.Text = "Enter the database username (default: root)"
-        lblServerStatus.ForeColor = Color.Gray
-    End Sub
-
-    Private Sub txtPassword_Enter(sender As Object, e As EventArgs) Handles txtPassword.Enter
-        lblServerStatus.Text = "Enter the database password (leave empty for no password)"
-        lblServerStatus.ForeColor = Color.Gray
-    End Sub
-
-
 
 End Class

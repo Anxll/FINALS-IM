@@ -283,7 +283,6 @@ Public Class UsersAccounts
         RoundButton(Staffbtn)
         RoundButton(Employeesbtn)
         SetActiveButton(AllUsersbtn)
-        RoundButton(AddEdit)
     End Sub
 
     Private Sub AddEdit_Click(sender As Object, e As EventArgs) Handles AddEdit.Click

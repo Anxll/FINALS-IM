@@ -1024,7 +1024,7 @@ Partial Class Dashboard
         Me.AutoScroll = True
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1267, 749)
+        Me.ClientSize = New System.Drawing.Size(1113, 749)
         Me.Controls.Add(Me.RoundedPane223)
         Me.Controls.Add(Me.lblTitle)
         Me.Controls.Add(Me.RoundedPane219)

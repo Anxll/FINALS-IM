@@ -14,7 +14,7 @@ Public Class Reports
         childForm.AutoScroll = False
         childForm.AutoSize = True
         childForm.AutoSizeMode = AutoSizeMode.GrowAndShrink
-        childForm.Dock = DockStyle.Fill
+        childForm.Dock = DockStyle.None
 
         ' Add to panel and show
         Panel1.Controls.Add(childForm)
@@ -54,7 +54,6 @@ Public Class Reports
         FlowLayoutPanel1.Top = 80   'Adjust below your label
         FlowLayoutPanel1.Left = 20
         FlowLayoutPanel1.Width = Me.ClientSize.Width - 320
-
         FlowLayoutPanel1.Height = 70
 
         FlowLayoutPanel1.AutoSize = False
@@ -76,18 +75,12 @@ Public Class Reports
 
         ' Bring FlowLayoutPanel forward so buttons are visible
         FlowLayoutPanel1.BringToFront()
+
+        ' === LOAD DEFAULT PAGE ===
         LoadFormIntoPanel(New FormSales())
         HighlightActiveButton(btnSales)
-
     End Sub
 
-
-
-    Public Sub ResetToDefault()
-        LoadFormIntoPanel(New FormSales())
-        HighlightActiveButton(btnSales)
-        reportPeriod.SelectedIndex = 0 ' Reset to Daily
-    End Sub
     ' === APPLY ROUNDED CORNERS TO CONTROL ===
     Private Sub ApplyRoundedCorners(ctrl As Control, radius As Integer)
         Dim gp As New GraphicsPath()
@@ -152,8 +145,8 @@ Public Class Reports
         activeBtn.Region = New Region(gp)
     End Sub
 
-    Private Sub ComboBox_DrawItem(sender As Object, e As DrawItemEventArgs)
-
+    Private Sub ComboBox_DrawItem(sender As Object, e As DrawItemEventArgs) _
+       Handles reportPeriod.DrawItem
 
         If e.Index < 0 Then Return
         Dim cmb As ComboBox = DirectCast(sender, ComboBox)
@@ -164,7 +157,7 @@ Public Class Reports
 
 
     ' === PERIOD SELECTION CHANGED ===
-    Private Sub reportPeriod_SelectedIndexChanged(sender As Object, e As EventArgs)
+    Private Sub reportPeriod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles reportPeriod.SelectedIndexChanged
         ' Update the shared property
         SelectedPeriod = reportPeriod.SelectedItem.ToString()
 
@@ -228,6 +221,7 @@ Public Class Reports
                 Return dateValue.ToString()
         End Select
     End Function
+
     Private Sub LoadDefaultForm()
         LoadFormIntoPanel(New FormSales())
         HighlightActiveButton(btnSales)

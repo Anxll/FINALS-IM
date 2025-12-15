@@ -200,8 +200,8 @@ Public Class ReservationPayment
 
         ' Other formatting
         Reservation.RowHeadersVisible = False
-        Reservation.DefaultCellStyle.Font = New Font("Segoe UI", 10)
-        Reservation.ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI Semibold", 10)
+        Reservation.DefaultCellStyle.Font = New Font("Segoe UI", 8.5)
+        Reservation.ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI Semibold", 9)
         Reservation.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(40, 60, 85)
         Reservation.ColumnHeadersDefaultCellStyle.ForeColor = Color.White
         Reservation.EnableHeadersVisualStyles = False
@@ -392,7 +392,7 @@ Public Class ReservationPayment
     ' REFRESH
     ' =============================================================
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
-        txtSearch.Clear()
+        txtSearch.Text = ""
         LoadReservationPayments()
         UpdateTotal()
     End Sub

@@ -22,20 +22,23 @@ Partial Class Feedback
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.btnExport = New System.Windows.Forms.Button()
-        Me.btnDelete = New System.Windows.Forms.Button()
-        Me.btnViewDetails = New System.Windows.Forms.Button()
-        Me.btnRefresh = New System.Windows.Forms.Button()
-        Me.txtSearch = New System.Windows.Forms.TextBox()
+        Me.btnExport = New ReaLTaiizor.Controls.Button()
+        Me.btnDelete = New ReaLTaiizor.Controls.Button()
+        Me.btnViewDetails = New ReaLTaiizor.Controls.Button()
+        Me.btnRefresh = New ReaLTaiizor.Controls.Button()
+        Me.txtSearch = New ReaLTaiizor.Controls.BigTextBox()
         Me.lblSearch = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.btnViewAll = New System.Windows.Forms.Button()
-        Me.btnViewRejected = New System.Windows.Forms.Button()
-        Me.btnViewApproved = New System.Windows.Forms.Button()
-        Me.btnViewPending = New System.Windows.Forms.Button()
+        Me.btnViewAll = New ReaLTaiizor.Controls.Button()
+        Me.btnViewRejected = New ReaLTaiizor.Controls.Button()
+        Me.btnViewApproved = New ReaLTaiizor.Controls.Button()
+        Me.btnViewPending = New ReaLTaiizor.Controls.Button()
         Me.lblFilter = New System.Windows.Forms.Label()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Panel4 = New System.Windows.Forms.Panel()
@@ -54,7 +57,7 @@ Partial Class Feedback
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1190, 79)
+        Me.Panel1.Size = New System.Drawing.Size(1113, 79)
         Me.Panel1.TabIndex = 0
         '
         'lblTitle
@@ -81,80 +84,113 @@ Partial Class Feedback
         Me.Panel2.Location = New System.Drawing.Point(0, 79)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Padding = New System.Windows.Forms.Padding(9)
-        Me.Panel2.Size = New System.Drawing.Size(1190, 63)
+        Me.Panel2.Size = New System.Drawing.Size(1113, 63)
         Me.Panel2.TabIndex = 1
         '
         'btnExport
         '
-        Me.btnExport.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.btnExport.FlatAppearance.BorderSize = 0
-        Me.btnExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnExport.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnExport.ForeColor = System.Drawing.Color.White
-        Me.btnExport.Location = New System.Drawing.Point(924, 12)
+        Me.btnExport.BackColor = System.Drawing.Color.Transparent
+        Me.btnExport.BorderColor = System.Drawing.Color.Transparent
+        Me.btnExport.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnExport.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnExport.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnExport.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnExport.Image = Nothing
+        Me.btnExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnExport.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnExport.Location = New System.Drawing.Point(885, 23)
         Me.btnExport.Name = "btnExport"
-        Me.btnExport.Size = New System.Drawing.Size(105, 30)
-        Me.btnExport.TabIndex = 5
+        Me.btnExport.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnExport.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnExport.Size = New System.Drawing.Size(109, 36)
+        Me.btnExport.TabIndex = 11
         Me.btnExport.Text = "Export to CSV"
-        Me.btnExport.UseVisualStyleBackColor = False
+        Me.btnExport.TextAlignment = System.Drawing.StringAlignment.Center
         '
         'btnDelete
         '
-        Me.btnDelete.BackColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(69, Byte), Integer))
-        Me.btnDelete.FlatAppearance.BorderSize = 0
-        Me.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnDelete.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnDelete.ForeColor = System.Drawing.Color.White
-        Me.btnDelete.Location = New System.Drawing.Point(818, 13)
+        Me.btnDelete.BackColor = System.Drawing.Color.Transparent
+        Me.btnDelete.BorderColor = System.Drawing.Color.Transparent
+        Me.btnDelete.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnDelete.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnDelete.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnDelete.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnDelete.Image = Nothing
+        Me.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnDelete.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(69, Byte), Integer))
+        Me.btnDelete.Location = New System.Drawing.Point(1000, 23)
         Me.btnDelete.Name = "btnDelete"
-        Me.btnDelete.Size = New System.Drawing.Size(100, 30)
-        Me.btnDelete.TabIndex = 4
+        Me.btnDelete.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnDelete.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnDelete.Size = New System.Drawing.Size(69, 36)
+        Me.btnDelete.TabIndex = 9
         Me.btnDelete.Text = "Delete"
-        Me.btnDelete.UseVisualStyleBackColor = False
+        Me.btnDelete.TextAlignment = System.Drawing.StringAlignment.Center
         '
         'btnViewDetails
         '
-        Me.btnViewDetails.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(167, Byte), Integer), CType(CType(69, Byte), Integer))
-        Me.btnViewDetails.FlatAppearance.BorderSize = 0
-        Me.btnViewDetails.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnViewDetails.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnViewDetails.ForeColor = System.Drawing.Color.White
-        Me.btnViewDetails.Location = New System.Drawing.Point(707, 13)
+        Me.btnViewDetails.BackColor = System.Drawing.Color.Transparent
+        Me.btnViewDetails.BorderColor = System.Drawing.Color.Transparent
+        Me.btnViewDetails.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnViewDetails.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewDetails.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewDetails.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnViewDetails.Image = Nothing
+        Me.btnViewDetails.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnViewDetails.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(167, Byte), Integer), CType(CType(69, Byte), Integer))
+        Me.btnViewDetails.Location = New System.Drawing.Point(775, 23)
         Me.btnViewDetails.Name = "btnViewDetails"
-        Me.btnViewDetails.Size = New System.Drawing.Size(105, 30)
-        Me.btnViewDetails.TabIndex = 3
+        Me.btnViewDetails.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewDetails.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewDetails.Size = New System.Drawing.Size(104, 36)
+        Me.btnViewDetails.TabIndex = 10
         Me.btnViewDetails.Text = "View Details"
-        Me.btnViewDetails.UseVisualStyleBackColor = False
+        Me.btnViewDetails.TextAlignment = System.Drawing.StringAlignment.Center
         '
         'btnRefresh
         '
-        Me.btnRefresh.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.btnRefresh.FlatAppearance.BorderSize = 0
-        Me.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnRefresh.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnRefresh.ForeColor = System.Drawing.Color.White
-        Me.btnRefresh.Location = New System.Drawing.Point(600, 13)
+        Me.btnRefresh.BackColor = System.Drawing.Color.Transparent
+        Me.btnRefresh.BorderColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnRefresh.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnRefresh.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnRefresh.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnRefresh.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnRefresh.Image = Nothing
+        Me.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnRefresh.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(36, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(62, Byte), Integer))
+        Me.btnRefresh.Location = New System.Drawing.Point(665, 22)
         Me.btnRefresh.Name = "btnRefresh"
-        Me.btnRefresh.Size = New System.Drawing.Size(100, 30)
-        Me.btnRefresh.TabIndex = 2
+        Me.btnRefresh.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnRefresh.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnRefresh.Size = New System.Drawing.Size(104, 36)
+        Me.btnRefresh.TabIndex = 8
         Me.btnRefresh.Text = "Refresh"
-        Me.btnRefresh.UseVisualStyleBackColor = False
+        Me.btnRefresh.TextAlignment = System.Drawing.StringAlignment.Center
         '
         'txtSearch
         '
-        Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.txtSearch.Location = New System.Drawing.Point(69, 15)
+        Me.txtSearch.BackColor = System.Drawing.Color.Transparent
+        Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.txtSearch.Image = Nothing
+        Me.txtSearch.Location = New System.Drawing.Point(39, 21)
+        Me.txtSearch.MaxLength = 32767
+        Me.txtSearch.Multiline = False
         Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(515, 25)
-        Me.txtSearch.TabIndex = 1
+        Me.txtSearch.ReadOnly = False
+        Me.txtSearch.Size = New System.Drawing.Size(488, 38)
+        Me.txtSearch.TabIndex = 6
+        Me.txtSearch.Text = "Search..."
+        Me.txtSearch.TextAlignment = System.Windows.Forms.HorizontalAlignment.Left
+        Me.txtSearch.UseSystemPasswordChar = False
         '
         'lblSearch
         '
         Me.lblSearch.AutoSize = True
-        Me.lblSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
-        Me.lblSearch.Location = New System.Drawing.Point(11, 17)
+        Me.lblSearch.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.lblSearch.Location = New System.Drawing.Point(41, 4)
         Me.lblSearch.Name = "lblSearch"
-        Me.lblSearch.Size = New System.Drawing.Size(58, 19)
+        Me.lblSearch.Size = New System.Drawing.Size(46, 15)
         Me.lblSearch.TabIndex = 0
         Me.lblSearch.Text = "Search:"
         '
@@ -170,72 +206,97 @@ Partial Class Feedback
         Me.Panel3.Location = New System.Drawing.Point(0, 142)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Padding = New System.Windows.Forms.Padding(9)
-        Me.Panel3.Size = New System.Drawing.Size(1190, 53)
+        Me.Panel3.Size = New System.Drawing.Size(1113, 64)
         Me.Panel3.TabIndex = 2
         '
         'btnViewAll
         '
-        Me.btnViewAll.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.btnViewAll.FlatAppearance.BorderSize = 0
-        Me.btnViewAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnViewAll.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnViewAll.ForeColor = System.Drawing.Color.White
-        Me.btnViewAll.Location = New System.Drawing.Point(466, 10)
+        Me.btnViewAll.BackColor = System.Drawing.Color.Transparent
+        Me.btnViewAll.BorderColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewAll.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnViewAll.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewAll.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewAll.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnViewAll.Image = Nothing
+        Me.btnViewAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnViewAll.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(36, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(62, Byte), Integer))
+        Me.btnViewAll.Location = New System.Drawing.Point(368, 21)
         Me.btnViewAll.Name = "btnViewAll"
-        Me.btnViewAll.Size = New System.Drawing.Size(100, 30)
-        Me.btnViewAll.TabIndex = 4
+        Me.btnViewAll.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewAll.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewAll.Size = New System.Drawing.Size(68, 36)
+        Me.btnViewAll.TabIndex = 12
         Me.btnViewAll.Text = "All"
-        Me.btnViewAll.UseVisualStyleBackColor = False
+        Me.btnViewAll.TextAlignment = System.Drawing.StringAlignment.Center
         '
         'btnViewRejected
         '
-        Me.btnViewRejected.BackColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(69, Byte), Integer))
-        Me.btnViewRejected.FlatAppearance.BorderSize = 0
-        Me.btnViewRejected.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnViewRejected.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnViewRejected.ForeColor = System.Drawing.Color.White
-        Me.btnViewRejected.Location = New System.Drawing.Point(360, 10)
+        Me.btnViewRejected.BackColor = System.Drawing.Color.Transparent
+        Me.btnViewRejected.BorderColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewRejected.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnViewRejected.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewRejected.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewRejected.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnViewRejected.Image = Nothing
+        Me.btnViewRejected.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnViewRejected.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(36, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(62, Byte), Integer))
+        Me.btnViewRejected.Location = New System.Drawing.Point(258, 21)
         Me.btnViewRejected.Name = "btnViewRejected"
-        Me.btnViewRejected.Size = New System.Drawing.Size(100, 30)
-        Me.btnViewRejected.TabIndex = 3
+        Me.btnViewRejected.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewRejected.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewRejected.Size = New System.Drawing.Size(104, 36)
+        Me.btnViewRejected.TabIndex = 13
         Me.btnViewRejected.Text = "Rejected"
-        Me.btnViewRejected.UseVisualStyleBackColor = False
+        Me.btnViewRejected.TextAlignment = System.Drawing.StringAlignment.Center
         '
         'btnViewApproved
         '
-        Me.btnViewApproved.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(167, Byte), Integer), CType(CType(69, Byte), Integer))
-        Me.btnViewApproved.FlatAppearance.BorderSize = 0
-        Me.btnViewApproved.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnViewApproved.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnViewApproved.ForeColor = System.Drawing.Color.White
-        Me.btnViewApproved.Location = New System.Drawing.Point(254, 11)
+        Me.btnViewApproved.BackColor = System.Drawing.Color.Transparent
+        Me.btnViewApproved.BorderColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewApproved.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnViewApproved.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewApproved.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewApproved.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnViewApproved.Image = Nothing
+        Me.btnViewApproved.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnViewApproved.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(36, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(62, Byte), Integer))
+        Me.btnViewApproved.Location = New System.Drawing.Point(149, 21)
         Me.btnViewApproved.Name = "btnViewApproved"
-        Me.btnViewApproved.Size = New System.Drawing.Size(100, 30)
-        Me.btnViewApproved.TabIndex = 2
+        Me.btnViewApproved.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewApproved.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewApproved.Size = New System.Drawing.Size(104, 36)
+        Me.btnViewApproved.TabIndex = 14
         Me.btnViewApproved.Text = "Approved"
-        Me.btnViewApproved.UseVisualStyleBackColor = False
+        Me.btnViewApproved.TextAlignment = System.Drawing.StringAlignment.Center
         '
         'btnViewPending
         '
-        Me.btnViewPending.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(193, Byte), Integer), CType(CType(7, Byte), Integer))
-        Me.btnViewPending.FlatAppearance.BorderSize = 0
-        Me.btnViewPending.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnViewPending.BackColor = System.Drawing.Color.Transparent
+        Me.btnViewPending.BorderColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewPending.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnViewPending.EnteredBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewPending.EnteredColor = System.Drawing.Color.FromArgb(CType(CType(32, Byte), Integer), CType(CType(34, Byte), Integer), CType(CType(37, Byte), Integer))
         Me.btnViewPending.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.btnViewPending.ForeColor = System.Drawing.Color.White
-        Me.btnViewPending.Location = New System.Drawing.Point(148, 12)
+        Me.btnViewPending.Image = Nothing
+        Me.btnViewPending.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnViewPending.InactiveColor = System.Drawing.Color.FromArgb(CType(CType(36, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(62, Byte), Integer))
+        Me.btnViewPending.Location = New System.Drawing.Point(39, 21)
         Me.btnViewPending.Name = "btnViewPending"
-        Me.btnViewPending.Size = New System.Drawing.Size(100, 30)
-        Me.btnViewPending.TabIndex = 1
+        Me.btnViewPending.PressedBorderColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewPending.PressedColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(37, Byte), Integer))
+        Me.btnViewPending.Size = New System.Drawing.Size(104, 36)
+        Me.btnViewPending.TabIndex = 15
         Me.btnViewPending.Text = "Pending"
-        Me.btnViewPending.UseVisualStyleBackColor = False
+        Me.btnViewPending.TextAlignment = System.Drawing.StringAlignment.Center
         '
         'lblFilter
         '
         Me.lblFilter.AutoSize = True
-        Me.lblFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
-        Me.lblFilter.Location = New System.Drawing.Point(11, 16)
+        Me.lblFilter.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.lblFilter.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblFilter.Location = New System.Drawing.Point(41, 2)
         Me.lblFilter.Name = "lblFilter"
-        Me.lblFilter.Size = New System.Drawing.Size(91, 19)
+        Me.lblFilter.Size = New System.Drawing.Size(72, 15)
         Me.lblFilter.TabIndex = 0
         Me.lblFilter.Text = "Filter Status:"
         '
@@ -244,15 +305,39 @@ Partial Class Feedback
         Me.DataGridView1.AllowUserToAddRows = False
         Me.DataGridView1.AllowUserToDeleteRows = False
         Me.DataGridView1.BackgroundColor = System.Drawing.Color.White
+        Me.DataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridView1.Location = New System.Drawing.Point(0, 195)
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle2
+        Me.DataGridView1.Location = New System.Drawing.Point(39, 212)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView1.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowTemplate.Height = 25
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1190, 368)
+        Me.DataGridView1.Size = New System.Drawing.Size(1030, 463)
         Me.DataGridView1.TabIndex = 3
         '
         'Panel4
@@ -260,16 +345,17 @@ Partial Class Feedback
         Me.Panel4.BackColor = System.Drawing.Color.WhiteSmoke
         Me.Panel4.Controls.Add(Me.lblTotalReviews)
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel4.Location = New System.Drawing.Point(0, 563)
+        Me.Panel4.Location = New System.Drawing.Point(0, 686)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1190, 26)
+        Me.Panel4.Size = New System.Drawing.Size(1113, 26)
         Me.Panel4.TabIndex = 4
         '
         'lblTotalReviews
         '
         Me.lblTotalReviews.AutoSize = True
         Me.lblTotalReviews.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.lblTotalReviews.Location = New System.Drawing.Point(10, 6)
+        Me.lblTotalReviews.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblTotalReviews.Location = New System.Drawing.Point(38, 5)
         Me.lblTotalReviews.Name = "lblTotalReviews"
         Me.lblTotalReviews.Size = New System.Drawing.Size(97, 15)
         Me.lblTotalReviews.TabIndex = 0
@@ -279,7 +365,8 @@ Partial Class Feedback
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1190, 589)
+        Me.BackColor = System.Drawing.Color.GhostWhite
+        Me.ClientSize = New System.Drawing.Size(1113, 712)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.Panel3)
@@ -304,19 +391,19 @@ Partial Class Feedback
     Friend WithEvents Panel1 As Panel
     Friend WithEvents lblTitle As Label
     Friend WithEvents Panel2 As Panel
-    Friend WithEvents txtSearch As TextBox
     Friend WithEvents lblSearch As Label
-    Friend WithEvents btnRefresh As Button
-    Friend WithEvents btnViewDetails As Button
-    Friend WithEvents btnDelete As Button
     Friend WithEvents Panel3 As Panel
     Friend WithEvents lblFilter As Label
-    Friend WithEvents btnViewPending As Button
-    Friend WithEvents btnViewApproved As Button
-    Friend WithEvents btnViewRejected As Button
-    Friend WithEvents btnViewAll As Button
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents Panel4 As Panel
     Friend WithEvents lblTotalReviews As Label
-    Friend WithEvents btnExport As Button
+    Friend WithEvents txtSearch As ReaLTaiizor.Controls.BigTextBox
+    Friend WithEvents btnRefresh As ReaLTaiizor.Controls.Button
+    Friend WithEvents btnDelete As ReaLTaiizor.Controls.Button
+    Friend WithEvents btnExport As ReaLTaiizor.Controls.Button
+    Friend WithEvents btnViewDetails As ReaLTaiizor.Controls.Button
+    Friend WithEvents btnViewAll As ReaLTaiizor.Controls.Button
+    Friend WithEvents btnViewRejected As ReaLTaiizor.Controls.Button
+    Friend WithEvents btnViewApproved As ReaLTaiizor.Controls.Button
+    Friend WithEvents btnViewPending As ReaLTaiizor.Controls.Button
 End Class
