@@ -674,6 +674,8 @@
     <None Include="Resources\calendar_icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\arrow.png" />
+    <None Include="Resources\arrow-down.png" />
     <Content Include="Resources\search_icon.png" />
     <None Include="Resources\search_icon1.png" />
   </ItemGroup>

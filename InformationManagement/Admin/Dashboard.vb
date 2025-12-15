@@ -25,6 +25,7 @@ Public Class Dashboard
 
         LoadTotalOrders()
         LoadReservationChart()
+        LoadOrdersOverviewChart()
     End Sub
 
     Private Sub LoadDashboardData()
@@ -36,19 +37,70 @@ Public Class Dashboard
 
             ' Load charts and lists
             LoadSalesByChannel()
-
+            LoadTopProductsChart()      ' Make sure this is called
             LoadReservationChart()
-            LoadOrdersTrendChart() ' Add this line
-            LoadSalesChart()
+            LoadOrdersOverviewChart()
+            LoadAverageOrder()
             ConfigureChart2Clickable()
-            ConfigureMonthlyChartClickable()
-            ConfigureSalesChartClickable()
-            LoadProductPerformanceChart()
+            ConfigureChartTopProducts()
+            ConfigureChart2OrderTrends()
+
 
         Catch ex As Exception
             MessageBox.Show("Error loading dashboard: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+    ' ============================================
+    ' FILTERS COMBO BOX EVENT HANDLER
+    ' ============================================
+    Private Sub Filters_SelectedIndexChanged(sender As Object, e As EventArgs) Handles Filters.SelectedIndexChanged
+        Try
+            ' Reload dashboard data based on selected filter
+            LoadDashboardData()
+        Catch ex As Exception
+            MessageBox.Show("Error applying filter: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' ============================================
+    ' GET DATE FILTER SQL CONDITION
+    ' ============================================
+    Private Function GetDateFilterCondition(dateColumn As String) As String
+        Dim selectedFilter As String = If(Filters.SelectedItem?.ToString(), "Yearly")
+
+        Select Case selectedFilter
+            Case "Daily"
+                ' Today only
+                Return $"DATE({dateColumn}) = CURDATE()"
+
+            Case "Weekly"
+                ' Last 7 days
+                Return $"{dateColumn} >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)"
+
+            Case "Monthly"
+                ' Last 30 days
+                Return $"{dateColumn} >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)"
+
+            Case "Yearly"
+                ' Current year
+                Return $"YEAR({dateColumn}) = YEAR(CURDATE())"
+
+            Case Else
+                ' Default to current year
+                Return $"YEAR({dateColumn}) = YEAR(CURDATE())"
+        End Select
+    End Function
+
+    Private Sub Filters_DrawItem(sender As Object, e As DrawItemEventArgs)
+
+
+        If e.Index < 0 Then Return
+        Dim cmb As ComboBox = DirectCast(sender, ComboBox)
+        e.DrawBackground()
+        e.Graphics.DrawString(cmb.Items(e.Index).ToString(), cmb.Font, Brushes.Black, e.Bounds)
+        e.DrawFocusRectangle()
+    End Sub
+
 
     ' ============================================
     ' TOP METRICS
@@ -57,13 +109,16 @@ Public Class Dashboard
     Private Sub LoadTotalRevenue()
         Try
             openConn()
+            Dim dateFilter As String = GetDateFilterCondition("OrderDate")
+            Dim dateFilterPayment As String = GetDateFilterCondition("PaymentDate")
+
             ' Calculate from both Orders and Reservation Payments
-            cmd = New MySqlCommand("
+            cmd = New MySqlCommand($"
                 SELECT COALESCE(
-                    (SELECT SUM(TotalAmount) FROM orders WHERE OrderStatus = 'Completed'),
+                    (SELECT SUM(TotalAmount) FROM orders WHERE OrderStatus = 'Completed' AND {dateFilter}),
                     0
                 ) + COALESCE(
-                    (SELECT SUM(AmountPaid) FROM reservation_payments WHERE PaymentStatus = 'Completed'),
+                    (SELECT SUM(AmountPaid) FROM reservation_payments WHERE PaymentStatus = 'Completed' AND {dateFilterPayment}),
                     0
                 ) as TotalRevenue", conn)
 
@@ -79,20 +134,23 @@ Public Class Dashboard
     Private Sub LoadTotalOrders()
         Try
             openConn()
-            ' Count both POS and Website orders
-            cmd = New MySqlCommand("
-                SELECT COUNT(*) FROM orders 
-                WHERE OrderSource IN ('POS', 'Website')", conn)
+            Dim dateFilter As String = GetDateFilterCondition("OrderDate")
+
+            ' Count both POS and Website orders with proper filter
+            cmd = New MySqlCommand($"
+            SELECT COUNT(*) FROM orders 
+            WHERE OrderSource IN ('POS', 'Website') 
+            AND OrderStatus IN ('Completed', 'Served', 'Cancelled', 'Pending')
+            AND {dateFilter}", conn)
 
             Dim totalOrders As Integer = Convert.ToInt32(cmd.ExecuteScalar())
-            Label14.Text = totalOrders.ToString("#,##0")
+            lblTotalOrder.Text = totalOrders.ToString("#,##0")
             closeConn()
         Catch ex As Exception
-            Label14.Text = "0"
+            lblTotalOrder.Text = "0"
             closeConn()
         End Try
     End Sub
-
     Private Sub LoadActiveReservations()
         Try
             openConn()
@@ -103,13 +161,193 @@ Public Class Dashboard
                 AND EventDate >= CURDATE()", conn)
 
             Dim activeReservations As Integer = Convert.ToInt32(cmd.ExecuteScalar())
-            Label16.Text = activeReservations.ToString()
+            lblActiveReservations.Text = activeReservations.ToString()
             closeConn()
         Catch ex As Exception
-            Label16.Text = "0"
+            lblActiveReservations.Text = "0"
             closeConn()
         End Try
     End Sub
+    ' ============================================
+    ' ADD THESE METHODS TO YOUR Dashboard CLASS
+    ' ============================================
+
+
+
+    Private Sub LoadTopProductsChart()
+        Try
+            ' Configure chart first
+            ConfigureTopProductsChart()
+
+            ' Fetch and display data
+            Dim performanceData = FetchTopProductsData()
+            UpdateTopProductsChart(performanceData)
+        Catch ex As Exception
+            MessageBox.Show($"Unable to load top products chart.{Environment.NewLine}{ex.Message}",
+                        "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' ============================================
+    ' FETCH TOP PRODUCTS DATA WITH FILTER
+    ' ============================================
+    Private Function FetchTopProductsData() As DataTable
+        ' Get the appropriate date filters for both orders and reservations
+        Dim orderDateFilter As String = GetDateFilterCondition("o.OrderDate")
+        Dim reservationDateFilter As String = GetDateFilterCondition("r.ReservationDate")
+
+        Dim query As String = $"
+SELECT ProductName,
+       SUM(Quantity) AS TotalQuantity,
+       SUM(TotalPrice) AS Revenue
+FROM (
+       -- Reservation items with Confirmed or Served status
+       SELECT ri.ProductName,
+              ri.Quantity,
+              ri.TotalPrice,
+              r.ReservationDate AS OrderDate
+       FROM reservation_items ri
+       INNER JOIN reservations r ON ri.ReservationID = r.ReservationID
+       WHERE r.ReservationStatus IN ('Confirmed', 'Served')
+       AND {reservationDateFilter}
+       
+       UNION ALL
+       
+       -- Order items with Served or Completed status
+       SELECT oi.ProductName,
+              oi.Quantity,
+              (oi.Quantity * oi.UnitPrice) AS TotalPrice,
+              o.OrderDate
+       FROM order_items oi
+       INNER JOIN orders o ON oi.OrderID = o.OrderID
+       WHERE o.OrderStatus IN ('Served', 'Completed')
+       AND {orderDateFilter}
+     ) AS combined
+GROUP BY ProductName
+ORDER BY TotalQuantity DESC
+LIMIT 8;"
+
+        Dim dt As New DataTable()
+
+        Using connection As New MySqlConnection(strConnection)
+            connection.Open()
+            Using command As New MySqlCommand(query, connection)
+                Using reader = command.ExecuteReader()
+                    dt.Load(reader)
+                End Using
+            End Using
+        End Using
+
+        Return dt
+    End Function
+    ' ============================================
+    ' UPDATE TOP PRODUCTS CHART
+    ' ============================================
+    Private Sub ConfigureTopProductsChart()
+        ' Assuming your chart control is named ChartTopProducts
+        ChartTopProducts.Series.Clear()
+        ChartTopProducts.Titles.Clear()
+        ChartTopProducts.Legends.Clear()
+
+        If ChartTopProducts.ChartAreas.Count = 0 Then
+            ChartTopProducts.ChartAreas.Add(New ChartArea("ChartArea1"))
+        End If
+
+        Dim chartArea = ChartTopProducts.ChartAreas(0)
+        With chartArea
+            .AxisX.MajorGrid.Enabled = False
+            .AxisX.LabelStyle.Font = New Font("Segoe UI", 9.0F)
+            ' REMOVE THE INTERVAL AND INTERVALTYPE LINES
+            .AxisY.LabelStyle.Format = "#,##0"
+            .AxisY.LabelStyle.Font = New Font("Segoe UI", 9.0F)
+            .AxisY.MajorGrid.LineColor = Color.LightGray
+            .AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot
+            .BackColor = Color.White
+        End With
+
+        Dim series = ChartTopProducts.Series.Add("Quantity")
+        With series
+            .ChartType = SeriesChartType.Bar
+            .Color = Color.FromArgb(45, 45, 45)
+            .BorderWidth = 0
+            .IsValueShownAsLabel = False
+            .Font = New Font("Segoe UI", 9.0F)
+            ' REMOVE .IsXValueIndexed = True
+        End With
+
+        ChartTopProducts.Titles.Add(New Title With {
+        .Text = "Top Products",
+        .Alignment = ContentAlignment.TopLeft,
+        .Font = New Font("Segoe UI Semibold", 12.0F, FontStyle.Bold),
+        .ForeColor = Color.FromArgb(45, 45, 45)
+    })
+
+        ChartTopProducts.Titles.Add(New Title With {
+        .Text = "Best selling items by selected period",
+        .Alignment = ContentAlignment.TopLeft,
+        .Font = New Font("Segoe UI", 9.0F),
+        .ForeColor = Color.Gray,
+        .Docking = Docking.Top
+    })
+    End Sub
+
+    ' ============================================
+    ' UPDATE TOP PRODUCTS CHART
+    ' ============================================
+    Private Sub UpdateTopProductsChart(data As DataTable)
+        Dim series = ChartTopProducts.Series("Quantity")
+        series.Points.Clear()
+
+        If data.Rows.Count = 0 Then
+            ' Show "No data" message
+            ChartTopProducts.Annotations.Clear()
+            Dim noDataAnnotation As New TextAnnotation()
+            noDataAnnotation.Text = "No Product Data Available"
+            noDataAnnotation.Font = New Font("Segoe UI", 12, FontStyle.Bold)
+            noDataAnnotation.ForeColor = Color.Gray
+            noDataAnnotation.X = 50
+            noDataAnnotation.Y = 50
+            noDataAnnotation.Alignment = ContentAlignment.MiddleCenter
+            ChartTopProducts.Annotations.Add(noDataAnnotation)
+            Return
+        End If
+
+        ' Clear any previous annotations
+        ChartTopProducts.Annotations.Clear()
+
+        ' Reverse order for bar chart (highest at top)
+        For i As Integer = data.Rows.Count - 1 To 0 Step -1
+            Dim row = data.Rows(i)
+            Dim productName = row("ProductName").ToString()
+            Dim quantity = If(IsDBNull(row("TotalQuantity")), 0, Convert.ToInt32(row("TotalQuantity")))
+            series.Points.AddXY(productName, quantity)
+        Next
+    End Sub
+
+
+
+    Private Sub LoadAverageOrder()
+        Try
+            openConn()
+            Dim dateFilter As String = GetDateFilterCondition("o.OrderDate")
+
+            ' Calculate average order value from completed/served orders
+            ' Using actual TotalAmount from orders table
+            cmd = New MySqlCommand($"
+            SELECT COALESCE(AVG(o.TotalAmount), 0) as AverageOrder
+            FROM orders o
+            WHERE o.OrderStatus IN ('Served', 'Completed')
+            AND {dateFilter}", conn)
+
+            Dim avgOrder As Decimal = Convert.ToDecimal(cmd.ExecuteScalar())
+            lblAverageOrder.Text = "₱" & avgOrder.ToString("N2")
+            closeConn()
+        Catch ex As Exception
+            lblAverageOrder.Text = "₱0.00"
+            closeConn()
+        End Try
+    End Sub
+
 
     ' ============================================
     ' FIXED: SALES BY CHANNEL - Now captures actual prices from orders
@@ -119,14 +357,19 @@ Public Class Dashboard
         Try
             openConn()
 
-            ' Get sales from completed orders grouped by type
-            cmd = New MySqlCommand("
-            SELECT 
-                OrderType,
-                COALESCE(SUM(TotalAmount), 0) as TotalSales
-            FROM orders 
-            WHERE OrderStatus = 'Completed'
-            GROUP BY OrderType", conn)
+            ' Get date filters for orders and payments
+            Dim orderDateFilter As String = GetDateFilterCondition("o.OrderDate")
+            Dim paymentDateFilter As String = GetDateFilterCondition("rp.PaymentDate")
+
+            ' Get sales from completed orders grouped by type with filter
+            cmd = New MySqlCommand($"
+        SELECT 
+            o.OrderType,
+            COALESCE(SUM(o.TotalAmount), 0) as TotalSales
+        FROM orders o
+        WHERE o.OrderStatus = 'Completed'
+        AND {orderDateFilter}
+        GROUP BY o.OrderType", conn)
 
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
 
@@ -149,11 +392,13 @@ Public Class Dashboard
             End While
             reader.Close()
 
-            ' Get Catering/Reservation revenue from completed payments
-            cmd = New MySqlCommand("
-            SELECT COALESCE(SUM(AmountPaid), 0) as CateringRevenue
-            FROM reservation_payments 
-            WHERE PaymentStatus = 'Completed'", conn)
+            ' Get Catering/Reservation revenue from completed payments with filter
+            cmd = New MySqlCommand($"
+        SELECT COALESCE(SUM(rp.AmountPaid), 0) as CateringRevenue
+        FROM reservation_payments rp
+        WHERE rp.PaymentStatus = 'Completed'
+        AND {paymentDateFilter}", conn)
+
             Dim cateringRevenue As Decimal = Convert.ToDecimal(cmd.ExecuteScalar())
 
             closeConn()
@@ -161,14 +406,16 @@ Public Class Dashboard
             ' Calculate total and percentages
             Dim totalSales As Decimal = dineInSales + takeoutSales + onlineSales + cateringRevenue
 
+            ' Clear chart and annotations first - ADD THIS BEFORE THE IF STATEMENT
+            Chart2.Series(0).Points.Clear()
+            Chart2.Annotations.Clear()
+
             If totalSales > 0 Then
                 Dim dineInPercent As Decimal = (dineInSales / totalSales) * 100
                 Dim takeoutPercent As Decimal = ((takeoutSales + onlineSales) / totalSales) * 100
                 Dim cateringPercent As Decimal = (cateringRevenue / totalSales) * 100
 
-                ' Clear and update chart with actual values (not percentages)
-                Chart2.Series(0).Points.Clear()
-
+                ' Add data points
                 Dim point1 As New DataVisualization.Charting.DataPoint()
                 point1.SetValueXY("Dine-in", dineInSales)
                 point1.Color = Color.FromArgb(165, 149, 233)
@@ -211,10 +458,6 @@ Public Class Dashboard
                 lblValueCatering.Text = "₱" & cateringRevenue.ToString("N2")
             Else
                 ' No data yet - show zeros and add "No data" label
-                Chart2.Series(0).Points.Clear()
-
-                ' Add "No Data Available" text annotation to chart
-                Chart2.Annotations.Clear()
                 Dim noDataAnnotation As New TextAnnotation()
                 noDataAnnotation.Text = "No Sales Data Available"
                 noDataAnnotation.Font = New Font("Segoe UI", 12, FontStyle.Bold)
@@ -239,7 +482,363 @@ Public Class Dashboard
             closeConn()
         End Try
     End Sub
+    Private Sub ComboBox_DrawItem(sender As Object, e As DrawItemEventArgs)
 
+
+        If e.Index < 0 Then Return
+        Dim cmb As ComboBox = DirectCast(sender, ComboBox)
+        e.DrawBackground()
+        e.Graphics.DrawString(cmb.Items(e.Index).ToString(), cmb.Font, Brushes.Black, e.Bounds)
+        e.DrawFocusRectangle()
+    End Sub
+
+    ' ============================================
+    ' ORDERS OVERVIEW CHART
+    ' ============================================
+
+    Private Sub LoadOrdersOverviewChart()
+        Try
+            ' Configure chart appearance
+            ConfigureOrdersOverviewChart()
+
+            ' Load and display data
+            LoadOrdersOverviewData()
+
+        Catch ex As Exception
+            MessageBox.Show("Error loading orders overview chart: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    Private Sub ConfigureOrdersOverviewChart()
+        ' Clear existing configuration
+        OrdersOverviewChart.Series.Clear()
+        OrdersOverviewChart.Titles.Clear()
+        OrdersOverviewChart.Legends.Clear()
+
+        ' Ensure chart area exists
+        If OrdersOverviewChart.ChartAreas.Count = 0 Then
+            OrdersOverviewChart.ChartAreas.Add(New ChartArea("MainArea"))
+        End If
+
+        Dim chartArea = OrdersOverviewChart.ChartAreas(0)
+        With chartArea
+            ' X-Axis configuration
+            .AxisX.MajorGrid.Enabled = False
+            .AxisX.LabelStyle.Font = New Font("Segoe UI", 9.0F)
+            .AxisX.LineColor = Color.LightGray
+            .AxisX.Interval = 1
+
+            ' Y-Axis configuration with default values
+            .AxisY.MajorGrid.LineColor = Color.LightGray
+            .AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot
+            .AxisY.LabelStyle.Font = New Font("Segoe UI", 9.0F)
+            .AxisY.LabelStyle.Format = "#,##0"
+            .AxisY.Minimum = 0
+            .AxisY.Maximum = 50  ' Set default maximum
+            .AxisY.Interval = 10  ' Set default interval
+
+            .BackColor = Color.White
+        End With
+
+        ' Create Completed Orders Series (Black bars)
+        Dim completedSeries = OrdersOverviewChart.Series.Add("Completed")
+        With completedSeries
+            .ChartType = SeriesChartType.Column
+            .Color = Color.FromArgb(0, 0, 0) ' Black
+            .BorderWidth = 0
+            .IsValueShownAsLabel = False
+        End With
+
+        ' Create Cancelled Orders Series (Gray bars)
+        Dim cancelledSeries = OrdersOverviewChart.Series.Add("Cancelled")
+        With cancelledSeries
+            .ChartType = SeriesChartType.Column
+            .Color = Color.FromArgb(209, 213, 219) ' Light gray
+            .BorderWidth = 0
+            .IsValueShownAsLabel = False
+        End With
+
+        ' Add title
+        OrdersOverviewChart.Titles.Add(New Title With {
+        .Text = "Orders Overview",
+        .Alignment = ContentAlignment.TopLeft,
+        .Font = New Font("Segoe UI Semibold", 11.0F, FontStyle.Bold),
+        .ForeColor = Color.FromArgb(51, 51, 51)
+    })
+
+        ' Add subtitle
+        OrdersOverviewChart.Titles.Add(New Title With {
+        .Text = "Weekly order statistics",
+        .Alignment = ContentAlignment.TopLeft,
+        .Font = New Font("Segoe UI", 8.5F, FontStyle.Regular),
+        .ForeColor = Color.Gray,
+        .Docking = Docking.Top
+    })
+
+        ' Add Legend
+        Dim legend As New Legend("StatusLegend")
+        With legend
+            .Docking = Docking.Bottom
+            .Alignment = StringAlignment.Center
+            .Font = New Font("Segoe UI", 8.5F)
+            .LegendStyle = LegendStyle.Row
+        End With
+        OrdersOverviewChart.Legends.Add(legend)
+    End Sub
+    Private Sub LoadOrdersOverviewData()
+        Try
+            openConn()
+
+            Dim selectedFilter As String = If(Filters.SelectedItem?.ToString(), "Yearly")
+            Dim labels As New List(Of String)
+            Dim completedData As New Dictionary(Of String, Integer)
+            Dim cancelledData As New Dictionary(Of String, Integer)
+            Dim sql As String = ""
+
+            Select Case selectedFilter
+                Case "Daily"
+                    ' Show hourly data for today
+                    labels.AddRange({"12AM", "3AM", "6AM", "9AM", "12PM", "3PM", "6PM", "9PM"})
+
+                    sql = "
+                SELECT 
+                    HOUR(OrderTime) AS Period,
+                    OrderStatus,
+                    COUNT(*) AS OrderCount
+                FROM orders
+                WHERE DATE(OrderDate) = CURDATE()
+                AND OrderStatus IN ('Completed', 'Cancelled', 'Served')
+                GROUP BY HOUR(OrderTime), OrderStatus"
+
+                    ' Initialize data
+                    For Each label In labels
+                        completedData(label) = 0
+                        cancelledData(label) = 0
+                    Next
+
+                    Using cmd As New MySqlCommand(sql, conn)
+                        Using reader As MySqlDataReader = cmd.ExecuteReader()
+                            While reader.Read()
+                                Dim hour As Integer = Convert.ToInt32(reader("Period"))
+                                Dim status As String = reader("OrderStatus").ToString()
+                                Dim count As Integer = Convert.ToInt32(reader("OrderCount"))
+
+                                ' Map hour to label (group into 3-hour blocks)
+                                Dim labelIndex As Integer = hour \ 3
+                                If labelIndex >= 0 AndAlso labelIndex < labels.Count Then
+                                    If status = "Completed" OrElse status = "Served" Then
+                                        completedData(labels(labelIndex)) += count
+                                    ElseIf status = "Cancelled" Then
+                                        cancelledData(labels(labelIndex)) += count
+                                    End If
+                                End If
+                            End While
+                        End Using
+                    End Using
+
+                Case "Weekly"
+                    ' Show daily data for last 7 days
+                    For i As Integer = 6 To 0 Step -1
+                        labels.Add(Format(Date.Today.AddDays(-i), "ddd"))
+                    Next
+
+                    sql = "
+                SELECT 
+                    DATE(OrderDate) AS Period,
+                    OrderStatus,
+                    COUNT(*) AS OrderCount
+                FROM orders
+                WHERE OrderDate >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+                AND OrderStatus IN ('Completed', 'Cancelled', 'Served')
+                GROUP BY DATE(OrderDate), OrderStatus
+                ORDER BY DATE(OrderDate)"
+
+                    ' Initialize data
+                    For Each label In labels
+                        completedData(label) = 0
+                        cancelledData(label) = 0
+                    Next
+
+                    Using cmd As New MySqlCommand(sql, conn)
+                        Using reader As MySqlDataReader = cmd.ExecuteReader()
+                            While reader.Read()
+                                Dim orderDate As Date = Convert.ToDateTime(reader("Period"))
+                                Dim status As String = reader("OrderStatus").ToString()
+                                Dim count As Integer = Convert.ToInt32(reader("OrderCount"))
+                                Dim dayLabel As String = Format(orderDate, "ddd")
+
+                                If labels.Contains(dayLabel) Then
+                                    If status = "Completed" OrElse status = "Served" Then
+                                        completedData(dayLabel) += count
+                                    ElseIf status = "Cancelled" Then
+                                        cancelledData(dayLabel) += count
+                                    End If
+                                End If
+                            End While
+                        End Using
+                    End Using
+
+                Case "Monthly"
+                    ' Show weekly data for last 30 days (4 weeks)
+                    labels.AddRange({"Week 1", "Week 2", "Week 3", "Week 4"})
+
+                    sql = "
+                SELECT 
+                    FLOOR(DATEDIFF(CURDATE(), OrderDate) / 7) AS WeekNum,
+                    OrderStatus,
+                    COUNT(*) AS OrderCount
+                FROM orders
+                WHERE OrderDate >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                AND OrderStatus IN ('Completed', 'Cancelled', 'Served')
+                GROUP BY FLOOR(DATEDIFF(CURDATE(), OrderDate) / 7), OrderStatus"
+
+                    ' Initialize data
+                    For Each label In labels
+                        completedData(label) = 0
+                        cancelledData(label) = 0
+                    Next
+
+                    Using cmd As New MySqlCommand(sql, conn)
+                        Using reader As MySqlDataReader = cmd.ExecuteReader()
+                            While reader.Read()
+                                Dim weekNum As Integer = Convert.ToInt32(reader("WeekNum"))
+                                Dim status As String = reader("OrderStatus").ToString()
+                                Dim count As Integer = Convert.ToInt32(reader("OrderCount"))
+
+                                ' Reverse week numbering (0 = current week = Week 4)
+                                Dim labelIndex As Integer = 3 - weekNum
+                                If labelIndex >= 0 AndAlso labelIndex < labels.Count Then
+                                    If status = "Completed" OrElse status = "Served" Then
+                                        completedData(labels(labelIndex)) += count
+                                    ElseIf status = "Cancelled" Then
+                                        cancelledData(labels(labelIndex)) += count
+                                    End If
+                                End If
+                            End While
+                        End Using
+                    End Using
+
+                Case "Yearly"
+                    ' Show monthly data for current year
+                    For i As Integer = 1 To 12
+                        labels.Add(New DateTime(Date.Today.Year, i, 1).ToString("MMM"))
+                    Next
+
+                    sql = "
+                SELECT 
+                    MONTH(OrderDate) AS MonthNum,
+                    OrderStatus,
+                    COUNT(*) AS OrderCount
+                FROM orders
+                WHERE YEAR(OrderDate) = YEAR(CURDATE())
+                AND OrderStatus IN ('Completed', 'Cancelled', 'Served')
+                GROUP BY MONTH(OrderDate), OrderStatus
+                ORDER BY MONTH(OrderDate)"
+
+                    ' Initialize data
+                    For Each label In labels
+                        completedData(label) = 0
+                        cancelledData(label) = 0
+                    Next
+
+                    Using cmd As New MySqlCommand(sql, conn)
+                        Using reader As MySqlDataReader = cmd.ExecuteReader()
+                            While reader.Read()
+                                Dim monthNum As Integer = Convert.ToInt32(reader("MonthNum"))
+                                Dim status As String = reader("OrderStatus").ToString()
+                                Dim count As Integer = Convert.ToInt32(reader("OrderCount"))
+
+                                If monthNum >= 1 AndAlso monthNum <= 12 Then
+                                    Dim label As String = labels(monthNum - 1)
+                                    If status = "Completed" OrElse status = "Served" Then
+                                        completedData(label) += count
+                                    ElseIf status = "Cancelled" Then
+                                        cancelledData(label) += count
+                                    End If
+                                End If
+                            End While
+                        End Using
+                    End Using
+            End Select
+
+            closeConn()
+
+            ' Update chart with data
+            UpdateOrdersOverviewChart(labels, completedData, cancelledData)
+
+        Catch ex As Exception
+            MessageBox.Show("Error loading orders overview data: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            closeConn()
+        End Try
+    End Sub
+
+    Private Sub UpdateOrdersOverviewChart(labels As List(Of String),
+                                      completedData As Dictionary(Of String, Integer),
+                                      cancelledData As Dictionary(Of String, Integer))
+
+        Dim completedSeries As Series = OrdersOverviewChart.Series("Completed")
+        Dim cancelledSeries As Series = OrdersOverviewChart.Series("Cancelled")
+
+        completedSeries.Points.Clear()
+        cancelledSeries.Points.Clear()
+
+        If labels.Count = 0 Then
+            ' Set default axis values for empty data
+            OrdersOverviewChart.ChartAreas(0).AxisY.Minimum = 0
+            OrdersOverviewChart.ChartAreas(0).AxisY.Maximum = 50
+            OrdersOverviewChart.ChartAreas(0).AxisY.Interval = 10
+
+            completedSeries.Points.AddXY("No data", 0)
+            cancelledSeries.Points.AddXY("No data", 0)
+            Return
+        End If
+
+        ' Find max value for Y-axis scaling
+        Dim maxValue As Integer = 0
+        For Each label In labels
+            Dim completedCount As Integer = If(completedData.ContainsKey(label), completedData(label), 0)
+            Dim cancelledCount As Integer = If(cancelledData.ContainsKey(label), cancelledData(label), 0)
+            Dim total As Integer = completedCount + cancelledCount
+            If total > maxValue Then maxValue = total
+        Next
+
+        ' Set Y-axis with proper values (avoid zero maximum)
+        With OrdersOverviewChart.ChartAreas(0).AxisY
+            .Minimum = 0
+
+            If maxValue = 0 Then
+                ' No data, set reasonable default
+                .Maximum = 50
+                .Interval = 10
+            Else
+                ' Calculate nice maximum and interval
+                Dim calculatedMax As Double = Math.Ceiling(maxValue * 1.3) ' 30% padding
+
+                ' Round up to nearest nice number
+                If calculatedMax <= 10 Then
+                    .Maximum = 10
+                    .Interval = 2
+                ElseIf calculatedMax <= 50 Then
+                    .Maximum = Math.Ceiling(calculatedMax / 10) * 10
+                    .Interval = Math.Max(5, Math.Ceiling(.Maximum / 5))
+                ElseIf calculatedMax <= 100 Then
+                    .Maximum = Math.Ceiling(calculatedMax / 20) * 20
+                    .Interval = Math.Max(10, Math.Ceiling(.Maximum / 5))
+                Else
+                    .Maximum = Math.Ceiling(calculatedMax / 50) * 50
+                    .Interval = Math.Max(25, Math.Ceiling(.Maximum / 4))
+                End If
+            End If
+        End With
+
+        ' Add data points
+        For Each label In labels
+            Dim completedCount As Integer = If(completedData.ContainsKey(label), completedData(label), 0)
+            Dim cancelledCount As Integer = If(cancelledData.ContainsKey(label), cancelledData(label), 0)
+
+            completedSeries.Points.AddXY(label, completedCount)
+            cancelledSeries.Points.AddXY(label, cancelledCount)
+        Next
+    End Sub
     ' ============================================
 
 
@@ -247,11 +846,13 @@ Public Class Dashboard
     ' SIMPLIFIED: Call FormReservationStatus chart rendering directly
     ' Add this to Dashboard.vb, replacing LoadReservationChart method
     ' ============================================
-
     Private Sub LoadReservationChart()
         Try
-            ' Simple approach: Reuse FormReservationStatus chart rendering logic
-            Dim reservationStatusData = GetReservationStatusData("Monthly")
+            ' Get the selected filter period
+            Dim selectedFilter As String = If(Filters.SelectedItem?.ToString(), "Yearly")
+
+            ' Get reservation data based on filter
+            Dim reservationStatusData = GetReservationStatusData(selectedFilter)
             RenderReservationChart(ChartReservations, reservationStatusData)
 
         Catch ex As Exception
@@ -275,8 +876,8 @@ Public Class Dashboard
         Try
             openConn()
 
-            ' Use same query logic as FormReservationStatus
-            Dim dateFilter As String = "MONTH(ReservationDate) = MONTH(CURDATE()) AND YEAR(ReservationDate) = YEAR(CURDATE())"
+            ' Get date filter based on selected period
+            Dim dateFilter As String = GetDateFilterCondition("ReservationDate")
 
             cmd = New MySqlCommand($"
             SELECT 
@@ -306,7 +907,6 @@ Public Class Dashboard
 
         Return data
     End Function
-
     ' ============================================
     ' SHARED: Render Reservation Chart
     ' This uses the EXACT same rendering logic as FormReservationStatus
@@ -416,14 +1016,23 @@ Public Class Dashboard
         Dim tooltip As New ToolTip()
         tooltip.SetToolTip(Chart2, "Click to view detailed Catering Reservations report")
     End Sub
-    Private Sub ConfigureMonthlyChartClickable()
-        ' Make the Monthly Orders chart clickable
-        MonthlyChartOrder.Cursor = Cursors.Hand
-
-        ' Add tooltip
+    Private Sub ConfigureChartTopProducts()
+        ' Make the chart cursor indicate it's clickable
+        ChartTopProducts.Cursor = Cursors.Hand
+        ' Add tooltip to indicate it's clickable
         Dim tooltip As New ToolTip()
-        tooltip.SetToolTip(MonthlyChartOrder, "Click to view detailed Orders report")
+        tooltip.SetToolTip(Chart2, "Click to view detailed Catering Reservations report")
     End Sub
+    Private Sub ConfigureChart2OrderTrends()
+        ' Make the chart cursor indicate it's clickable
+        OrdersOverviewChart.Cursor = Cursors.Hand
+        ' Add tooltip to indicate it's clickable
+        Dim tooltip As New ToolTip()
+        tooltip.SetToolTip(Chart2, "Click to view detailed Catering Reservations report")
+    End Sub
+
+
+
     Private Sub ChartReservations_Click(sender As Object, e As EventArgs) Handles ChartReservations.Click
         Try
             ' Get reference to AdminDashboard (parent form)
@@ -448,51 +1057,8 @@ Public Class Dashboard
             MessageBox.Show("Error navigating to catering reservations: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Private Sub LoadOrdersTrendChart()
-        Try
-            If MonthlyChartOrder Is Nothing Then Return
 
-            openConn()
-
-            ' Get last 6 months of order data
-            cmd = New MySqlCommand("
-                SELECT 
-                    DATE_FORMAT(OrderDate,'%Y-%m') AS Period,
-                    DATE_FORMAT(OrderDate,'%b') AS MonthLabel,
-                    COUNT(*) AS OrderCount
-                FROM orders
-                WHERE OrderDate >= DATE_SUB(CURDATE(), INTERVAL 5 MONTH)
-                GROUP BY DATE_FORMAT(OrderDate,'%Y-%m'), DATE_FORMAT(OrderDate,'%b')
-                ORDER BY DATE_FORMAT(OrderDate,'%Y-%m')", conn)
-
-            Dim reader As MySqlDataReader = cmd.ExecuteReader()
-
-            ' Clear existing data
-            MonthlyChartOrder.Series(0).Points.Clear()
-
-            Dim hasData As Boolean = False
-            While reader.Read()
-                hasData = True
-                Dim monthLabel As String = reader("MonthLabel").ToString()
-                Dim orderCount As Integer = Convert.ToInt32(reader("OrderCount"))
-
-                Dim point As New DataVisualization.Charting.DataPoint()
-                point.SetValueXY(monthLabel, orderCount)
-                point.Color = Color.FromArgb(99, 102, 241)
-                point.MarkerStyle = MarkerStyle.Circle
-                point.MarkerSize = 8
-                MonthlyChartOrder.Series(0).Points.Add(point)
-            End While
-
-            reader.Close()
-            closeConn()
-
-
-        Catch ex As Exception
-            closeConn()
-        End Try
-    End Sub
-    Private Sub MonthlyChartOrder_Click(sender As Object, e As EventArgs) Handles MonthlyChartOrder.Click
+    Private Sub MonthlyChartOrder_Click(sender As Object, e As EventArgs) Handles OrdersOverviewChart.Click
         Try
             ' Get reference to AdminDashboard (parent form)
             Dim adminDashboard As AdminDashboard = TryCast(Me.ParentForm, AdminDashboard)
@@ -516,13 +1082,46 @@ Public Class Dashboard
             MessageBox.Show("Error navigating to orders: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    ' Add visual feedback when hovering over the chart
-    Private Sub Chart2_MouseEnter(sender As Object, e As EventArgs) Handles Chart2.MouseEnter
+    Private Sub ChartTopProducts_Click(sender As Object, e As EventArgs) Handles ChartTopProducts.Click
+        Try
+            ' Get reference to AdminDashboard (parent form)
+            Dim adminDashboard As AdminDashboard = TryCast(Me.ParentForm, AdminDashboard)
+
+            If adminDashboard IsNot Nothing Then
+                ' First, load the Reports form in AdminDashboard
+                adminDashboard.btnReports.PerformClick()
+
+                ' Give UI time to load
+                Application.DoEvents()
+
+                ' Then load the Catering Reservations report
+                If Reports IsNot Nothing Then
+                    Reports.LoadProductPerformanceReport()
+                End If
+            Else
+                MessageBox.Show("Unable to navigate to Reports section.", "Navigation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error navigating to orders: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    Private Sub ChartTopProducts_MouseEnter(sender As Object, e As EventArgs) Handles ChartTopProducts.MouseEnter
         Chart2.Cursor = Cursors.Hand
         RoundedPane28.BackColor = Color.FromArgb(248, 248, 250)
     End Sub
 
-    Private Sub Chart2_MouseLeave(sender As Object, e As EventArgs) Handles Chart2.MouseLeave
+    Private Sub ChartTopProducts_MouseLeave(sender As Object, e As EventArgs) Handles ChartTopProducts.MouseLeave
+        Chart2.Cursor = Cursors.Default
+        RoundedPane28.BackColor = Color.White
+    End Sub
+
+    Private Sub OrdersOverviewChart_MouseEnter(sender As Object, e As EventArgs) Handles OrdersOverviewChart.MouseEnter
+        Chart2.Cursor = Cursors.Hand
+        RoundedPane28.BackColor = Color.FromArgb(248, 248, 250)
+    End Sub
+
+    Private Sub OrdersOverviewChart_MouseLeave(sender As Object, e As EventArgs) Handles OrdersOverviewChart.MouseLeave
         Chart2.Cursor = Cursors.Default
         RoundedPane28.BackColor = Color.White
     End Sub
@@ -540,32 +1139,10 @@ Public Class Dashboard
         Chart2.Cursor = Cursors.Default
         ChartReservations.BackColor = Color.White
     End Sub
-    Private Sub RoundedPane21_Paint(sender As Object, e As PaintEventArgs) Handles RoundedPane21.Paint
+    Private Sub RoundedPane21_Paint(sender As Object, e As PaintEventArgs)
+
 
     End Sub
-    Private Sub MonthlyChartOrder_MouseEnter(sender As Object, e As EventArgs) Handles MonthlyChartOrder.MouseEnter
-        MonthlyChartOrder.Cursor = Cursors.Hand
-        RoundedPane26.BackColor = Color.FromArgb(248, 248, 250)
-    End Sub
-
-    Private Sub MonthlyChartOrder_MouseLeave(sender As Object, e As EventArgs) Handles MonthlyChartOrder.MouseLeave
-        MonthlyChartOrder.Cursor = Cursors.Default
-        RoundedPane26.BackColor = Color.White
-    End Sub
-    Private Sub LoadSalesChart()
-        Try
-            ' Get sales data for current year
-            Dim salesData = GetSalesData()
-
-            ' Render the chart with the data
-            RenderSalesChart(SalesChart, salesData)  ' Replace Chart1 with your actual sales chart name
-
-        Catch ex As Exception
-            MessageBox.Show("Error loading sales chart: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            closeConn()
-        End Try
-    End Sub
-
     ' ============================================
     ' GET SALES DATA - Same logic as FormSales
     ' ============================================
@@ -778,9 +1355,7 @@ Public Class Dashboard
         End Try
     End Sub
 
-    ' ============================================
-    ' TABLE EXISTS HELPER (if not already in Dashboard)
-    ' ============================================
+
     Private Function TableExists(tableName As String) As Boolean
         Try
             If conn Is Nothing Then Return False
@@ -807,60 +1382,9 @@ Public Class Dashboard
         End Try
     End Function
 
-    ' ============================================
-    ' MAKE SALES CHART CLICKABLE (Optional)
-    ' ============================================
-    Private Sub ConfigureSalesChartClickable()
-        ' Make the chart cursor indicate it's clickable
-        SalesChart.Cursor = Cursors.Hand  ' Replace Chart1 with your actual chart name
-
-        ' Add tooltip
-        Dim tooltip As New ToolTip()
-        tooltip.SetToolTip(SalesChart, "Click to view detailed Sales report")
-    End Sub
-
-    Private Sub SalesChart_Click(sender As Object, e As EventArgs) Handles SalesChart.Click
-        Try
-            ' Get reference to AdminDashboard (parent form)
-            Dim adminDashboard As AdminDashboard = TryCast(Me.ParentForm, AdminDashboard)
-
-            If adminDashboard IsNot Nothing Then
-                ' First, load the Reports form in AdminDashboard
-                adminDashboard.btnReports.PerformClick()
-
-                ' Give UI time to load
-                Application.DoEvents()
-
-                ' Then load the Sales report (btnSales should be clicked)
-                If Reports IsNot Nothing Then
-                    ' Assuming Reports has access to btnSales
-                    ' You may need to add a public method in Reports.vb to handle this
-                    Reports.LoadSalesReport()  ' Add this method to Reports.vb
-                End If
-            Else
-                MessageBox.Show("Unable to navigate to Reports section.", "Navigation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("Error navigating to sales report: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    ' ============================================
-    ' VISUAL FEEDBACK FOR SALES CHART HOVER
-    ' ============================================
-    Private Sub SalesChart_MouseEnter(sender As Object, e As EventArgs) Handles SalesChart.MouseEnter
-        SalesChart.Cursor = Cursors.Hand
-        ' If your chart is inside a RoundedPane, change its background:
-        ' RoundedPaneXX.BackColor = Color.FromArgb(248, 248, 250)
-    End Sub
-
-    Private Sub SalesChart_MouseLeave(sender As Object, e As EventArgs) Handles SalesChart.MouseLeave
-        SalesChart.Cursor = Cursors.Default
-        ' RoundedPaneXX.BackColor = Color.White
-    End Sub
+    ' 
     ' Add this method to your Reports.vb file
-    Private Sub ProductPerformance_Click(sender As Object, e As EventArgs) Handles ProductPerformance.Click
+    Private Sub ProductPerformance_Click(sender As Object, e As EventArgs)
         Try
             ' Get reference to AdminDashboard (parent form)
             Dim adminDashboard As AdminDashboard = TryCast(Me.ParentForm, AdminDashboard)
@@ -883,61 +1407,20 @@ Public Class Dashboard
         Catch ex As Exception
             MessageBox.Show("Error navigating to catering reservations: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    End Sub
-    Public Sub LoadProductPerformanceChart()
-        Try
-            Dim query As String =
-"SELECT ProductName,
-        SUM(Quantity) AS TotalOrders,
-        SUM(TotalPrice) AS Revenue
- FROM (
-        SELECT ri.ProductName,
-               ri.Quantity,
-               ri.TotalPrice
-        FROM reservation_items ri
-        INNER JOIN reservations r ON ri.ReservationID = r.ReservationID
-        WHERE r.ReservationStatus IN ('Confirmed', 'Served')
 
-        UNION ALL
-        
-        SELECT oi.ProductName,
-               oi.Quantity,
-               (oi.Quantity * oi.UnitPrice) AS TotalPrice
-        FROM order_items oi
-        INNER JOIN orders o ON oi.OrderID = o.OrderID
-        WHERE o.OrderStatus IN ('Served', 'Completed')
-      ) AS combined
- GROUP BY ProductName
- ORDER BY Revenue DESC;"
-
-            ProductPerformance.Series("Revenue").Points.Clear()
-
-            Using conn As New MySqlConnection(strConnection)
-                conn.Open()
-                Using cmd As New MySqlCommand(query, conn)
-                    Using reader = cmd.ExecuteReader()
-                        While reader.Read()
-                            ProductPerformance.Series("Revenue").Points.AddXY(
-                            reader("ProductName").ToString(),
-                            Convert.ToDecimal(reader("Revenue"))
-                        )
-                        End While
-                    End Using
-                End Using
-            End Using
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        End Try
-    End Sub
-    Private Sub ProductPerformance_MouseEnter(sender As Object, e As EventArgs) Handles ProductPerformance.MouseEnter
-        ProductPerformance.Cursor = Cursors.Hand
-        ' If your chart is inside a RoundedPane, change its background:
-        ' RoundedPaneXX.BackColor = Color.FromArgb(248, 248, 250)
     End Sub
 
-    Private Sub ProductPerformance_MouseLeave(sender As Object, e As EventArgs) Handles ProductPerformance.MouseLeave
-        ProductPerformance.Cursor = Cursors.Default
-        ' RoundedPaneXX.BackCo
+    Private Sub RoundedPane24_Paint(sender As Object, e As PaintEventArgs) Handles RoundedPane24.Paint
+
     End Sub
+
+    Private Sub Label11_Click(sender As Object, e As EventArgs) Handles Label11.Click
+
+    End Sub
+
+
+    ' ============================================
+    ' TOP PRODUCTS CHART
+    ' ============================================
+
 End Class

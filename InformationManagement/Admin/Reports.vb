@@ -53,7 +53,7 @@ Public Class Reports
         FlowLayoutPanel1.Height = 50
         FlowLayoutPanel1.Top = 80   'Adjust below your label
         FlowLayoutPanel1.Left = 20
-        FlowLayoutPanel1.Width = Me.ClientSize.Width - 30
+        FlowLayoutPanel1.Width = Me.ClientSize.Width - 320
         FlowLayoutPanel1.Height = 70
 
         FlowLayoutPanel1.AutoSize = False
@@ -75,18 +75,12 @@ Public Class Reports
 
         ' Bring FlowLayoutPanel forward so buttons are visible
         FlowLayoutPanel1.BringToFront()
+
+        ' === LOAD DEFAULT PAGE ===
         LoadFormIntoPanel(New FormSales())
         HighlightActiveButton(btnSales)
-
     End Sub
 
-
-
-    Public Sub ResetToDefault()
-        LoadFormIntoPanel(New FormSales())
-        HighlightActiveButton(btnSales)
-        reportPeriod.SelectedIndex = 0 ' Reset to Daily
-    End Sub
     ' === APPLY ROUNDED CORNERS TO CONTROL ===
     Private Sub ApplyRoundedCorners(ctrl As Control, radius As Integer)
         Dim gp As New GraphicsPath()
@@ -227,6 +221,7 @@ Public Class Reports
                 Return dateValue.ToString()
         End Select
     End Function
+
     Private Sub LoadDefaultForm()
         LoadFormIntoPanel(New FormSales())
         HighlightActiveButton(btnSales)
@@ -288,9 +283,7 @@ Public Class Reports
             MessageBox.Show("Error loading catering reservation report: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    ' ============================================
-    ' ADD THIS TO Reports.vb to handle navigation
-    ' ============================================
+
     Public Sub LoadSalesReport()
         Try
             ' Load FormCateringReservations into Panel1
@@ -329,6 +322,5 @@ Public Class Reports
             MessageBox.Show("Error loading catering reservation report: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
 
 End Class

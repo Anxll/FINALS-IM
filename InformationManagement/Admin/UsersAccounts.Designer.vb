@@ -76,7 +76,7 @@ Partial Class UsersAccounts
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Label1.Location = New System.Drawing.Point(26, 28)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(213, 40)
+        Me.Label1.Size = New System.Drawing.Size(269, 50)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "User Accounts"
         '
@@ -275,11 +275,9 @@ Partial Class UsersAccounts
         'RoundedPane24
         '
         Me.RoundedPane24.BorderColor = System.Drawing.Color.LightGray
-        Me.RoundedPane24.BorderThickness = 1
         Me.RoundedPane24.Controls.Add(Me.lblCustomers)
         Me.RoundedPane24.Controls.Add(Me.Label8)
         Me.RoundedPane24.Controls.Add(Me.PictureBox7)
-        Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
         Me.RoundedPane24.Location = New System.Drawing.Point(899, 149)
         Me.RoundedPane24.Name = "RoundedPane24"
@@ -294,7 +292,7 @@ Partial Class UsersAccounts
         Me.lblCustomers.ForeColor = System.Drawing.Color.DarkViolet
         Me.lblCustomers.Location = New System.Drawing.Point(25, 52)
         Me.lblCustomers.Name = "lblCustomers"
-        Me.lblCustomers.Size = New System.Drawing.Size(26, 30)
+        Me.lblCustomers.Size = New System.Drawing.Size(33, 37)
         Me.lblCustomers.TabIndex = 3
         Me.lblCustomers.Text = "2"
         '
@@ -304,9 +302,9 @@ Partial Class UsersAccounts
         Me.Label8.BackColor = System.Drawing.Color.Transparent
         Me.Label8.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.ForeColor = System.Drawing.Color.DarkViolet
-        Me.Label8.Location = New System.Drawing.Point(14, 19)
+        Me.Label8.Location = New System.Drawing.Point(14, 17)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(75, 19)
+        Me.Label8.Size = New System.Drawing.Size(91, 23)
         Me.Label8.TabIndex = 0
         Me.Label8.Text = "Customers"
         '
@@ -323,11 +321,9 @@ Partial Class UsersAccounts
         'RoundedPane23
         '
         Me.RoundedPane23.BorderColor = System.Drawing.Color.LightGray
-        Me.RoundedPane23.BorderThickness = 1
         Me.RoundedPane23.Controls.Add(Me.lblEmployees)
         Me.RoundedPane23.Controls.Add(Me.Label7)
         Me.RoundedPane23.Controls.Add(Me.PictureBox6)
-        Me.RoundedPane23.CornerRadius = 15
         Me.RoundedPane23.FillColor = System.Drawing.Color.White
         Me.RoundedPane23.Location = New System.Drawing.Point(624, 149)
         Me.RoundedPane23.Name = "RoundedPane23"
@@ -342,7 +338,7 @@ Partial Class UsersAccounts
         Me.lblEmployees.ForeColor = System.Drawing.Color.ForestGreen
         Me.lblEmployees.Location = New System.Drawing.Point(31, 52)
         Me.lblEmployees.Name = "lblEmployees"
-        Me.lblEmployees.Size = New System.Drawing.Size(26, 30)
+        Me.lblEmployees.Size = New System.Drawing.Size(33, 37)
         Me.lblEmployees.TabIndex = 3
         Me.lblEmployees.Text = "1"
         '
@@ -354,7 +350,7 @@ Partial Class UsersAccounts
         Me.Label7.ForeColor = System.Drawing.Color.ForestGreen
         Me.Label7.Location = New System.Drawing.Point(14, 19)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(75, 19)
+        Me.Label7.Size = New System.Drawing.Size(92, 23)
         Me.Label7.TabIndex = 0
         Me.Label7.Text = "Employees"
         '
@@ -371,11 +367,9 @@ Partial Class UsersAccounts
         'RoundedPane22
         '
         Me.RoundedPane22.BorderColor = System.Drawing.Color.LightGray
-        Me.RoundedPane22.BorderThickness = 1
         Me.RoundedPane22.Controls.Add(Me.lblStaffs)
         Me.RoundedPane22.Controls.Add(Me.Label6)
         Me.RoundedPane22.Controls.Add(Me.PictureBox5)
-        Me.RoundedPane22.CornerRadius = 15
         Me.RoundedPane22.FillColor = System.Drawing.Color.White
         Me.RoundedPane22.Location = New System.Drawing.Point(345, 149)
         Me.RoundedPane22.Name = "RoundedPane22"
@@ -390,7 +384,7 @@ Partial Class UsersAccounts
         Me.lblStaffs.ForeColor = System.Drawing.Color.RoyalBlue
         Me.lblStaffs.Location = New System.Drawing.Point(26, 52)
         Me.lblStaffs.Name = "lblStaffs"
-        Me.lblStaffs.Size = New System.Drawing.Size(26, 30)
+        Me.lblStaffs.Size = New System.Drawing.Size(33, 37)
         Me.lblStaffs.TabIndex = 3
         Me.lblStaffs.Text = "2"
         '
@@ -402,7 +396,7 @@ Partial Class UsersAccounts
         Me.Label6.ForeColor = System.Drawing.Color.RoyalBlue
         Me.Label6.Location = New System.Drawing.Point(14, 19)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(101, 19)
+        Me.Label6.Size = New System.Drawing.Size(123, 23)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Staff Members"
         '
@@ -419,11 +413,9 @@ Partial Class UsersAccounts
         'RoundedPane21
         '
         Me.RoundedPane21.BorderColor = System.Drawing.Color.LightGray
-        Me.RoundedPane21.BorderThickness = 1
         Me.RoundedPane21.Controls.Add(Me.PictureBox1)
         Me.RoundedPane21.Controls.Add(Me.lblTotalUsers)
         Me.RoundedPane21.Controls.Add(Me.Label2)
-        Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
         Me.RoundedPane21.Location = New System.Drawing.Point(61, 149)
         Me.RoundedPane21.Name = "RoundedPane21"
@@ -445,9 +437,9 @@ Partial Class UsersAccounts
         Me.lblTotalUsers.AutoSize = True
         Me.lblTotalUsers.BackColor = System.Drawing.Color.Transparent
         Me.lblTotalUsers.Font = New System.Drawing.Font("Segoe UI", 16.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTotalUsers.Location = New System.Drawing.Point(22, 52)
+        Me.lblTotalUsers.Location = New System.Drawing.Point(30, 44)
         Me.lblTotalUsers.Name = "lblTotalUsers"
-        Me.lblTotalUsers.Size = New System.Drawing.Size(26, 30)
+        Me.lblTotalUsers.Size = New System.Drawing.Size(33, 37)
         Me.lblTotalUsers.TabIndex = 2
         Me.lblTotalUsers.Text = "5"
         '
@@ -459,13 +451,13 @@ Partial Class UsersAccounts
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.Label2.Location = New System.Drawing.Point(14, 19)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(78, 19)
+        Me.Label2.Size = New System.Drawing.Size(92, 23)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Total Users"
         '
         'UsersAccounts
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 17.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.GhostWhite
@@ -511,12 +503,6 @@ Partial Class UsersAccounts
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents Label2 As Label
     Friend WithEvents UsersAccountData As DataGridView
-    Friend WithEvents email As DataGridViewTextBoxColumn
-    Friend WithEvents phone As DataGridViewTextBoxColumn
-    Friend WithEvents role As DataGridViewTextBoxColumn
-    Friend WithEvents status As DataGridViewTextBoxColumn
-    Friend WithEvents joinDate As DataGridViewTextBoxColumn
-    Friend WithEvents actions As DataGridViewTextBoxColumn
     Friend WithEvents RoundedPane21 As RoundedPane2
     Friend WithEvents RoundedPane22 As RoundedPane2
     Friend WithEvents Label6 As Label

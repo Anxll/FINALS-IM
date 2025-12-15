@@ -44,7 +44,7 @@ Partial Class FormTakeOutOrders
         Me.RoundedPane21.Location = New System.Drawing.Point(33, 30)
         Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(1393, 555)
+        Me.RoundedPane21.Size = New System.Drawing.Size(1393, 869)
         Me.RoundedPane21.TabIndex = 0
         '
         'DataGridView1
@@ -68,7 +68,7 @@ Partial Class FormTakeOutOrders
         Me.DataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowHeadersWidth = 51
-        Me.DataGridView1.Size = New System.Drawing.Size(1376, 219)
+        Me.DataGridView1.Size = New System.Drawing.Size(1376, 527)
         Me.DataGridView1.TabIndex = 9
         '
         'Export

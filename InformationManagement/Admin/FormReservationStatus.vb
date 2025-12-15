@@ -8,6 +8,9 @@ Public Class FormReservationStatus
     Private filterPeriod As String = "Monthly" ' Daily, Weekly, Monthly, Yearly
     Private reservationData As New Dictionary(Of String, Integer)
 
+    ' Shared property to track selected period across the application
+    Public Shared Property SelectedPeriod As String = "Monthly"
+
     ' =======================================================================
     ' FORM LOAD
     ' =======================================================================
@@ -19,8 +22,7 @@ Public Class FormReservationStatus
             RoundedPane23.BringToFront()
             RoundedPane24.BringToFront()
             RoundedPane25.BringToFront()
-            ComboBox1.BringToFront()
-            Label9.BringToFront()
+
 
             InitializeForm()
             ConfigureChart()
@@ -35,10 +37,6 @@ Public Class FormReservationStatus
     ' =======================================================================
     Private Sub InitializeForm()
         Try
-            ' Set default period
-            If ComboBox1.Items.Count > 0 Then
-                ComboBox1.SelectedIndex = 2 ' Monthly
-            End If
 
             ' Configure chart colors
             Chart1.BackColor = Color.White
@@ -194,6 +192,42 @@ Public Class FormReservationStatus
     End Function
 
     ' =======================================================================
+    ' HELPER FUNCTION TO GET SQL DATE GROUPING
+    ' =======================================================================
+    Public Shared Function GetDateGrouping(dateColumn As String) As String
+        Select Case SelectedPeriod
+            Case "Daily"
+                Return $"DATE({dateColumn})"
+            Case "Weekly"
+                Return $"YEARWEEK({dateColumn}, 1)"
+            Case "Monthly"
+                Return $"DATE_FORMAT({dateColumn}, '%Y-%m')"
+            Case "Yearly"
+                Return $"YEAR({dateColumn})"
+            Case Else
+                Return $"DATE({dateColumn})"
+        End Select
+    End Function
+
+    ' =======================================================================
+    ' HELPER FUNCTION TO GET DISPLAY FORMAT
+    ' =======================================================================
+    Public Shared Function GetDateDisplayFormat(dateValue As Object) As String
+        Select Case SelectedPeriod
+            Case "Daily"
+                Return Convert.ToDateTime(dateValue).ToString("MMM dd, yyyy")
+            Case "Weekly"
+                Return $"Week {dateValue}"
+            Case "Monthly"
+                Return Convert.ToDateTime(dateValue & "-01").ToString("MMM yyyy")
+            Case "Yearly"
+                Return dateValue.ToString()
+            Case Else
+                Return dateValue.ToString()
+        End Select
+    End Function
+
+    ' =======================================================================
     ' UPDATE STATISTICS CARDS
     ' =======================================================================
     Private Sub UpdateStatisticsCards()
@@ -284,12 +318,7 @@ Public Class FormReservationStatus
     ' =======================================================================
     ' PERIOD SELECTION CHANGED
     ' =======================================================================
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        If ComboBox1.SelectedItem IsNot Nothing Then
-            filterPeriod = ComboBox1.SelectedItem.ToString()
-            LoadReservationData()
-        End If
-    End Sub
+
 
     ' =======================================================================
     ' EXPORT CHART TO IMAGE
@@ -318,7 +347,7 @@ Public Class FormReservationStatus
     End Sub
 
     ' =======================================================================
-    ' GET DETAILED RESERVATION STATISTICS
+    ' GET DETAILED RESERVATION STATISTICS (WITH FILTER APPLIED)
     ' =======================================================================
     Public Function GetDetailedStatistics() As Dictionary(Of String, Object)
         Dim stats As New Dictionary(Of String, Object)
@@ -329,8 +358,9 @@ Public Class FormReservationStatus
             End If
 
             Dim dateFilter As String = GetDateFilter()
+            Dim dateGrouping As String = GetDateGrouping("ReservationDate")
 
-            ' Get reservation statistics
+            ' Get reservation statistics with filter applied
             Dim sql As String = $"
                 SELECT 
                     COUNT(*) AS TotalReservations,
@@ -358,7 +388,7 @@ Public Class FormReservationStatus
                 End Using
             End Using
 
-            ' Get most popular reservation times
+            ' Get most popular reservation times with filter applied
             Dim sqlTimes As String = $"
                 SELECT 
                     HOUR(ReservationDate) AS ReservationHour,
@@ -380,6 +410,37 @@ Public Class FormReservationStatus
             End Using
             stats("PopularTimes") = popularTimes
 
+            ' Get trend data grouped by period
+            Dim sqlTrend As String = $"
+                SELECT 
+                    {dateGrouping} AS PeriodGroup,
+                    COUNT(*) AS ReservationCount,
+                    COUNT(CASE WHEN ReservationStatus = 'Confirmed' THEN 1 END) AS ConfirmedCount,
+                    COUNT(CASE WHEN ReservationStatus = 'Cancelled' THEN 1 END) AS CancelledCount
+                FROM reservations
+                WHERE {dateFilter}
+                GROUP BY {dateGrouping}
+                ORDER BY PeriodGroup
+            "
+
+            Dim trendData As New List(Of (Period As String, Total As Integer, Confirmed As Integer, Cancelled As Integer))
+            Using cmd As New MySqlCommand(sqlTrend, conn)
+                Using reader As MySqlDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        Dim periodValue = reader("PeriodGroup")
+                        Dim periodDisplay As String = GetDateDisplayFormat(periodValue)
+
+                        trendData.Add((
+                            periodDisplay,
+                            Convert.ToInt32(reader("ReservationCount")),
+                            Convert.ToInt32(reader("ConfirmedCount")),
+                            Convert.ToInt32(reader("CancelledCount"))
+                        ))
+                    End While
+                End Using
+            End Using
+            stats("TrendData") = trendData
+
             ' Calculate conversion rate (Confirmed / Total)
             Dim total As Integer = Convert.ToInt32(stats("Total"))
             Dim confirmed As Integer = Convert.ToInt32(stats("Confirmed"))
@@ -397,7 +458,7 @@ Public Class FormReservationStatus
     End Function
 
     ' =======================================================================
-    ' GENERATE DETAILED REPORT
+    ' GENERATE DETAILED REPORT (WITH FILTER APPLIED)
     ' =======================================================================
     Public Function GenerateReport() As String
         Dim report As New Text.StringBuilder()
@@ -405,12 +466,13 @@ Public Class FormReservationStatus
 
         report.AppendLine("═══════════════════════════════════════════════════════")
         report.AppendLine($"       RESERVATION STATUS REPORT - {filterPeriod}")
+        report.AppendLine($"       Generated: {DateTime.Now:yyyy-MM-dd HH:mm:ss}")
         report.AppendLine("═══════════════════════════════════════════════════════")
         report.AppendLine()
 
         ' Summary
         report.AppendLine("SUMMARY:")
-        report.AppendLine($"  Period:            {filterPeriod}")
+        report.AppendLine($"  Period:             {filterPeriod}")
         report.AppendLine($"  Total Reservations: {stats("Total")}")
         report.AppendLine($"  Conversion Rate:    {stats("ConversionRate"):N2}%")
         report.AppendLine($"  Cancellation Rate:  {stats("CancellationRate"):N2}%")
@@ -418,13 +480,26 @@ Public Class FormReservationStatus
 
         ' Status Breakdown
         report.AppendLine("STATUS BREAKDOWN:")
-        report.AppendLine($"  Pending:    {stats("Pending"),5} ({If(stats("Total") > 0, (stats("Pending") / stats("Total")) * 100, 0):N1}%)")
-        report.AppendLine($"  Confirmed:  {stats("Confirmed"),5} ({If(stats("Total") > 0, (stats("Confirmed") / stats("Total")) * 100, 0):N1}%)")
-        report.AppendLine($"  Cancelled:  {stats("Cancelled"),5} ({If(stats("Total") > 0, (stats("Cancelled") / stats("Total")) * 100, 0):N1}%)")
+        Dim total As Integer = Convert.ToInt32(stats("Total"))
+        report.AppendLine($"  Pending:    {stats("Pending"),5} ({If(total > 0, (Convert.ToInt32(stats("Pending")) / total) * 100, 0):N1}%)")
+        report.AppendLine($"  Confirmed:  {stats("Confirmed"),5} ({If(total > 0, (Convert.ToInt32(stats("Confirmed")) / total) * 100, 0):N1}%)")
+        report.AppendLine($"  Cancelled:  {stats("Cancelled"),5} ({If(total > 0, (Convert.ToInt32(stats("Cancelled")) / total) * 100, 0):N1}%)")
         If stats.ContainsKey("Completed") Then
-            report.AppendLine($"  Completed:  {stats("Completed"),5} ({If(stats("Total") > 0, (stats("Completed") / stats("Total")) * 100, 0):N1}%)")
+            report.AppendLine($"  Completed:  {stats("Completed"),5} ({If(total > 0, (Convert.ToInt32(stats("Completed")) / total) * 100, 0):N1}%)")
         End If
         report.AppendLine()
+
+        ' Trend Analysis (NEW - Uses filter grouping)
+        If stats.ContainsKey("TrendData") Then
+            Dim trends = DirectCast(stats("TrendData"), List(Of (Period As String, Total As Integer, Confirmed As Integer, Cancelled As Integer)))
+            If trends.Count > 0 Then
+                report.AppendLine($"TREND ANALYSIS ({filterPeriod}):")
+                For Each trend In trends
+                    report.AppendLine($"  {trend.Period,-15} Total: {trend.Total,3}  Confirmed: {trend.Confirmed,3}  Cancelled: {trend.Cancelled,3}")
+                Next
+                report.AppendLine()
+            End If
+        End If
 
         ' Popular Times
         If stats.ContainsKey("PopularTimes") Then
@@ -440,16 +515,41 @@ Public Class FormReservationStatus
         End If
 
         ' Date Range
-        If stats("FirstDate") IsNot Nothing AndAlso stats("FirstDate") <> DateTime.MinValue Then
+        If stats("FirstDate") IsNot Nothing AndAlso Convert.ToDateTime(stats("FirstDate")) <> DateTime.MinValue Then
             report.AppendLine("DATE RANGE:")
-            report.AppendLine($"  First Reservation: {stats("FirstDate"):yyyy-MM-dd}")
-            report.AppendLine($"  Last Reservation:  {stats("LastDate"):yyyy-MM-dd}")
+            report.AppendLine($"  First Reservation: {Convert.ToDateTime(stats("FirstDate")):yyyy-MM-dd HH:mm}")
+            report.AppendLine($"  Last Reservation:  {Convert.ToDateTime(stats("LastDate")):yyyy-MM-dd HH:mm}")
+            report.AppendLine()
         End If
 
+        report.AppendLine("═══════════════════════════════════════════════════════")
+        report.AppendLine($"Note: All data filtered by {filterPeriod} period")
         report.AppendLine("═══════════════════════════════════════════════════════")
 
         Return report.ToString()
     End Function
+
+    ' =======================================================================
+    ' EXPORT REPORT TO FILE (NEW)
+    ' =======================================================================
+    Public Sub ExportReportToFile()
+        Try
+            Dim saveDialog As New SaveFileDialog With {
+                .Filter = "Text File|*.txt|All Files|*.*",
+                .Title = "Export Report",
+                .FileName = $"Reservation_Report_{filterPeriod}_{DateTime.Now:yyyy-MM-dd_HHmmss}.txt"
+            }
+
+            If saveDialog.ShowDialog() = DialogResult.OK Then
+                Dim reportContent As String = GenerateReport()
+                System.IO.File.WriteAllText(saveDialog.FileName, reportContent)
+                MessageBox.Show("Report exported successfully!", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show($"Export Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
     ' =======================================================================
     ' REFRESH DATA
@@ -467,6 +567,24 @@ Public Class FormReservationStatus
         currentMonth = startDate.Month
         LoadReservationData()
     End Sub
+
+    ' =======================================================================
+    ' GET CURRENT FILTER INFO (NEW)
+    ' =======================================================================
+    Public Function GetCurrentFilterInfo() As String
+        Select Case filterPeriod
+            Case "Daily"
+                Return $"Today ({DateTime.Now:MMM dd, yyyy})"
+            Case "Weekly"
+                Return $"This Week"
+            Case "Monthly"
+                Return $"{New DateTime(currentYear, currentMonth, 1):MMMM yyyy}"
+            Case "Yearly"
+                Return $"Year {currentYear}"
+            Case Else
+                Return filterPeriod
+        End Select
+    End Function
 
     ' =======================================================================
     ' CLEANUP

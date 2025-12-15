@@ -202,25 +202,28 @@ Partial Class Customer
         Me.lblTotalCustomers.TabIndex = 0
         Me.lblTotalCustomers.Text = "Total Customers: 0"
         '
+        '
+        '
+        '
+        '
+        '
+        '
         'Customer
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(247, Byte), Integer), CType(CType(250, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1028, 572)
+        Me.BackColor = System.Drawing.Color.GhostWhite
+        Me.ClientSize = New System.Drawing.Size(1113, 572)
+        Me.Controls.Add(Me.lblTitle)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.Panel4)
-        Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Panel2)
-        Me.Controls.Add(Me.Panel1)
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.MinimumSize = New System.Drawing.Size(688, 525)
         Me.Name = "Customer"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Customer Management - Tabeya"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -228,7 +231,7 @@ Partial Class Customer
         Me.Panel4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
-
+        Me.DataGridView1.Size = New System.Drawing.Size(1028, 415)
     End Sub
 
     Friend WithEvents Panel1 As Panel
@@ -236,10 +239,10 @@ Partial Class Customer
     Friend WithEvents Panel2 As Panel
     Friend WithEvents txtSearch As TextBox
     Friend WithEvents lblSearch As Label
-    Friend WithEvents btnRefresh As Button
-    Friend WithEvents btnDelete As Button
-    Friend WithEvents Panel3 As Panel
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents Panel4 As Panel
     Friend WithEvents lblTotalCustomers As Label
+    Friend WithEvents btnDelete As Guna.UI2.WinForms.Guna2Button
+    Friend WithEvents btnRefresh As Guna.UI2.WinForms.Guna2Button
+    Friend WithEvents txtSearch As Guna.UI2.WinForms.Guna2TextBox
 End Class

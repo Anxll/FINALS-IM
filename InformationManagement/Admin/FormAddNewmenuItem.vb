@@ -1,6 +1,7 @@
 ﻿Imports MySqlConnector
 Imports System.IO
 Imports System.Drawing.Imaging
+Imports System.Net
 
 Public Class FormAddNewmenuItem
 
@@ -52,17 +53,15 @@ Public Class FormAddNewmenuItem
             "Bilao",
             "Snacks"
         })
-        cmbCategory.SelectedIndex = -1
 
         cmbMealTime.Items.Clear()
         cmbMealTime.Items.AddRange({"All Day", "Breakfast", "Lunch", "Dinner"})
         cmbMealTime.SelectedIndex = 0
 
-        numericPrice.Value = 0
         numericPrice.DecimalPlaces = 2
         numericPrice.Maximum = 999999
 
-        ProductID.Text = GenerateNextProductID()
+        ProductID.Text = "Auto-Generated"
         ProductID.ReadOnly = True
         ProductID.BackColor = Color.LightGray
 
@@ -73,58 +72,36 @@ Public Class FormAddNewmenuItem
         OrderCount.ReadOnly = True
         OrderCount.BackColor = Color.LightGray
 
-        PictureBox1.Image = Nothing
         PictureBox1.SizeMode = PictureBoxSizeMode.Zoom
+        PictureBox1.Image = Nothing
 
         SelectedImagePath = Nothing
     End Sub
 
-    ' =======================================================
-    ' GENERATE NEXT PRODUCT ID
-    ' =======================================================
-    Private Function GenerateNextProductID() As String
-        Try
-            openConn()
-            Dim query As String = "SELECT COALESCE(MAX(ProductID), 0) + 1 AS NextID FROM products"
-            Dim cmd As New MySqlCommand(query, conn)
-            Return cmd.ExecuteScalar().ToString()
-        Catch
-            Return "1"
-        Finally
-            conn.Close()
-        End Try
-    End Function
-
-    ' =======================================================
+    ' ================================
     ' VALIDATION
-    ' =======================================================
+    ' ================================
     Private Function ValidateForm() As Boolean
-        If txtProductName.Text.Trim() = "" Then Return ShowError(txtProductName, "Please enter a product name.")
-        If cmbCategory.SelectedIndex = -1 Then Return ShowError(cmbCategory, "Please select a category.")
-        If Description.Text.Trim() = "" Then Return ShowError(Description, "Please enter a description.")
+        If txtProductName.Text.Trim() = "" Then Return ShowError(txtProductName, "Enter product name.")
+        If cmbCategory.SelectedIndex = -1 Then Return ShowError(cmbCategory, "Select category.")
+        If Description.Text.Trim() = "" Then Return ShowError(Description, "Enter description.")
         If numericPrice.Value <= 0 Then Return ShowError(numericPrice, "Price must be greater than 0.")
-        If Availability.SelectedIndex = -1 Then Return ShowError(Availability, "Please select availability.")
-        If ServingSize.Text.Trim() = "" Then Return ShowError(ServingSize, "Please enter serving size.")
-        If PrepTime.Text.Trim() = "" Then Return ShowError(PrepTime, "Please enter preparation time.")
-        If cmbMealTime.SelectedIndex = -1 Then Return ShowError(cmbMealTime, "Please select meal time.")
+        If ServingSize.Text.Trim() = "" Then Return ShowError(ServingSize, "Enter serving size.")
+        If PrepTime.Text.Trim() = "" Then Return ShowError(PrepTime, "Enter prep time.")
 
         Return True
     End Function
 
     Private Function ShowError(ctrl As Control, msg As String) As Boolean
-        MessageBox.Show(msg, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        MessageBox.Show(msg, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         ctrl.Focus()
         Return False
     End Function
 
-    ' =======================================================
-    ' PICTUREBOX IMAGE LOADING
-    ' =======================================================
+    ' ================================
+    ' IMAGE BROWSE
+    ' ================================
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-        BrowseAndLoadImage()
-    End Sub
-
-    Private Sub BrowseAndLoadImage()
         Dim ofd As New OpenFileDialog()
         ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif"
 
@@ -172,23 +149,25 @@ Public Class FormAddNewmenuItem
         End Try
     End Function
 
-    ' =======================================================
-    ' ADD ITEM BUTTON CLICK
-    ' =======================================================
+    ' ================================
+    ' ADD BUTTON
+    ' ================================
     Private Sub btnAddItem_Click(sender As Object, e As EventArgs) Handles btnAddItem.Click
-
         If Not ValidateForm() Then Exit Sub
+
+        Dim savedImageUrl As String = Nothing
 
         Try
             openConn()
 
-            Dim sql As String =
-                "INSERT INTO products 
+            Dim sql As String = "
+                INSERT INTO products 
                 (ProductName, Category, Description, Price, Availability, ServingSize, 
-                 DateAdded, LastUpdated, ProductCode, OrderCount, Image, PrepTime, MealTime)
-                 VALUES
+                 DateAdded, LastUpdated, ProductCode, OrderCount, PrepTime, MealTime)
+                VALUES
                 (@ProductName, @Category, @Description, @Price, @Availability, @ServingSize,
-                 NOW(), NOW(), @ProductCode, 0, @Image, @PrepTime, @MealTime)"
+                 NOW(), NOW(), @ProductCode, 0, @PrepTime, @MealTime);
+                SELECT LAST_INSERT_ID();"
 
             Dim cmd As New MySqlCommand(sql, conn)
 
@@ -198,6 +177,8 @@ Public Class FormAddNewmenuItem
             cmd.Parameters.AddWithValue("@Price", numericPrice.Value)
             cmd.Parameters.AddWithValue("@Availability", Availability.Text)
             cmd.Parameters.AddWithValue("@ServingSize", ServingSize.Text.Trim())
+            cmd.Parameters.AddWithValue("@PrepTime", PrepTime.Text.Trim())
+            cmd.Parameters.AddWithValue("@MealTime", cmbMealTime.Text)
 
             If ProductCode.Text.Trim() = "" Then
                 cmd.Parameters.AddWithValue("@ProductCode", DBNull.Value)
@@ -205,51 +186,73 @@ Public Class FormAddNewmenuItem
                 cmd.Parameters.AddWithValue("@ProductCode", ProductCode.Text.Trim())
             End If
 
-            cmd.Parameters.AddWithValue("@PrepTime", PrepTime.Text.Trim())
-            cmd.Parameters.AddWithValue("@MealTime", cmbMealTime.Text)
+            Dim insertedId As String = cmd.ExecuteScalar().ToString()
+            ProductID.Text = insertedId
 
             ' ===================== SAVE IMAGE AS FILE PATH =====================
             Dim imagePath As String = SaveImageToFolder()
 
-            If imagePath IsNot Nothing Then
-                cmd.Parameters.AddWithValue("@Image", imagePath)
+            ' ===================== IMAGE SAVE LOGIC =====================
+            ' Use stored image bytes if available
+            If SelectedImageBytes IsNot Nothing Then
+                cmd.Parameters.Add("@Image", MySqlDbType.LongBlob).Value = SelectedImageBytes
             Else
                 cmd.Parameters.AddWithValue("@Image", DBNull.Value)
             End If
             ' ===================================================================
 
-            cmd.ExecuteNonQuery()
+            If savedImageUrl IsNot Nothing Then
+                Dim updateSql As String = "UPDATE products SET Image = @Image WHERE ProductID = @ProductID"
+                Dim updateCmd As New MySqlCommand(updateSql, conn)
+                updateCmd.Parameters.AddWithValue("@Image", savedImageUrl)
+                updateCmd.Parameters.AddWithValue("@ProductID", insertedId)
+                updateCmd.ExecuteNonQuery()
 
-            MessageBox.Show("Menu item added successfully!" & vbCrLf &
-                          If(imagePath IsNot Nothing, "Image saved to: " & imagePath, "No image uploaded"),
-                          "Success")
+                MessageBox.Show("Menu item added successfully!", "Success")
 
-            ClearForm()
+                MessageBox.Show("Menu item saved! ID: " & insertedId)
+                ClearForm()
 
         Catch ex As Exception
-            MessageBox.Show("Error adding item: " & ex.Message)
+            MessageBox.Show("Save error: " & ex.Message)
         Finally
             conn.Close()
         End Try
     End Sub
 
-    ' =======================================================
-    ' MAP DISPLAY CATEGORY TO DB CATEGORY
-    ' =======================================================
+    ' ================================
+    ' LOAD IMAGE BACK INTO PICTUREBOX
+    ' ================================
+    Private Sub LoadProductImage(imageUrl As String)
+        Try
+            Using wc As New WebClient()
+                Dim imgBytes = wc.DownloadData(imageUrl)
+
+                Using ms As New MemoryStream(imgBytes)
+                    PictureBox1.Image = Image.FromStream(ms)
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Image load failed: " & ex.Message)
+        End Try
+    End Sub
+
+    ' ================================
+    ' CATEGORY MAP
+    ' ================================
     Private Function GetDatabaseCategory(displayCategory As String) As String
         If displayCategory = "Bilao" Then Return "NOODLES & PASTA"
         Return displayCategory
     End Function
 
-    ' =======================================================
+    ' ================================
     ' CLEAR FORM
-    ' =======================================================
+    ' ================================
     Private Sub ClearForm()
         txtProductName.Text = ""
         cmbCategory.SelectedIndex = -1
         Description.Text = ""
         numericPrice.Value = 0
-        Availability.SelectedIndex = 0
         ServingSize.Text = ""
         ProductCode.Text = ""
         PrepTime.Text = ""

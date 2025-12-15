@@ -96,9 +96,10 @@ Partial Class FormProductPerformance
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
         Me.RoundedPane21.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.RoundedPane21.Location = New System.Drawing.Point(29, 12)
+        Me.RoundedPane21.Location = New System.Drawing.Point(39, 15)
+        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(1045, 676)
+        Me.RoundedPane21.Size = New System.Drawing.Size(1433, 1012)
         Me.RoundedPane21.TabIndex = 0
         '
         'RoundedPane28
@@ -109,9 +110,10 @@ Partial Class FormProductPerformance
         Me.RoundedPane28.Controls.Add(Me.Chart1)
         Me.RoundedPane28.CornerRadius = 15
         Me.RoundedPane28.FillColor = System.Drawing.Color.White
-        Me.RoundedPane28.Location = New System.Drawing.Point(21, 267)
+        Me.RoundedPane28.Location = New System.Drawing.Point(28, 329)
+        Me.RoundedPane28.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane28.Name = "RoundedPane28"
-        Me.RoundedPane28.Size = New System.Drawing.Size(1006, 365)
+        Me.RoundedPane28.Size = New System.Drawing.Size(1383, 624)
         Me.RoundedPane28.TabIndex = 16
         '
         'Chart1
@@ -134,7 +136,8 @@ Partial Class FormProductPerformance
         Legend1.Enabled = False
         Legend1.Name = "Legend1"
         Me.Chart1.Legends.Add(Legend1)
-        Me.Chart1.Location = New System.Drawing.Point(20, 18)
+        Me.Chart1.Location = New System.Drawing.Point(12, 14)
+        Me.Chart1.Margin = New System.Windows.Forms.Padding(4)
         Me.Chart1.Name = "Chart1"
         Me.Chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None
         Series1.BorderWidth = 0
@@ -160,7 +163,7 @@ Partial Class FormProductPerformance
         Series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.[String]
         Series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Int64
         Me.Chart1.Series.Add(Series1)
-        Me.Chart1.Size = New System.Drawing.Size(965, 329)
+        Me.Chart1.Size = New System.Drawing.Size(1330, 522)
         Me.Chart1.TabIndex = 0
         Me.Chart1.Text = "Chart1"
         Title1.Alignment = System.Drawing.ContentAlignment.TopLeft
@@ -180,9 +183,10 @@ Partial Class FormProductPerformance
         Me.RoundedPane27.Controls.Add(Me.PictureBox6)
         Me.RoundedPane27.CornerRadius = 15
         Me.RoundedPane27.FillColor = System.Drawing.Color.White
-        Me.RoundedPane27.Location = New System.Drawing.Point(707, 76)
+        Me.RoundedPane27.Location = New System.Drawing.Point(943, 94)
+        Me.RoundedPane27.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane27.Name = "RoundedPane27"
-        Me.RoundedPane27.Size = New System.Drawing.Size(320, 73)
+        Me.RoundedPane27.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane27.TabIndex = 12
         '
         'Label12
@@ -191,9 +195,10 @@ Partial Class FormProductPerformance
         Me.Label12.BackColor = System.Drawing.Color.Transparent
         Me.Label12.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label12.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label12.Location = New System.Drawing.Point(71, 35)
+        Me.Label12.Location = New System.Drawing.Point(95, 43)
+        Me.Label12.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(82, 15)
+        Me.Label12.Size = New System.Drawing.Size(106, 20)
         Me.Label12.TabIndex = 2
         Me.Label12.Text = "98 total orders"
         '
@@ -202,9 +207,10 @@ Partial Class FormProductPerformance
         Me.Label13.AutoSize = True
         Me.Label13.BackColor = System.Drawing.Color.Transparent
         Me.Label13.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.Location = New System.Drawing.Point(70, 13)
+        Me.Label13.Location = New System.Drawing.Point(93, 16)
+        Me.Label13.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(85, 20)
+        Me.Label13.Size = New System.Drawing.Size(107, 25)
         Me.Label13.TabIndex = 1
         Me.Label13.Text = "Fish Grilled"
         '
@@ -212,9 +218,10 @@ Partial Class FormProductPerformance
         '
         Me.PictureBox6.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox6.Image = CType(resources.GetObject("PictureBox6.Image"), System.Drawing.Image)
-        Me.PictureBox6.Location = New System.Drawing.Point(20, 22)
+        Me.PictureBox6.Location = New System.Drawing.Point(27, 27)
+        Me.PictureBox6.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox6.Name = "PictureBox6"
-        Me.PictureBox6.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox6.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox6.TabIndex = 0
         Me.PictureBox6.TabStop = False
         '
@@ -228,9 +235,10 @@ Partial Class FormProductPerformance
         Me.RoundedPane26.Controls.Add(Me.PictureBox5)
         Me.RoundedPane26.CornerRadius = 15
         Me.RoundedPane26.FillColor = System.Drawing.Color.White
-        Me.RoundedPane26.Location = New System.Drawing.Point(707, 170)
+        Me.RoundedPane26.Location = New System.Drawing.Point(943, 209)
+        Me.RoundedPane26.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane26.Name = "RoundedPane26"
-        Me.RoundedPane26.Size = New System.Drawing.Size(320, 73)
+        Me.RoundedPane26.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane26.TabIndex = 15
         '
         'Label10
@@ -239,9 +247,10 @@ Partial Class FormProductPerformance
         Me.Label10.BackColor = System.Drawing.Color.Transparent
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label10.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label10.Location = New System.Drawing.Point(71, 35)
+        Me.Label10.Location = New System.Drawing.Point(95, 43)
+        Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(88, 15)
+        Me.Label10.Size = New System.Drawing.Size(114, 20)
         Me.Label10.TabIndex = 2
         Me.Label10.Text = "156 total orders"
         '
@@ -250,9 +259,10 @@ Partial Class FormProductPerformance
         Me.Label11.AutoSize = True
         Me.Label11.BackColor = System.Drawing.Color.Transparent
         Me.Label11.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(70, 13)
+        Me.Label11.Location = New System.Drawing.Point(93, 16)
+        Me.Label11.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(96, 20)
+        Me.Label11.Size = New System.Drawing.Size(121, 25)
         Me.Label11.TabIndex = 1
         Me.Label11.Text = "Chicken BBQ"
         '
@@ -260,9 +270,10 @@ Partial Class FormProductPerformance
         '
         Me.PictureBox5.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
-        Me.PictureBox5.Location = New System.Drawing.Point(20, 22)
+        Me.PictureBox5.Location = New System.Drawing.Point(27, 27)
+        Me.PictureBox5.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox5.Name = "PictureBox5"
-        Me.PictureBox5.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox5.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox5.TabIndex = 0
         Me.PictureBox5.TabStop = False
         '
@@ -276,9 +287,10 @@ Partial Class FormProductPerformance
         Me.RoundedPane25.Controls.Add(Me.PictureBox4)
         Me.RoundedPane25.CornerRadius = 15
         Me.RoundedPane25.FillColor = System.Drawing.Color.White
-        Me.RoundedPane25.Location = New System.Drawing.Point(365, 170)
+        Me.RoundedPane25.Location = New System.Drawing.Point(487, 209)
+        Me.RoundedPane25.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane25.Name = "RoundedPane25"
-        Me.RoundedPane25.Size = New System.Drawing.Size(320, 73)
+        Me.RoundedPane25.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane25.TabIndex = 14
         '
         'Label8
@@ -287,9 +299,10 @@ Partial Class FormProductPerformance
         Me.Label8.BackColor = System.Drawing.Color.Transparent
         Me.Label8.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label8.Location = New System.Drawing.Point(71, 35)
+        Me.Label8.Location = New System.Drawing.Point(95, 43)
+        Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(82, 15)
+        Me.Label8.Size = New System.Drawing.Size(106, 20)
         Me.Label8.TabIndex = 2
         Me.Label8.Text = "76 total orders"
         '
@@ -298,9 +311,10 @@ Partial Class FormProductPerformance
         Me.Label9.AutoSize = True
         Me.Label9.BackColor = System.Drawing.Color.Transparent
         Me.Label9.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(70, 13)
+        Me.Label9.Location = New System.Drawing.Point(93, 16)
+        Me.Label9.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(131, 20)
+        Me.Label9.Size = New System.Drawing.Size(163, 25)
         Me.Label9.TabIndex = 1
         Me.Label9.Text = "Vegetable Stir Fry"
         '
@@ -308,9 +322,10 @@ Partial Class FormProductPerformance
         '
         Me.PictureBox4.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox4.Image = CType(resources.GetObject("PictureBox4.Image"), System.Drawing.Image)
-        Me.PictureBox4.Location = New System.Drawing.Point(20, 22)
+        Me.PictureBox4.Location = New System.Drawing.Point(27, 27)
+        Me.PictureBox4.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox4.Name = "PictureBox4"
-        Me.PictureBox4.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox4.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox4.TabIndex = 0
         Me.PictureBox4.TabStop = False
         '
@@ -324,9 +339,10 @@ Partial Class FormProductPerformance
         Me.RoundedPane24.Controls.Add(Me.PictureBox3)
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
-        Me.RoundedPane24.Location = New System.Drawing.Point(365, 76)
+        Me.RoundedPane24.Location = New System.Drawing.Point(487, 94)
+        Me.RoundedPane24.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane24.Name = "RoundedPane24"
-        Me.RoundedPane24.Size = New System.Drawing.Size(320, 73)
+        Me.RoundedPane24.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane24.TabIndex = 13
         '
         'Label6
@@ -335,9 +351,10 @@ Partial Class FormProductPerformance
         Me.Label6.BackColor = System.Drawing.Color.Transparent
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label6.Location = New System.Drawing.Point(71, 35)
+        Me.Label6.Location = New System.Drawing.Point(95, 43)
+        Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(88, 15)
+        Me.Label6.Size = New System.Drawing.Size(114, 20)
         Me.Label6.TabIndex = 2
         Me.Label6.Text = "132 total orders"
         '
@@ -346,9 +363,10 @@ Partial Class FormProductPerformance
         Me.Label7.AutoSize = True
         Me.Label7.BackColor = System.Drawing.Color.Transparent
         Me.Label7.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(70, 13)
+        Me.Label7.Location = New System.Drawing.Point(93, 16)
+        Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(106, 20)
+        Me.Label7.Size = New System.Drawing.Size(133, 25)
         Me.Label7.TabIndex = 1
         Me.Label7.Text = "Chicken Curry"
         '
@@ -356,9 +374,10 @@ Partial Class FormProductPerformance
         '
         Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox3.Image = CType(resources.GetObject("PictureBox3.Image"), System.Drawing.Image)
-        Me.PictureBox3.Location = New System.Drawing.Point(20, 22)
+        Me.PictureBox3.Location = New System.Drawing.Point(27, 27)
+        Me.PictureBox3.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox3.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox3.TabIndex = 0
         Me.PictureBox3.TabStop = False
         '
@@ -372,9 +391,10 @@ Partial Class FormProductPerformance
         Me.RoundedPane22.Controls.Add(Me.PictureBox1)
         Me.RoundedPane22.CornerRadius = 15
         Me.RoundedPane22.FillColor = System.Drawing.Color.White
-        Me.RoundedPane22.Location = New System.Drawing.Point(21, 170)
+        Me.RoundedPane22.Location = New System.Drawing.Point(28, 209)
+        Me.RoundedPane22.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane22.Name = "RoundedPane22"
-        Me.RoundedPane22.Size = New System.Drawing.Size(320, 73)
+        Me.RoundedPane22.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane22.TabIndex = 12
         '
         'Label4
@@ -383,9 +403,10 @@ Partial Class FormProductPerformance
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label4.Location = New System.Drawing.Point(71, 35)
+        Me.Label4.Location = New System.Drawing.Point(95, 43)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(82, 15)
+        Me.Label4.Size = New System.Drawing.Size(106, 20)
         Me.Label4.TabIndex = 2
         Me.Label4.Text = "87 total orders"
         '
@@ -394,9 +415,10 @@ Partial Class FormProductPerformance
         Me.Label5.AutoSize = True
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(70, 13)
+        Me.Label5.Location = New System.Drawing.Point(93, 16)
+        Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(90, 20)
+        Me.Label5.Size = New System.Drawing.Size(112, 25)
         Me.Label5.TabIndex = 1
         Me.Label5.Text = "Pork Adobo"
         '
@@ -404,9 +426,10 @@ Partial Class FormProductPerformance
         '
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(20, 22)
+        Me.PictureBox1.Location = New System.Drawing.Point(27, 27)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox1.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
         '
@@ -420,9 +443,10 @@ Partial Class FormProductPerformance
         Me.RoundedPane23.Controls.Add(Me.PictureBox2)
         Me.RoundedPane23.CornerRadius = 15
         Me.RoundedPane23.FillColor = System.Drawing.Color.White
-        Me.RoundedPane23.Location = New System.Drawing.Point(21, 76)
+        Me.RoundedPane23.Location = New System.Drawing.Point(28, 94)
+        Me.RoundedPane23.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane23.Name = "RoundedPane23"
-        Me.RoundedPane23.Size = New System.Drawing.Size(320, 73)
+        Me.RoundedPane23.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane23.TabIndex = 11
         '
         'Label3
@@ -431,9 +455,10 @@ Partial Class FormProductPerformance
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label3.Location = New System.Drawing.Point(71, 35)
+        Me.Label3.Location = New System.Drawing.Point(95, 43)
+        Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(92, 15)
+        Me.Label3.Size = New System.Drawing.Size(118, 20)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "145 Total Orders"
         '
@@ -442,9 +467,10 @@ Partial Class FormProductPerformance
         Me.Label2.AutoSize = True
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(70, 13)
+        Me.Label2.Location = New System.Drawing.Point(93, 16)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(80, 20)
+        Me.Label2.Size = New System.Drawing.Size(101, 25)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Beef Steak"
         '
@@ -452,9 +478,10 @@ Partial Class FormProductPerformance
         '
         Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
-        Me.PictureBox2.Location = New System.Drawing.Point(20, 22)
+        Me.PictureBox2.Location = New System.Drawing.Point(27, 27)
+        Me.PictureBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox2.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox2.TabIndex = 0
         Me.PictureBox2.TabStop = False
         '
@@ -462,9 +489,10 @@ Partial Class FormProductPerformance
         '
         Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
         Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(923, 12)
+        Me.Button1.Location = New System.Drawing.Point(1231, 15)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(104, 30)
+        Me.Button1.Size = New System.Drawing.Size(139, 37)
         Me.Button1.TabIndex = 9
         Me.Button1.Text = "   Export"
         Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -476,20 +504,22 @@ Partial Class FormProductPerformance
         Me.Label1.AutoSize = True
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(16, 17)
+        Me.Label1.Location = New System.Drawing.Point(21, 21)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(258, 25)
+        Me.Label1.Size = New System.Drawing.Size(324, 32)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Products Performance Report"
         '
         'FormProductPerformance
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1151, 749)
+        Me.ClientSize = New System.Drawing.Size(1535, 922)
         Me.Controls.Add(Me.RoundedPane21)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormProductPerformance"
         Me.Text = "FormProductPerformance"
         Me.RoundedPane21.ResumeLayout(False)

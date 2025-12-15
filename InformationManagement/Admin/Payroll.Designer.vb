@@ -70,9 +70,10 @@ Partial Class Payroll
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 21.75!, System.Drawing.FontStyle.Bold)
-        Me.Label1.Location = New System.Drawing.Point(22, 21)
+        Me.Label1.Location = New System.Drawing.Point(29, 26)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(304, 40)
+        Me.Label1.Size = New System.Drawing.Size(384, 50)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Payroll Management"
         '
@@ -115,6 +116,7 @@ Partial Class Payroll
         '
         Me.Employee.Frozen = True
         Me.Employee.HeaderText = "Employee"
+        Me.Employee.MinimumWidth = 6
         Me.Employee.Name = "Employee"
         Me.Employee.ReadOnly = True
         Me.Employee.Width = 150
@@ -123,6 +125,7 @@ Partial Class Payroll
         '
         Me.Position.Frozen = True
         Me.Position.HeaderText = "Position"
+        Me.Position.MinimumWidth = 6
         Me.Position.Name = "Position"
         Me.Position.ReadOnly = True
         Me.Position.Width = 120
@@ -131,13 +134,16 @@ Partial Class Payroll
         '
         Me.Hours.Frozen = True
         Me.Hours.HeaderText = "Hours"
+        Me.Hours.MinimumWidth = 6
         Me.Hours.Name = "Hours"
         Me.Hours.ReadOnly = True
+        Me.Hours.Width = 125
         '
         'HourlyRate
         '
         Me.HourlyRate.Frozen = True
         Me.HourlyRate.HeaderText = "Hourly Rate"
+        Me.HourlyRate.MinimumWidth = 6
         Me.HourlyRate.Name = "HourlyRate"
         Me.HourlyRate.ReadOnly = True
         Me.HourlyRate.Width = 150
@@ -146,13 +152,16 @@ Partial Class Payroll
         '
         Me.Overtime.Frozen = True
         Me.Overtime.HeaderText = "Overtime"
+        Me.Overtime.MinimumWidth = 6
         Me.Overtime.Name = "Overtime"
         Me.Overtime.ReadOnly = True
+        Me.Overtime.Width = 125
         '
         'GrossPay
         '
         Me.GrossPay.Frozen = True
         Me.GrossPay.HeaderText = "Gross Pay"
+        Me.GrossPay.MinimumWidth = 6
         Me.GrossPay.Name = "GrossPay"
         Me.GrossPay.ReadOnly = True
         Me.GrossPay.Width = 120
@@ -161,6 +170,7 @@ Partial Class Payroll
         '
         Me.NetPay.Frozen = True
         Me.NetPay.HeaderText = "Net Pay"
+        Me.NetPay.MinimumWidth = 6
         Me.NetPay.Name = "NetPay"
         Me.NetPay.ReadOnly = True
         Me.NetPay.Width = 120
@@ -169,6 +179,7 @@ Partial Class Payroll
         '
         Me.Status.Frozen = True
         Me.Status.HeaderText = "Status"
+        Me.Status.MinimumWidth = 6
         Me.Status.Name = "Status"
         Me.Status.ReadOnly = True
         Me.Status.Width = 120
@@ -176,6 +187,7 @@ Partial Class Payroll
         'Actions
         '
         Me.Actions.HeaderText = "Actions"
+        Me.Actions.MinimumWidth = 6
         Me.Actions.Name = "Actions"
         Me.Actions.ReadOnly = True
         Me.Actions.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
@@ -188,7 +200,7 @@ Partial Class Payroll
         Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(31, 235)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(73, 17)
+        Me.Label3.Size = New System.Drawing.Size(93, 23)
         Me.Label3.TabIndex = 6
         Me.Label3.Text = "Pay Period:"
         '
@@ -206,9 +218,10 @@ Partial Class Payroll
         '
         Me.PictureBox4.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox4.Image = CType(resources.GetObject("PictureBox4.Image"), System.Drawing.Image)
-        Me.PictureBox4.Location = New System.Drawing.Point(206, 19)
+        Me.PictureBox4.Location = New System.Drawing.Point(275, 23)
+        Me.PictureBox4.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.PictureBox4.Name = "PictureBox4"
-        Me.PictureBox4.Size = New System.Drawing.Size(25, 19)
+        Me.PictureBox4.Size = New System.Drawing.Size(33, 23)
         Me.PictureBox4.TabIndex = 1
         Me.PictureBox4.TabStop = False
         '
@@ -429,6 +442,7 @@ Partial Class Payroll
         Me.DoubleBuffered = True
         Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "Payroll"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.Text = "Payroll"

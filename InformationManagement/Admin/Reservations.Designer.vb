@@ -229,12 +229,12 @@ Partial Class Reservations
         'lblFilter
         '
         Me.lblFilter.AutoSize = True
-        Me.lblFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
+        Me.lblFilter.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
         Me.lblFilter.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.lblFilter.Location = New System.Drawing.Point(11, 13)
         Me.lblFilter.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblFilter.Name = "lblFilter"
-        Me.lblFilter.Size = New System.Drawing.Size(91, 19)
+        Me.lblFilter.Size = New System.Drawing.Size(72, 15)
         Me.lblFilter.TabIndex = 0
         Me.lblFilter.Text = "Filter Status:"
         '
@@ -243,7 +243,6 @@ Partial Class Reservations
         Me.Reservation.AllowUserToAddRows = False
         Me.Reservation.AllowUserToDeleteRows = False
         Me.Reservation.AllowUserToResizeRows = False
-        Me.Reservation.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells
         Me.Reservation.BackgroundColor = System.Drawing.Color.White
         Me.Reservation.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.Reservation.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
@@ -252,7 +251,7 @@ Partial Class Reservations
         DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
         DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.Reservation.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
