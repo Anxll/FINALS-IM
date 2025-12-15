@@ -309,7 +309,7 @@ Public Class Payroll
 
     Private Sub HandleApproveAction(payrollID As Integer, employeeName As String)
         Dim result As DialogResult = MessageBox.Show(
-            $"Approve payroll for {employeeName}?" & vbCrLf & vbCrLf &
+            $"Approve payroll for {employeeName}" & vbCrLf & vbCrLf &
             "This will change status to 'Approved' and allow payment processing.",
             "Approve Payroll",
             MessageBoxButtons.YesNo,

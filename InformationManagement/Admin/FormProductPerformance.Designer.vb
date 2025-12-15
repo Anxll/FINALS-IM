@@ -97,7 +97,7 @@ Partial Class FormProductPerformance
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
         Me.RoundedPane21.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.RoundedPane21.Location = New System.Drawing.Point(39, 15)
-        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(1433, 1012)
         Me.RoundedPane21.TabIndex = 0
@@ -111,7 +111,7 @@ Partial Class FormProductPerformance
         Me.RoundedPane28.CornerRadius = 15
         Me.RoundedPane28.FillColor = System.Drawing.Color.White
         Me.RoundedPane28.Location = New System.Drawing.Point(28, 329)
-        Me.RoundedPane28.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane28.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane28.Name = "RoundedPane28"
         Me.RoundedPane28.Size = New System.Drawing.Size(1383, 624)
         Me.RoundedPane28.TabIndex = 16
@@ -136,8 +136,8 @@ Partial Class FormProductPerformance
         Legend1.Enabled = False
         Legend1.Name = "Legend1"
         Me.Chart1.Legends.Add(Legend1)
-        Me.Chart1.Location = New System.Drawing.Point(27, 22)
-        Me.Chart1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Chart1.Location = New System.Drawing.Point(12, 14)
+        Me.Chart1.Margin = New System.Windows.Forms.Padding(4)
         Me.Chart1.Name = "Chart1"
         Me.Chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None
         Series1.BorderWidth = 0
@@ -163,7 +163,7 @@ Partial Class FormProductPerformance
         Series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.[String]
         Series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Int64
         Me.Chart1.Series.Add(Series1)
-        Me.Chart1.Size = New System.Drawing.Size(1330, 598)
+        Me.Chart1.Size = New System.Drawing.Size(1330, 522)
         Me.Chart1.TabIndex = 0
         Me.Chart1.Text = "Chart1"
         Title1.Alignment = System.Drawing.ContentAlignment.TopLeft
@@ -184,7 +184,7 @@ Partial Class FormProductPerformance
         Me.RoundedPane27.CornerRadius = 15
         Me.RoundedPane27.FillColor = System.Drawing.Color.White
         Me.RoundedPane27.Location = New System.Drawing.Point(943, 94)
-        Me.RoundedPane27.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane27.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane27.Name = "RoundedPane27"
         Me.RoundedPane27.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane27.TabIndex = 12
@@ -219,7 +219,7 @@ Partial Class FormProductPerformance
         Me.PictureBox6.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox6.Image = CType(resources.GetObject("PictureBox6.Image"), System.Drawing.Image)
         Me.PictureBox6.Location = New System.Drawing.Point(27, 27)
-        Me.PictureBox6.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox6.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox6.Name = "PictureBox6"
         Me.PictureBox6.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox6.TabIndex = 0
@@ -236,7 +236,7 @@ Partial Class FormProductPerformance
         Me.RoundedPane26.CornerRadius = 15
         Me.RoundedPane26.FillColor = System.Drawing.Color.White
         Me.RoundedPane26.Location = New System.Drawing.Point(943, 209)
-        Me.RoundedPane26.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane26.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane26.Name = "RoundedPane26"
         Me.RoundedPane26.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane26.TabIndex = 15
@@ -271,7 +271,7 @@ Partial Class FormProductPerformance
         Me.PictureBox5.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
         Me.PictureBox5.Location = New System.Drawing.Point(27, 27)
-        Me.PictureBox5.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox5.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox5.Name = "PictureBox5"
         Me.PictureBox5.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox5.TabIndex = 0
@@ -288,7 +288,7 @@ Partial Class FormProductPerformance
         Me.RoundedPane25.CornerRadius = 15
         Me.RoundedPane25.FillColor = System.Drawing.Color.White
         Me.RoundedPane25.Location = New System.Drawing.Point(487, 209)
-        Me.RoundedPane25.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane25.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane25.Name = "RoundedPane25"
         Me.RoundedPane25.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane25.TabIndex = 14
@@ -323,7 +323,7 @@ Partial Class FormProductPerformance
         Me.PictureBox4.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox4.Image = CType(resources.GetObject("PictureBox4.Image"), System.Drawing.Image)
         Me.PictureBox4.Location = New System.Drawing.Point(27, 27)
-        Me.PictureBox4.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox4.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox4.Name = "PictureBox4"
         Me.PictureBox4.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox4.TabIndex = 0
@@ -340,7 +340,7 @@ Partial Class FormProductPerformance
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
         Me.RoundedPane24.Location = New System.Drawing.Point(487, 94)
-        Me.RoundedPane24.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane24.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane24.Name = "RoundedPane24"
         Me.RoundedPane24.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane24.TabIndex = 13
@@ -375,7 +375,7 @@ Partial Class FormProductPerformance
         Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox3.Image = CType(resources.GetObject("PictureBox3.Image"), System.Drawing.Image)
         Me.PictureBox3.Location = New System.Drawing.Point(27, 27)
-        Me.PictureBox3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox3.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox3.Name = "PictureBox3"
         Me.PictureBox3.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox3.TabIndex = 0
@@ -392,7 +392,7 @@ Partial Class FormProductPerformance
         Me.RoundedPane22.CornerRadius = 15
         Me.RoundedPane22.FillColor = System.Drawing.Color.White
         Me.RoundedPane22.Location = New System.Drawing.Point(28, 209)
-        Me.RoundedPane22.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane22.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane22.Name = "RoundedPane22"
         Me.RoundedPane22.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane22.TabIndex = 12
@@ -427,7 +427,7 @@ Partial Class FormProductPerformance
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
         Me.PictureBox1.Location = New System.Drawing.Point(27, 27)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox1.TabIndex = 0
@@ -444,7 +444,7 @@ Partial Class FormProductPerformance
         Me.RoundedPane23.CornerRadius = 15
         Me.RoundedPane23.FillColor = System.Drawing.Color.White
         Me.RoundedPane23.Location = New System.Drawing.Point(28, 94)
-        Me.RoundedPane23.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane23.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane23.Name = "RoundedPane23"
         Me.RoundedPane23.Size = New System.Drawing.Size(427, 90)
         Me.RoundedPane23.TabIndex = 11
@@ -479,7 +479,7 @@ Partial Class FormProductPerformance
         Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
         Me.PictureBox2.Location = New System.Drawing.Point(27, 27)
-        Me.PictureBox2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(37, 34)
         Me.PictureBox2.TabIndex = 0
@@ -490,7 +490,7 @@ Partial Class FormProductPerformance
         Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
         Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
         Me.Button1.Location = New System.Drawing.Point(1231, 15)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(139, 37)
         Me.Button1.TabIndex = 9
@@ -519,7 +519,7 @@ Partial Class FormProductPerformance
         Me.BackColor = System.Drawing.Color.GhostWhite
         Me.ClientSize = New System.Drawing.Size(1535, 922)
         Me.Controls.Add(Me.RoundedPane21)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormProductPerformance"
         Me.Text = "FormProductPerformance"
         Me.RoundedPane21.ResumeLayout(False)
