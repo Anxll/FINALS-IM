@@ -116,14 +116,13 @@ Partial Class ReservationPayment
         Me.btnRefresh.Size = New System.Drawing.Size(100, 30)
         Me.btnRefresh.TabIndex = 2
         Me.btnRefresh.Text = "Refresh"
-        Me.btnRefresh.TextAlignment = System.Drawing.StringAlignment.Center
+
         '
         'txtSearch
         '
         Me.txtSearch.BackColor = System.Drawing.Color.Transparent
         Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.txtSearch.Image = Nothing
         Me.txtSearch.Location = New System.Drawing.Point(38, 23)
         Me.txtSearch.MaxLength = 32767
         Me.txtSearch.Multiline = False
@@ -132,8 +131,6 @@ Partial Class ReservationPayment
         Me.txtSearch.Size = New System.Drawing.Size(688, 38)
         Me.txtSearch.TabIndex = 10
         Me.txtSearch.Text = "Search..."
-        Me.txtSearch.TextAlignment = System.Windows.Forms.HorizontalAlignment.Left
-        Me.txtSearch.UseSystemPasswordChar = False
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
