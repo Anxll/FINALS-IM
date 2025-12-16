@@ -2,8 +2,20 @@
 Imports System.Data
 
 Public Class Reservations
+    ' ==========================================
+    ' PAGINATION VARIABLES
+    ' ==========================================
+    Private CurrentPage As Integer = 1
+    Private RecordsPerPage As Integer = 50
+    Private TotalRecords As Integer = 0
+    Private CurrentCondition As String = ""
 
     Private Sub Reservations_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Initialize pagination dropdown
+        cboRecordsPerPage.Items.Clear()
+        cboRecordsPerPage.Items.AddRange(New Object() {10, 25, 50, 100})
+        cboRecordsPerPage.SelectedItem = 50
+
         LoadReservations()
     End Sub
 
@@ -123,16 +135,13 @@ Public Class Reservations
     ' UPDATE RESERVATION STATUS
     ' ==========================================
     Private Sub UpdateReservationStatus(reservationID As Integer, newStatus As String)
-        Dim connection As MySqlConnection = Nothing
-
         Try
-            connection = New MySqlConnection(strConnection)
-            connection.Open()
+            openConn()
 
             ' Use parameterized query to prevent SQL injection
             Dim query As String = "UPDATE reservations SET ReservationStatus = @status, UpdatedDate = @updated WHERE ReservationID = @id"
 
-            Using cmd As New MySqlCommand(query, connection)
+            Using cmd As New MySqlCommand(query, conn)
                 cmd.Parameters.AddWithValue("@status", newStatus)
                 cmd.Parameters.AddWithValue("@updated", DateTime.Now)
                 cmd.Parameters.AddWithValue("@id", reservationID)
@@ -141,6 +150,7 @@ Public Class Reservations
 
                 If rowsAffected = 0 Then
                     MessageBox.Show("No reservation was updated. Please check if the reservation exists.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    closeConn()
                     Return
                 End If
             End Using
@@ -152,18 +162,30 @@ Public Class Reservations
         Catch ex As Exception
             MessageBox.Show("Error updating reservation: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
-            If connection IsNot Nothing AndAlso connection.State = ConnectionState.Open Then
-                connection.Close()
-            End If
-            LoadReservations()
+            closeConn()
+            LoadReservations(CurrentCondition)
         End Try
     End Sub
 
     ' ==========================================
-    ' LOAD RESERVATIONS WITH CUSTOMER INFO
+    ' LOAD RESERVATIONS WITH PAGINATION
     ' ==========================================
     Private Sub LoadReservations(Optional condition As String = "")
         Try
+            CurrentCondition = condition
+
+            ' Get total count first
+            Dim countQuery As String = "SELECT COUNT(*) FROM reservations r INNER JOIN customers c ON r.CustomerID = c.CustomerID"
+            If condition <> "" Then
+                countQuery &= " WHERE " & condition
+            End If
+
+            openConn()
+            Dim countCmd As New MySqlCommand(countQuery, conn)
+            TotalRecords = Convert.ToInt32(countCmd.ExecuteScalar())
+            closeConn()
+
+            ' Build main query with pagination
             Dim query As String =
         "SELECT 
             r.ReservationID,
@@ -194,13 +216,17 @@ Public Class Reservations
 
             query &= " ORDER BY r.ReservationDate DESC"
 
+            ' Add pagination
+            Dim offset As Integer = (CurrentPage - 1) * RecordsPerPage
+            query &= $" LIMIT {RecordsPerPage} OFFSET {offset}"
+
             ' Load results into DGV
             LoadToDGV(query, Reservation)
 
-            ' Update count label
-            lblTotalReservations.Text = "Total: " & Reservation.Rows.Count.ToString()
+            ' Update pagination info
+            UpdatePaginationInfo()
 
-            ' Optional: Format the DataGridView columns
+            ' Format the DataGridView columns
             FormatReservationColumns()
 
         Catch ex As Exception
@@ -209,7 +235,28 @@ Public Class Reservations
     End Sub
 
     ' ==========================================
-    ' FORMAT DATAGRIDVIEW COLUMNS (OPTIONAL)
+    ' UPDATE PAGINATION INFO
+    ' ==========================================
+    Private Sub UpdatePaginationInfo()
+        Try
+            Dim totalPages As Integer = If(TotalRecords > 0, Math.Ceiling(TotalRecords / RecordsPerPage), 1)
+
+            ' Update label with current info
+            lblTotalReservations.Text = $"Total: {TotalRecords} | Page {CurrentPage} of {totalPages}"
+
+            ' Enable/disable navigation buttons
+            btnFirstPage.Enabled = (CurrentPage > 1)
+            btnPrevPage.Enabled = (CurrentPage > 1)
+            btnNextPage.Enabled = (CurrentPage < totalPages)
+            btnLastPage.Enabled = (CurrentPage < totalPages)
+
+        Catch ex As Exception
+            ' Silently handle errors
+        End Try
+    End Sub
+
+    ' ==========================================
+    ' FORMAT DATAGRIDVIEW COLUMNS
     ' ==========================================
     Private Sub FormatReservationColumns()
         Try
@@ -361,6 +408,7 @@ Public Class Reservations
 
         Catch ex As Exception
             MessageBox.Show("Error loading data: " & ex.Message)
+            closeConn()
         End Try
     End Sub
 
@@ -368,6 +416,7 @@ Public Class Reservations
     ' VIEW ALL
     ' ==========================================
     Private Sub btnViewAll_Click(sender As Object, e As EventArgs) Handles btnViewAll.Click
+        CurrentPage = 1
         LoadReservations()
         lblFilter.Text = "Showing: All Reservations"
     End Sub
@@ -376,7 +425,8 @@ Public Class Reservations
     ' VIEW PENDING
     ' ==========================================
     Private Sub btnViewPending_Click(sender As Object, e As EventArgs) Handles btnViewPending.Click
-        LoadReservations("ReservationStatus = 'Pending'")
+        CurrentPage = 1
+        LoadReservations("r.ReservationStatus = 'Pending'")
         lblFilter.Text = "Showing: Pending"
     End Sub
 
@@ -384,7 +434,8 @@ Public Class Reservations
     ' VIEW CONFIRMED
     ' ==========================================
     Private Sub btnViewConfirmed_Click(sender As Object, e As EventArgs) Handles btnViewConfirmed.Click
-        LoadReservations("ReservationStatus = 'Confirmed'")
+        CurrentPage = 1
+        LoadReservations("r.ReservationStatus = 'Confirmed'")
         lblFilter.Text = "Showing: Confirmed"
     End Sub
 
@@ -392,7 +443,8 @@ Public Class Reservations
     ' VIEW CANCELLED
     ' ==========================================
     Private Sub btnViewCancelled_Click(sender As Object, e As EventArgs) Handles btnViewCancelled.Click
-        LoadReservations("ReservationStatus = 'Cancelled'")
+        CurrentPage = 1
+        LoadReservations("r.ReservationStatus = 'Cancelled'")
         lblFilter.Text = "Showing: Cancelled"
     End Sub
 
@@ -400,25 +452,109 @@ Public Class Reservations
     ' REFRESH
     ' ==========================================
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
-        LoadReservations()
-        lblFilter.Text = "Showing: All Reservations"
+        CurrentPage = 1
+        LoadReservations(CurrentCondition)
+        If CurrentCondition = "" Then
+            lblFilter.Text = "Showing: All Reservations"
+        End If
     End Sub
 
     ' ==========================================
-    ' SEARCH BAR
+    ' SEARCH BAR (FIXED - NOW USES PARAMETERS)
     ' ==========================================
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
         Dim keyword As String = txtSearch.Text.Trim()
 
         If keyword = "" Then
+            CurrentPage = 1
             LoadReservations()
             Exit Sub
         End If
 
-        LoadReservations($"ReservationID LIKE '%{keyword}%' 
-                          OR CustomerID LIKE '%{keyword}%' 
-                          OR EventType LIKE '%{keyword}%' 
-                          OR ReservationStatus LIKE '%{keyword}%'")
+        ' Use parameterized search
+        CurrentPage = 1
+        SearchReservations(keyword)
+    End Sub
+
+    ' ==========================================
+    ' SEARCH RESERVATIONS (NEW - SECURE)
+    ' ==========================================
+    Private Sub SearchReservations(keyword As String)
+        Try
+            ' Get total count for search results
+            Dim countQuery As String = "SELECT COUNT(*) FROM reservations r " &
+                                      "INNER JOIN customers c ON r.CustomerID = c.CustomerID " &
+                                      "WHERE CAST(r.ReservationID AS CHAR) LIKE @keyword " &
+                                      "OR CAST(r.CustomerID AS CHAR) LIKE @keyword " &
+                                      "OR c.FirstName LIKE @keyword " &
+                                      "OR c.LastName LIKE @keyword " &
+                                      "OR r.EventType LIKE @keyword " &
+                                      "OR r.ReservationStatus LIKE @keyword"
+
+            openConn()
+            Dim countCmd As New MySqlCommand(countQuery, conn)
+            countCmd.Parameters.AddWithValue("@keyword", "%" & keyword & "%")
+            TotalRecords = Convert.ToInt32(countCmd.ExecuteScalar())
+            closeConn()
+
+            ' Build main search query
+            Dim query As String =
+        "SELECT 
+            r.ReservationID,
+            r.CustomerID,
+            c.FirstName,
+            c.LastName,
+            c.Email,
+            c.ContactNumber AS CustomerContact,
+            r.ContactNumber AS ReservationContact,
+            r.ReservationType,
+            r.EventType,
+            r.EventDate,
+            r.EventTime,
+            r.NumberOfGuests,
+            r.ProductSelection,
+            r.SpecialRequests,
+            r.ReservationStatus,
+            r.ReservationDate,
+            r.DeliveryAddress,
+            r.DeliveryOption,
+            r.UpdatedDate
+         FROM reservations r
+         INNER JOIN customers c ON r.CustomerID = c.CustomerID
+         WHERE CAST(r.ReservationID AS CHAR) LIKE @keyword 
+         OR CAST(r.CustomerID AS CHAR) LIKE @keyword 
+         OR c.FirstName LIKE @keyword 
+         OR c.LastName LIKE @keyword 
+         OR r.EventType LIKE @keyword 
+         OR r.ReservationStatus LIKE @keyword
+         ORDER BY r.ReservationDate DESC"
+
+            ' Add pagination
+            Dim offset As Integer = (CurrentPage - 1) * RecordsPerPage
+            query &= $" LIMIT {RecordsPerPage} OFFSET {offset}"
+
+            ' Load with parameters
+            openConn()
+            Dim cmd As New MySqlCommand(query, conn)
+            cmd.Parameters.AddWithValue("@keyword", "%" & keyword & "%")
+
+            Dim adapter As New MySqlDataAdapter(cmd)
+            Dim dt As New DataTable()
+            adapter.Fill(dt)
+
+            Reservation.DataSource = dt
+            closeConn()
+
+            ' Update pagination info
+            UpdatePaginationInfo()
+            FormatReservationColumns()
+
+            lblFilter.Text = $"Search results for: {keyword}"
+
+        Catch ex As Exception
+            MessageBox.Show("Error searching reservations: " & ex.Message)
+            closeConn()
+        End Try
     End Sub
 
     ' ==========================================
@@ -448,12 +584,111 @@ Public Class Reservations
             closeConn()
 
             MessageBox.Show("Reservation deleted successfully.")
-            LoadReservations()
+            LoadReservations(CurrentCondition)
 
         Catch ex As Exception
             MessageBox.Show("Error deleting reservation: " & ex.Message)
+            closeConn()
         End Try
 
+    End Sub
+
+    ' ============================================================
+    ' PAGINATION BUTTON EVENTS
+    ' ============================================================
+    Private Sub btnFirstPage_Click(sender As Object, e As EventArgs) Handles btnFirstPage.Click
+        CurrentPage = 1
+
+        If txtSearch.Text.Trim() <> "" Then
+            SearchReservations(txtSearch.Text.Trim())
+        Else
+            LoadReservations(CurrentCondition)
+        End If
+    End Sub
+
+    Private Sub btnPrevPage_Click(sender As Object, e As EventArgs) Handles btnPrevPage.Click
+        If CurrentPage > 1 Then
+            CurrentPage -= 1
+
+            If txtSearch.Text.Trim() <> "" Then
+                SearchReservations(txtSearch.Text.Trim())
+            Else
+                LoadReservations(CurrentCondition)
+            End If
+        End If
+    End Sub
+
+    Private Sub btnNextPage_Click(sender As Object, e As EventArgs) Handles btnNextPage.Click
+        Dim totalPages As Integer = If(TotalRecords > 0, Math.Ceiling(TotalRecords / RecordsPerPage), 1)
+        If CurrentPage < totalPages Then
+            CurrentPage += 1
+
+            If txtSearch.Text.Trim() <> "" Then
+                SearchReservations(txtSearch.Text.Trim())
+            Else
+                LoadReservations(CurrentCondition)
+            End If
+        End If
+    End Sub
+
+    Private Sub btnLastPage_Click(sender As Object, e As EventArgs) Handles btnLastPage.Click
+        Dim totalPages As Integer = If(TotalRecords > 0, Math.Ceiling(TotalRecords / RecordsPerPage), 1)
+        CurrentPage = totalPages
+
+        If txtSearch.Text.Trim() <> "" Then
+            SearchReservations(txtSearch.Text.Trim())
+        Else
+            LoadReservations(CurrentCondition)
+        End If
+    End Sub
+
+    Private Sub cboRecordsPerPage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRecordsPerPage.SelectedIndexChanged
+        If cboRecordsPerPage.SelectedItem IsNot Nothing Then
+            RecordsPerPage = CInt(cboRecordsPerPage.SelectedItem)
+            CurrentPage = 1 ' Reset to first page when changing page size
+
+            If txtSearch.Text.Trim() <> "" Then
+                SearchReservations(txtSearch.Text.Trim())
+            Else
+                LoadReservations(CurrentCondition)
+            End If
+        End If
+    End Sub
+
+    ' ============================================================
+    ' PAGE INFO LABEL CLICK (Go to specific page)
+    ' ============================================================
+    Private Sub lblPageInfo_Click(sender As Object, e As EventArgs) Handles lblPageInfo.Click
+        Try
+            Dim totalPages As Integer = If(TotalRecords > 0, Math.Ceiling(TotalRecords / RecordsPerPage), 1)
+
+            ' Prompt user for page number
+            Dim input As String = InputBox($"Enter page number (1 to {totalPages}):", "Go to Page", CurrentPage.ToString())
+
+            If String.IsNullOrWhiteSpace(input) Then
+                Return ' User cancelled
+            End If
+
+            Dim pageNumber As Integer
+            If Integer.TryParse(input, pageNumber) Then
+                If pageNumber >= 1 AndAlso pageNumber <= totalPages Then
+                    CurrentPage = pageNumber
+
+                    If txtSearch.Text.Trim() <> "" Then
+                        SearchReservations(txtSearch.Text.Trim())
+                    Else
+                        LoadReservations(CurrentCondition)
+                    End If
+                Else
+                    MessageBox.Show($"Please enter a valid page number between 1 and {totalPages}.", "Invalid Page", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                End If
+            Else
+                MessageBox.Show("Please enter a valid number.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error navigating to page: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
 End Class

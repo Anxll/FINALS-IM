@@ -885,4 +885,41 @@ Public Class Orders
         MyBase.OnFormClosing(e)
     End Sub
 
+    ' ============================================================
+    ' PAGINATION BUTTON EVENTS
+    ' ============================================================
+    Private Sub btnFirstPage_Click(sender As Object, e As EventArgs) Handles btnFirstPage.Click
+        CurrentPage = 1
+        LoadOrdersAsync(CurrentCondition)
+    End Sub
+
+    Private Sub btnPrevPage_Click(sender As Object, e As EventArgs) Handles btnPrevPage.Click
+        If CurrentPage > 1 Then
+            CurrentPage -= 1
+            LoadOrdersAsync(CurrentCondition)
+        End If
+    End Sub
+
+    Private Sub btnNextPage_Click(sender As Object, e As EventArgs) Handles btnNextPage.Click
+        Dim totalPages As Integer = If(TotalRecords > 0, Math.Ceiling(TotalRecords / RecordsPerPage), 1)
+        If CurrentPage < totalPages Then
+            CurrentPage += 1
+            LoadOrdersAsync(CurrentCondition)
+        End If
+    End Sub
+
+    Private Sub btnLastPage_Click(sender As Object, e As EventArgs) Handles btnLastPage.Click
+        Dim totalPages As Integer = If(TotalRecords > 0, Math.Ceiling(TotalRecords / RecordsPerPage), 1)
+        CurrentPage = totalPages
+        LoadOrdersAsync(CurrentCondition)
+    End Sub
+
+    Private Sub cboRecordsPerPage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRecordsPerPage.SelectedIndexChanged
+        If cboRecordsPerPage.SelectedItem IsNot Nothing Then
+            RecordsPerPage = CInt(cboRecordsPerPage.SelectedItem)
+            CurrentPage = 1 ' Reset to first page when changing page size
+            LoadOrdersAsync(CurrentCondition)
+        End If
+    End Sub
+
 End Class
