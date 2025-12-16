@@ -14,7 +14,7 @@ Public Class Dashboard
 
         ' Initialize the Filters ComboBox
         InitializeFiltersComboBox()
-
+        LoadInventoryAlerts()
         ' Load all dashboard data
         LoadDashboardData()
 
@@ -24,6 +24,13 @@ Public Class Dashboard
     End Sub
     Private Sub InitializeFiltersComboBox()
         Try
+            ' Check if Filters control exists
+            If Filters Is Nothing Then
+                MessageBox.Show("Filters ComboBox control not found. Please check the form designer.",
+                          "Control Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+
             ' Clear any existing items
             Filters.Items.Clear()
 
@@ -48,7 +55,7 @@ Public Class Dashboard
         LoadDashboardData()
 
         LoadTotalOrders()
-        LoadReservationChart()
+        LoadInventoryAlerts()
         LoadOrdersOverviewChart()
     End Sub
 
@@ -63,10 +70,9 @@ Public Class Dashboard
             ' Load charts and lists
             LoadSalesByChannel()
             LoadTopProductsChart()
-            LoadReservationChart()
+
             LoadOrdersOverviewChart()
 
-            ConfigureChart2Clickable()
             ConfigureChartTopProducts()
             ConfigureChart2OrderTrends()
 
@@ -92,7 +98,12 @@ Public Class Dashboard
     ' ============================================
     Private Function GetDateFilterCondition(dateColumn As String) As String
         ' Get selected filter, default to "Daily" if nothing is selected
-        Dim selectedFilter As String = If(Filters.SelectedItem?.ToString(), "Daily")
+        Dim selectedFilter As String = "Daily" ' Set default first
+
+        ' Safely check if Filters exists and has a selected item
+        If Filters IsNot Nothing AndAlso Filters.SelectedItem IsNot Nothing Then
+            selectedFilter = Filters.SelectedItem.ToString()
+        End If
 
         Select Case selectedFilter
             Case "Daily"
@@ -116,7 +127,6 @@ Public Class Dashboard
                 Return $"DATE({dateColumn}) = CURDATE()"
         End Select
     End Function
-
     Private Sub Filters_DrawItem(sender As Object, e As DrawItemEventArgs) Handles Filters.DrawItem
         If e.Index < 0 Then Return
         Dim cmb As ComboBox = DirectCast(sender, ComboBox)
@@ -384,6 +394,7 @@ LIMIT 8;"
             Dim orderDateFilter As String = GetDateFilterCondition("o.OrderDate")
             Dim paymentDateFilter As String = GetDateFilterCondition("rp.PaymentDate")
 
+
             ' Get sales from completed orders grouped by type with filter
             cmd = New MySqlCommand($"
         SELECT 
@@ -419,7 +430,7 @@ LIMIT 8;"
             cmd = New MySqlCommand($"
         SELECT COALESCE(SUM(rp.AmountPaid), 0) as CateringRevenue
         FROM reservation_payments rp
-        WHERE rp.PaymentStatus = 'Completed'
+        WHERE rp.PaymentStatus IN ('Completed', 'Paid')
         AND {paymentDateFilter}", conn)
 
             Dim cateringRevenue As Decimal = Convert.ToDecimal(cmd.ExecuteScalar())
@@ -506,9 +517,200 @@ LIMIT 8;"
         End Try
     End Sub
 
-    ' ============================================
-    ' ORDERS OVERVIEW CHART
-    ' ============================================
+    Private Sub LoadInventoryAlerts()
+        Try
+            openConn()
+
+            ' Query to get critical and low stock items
+            Dim sql As String = "
+            SELECT 
+                i.IngredientName AS 'Item Name',
+                COALESCE(SUM(ib.StockQuantity), 0) AS 'Stock',
+                i.UnitType AS 'Unit',
+                i.MinStockLevel,
+                CASE 
+                    WHEN COALESCE(SUM(ib.StockQuantity), 0) = 0 THEN 'Critical'
+                    WHEN COALESCE(SUM(ib.StockQuantity), 0) < i.MinStockLevel THEN 'Low'
+                    ELSE 'OK'
+                END AS 'Alert Level'
+            FROM ingredients i
+            LEFT JOIN inventory_batches ib ON i.IngredientID = ib.IngredientID 
+                AND ib.BatchStatus = 'Active'
+            WHERE i.IsActive = 1
+            GROUP BY i.IngredientID, i.IngredientName, i.UnitType, i.MinStockLevel
+            HAVING COALESCE(SUM(ib.StockQuantity), 0) < i.MinStockLevel
+            ORDER BY 
+                CASE 
+                    WHEN COALESCE(SUM(ib.StockQuantity), 0) = 0 THEN 1
+                    ELSE 2
+                END,
+                COALESCE(SUM(ib.StockQuantity), 0) ASC
+            LIMIT 5
+        "
+
+            Dim cmd As New MySqlCommand(sql, conn)
+            Dim reader As MySqlDataReader = cmd.ExecuteReader()
+
+            ' Clear existing alert items
+            InventoryAlerts.Controls.Clear()
+
+            ' Add header with icon
+            Dim headerPanel As New Panel()
+            headerPanel.Size = New Size(InventoryAlerts.Width - 20, 35)
+            headerPanel.Location = New Point(10, 10)
+            headerPanel.BackColor = Color.Transparent
+
+            ' Warning icon label
+            Dim lblIcon As New Label()
+            lblIcon.Text = "⚠"
+            lblIcon.Font = New Font("Segoe UI", 14, FontStyle.Bold)
+            lblIcon.ForeColor = Color.FromArgb(255, 193, 7)
+            lblIcon.Location = New Point(0, 5)
+            lblIcon.Size = New Size(30, 25)
+            headerPanel.Controls.Add(lblIcon)
+
+            ' Header title
+            Dim lblHeader As New Label()
+            lblHeader.Text = "Inventory Alerts"
+            lblHeader.Font = New Font("Segoe UI", 12, FontStyle.Bold)
+            lblHeader.ForeColor = Color.FromArgb(45, 45, 45)
+            lblHeader.Location = New Point(35, 7)
+            lblHeader.AutoSize = True
+            headerPanel.Controls.Add(lblHeader)
+
+            ' View All button
+            Dim btnViewAll As New Button()
+            btnViewAll.Text = "View All"
+            btnViewAll.Font = New Font("Segoe UI", 8, FontStyle.Regular)
+            btnViewAll.ForeColor = Color.FromArgb(111, 66, 193)
+            btnViewAll.BackColor = Color.Transparent
+            btnViewAll.FlatStyle = FlatStyle.Flat
+            btnViewAll.FlatAppearance.BorderSize = 0
+            btnViewAll.Cursor = Cursors.Hand
+            btnViewAll.Size = New Size(70, 25)
+            btnViewAll.Location = New Point(headerPanel.Width - 75, 5)
+
+            ' Add click event handler
+            AddHandler btnViewAll.Click, AddressOf ViewAllInventory_Click
+
+            ' Add hover effects
+            AddHandler btnViewAll.MouseEnter, Sub(s, ev)
+                                                  btnViewAll.ForeColor = Color.FromArgb(90, 50, 160)
+                                                  btnViewAll.Font = New Font("Segoe UI", 8, FontStyle.Underline)
+                                              End Sub
+            AddHandler btnViewAll.MouseLeave, Sub(s, ev)
+                                                  btnViewAll.ForeColor = Color.FromArgb(111, 66, 193)
+                                                  btnViewAll.Font = New Font("Segoe UI", 8, FontStyle.Regular)
+                                              End Sub
+
+            headerPanel.Controls.Add(btnViewAll)
+
+            InventoryAlerts.Controls.Add(headerPanel)
+
+            Dim yPosition As Integer = 55
+            Dim alertCount As Integer = 0
+
+            While reader.Read() AndAlso alertCount < 5
+                Dim itemName As String = reader("Item Name").ToString()
+                Dim stock As Decimal = Convert.ToDecimal(reader("Stock"))
+                Dim unit As String = reader("Unit").ToString()
+                Dim alertLevel As String = reader("Alert Level").ToString()
+
+                ' Create alert item panel
+                Dim alertItem As New Panel()
+                alertItem.Size = New Size(InventoryAlerts.Width - 20, 50)
+                alertItem.Location = New Point(10, yPosition)
+                alertItem.BackColor = Color.White
+
+                ' Item name label
+                Dim lblItem As New Label()
+                lblItem.Text = itemName
+                lblItem.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                lblItem.ForeColor = Color.FromArgb(45, 45, 45)
+                lblItem.Location = New Point(10, 8)
+                lblItem.AutoSize = True
+                alertItem.Controls.Add(lblItem)
+
+                ' Stock quantity label
+                Dim lblStock As New Label()
+                lblStock.Text = stock.ToString("N2") & " " & unit & " left"
+                lblStock.Font = New Font("Segoe UI", 8)
+                lblStock.ForeColor = Color.Gray
+                lblStock.Location = New Point(10, 28)
+                lblStock.AutoSize = True
+                alertItem.Controls.Add(lblStock)
+
+                ' Alert badge
+                Dim lblAlert As New Label()
+                lblAlert.Text = alertLevel
+                lblAlert.Font = New Font("Segoe UI", 8, FontStyle.Bold)
+                lblAlert.AutoSize = False
+                lblAlert.Size = New Size(60, 22)
+                lblAlert.TextAlign = ContentAlignment.MiddleCenter
+                lblAlert.Location = New Point(alertItem.Width - 75, 14)
+
+                ' Color code based on alert level
+                Select Case alertLevel
+                    Case "Critical"
+                        lblAlert.BackColor = Color.FromArgb(220, 53, 69)
+                        lblAlert.ForeColor = Color.White
+                    Case "Low"
+                        lblAlert.BackColor = Color.FromArgb(255, 193, 7)
+                        lblAlert.ForeColor = Color.Black
+                End Select
+
+                alertItem.Controls.Add(lblAlert)
+
+                ' Add separator line
+                If alertCount < 4 Then
+                    Dim separator As New Panel()
+                    separator.Height = 1
+                    separator.Width = alertItem.Width - 20
+                    separator.BackColor = Color.FromArgb(230, 230, 230)
+                    separator.Location = New Point(10, 49)
+                    alertItem.Controls.Add(separator)
+                End If
+
+                InventoryAlerts.Controls.Add(alertItem)
+
+                yPosition += 55
+                alertCount += 1
+            End While
+
+            reader.Close()
+
+            ' Show message if no alerts
+            If alertCount = 0 Then
+                Dim noAlerts As New Label()
+                noAlerts.Text = "✓ All inventory levels are healthy"
+                noAlerts.Font = New Font("Segoe UI", 9, FontStyle.Italic)
+                noAlerts.ForeColor = Color.FromArgb(40, 167, 69)
+                noAlerts.Location = New Point(20, 60)
+                noAlerts.AutoSize = True
+                InventoryAlerts.Controls.Add(noAlerts)
+            End If
+
+            closeConn()
+
+        Catch ex As Exception
+            MessageBox.Show("Error loading inventory alerts: " & ex.Message,
+                       "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            closeConn()
+        End Try
+    End Sub
+
+    ' Add a click event to navigate to full inventory
+    Private Sub ViewAllInventory_Click(sender As Object, e As EventArgs)
+        Try
+            Dim adminDashboard As AdminDashboard = TryCast(Me.ParentForm, AdminDashboard)
+            If adminDashboard IsNot Nothing Then
+                adminDashboard.Inventory.PerformClick()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Error navigating to inventory: " & ex.Message,
+                       "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
     Private Sub LoadOrdersOverviewChart()
         Try
@@ -860,20 +1062,6 @@ LIMIT 8;"
     ' SIMPLIFIED: Call FormReservationStatus chart rendering directly
     ' Add this to Dashboard.vb, replacing LoadReservationChart method
     ' ============================================
-    Private Sub LoadReservationChart()
-        Try
-            ' Get the selected filter period
-            Dim selectedFilter As String = If(Filters.SelectedItem?.ToString(), "Daily")
-
-            ' Get reservation data based on filter
-            Dim reservationStatusData = GetReservationStatusData(selectedFilter)
-            RenderReservationChart(ChartReservations, reservationStatusData)
-
-        Catch ex As Exception
-            MessageBox.Show("Error loading reservation chart: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            closeConn()
-        End Try
-    End Sub
 
     ' ============================================
     ' SHARED: Get Reservation Status Data
@@ -1020,16 +1208,7 @@ LIMIT 8;"
         End Try
     End Sub
 
-    ' ============================================
-    ' CHART CLICK EVENT - Navigate to Reservation Reports
-    ' ============================================
-    Private Sub ConfigureChart2Clickable()
-        ' Make the chart cursor indicate it's clickable
-        ChartReservations.Cursor = Cursors.Hand
-        ' Add tooltip to indicate it's clickable
-        Dim tooltip As New ToolTip()
-        tooltip.SetToolTip(Chart2, "Click to view detailed Catering Reservations report")
-    End Sub
+
     Private Sub ConfigureChartTopProducts()
         ' Make the chart cursor indicate it's clickable
         ChartTopProducts.Cursor = Cursors.Hand
@@ -1047,30 +1226,7 @@ LIMIT 8;"
 
 
 
-    Private Sub ChartReservations_Click(sender As Object, e As EventArgs) Handles ChartReservations.Click
-        Try
-            ' Get reference to AdminDashboard (parent form)
-            Dim adminDashboard As AdminDashboard = TryCast(Me.ParentForm, AdminDashboard)
 
-            If adminDashboard IsNot Nothing Then
-                ' First, load the Reports form in AdminDashboard
-                adminDashboard.btnReports.PerformClick()
-
-                ' Give UI time to load
-                Application.DoEvents()
-
-                ' Then load the Catering Reservations report
-                If Reports IsNot Nothing Then
-                    Reports.LoadCateringReservationReport()
-                End If
-            Else
-                MessageBox.Show("Unable to navigate to Reports section.", "Navigation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("Error navigating to catering reservations: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
 
     Private Sub MonthlyChartOrder_Click(sender As Object, e As EventArgs) Handles OrdersOverviewChart.Click
         Try
@@ -1144,15 +1300,7 @@ LIMIT 8;"
 
 
     ' Add visual feedback when hovering over the chart
-    Private Sub ChartReservations_MouseEnter(sender As Object, e As EventArgs) Handles ChartReservations.MouseEnter
-        Chart2.Cursor = Cursors.Hand
-        ChartReservations.BackColor = Color.FromArgb(245, 245, 245)
-    End Sub
 
-    Private Sub ChartReservations_MouseLeave(sender As Object, e As EventArgs) Handles ChartReservations.MouseLeave
-        Chart2.Cursor = Cursors.Default
-        ChartReservations.BackColor = Color.White
-    End Sub
     Private Sub RoundedPane21_Paint(sender As Object, e As PaintEventArgs)
 
 
