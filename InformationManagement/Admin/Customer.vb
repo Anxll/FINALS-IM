@@ -167,14 +167,5 @@ Public Class Customer
         End Try
     End Sub
 
-    ' ==============================
-    ' SEARCH LIVE FILTER
-    ' ==============================
-    Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
-        LoadCustomerData(txtSearch.Text)
-    End Sub
-
-
-
 
 End Class

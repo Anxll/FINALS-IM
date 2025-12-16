@@ -770,4 +770,66 @@ Public Class MenuItems
         End If
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Edit.Click
+
+    End Sub
+
+    ' ===============================
+    ' EDIT BUTTON (Panel button)
+    ' ===============================
+    Private Sub Edit_Click(sender As Object, e As EventArgs) Handles Edit.Click
+
+        If DataGridMenu.SelectedRows.Count = 0 Then
+            MessageBox.Show("Please select a product to edit.", "No Selection")
+            Exit Sub
+        End If
+
+        Dim id As Integer = DataGridMenu.SelectedRows(0).Cells("ProductID").Value
+
+        Dim editForm As New FormEditMenu()
+        editForm.LoadProductData(id)
+
+        If editForm.ShowDialog() = DialogResult.OK Then
+            LoadMenuItems(txtSearch.Text, Category.Text)
+        End If
+
+    End Sub
+
+
+    ' ===============================
+    ' DELETE BUTTON (Panel button)
+    ' ===============================
+    Private Sub Delete_Click(sender As Object, e As EventArgs) Handles Delete.Click
+
+        If DataGridMenu.SelectedRows.Count = 0 Then
+            MessageBox.Show("Please select a product to delete.", "No Selection")
+            Exit Sub
+        End If
+
+        Dim id As Integer = DataGridMenu.SelectedRows(0).Cells("ProductID").Value
+        Dim name As String = DataGridMenu.SelectedRows(0).Cells("ProductName").Value.ToString()
+
+        Dim result = MessageBox.Show($"Delete this product: {name}?",
+                                     "Confirm Delete",
+                                     MessageBoxButtons.YesNo,
+                                     MessageBoxIcon.Warning)
+
+        If result = DialogResult.Yes Then
+            Try
+                openConn()
+                Dim cmd As New MySqlCommand("DELETE FROM products WHERE ProductID=@id", conn)
+                cmd.Parameters.AddWithValue("@id", id)
+                cmd.ExecuteNonQuery()
+                conn.Close()
+
+                MessageBox.Show("Deleted successfully!")
+                LoadMenuItems(txtSearch.Text, Category.Text)
+
+            Catch ex As Exception
+                MessageBox.Show("Error deleting: " & ex.Message)
+            End Try
+        End If
+
+    End Sub
+
 End Class

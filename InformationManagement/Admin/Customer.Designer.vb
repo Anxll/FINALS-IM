@@ -26,11 +26,10 @@ Partial Class Customer
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.btnDelete = New System.Windows.Forms.Button()
-        Me.btnRefresh = New System.Windows.Forms.Button()
+        Me.btnDelete = New Guna.UI2.WinForms.Guna2Button()
+        Me.btnRefresh = New Guna.UI2.WinForms.Guna2Button()
         Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.lblSearch = New System.Windows.Forms.Label()
-        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.lblTotalCustomers = New System.Windows.Forms.Label()
@@ -85,9 +84,12 @@ Partial Class Customer
         'btnDelete
         '
         Me.btnDelete.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnDelete.BackColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(69, Byte), Integer))
-        Me.btnDelete.FlatAppearance.BorderSize = 0
-        Me.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnDelete.BorderRadius = 4
+        Me.btnDelete.DisabledState.BorderColor = System.Drawing.Color.DarkGray
+        Me.btnDelete.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray
+        Me.btnDelete.DisabledState.FillColor = System.Drawing.Color.FromArgb(CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer))
+        Me.btnDelete.DisabledState.ForeColor = System.Drawing.Color.FromArgb(CType(CType(141, Byte), Integer), CType(CType(141, Byte), Integer), CType(CType(141, Byte), Integer))
+        Me.btnDelete.FillColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(69, Byte), Integer))
         Me.btnDelete.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnDelete.ForeColor = System.Drawing.Color.White
         Me.btnDelete.Location = New System.Drawing.Point(717, 13)
@@ -96,14 +98,16 @@ Partial Class Customer
         Me.btnDelete.Size = New System.Drawing.Size(86, 26)
         Me.btnDelete.TabIndex = 5
         Me.btnDelete.Text = "Delete"
-        Me.btnDelete.UseVisualStyleBackColor = False
         '
         'btnRefresh
         '
         Me.btnRefresh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnRefresh.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.btnRefresh.FlatAppearance.BorderSize = 0
-        Me.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnRefresh.BorderRadius = 4
+        Me.btnRefresh.DisabledState.BorderColor = System.Drawing.Color.DarkGray
+        Me.btnRefresh.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray
+        Me.btnRefresh.DisabledState.FillColor = System.Drawing.Color.FromArgb(CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer), CType(CType(169, Byte), Integer))
+        Me.btnRefresh.DisabledState.ForeColor = System.Drawing.Color.FromArgb(CType(CType(141, Byte), Integer), CType(CType(141, Byte), Integer), CType(CType(141, Byte), Integer))
+        Me.btnRefresh.FillColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
         Me.btnRefresh.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnRefresh.ForeColor = System.Drawing.Color.White
         Me.btnRefresh.Location = New System.Drawing.Point(619, 13)
@@ -112,7 +116,6 @@ Partial Class Customer
         Me.btnRefresh.Size = New System.Drawing.Size(86, 26)
         Me.btnRefresh.TabIndex = 3
         Me.btnRefresh.Text = "Refresh"
-        Me.btnRefresh.UseVisualStyleBackColor = False
         '
         'txtSearch
         '
@@ -136,17 +139,6 @@ Partial Class Customer
         Me.lblSearch.TabIndex = 0
         Me.lblSearch.Text = "Search:"
         '
-        'Panel3
-        '
-        Me.Panel3.BackColor = System.Drawing.Color.White
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel3.Location = New System.Drawing.Point(0, 123)
-        Me.Panel3.Margin = New System.Windows.Forms.Padding(2)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Padding = New System.Windows.Forms.Padding(8, 9, 8, 9)
-        Me.Panel3.Size = New System.Drawing.Size(1028, 8)
-        Me.Panel3.TabIndex = 2
-        '
         'DataGridView1
         '
         Me.DataGridView1.AllowUserToAddRows = False
@@ -169,7 +161,7 @@ Partial Class Customer
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridView1.EnableHeadersVisualStyles = False
-        Me.DataGridView1.Location = New System.Drawing.Point(0, 131)
+        Me.DataGridView1.Location = New System.Drawing.Point(0, 123)
         Me.DataGridView1.Margin = New System.Windows.Forms.Padding(2)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
@@ -177,7 +169,7 @@ Partial Class Customer
         Me.DataGridView1.RowHeadersWidth = 51
         Me.DataGridView1.RowTemplate.Height = 35
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1028, 415)
+        Me.DataGridView1.Size = New System.Drawing.Size(1028, 423)
         Me.DataGridView1.TabIndex = 3
         '
         'Panel4
@@ -206,11 +198,10 @@ Partial Class Customer
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(247, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.BackColor = System.Drawing.Color.GhostWhite
         Me.ClientSize = New System.Drawing.Size(1028, 572)
         Me.Controls.Add(Me.DataGridView1)
         Me.Controls.Add(Me.Panel4)
-        Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
         Me.Margin = New System.Windows.Forms.Padding(2)
@@ -236,10 +227,9 @@ Partial Class Customer
     Friend WithEvents Panel2 As Panel
     Friend WithEvents txtSearch As TextBox
     Friend WithEvents lblSearch As Label
-    Friend WithEvents btnRefresh As Button
-    Friend WithEvents btnDelete As Button
-    Friend WithEvents Panel3 As Panel
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents Panel4 As Panel
     Friend WithEvents lblTotalCustomers As Label
+    Friend WithEvents btnDelete As Guna.UI2.WinForms.Guna2Button
+    Friend WithEvents btnRefresh As Guna.UI2.WinForms.Guna2Button
 End Class

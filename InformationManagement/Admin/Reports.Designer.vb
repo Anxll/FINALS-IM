@@ -35,7 +35,8 @@ Partial Class Reports
         Me.btnCustomerHistory = New System.Windows.Forms.Button()
         Me.btnEmployeeAttendance = New System.Windows.Forms.Button()
         Me.btnProductsPerformance = New System.Windows.Forms.Button()
-        Me.reportPeriod = New Guna.UI2.WinForms.Guna2ComboBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.reportPeriod = New System.Windows.Forms.ComboBox()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -82,7 +83,7 @@ Partial Class Reports
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(12, 80)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(10, 5, 10, 5)
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2416, 50)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2433, 50)
         Me.FlowLayoutPanel1.TabIndex = 4
         Me.FlowLayoutPanel1.WrapContents = False
         '
@@ -266,22 +267,30 @@ Partial Class Reports
         Me.btnProductsPerformance.Text = "Products Performance"
         Me.btnProductsPerformance.UseVisualStyleBackColor = False
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
+        Me.Label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.Label2.Location = New System.Drawing.Point(978, 23)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(57, 17)
+        Me.Label2.TabIndex = 5
+        Me.Label2.Text = "Period :"
+        '
         'reportPeriod
         '
-        Me.reportPeriod.BackColor = System.Drawing.Color.Transparent
-        Me.reportPeriod.BorderRadius = 6
         Me.reportPeriod.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
         Me.reportPeriod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.reportPeriod.FocusedColor = System.Drawing.Color.FromArgb(CType(CType(94, Byte), Integer), CType(CType(148, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.reportPeriod.FocusedState.BorderColor = System.Drawing.Color.FromArgb(CType(CType(94, Byte), Integer), CType(CType(148, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.reportPeriod.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.reportPeriod.ForeColor = System.Drawing.Color.FromArgb(CType(CType(68, Byte), Integer), CType(CType(88, Byte), Integer), CType(CType(112, Byte), Integer))
-        Me.reportPeriod.ItemHeight = 30
+        Me.reportPeriod.DropDownWidth = 106
+        Me.reportPeriod.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.reportPeriod.FormattingEnabled = True
+        Me.reportPeriod.ItemHeight = 14
         Me.reportPeriod.Items.AddRange(New Object() {"Daily", "Weekly", "Montly", "Yearly"})
-        Me.reportPeriod.Location = New System.Drawing.Point(960, 24)
+        Me.reportPeriod.Location = New System.Drawing.Point(1068, 23)
         Me.reportPeriod.Name = "reportPeriod"
-        Me.reportPeriod.Size = New System.Drawing.Size(140, 36)
-        Me.reportPeriod.TabIndex = 5
+        Me.reportPeriod.Size = New System.Drawing.Size(121, 20)
+        Me.reportPeriod.TabIndex = 6
         '
         'Reports
         '
@@ -290,8 +299,9 @@ Partial Class Reports
         Me.AutoScroll = True
         Me.AutoSize = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1131, 609)
+        Me.ClientSize = New System.Drawing.Size(1370, 609)
         Me.Controls.Add(Me.reportPeriod)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.FlowLayoutPanel1)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Label1)
@@ -320,5 +330,6 @@ Partial Class Reports
     Friend WithEvents btnCustomerHistory As Button
     Friend WithEvents btnEmployeeAttendance As Button
     Friend WithEvents btnProductsPerformance As Button
-    Friend WithEvents reportPeriod As Guna.UI2.WinForms.Guna2ComboBox
+    Friend WithEvents Label2 As Label
+    Friend WithEvents reportPeriod As ComboBox
 End Class

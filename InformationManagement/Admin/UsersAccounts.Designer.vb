@@ -41,7 +41,6 @@ Partial Class UsersAccounts
         Me.colDelete = New System.Windows.Forms.DataGridViewImageColumn()
         Me.DataGridViewImageColumn1 = New System.Windows.Forms.DataGridViewImageColumn()
         Me.DataGridViewImageColumn2 = New System.Windows.Forms.DataGridViewImageColumn()
-        Me.AddEdit = New System.Windows.Forms.Button()
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
         Me.lblCustomers = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -76,7 +75,7 @@ Partial Class UsersAccounts
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Label1.Location = New System.Drawing.Point(26, 28)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(213, 40)
+        Me.Label1.Size = New System.Drawing.Size(269, 50)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "User Accounts"
         '
@@ -163,7 +162,7 @@ Partial Class UsersAccounts
         Me.UsersAccountData.DefaultCellStyle = DataGridViewCellStyle3
         Me.UsersAccountData.EnableHeadersVisualStyles = False
         Me.UsersAccountData.GridColor = System.Drawing.Color.LightGray
-        Me.UsersAccountData.Location = New System.Drawing.Point(58, 273)
+        Me.UsersAccountData.Location = New System.Drawing.Point(43, 271)
         Me.UsersAccountData.Name = "UsersAccountData"
         Me.UsersAccountData.ReadOnly = True
         Me.UsersAccountData.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
@@ -176,64 +175,8 @@ Partial Class UsersAccounts
         Me.UsersAccountData.RowTemplate.Height = 35
         Me.UsersAccountData.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal
         Me.UsersAccountData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.UsersAccountData.Size = New System.Drawing.Size(1214, 219)
+        Me.UsersAccountData.Size = New System.Drawing.Size(1026, 270)
         Me.UsersAccountData.TabIndex = 9
-        '
-        'txtName
-        '
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.txtName.DefaultCellStyle = DataGridViewCellStyle2
-        Me.txtName.HeaderText = "Name"
-        Me.txtName.MinimumWidth = 6
-        Me.txtName.Name = "txtName"
-        Me.txtName.ReadOnly = True
-        Me.txtName.Width = 250
-        '
-        'colRole
-        '
-        Me.colRole.HeaderText = "Role"
-        Me.colRole.MinimumWidth = 6
-        Me.colRole.Name = "colRole"
-        Me.colRole.ReadOnly = True
-        Me.colRole.Width = 250
-        '
-        'colStatus
-        '
-        Me.colStatus.HeaderText = "Status"
-        Me.colStatus.MinimumWidth = 6
-        Me.colStatus.Name = "colStatus"
-        Me.colStatus.ReadOnly = True
-        Me.colStatus.Width = 250
-        '
-        'colJoinDate
-        '
-        Me.colJoinDate.HeaderText = "Join Date"
-        Me.colJoinDate.MinimumWidth = 6
-        Me.colJoinDate.Name = "colJoinDate"
-        Me.colJoinDate.ReadOnly = True
-        Me.colJoinDate.Width = 250
-        '
-        'colEdit
-        '
-        Me.colEdit.HeaderText = "Actions"
-        Me.colEdit.Image = Global.InformationManagement.My.Resources.Resources.edit
-        Me.colEdit.MinimumWidth = 6
-        Me.colEdit.Name = "colEdit"
-        Me.colEdit.ReadOnly = True
-        Me.colEdit.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.colEdit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.colEdit.Width = 200
-        '
-        'colDelete
-        '
-        Me.colDelete.HeaderText = ""
-        Me.colDelete.Image = Global.InformationManagement.My.Resources.Resources.delete
-        Me.colDelete.MinimumWidth = 6
-        Me.colDelete.Name = "colDelete"
-        Me.colDelete.ReadOnly = True
-        Me.colDelete.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.colDelete.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.colDelete.Width = 200
         '
         'DataGridViewImageColumn1
         '
@@ -257,23 +200,9 @@ Partial Class UsersAccounts
         Me.DataGridViewImageColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.DataGridViewImageColumn2.Width = 80
         '
-        'AddEdit
-        '
-        Me.AddEdit.BackColor = System.Drawing.SystemColors.ControlText
-        Me.AddEdit.FlatAppearance.BorderSize = 0
-        Me.AddEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.AddEdit.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.AddEdit.ForeColor = System.Drawing.Color.White
-        Me.AddEdit.Location = New System.Drawing.Point(962, 20)
-        Me.AddEdit.Name = "AddEdit"
-        Me.AddEdit.Size = New System.Drawing.Size(165, 40)
-        Me.AddEdit.TabIndex = 14
-        Me.AddEdit.Text = "+   Add New User"
-        Me.AddEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.AddEdit.UseVisualStyleBackColor = False
-        '
         'RoundedPane24
         '
+        Me.RoundedPane24.AutoSize = True
         Me.RoundedPane24.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane24.BorderThickness = 1
         Me.RoundedPane24.Controls.Add(Me.lblCustomers)
@@ -281,9 +210,9 @@ Partial Class UsersAccounts
         Me.RoundedPane24.Controls.Add(Me.PictureBox7)
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
-        Me.RoundedPane24.Location = New System.Drawing.Point(899, 149)
+        Me.RoundedPane24.Location = New System.Drawing.Point(833, 146)
         Me.RoundedPane24.Name = "RoundedPane24"
-        Me.RoundedPane24.Size = New System.Drawing.Size(253, 105)
+        Me.RoundedPane24.Size = New System.Drawing.Size(236, 105)
         Me.RoundedPane24.TabIndex = 12
         '
         'lblCustomers
@@ -294,7 +223,7 @@ Partial Class UsersAccounts
         Me.lblCustomers.ForeColor = System.Drawing.Color.DarkViolet
         Me.lblCustomers.Location = New System.Drawing.Point(25, 52)
         Me.lblCustomers.Name = "lblCustomers"
-        Me.lblCustomers.Size = New System.Drawing.Size(26, 30)
+        Me.lblCustomers.Size = New System.Drawing.Size(33, 37)
         Me.lblCustomers.TabIndex = 3
         Me.lblCustomers.Text = "2"
         '
@@ -306,7 +235,7 @@ Partial Class UsersAccounts
         Me.Label8.ForeColor = System.Drawing.Color.DarkViolet
         Me.Label8.Location = New System.Drawing.Point(14, 19)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(75, 19)
+        Me.Label8.Size = New System.Drawing.Size(91, 23)
         Me.Label8.TabIndex = 0
         Me.Label8.Text = "Customers"
         '
@@ -314,7 +243,7 @@ Partial Class UsersAccounts
         '
         Me.PictureBox7.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox7.Image = Global.InformationManagement.My.Resources.Resources.user__6_
-        Me.PictureBox7.Location = New System.Drawing.Point(209, 28)
+        Me.PictureBox7.Location = New System.Drawing.Point(160, 28)
         Me.PictureBox7.Name = "PictureBox7"
         Me.PictureBox7.Size = New System.Drawing.Size(31, 24)
         Me.PictureBox7.TabIndex = 1
@@ -322,6 +251,7 @@ Partial Class UsersAccounts
         '
         'RoundedPane23
         '
+        Me.RoundedPane23.AutoSize = True
         Me.RoundedPane23.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane23.BorderThickness = 1
         Me.RoundedPane23.Controls.Add(Me.lblEmployees)
@@ -329,9 +259,9 @@ Partial Class UsersAccounts
         Me.RoundedPane23.Controls.Add(Me.PictureBox6)
         Me.RoundedPane23.CornerRadius = 15
         Me.RoundedPane23.FillColor = System.Drawing.Color.White
-        Me.RoundedPane23.Location = New System.Drawing.Point(624, 149)
+        Me.RoundedPane23.Location = New System.Drawing.Point(570, 149)
         Me.RoundedPane23.Name = "RoundedPane23"
-        Me.RoundedPane23.Size = New System.Drawing.Size(253, 105)
+        Me.RoundedPane23.Size = New System.Drawing.Size(236, 105)
         Me.RoundedPane23.TabIndex = 13
         '
         'lblEmployees
@@ -342,7 +272,7 @@ Partial Class UsersAccounts
         Me.lblEmployees.ForeColor = System.Drawing.Color.ForestGreen
         Me.lblEmployees.Location = New System.Drawing.Point(31, 52)
         Me.lblEmployees.Name = "lblEmployees"
-        Me.lblEmployees.Size = New System.Drawing.Size(26, 30)
+        Me.lblEmployees.Size = New System.Drawing.Size(33, 37)
         Me.lblEmployees.TabIndex = 3
         Me.lblEmployees.Text = "1"
         '
@@ -354,7 +284,7 @@ Partial Class UsersAccounts
         Me.Label7.ForeColor = System.Drawing.Color.ForestGreen
         Me.Label7.Location = New System.Drawing.Point(14, 19)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(75, 19)
+        Me.Label7.Size = New System.Drawing.Size(92, 23)
         Me.Label7.TabIndex = 0
         Me.Label7.Text = "Employees"
         '
@@ -362,7 +292,7 @@ Partial Class UsersAccounts
         '
         Me.PictureBox6.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox6.Image = Global.InformationManagement.My.Resources.Resources.user__7_
-        Me.PictureBox6.Location = New System.Drawing.Point(209, 28)
+        Me.PictureBox6.Location = New System.Drawing.Point(173, 25)
         Me.PictureBox6.Name = "PictureBox6"
         Me.PictureBox6.Size = New System.Drawing.Size(31, 24)
         Me.PictureBox6.TabIndex = 1
@@ -370,6 +300,7 @@ Partial Class UsersAccounts
         '
         'RoundedPane22
         '
+        Me.RoundedPane22.AutoSize = True
         Me.RoundedPane22.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane22.BorderThickness = 1
         Me.RoundedPane22.Controls.Add(Me.lblStaffs)
@@ -377,9 +308,9 @@ Partial Class UsersAccounts
         Me.RoundedPane22.Controls.Add(Me.PictureBox5)
         Me.RoundedPane22.CornerRadius = 15
         Me.RoundedPane22.FillColor = System.Drawing.Color.White
-        Me.RoundedPane22.Location = New System.Drawing.Point(345, 149)
+        Me.RoundedPane22.Location = New System.Drawing.Point(306, 149)
         Me.RoundedPane22.Name = "RoundedPane22"
-        Me.RoundedPane22.Size = New System.Drawing.Size(253, 105)
+        Me.RoundedPane22.Size = New System.Drawing.Size(236, 105)
         Me.RoundedPane22.TabIndex = 12
         '
         'lblStaffs
@@ -390,7 +321,7 @@ Partial Class UsersAccounts
         Me.lblStaffs.ForeColor = System.Drawing.Color.RoyalBlue
         Me.lblStaffs.Location = New System.Drawing.Point(26, 52)
         Me.lblStaffs.Name = "lblStaffs"
-        Me.lblStaffs.Size = New System.Drawing.Size(26, 30)
+        Me.lblStaffs.Size = New System.Drawing.Size(33, 37)
         Me.lblStaffs.TabIndex = 3
         Me.lblStaffs.Text = "2"
         '
@@ -402,7 +333,7 @@ Partial Class UsersAccounts
         Me.Label6.ForeColor = System.Drawing.Color.RoyalBlue
         Me.Label6.Location = New System.Drawing.Point(14, 19)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(101, 19)
+        Me.Label6.Size = New System.Drawing.Size(123, 23)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Staff Members"
         '
@@ -410,7 +341,7 @@ Partial Class UsersAccounts
         '
         Me.PictureBox5.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
-        Me.PictureBox5.Location = New System.Drawing.Point(209, 28)
+        Me.PictureBox5.Location = New System.Drawing.Point(190, 25)
         Me.PictureBox5.Name = "PictureBox5"
         Me.PictureBox5.Size = New System.Drawing.Size(31, 24)
         Me.PictureBox5.TabIndex = 1
@@ -418,6 +349,7 @@ Partial Class UsersAccounts
         '
         'RoundedPane21
         '
+        Me.RoundedPane21.AutoSize = True
         Me.RoundedPane21.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane21.BorderThickness = 1
         Me.RoundedPane21.Controls.Add(Me.PictureBox1)
@@ -425,16 +357,16 @@ Partial Class UsersAccounts
         Me.RoundedPane21.Controls.Add(Me.Label2)
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
-        Me.RoundedPane21.Location = New System.Drawing.Point(61, 149)
+        Me.RoundedPane21.Location = New System.Drawing.Point(43, 149)
         Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(253, 105)
+        Me.RoundedPane21.Size = New System.Drawing.Size(236, 105)
         Me.RoundedPane21.TabIndex = 11
         '
         'PictureBox1
         '
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox1.Image = Global.InformationManagement.My.Resources.Resources.user__4_
-        Me.PictureBox1.Location = New System.Drawing.Point(199, 28)
+        Me.PictureBox1.Location = New System.Drawing.Point(182, 19)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(31, 24)
         Me.PictureBox1.TabIndex = 1
@@ -447,7 +379,7 @@ Partial Class UsersAccounts
         Me.lblTotalUsers.Font = New System.Drawing.Font("Segoe UI", 16.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblTotalUsers.Location = New System.Drawing.Point(22, 52)
         Me.lblTotalUsers.Name = "lblTotalUsers"
-        Me.lblTotalUsers.Size = New System.Drawing.Size(26, 30)
+        Me.lblTotalUsers.Size = New System.Drawing.Size(33, 37)
         Me.lblTotalUsers.TabIndex = 2
         Me.lblTotalUsers.Text = "5"
         '
@@ -459,17 +391,17 @@ Partial Class UsersAccounts
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark
         Me.Label2.Location = New System.Drawing.Point(14, 19)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(78, 19)
+        Me.Label2.Size = New System.Drawing.Size(92, 23)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Total Users"
         '
         'UsersAccounts
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 17.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1265, 544)
+        Me.ClientSize = New System.Drawing.Size(1110, 609)
         Me.Controls.Add(Me.AddEdit)
         Me.Controls.Add(Me.RoundedPane24)
         Me.Controls.Add(Me.RoundedPane23)
