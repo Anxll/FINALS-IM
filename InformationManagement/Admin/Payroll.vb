@@ -56,7 +56,8 @@ Public Class Payroll
 
     ' Helper function to format currency as Philippine Peso
     Private Function FormatPeso(amount As Decimal) As String
-        Return "?" & amount.ToString("N2")
+        ' Use Unicode Peso sign safely even if the source file encoding is not UTF-8.
+        Return ChrW(&H20B1) & amount.ToString("N2")
     End Function
 
     Public Sub LoadEmployees()
@@ -323,7 +324,7 @@ Public Class Payroll
     Private Sub HandleMarkAsPaidAction(payrollID As Integer, employeeName As String)
         Dim result As DialogResult = MessageBox.Show(
             $"Mark payroll as PAID for {employeeName}?" & vbCrLf & vbCrLf &
-            "?? This action marks the payroll as completed." & vbCrLf &
+            "This action marks the payroll as completed." & vbCrLf &
             "Make sure payment has been processed!",
             "Mark as Paid",
             MessageBoxButtons.YesNo,

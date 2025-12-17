@@ -59,9 +59,9 @@ Public Class FormEditPayroll
             Dim bonuses As Decimal = If(Decimal.TryParse(txtBonuses.Text, Nothing), Convert.ToDecimal(txtBonuses.Text), 0)
 
             Dim netPay As Decimal = basic + overtime + bonuses - deductions
-            lblNetPay.Text = "₱" & netPay.ToString("N2")
+            lblNetPay.Text = ChrW(&H20B1) & netPay.ToString("N2")
         Catch ex As Exception
-            lblNetPay.Text = "₱0.00"
+            lblNetPay.Text = ChrW(&H20B1) & "0.00"
         End Try
     End Sub
 

@@ -19,9 +19,9 @@ Public Class FormPayroll
                 Dim cmdTotalPayroll As New MySqlCommand("SELECT IFNULL(SUM(BasicSalary + Overtime + Bonuses - Deductions), 0) FROM payroll WHERE Status = 'Paid'", conn)
                 Dim totalPayroll As Object = cmdTotalPayroll.ExecuteScalar()
                 If totalPayroll IsNot Nothing AndAlso Not IsDBNull(totalPayroll) Then
-                    Label4.Text = "₱" & Convert.ToDecimal(totalPayroll).ToString("N2")
+                    Label4.Text = ChrW(&H20B1) & Convert.ToDecimal(totalPayroll).ToString("N2")
                 Else
-                    Label4.Text = "₱0.00"
+                    Label4.Text = ChrW(&H20B1) & "0.00"
                 End If
 
                 ' Get total hours from actual payroll records (Paid records only)
