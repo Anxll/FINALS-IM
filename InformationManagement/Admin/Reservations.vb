@@ -79,8 +79,16 @@ Public Class Reservations
             rbCancelled.Checked = (currentStatus.Equals("Cancelled", StringComparison.OrdinalIgnoreCase))
             statusForm.Controls.Add(rbCancelled)
 
+            Dim rbCompleted As New RadioButton()
+            rbCompleted.Text = "Completed"
+            rbCompleted.Location = New Point(30, 130)
+            rbCompleted.Size = New Size(120, 25)
+            rbCompleted.Font = New Font("Segoe UI", 10)
+            rbCompleted.Checked = (currentStatus.Equals("Completed", StringComparison.OrdinalIgnoreCase))
+            statusForm.Controls.Add(rbCompleted)
+
             ' Ensure at least one is checked if none match
-            If Not (rbPending.Checked Or rbConfirmed.Checked Or rbCancelled.Checked) Then
+            If Not (rbPending.Checked Or rbConfirmed.Checked Or rbCancelled.Checked Or rbCompleted.Checked) Then
                 rbPending.Checked = True
             End If
 
@@ -114,6 +122,8 @@ Public Class Reservations
                     newStatus = "Confirmed"
                 ElseIf rbCancelled.Checked Then
                     newStatus = "Cancelled"
+                ElseIf rbCompleted.Checked Then
+                    newStatus = "Completed"
                 End If
 
                 ' Check if status is actually changing (case-insensitive comparison)

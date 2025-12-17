@@ -1,55 +1,96 @@
 ﻿Imports MySqlConnector
 Imports System.Text
+Imports System.Data
+Imports System.Threading.Tasks
 
 Public Class FormCustomerHistory
     Private ReadOnly connectionString As String = modDB.strConnection
+    Private _isLoading As Boolean = False
+    Private _baseTitle As String = ""
 
     Private Sub FormCustomerHistory_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        LoadCustomerHistory()
+        _baseTitle = Label1.Text
+        ConfigureGrid()
+        BeginLoadCustomerHistory()
     End Sub
 
-    Private Sub LoadCustomerHistory()
-        Dim query As String =
-            "SELECT o.OrderID,
-                    o.OrderDate,
-                    o.OrderType,
-                    o.TotalAmount,
-                    o.OrderStatus,
-                    GROUP_CONCAT(CONCAT(oi.ProductName, ' (', oi.Quantity, ')') SEPARATOR ', ') AS Items
-             FROM orders o
-             LEFT JOIN order_items oi ON o.OrderID = oi.OrderID
-             GROUP BY o.OrderID
-             ORDER BY o.OrderDate DESC;"
+    Private Async Sub BeginLoadCustomerHistory()
+        If _isLoading Then Return
+        _isLoading = True
+        SetLoadingState(True)
+
         Try
-            Using conn As New MySqlConnection(connectionString)
-                Using cmd As New MySqlCommand(query, conn)
-                    conn.Open()
-                    Using reader As MySqlDataReader = cmd.ExecuteReader()
-                        DataGridView1.Rows.Clear()
-                        While reader.Read()
-                            ' Format date safely
-                            Dim orderDate As String = ""
-                            If Not reader.IsDBNull(reader.GetOrdinal("OrderDate")) Then
-                                orderDate = CDate(reader("OrderDate")).ToString("yyyy-MM-dd")
-                            End If
-                            ' Add row to DataGridView
-                            DataGridView1.Rows.Add(
-                                orderDate,
-                                reader("OrderID").ToString(),
-                                reader("OrderType").ToString(),
-                                reader("Items").ToString(),
-                                Convert.ToDecimal(reader("TotalAmount")).ToString("0.00"),
-                                reader("OrderStatus").ToString()
-                            )
-                        End While
-                    End Using
+            Dim table As DataTable = Await Task.Run(Function() FetchCustomerHistoryTable())
+
+            If Me.IsDisposed OrElse Not Me.IsHandleCreated Then Return
+            DataGridView1.DataSource = table
+        Catch ex As Exception
+            If Not Me.IsDisposed Then
+                MessageBox.Show("Error loading customer history:" & vbCrLf & ex.Message,
+                                "Database Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error)
+            End If
+        Finally
+            If Not Me.IsDisposed Then SetLoadingState(False)
+            _isLoading = False
+        End Try
+    End Sub
+
+    Private Function FetchCustomerHistoryTable() As DataTable
+        Dim query As String =
+            "SELECT " &
+            "  o.OrderDate, " &
+            "  o.OrderID, " &
+            "  o.OrderType, " &
+            "  GROUP_CONCAT(CONCAT(oi.ProductName, ' (', oi.Quantity, ')') ORDER BY oi.ProductName SEPARATOR ', ') AS Items, " &
+            "  IFNULL(o.TotalAmount, 0) AS TotalAmount, " &
+            "  o.OrderStatus " &
+            "FROM orders o " &
+            "LEFT JOIN order_items oi ON o.OrderID = oi.OrderID " &
+            "WHERE 1=1 " &
+            "GROUP BY o.OrderID, o.OrderDate, o.OrderType, o.TotalAmount, o.OrderStatus " &
+            "ORDER BY o.OrderDate DESC, o.OrderID DESC;"
+
+        Using conn As New MySqlConnection(connectionString)
+            conn.Open()
+            Using cmd As New MySqlCommand(query, conn)
+                cmd.CommandTimeout = 60
+                Using adapter As New MySqlDataAdapter(cmd)
+                    Dim table As New DataTable()
+                    adapter.Fill(table)
+                    Return table
                 End Using
             End Using
-        Catch ex As Exception
-            MessageBox.Show("Error loading customer history:" & vbCrLf & ex.Message,
-                            "Database Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error)
+        End Using
+    End Function
+
+    Private Sub ConfigureGrid()
+        ' Use the designer-defined columns; bind to a DataTable for faster loading.
+        DataGridView1.AutoGenerateColumns = False
+
+        dateid.DataPropertyName = "OrderDate"
+        Orderid.DataPropertyName = "OrderID"
+        Type.DataPropertyName = "OrderType"
+        Items.DataPropertyName = "Items"
+        Amount.DataPropertyName = "TotalAmount"
+        Status.DataPropertyName = "OrderStatus"
+
+        dateid.DefaultCellStyle.Format = "yyyy-MM-dd"
+        Amount.DefaultCellStyle.Format = "₱#,##0.00"
+
+        DataGridView1.ReadOnly = True
+        DataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        DataGridView1.MultiSelect = False
+    End Sub
+
+    Private Sub SetLoadingState(isLoading As Boolean)
+        Try
+            Me.UseWaitCursor = isLoading
+            DataGridView1.Enabled = Not isLoading
+            Export.Enabled = Not isLoading
+            Label1.Text = If(isLoading, _baseTitle & " (Loading...)", _baseTitle)
+        Catch
         End Try
     End Sub
 

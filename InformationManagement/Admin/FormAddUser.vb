@@ -42,15 +42,17 @@ Public Class FormAddUser
 
         Try
             openConn()
+            Dim tx As MySqlTransaction = conn.BeginTransaction()
 
             ' Check if username exists in user_accounts
             Dim checkSql As String = "SELECT COUNT(*) FROM user_accounts WHERE username = @user"
-            Dim checkCmd As New MySqlCommand(checkSql, conn)
+            Dim checkCmd As New MySqlCommand(checkSql, conn, tx)
             checkCmd.Parameters.AddWithValue("@user", txtFullName.Text.Trim())
             Dim count As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
 
             If count > 0 Then
                 MessageBox.Show("Username already exists. Please choose another.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                tx.Rollback()
                 closeConn()
                 Return
             End If
@@ -64,24 +66,45 @@ Public Class FormAddUser
             Dim firstName As String = nameParts(0)
             Dim lastName As String = If(nameParts.Length > 1, String.Join(" ", nameParts.Skip(1)), "")
 
-            ' Insert into user_accounts table (Staff = type 1)
-            Dim userQuery As String = "INSERT INTO user_accounts (name, username, password, type, position, created_at) VALUES (@name, @user, @pass, 1, @position, NOW())"
-            Dim userCmd As New MySqlCommand(userQuery, conn)
-            userCmd.Parameters.AddWithValue("@name", txtFullName.Text.Trim())
-            userCmd.Parameters.AddWithValue("@user", txtFullName.Text.Trim())
-            userCmd.Parameters.AddWithValue("@pass", encryptedPassword)
-            userCmd.Parameters.AddWithValue("@position", selectedRole)
-            userCmd.ExecuteNonQuery()
-
             ' Insert into employee table (all staff are employees)
             Dim empQuery As String = "INSERT INTO employee (FirstName, LastName, Email, Position, HireDate, EmploymentStatus, EmploymentType, Salary) VALUES (@fname, @lname, @email, @position, NOW(), @status, 'Full-time', 0)"
-            Dim empCmd As New MySqlCommand(empQuery, conn)
+            Dim empCmd As New MySqlCommand(empQuery, conn, tx)
             empCmd.Parameters.AddWithValue("@fname", firstName)
             empCmd.Parameters.AddWithValue("@lname", lastName)
             empCmd.Parameters.AddWithValue("@email", txtFullName.Text.Trim().Replace(" ", "").ToLower() & "@company.com")
             empCmd.Parameters.AddWithValue("@position", selectedRole)
             empCmd.Parameters.AddWithValue("@status", selectedStatus)
             empCmd.ExecuteNonQuery()
+            Dim newEmployeeId As Integer = CInt(empCmd.LastInsertedId)
+
+            ' Ensure employee_id column exists (older DB)
+            Try
+                Dim colCheckSql As String = "SELECT COUNT(*) FROM information_schema.COLUMNS " &
+                                            "WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'user_accounts' AND COLUMN_NAME = 'employee_id'"
+                Using colCheckCmd As New MySqlCommand(colCheckSql, conn, tx)
+                    Dim colCount As Integer = Convert.ToInt32(colCheckCmd.ExecuteScalar())
+                    If colCount = 0 Then
+                        Using alterCmd As New MySqlCommand("ALTER TABLE user_accounts ADD COLUMN employee_id INT NULL", conn, tx)
+                            alterCmd.ExecuteNonQuery()
+                        End Using
+                    End If
+                End Using
+            Catch
+                ' ignore
+            End Try
+
+            ' Insert into user_accounts table (Staff = type 1) and LINK employee_id
+            Dim userQuery As String = "INSERT INTO user_accounts (employee_id, name, username, password, type, position, created_at) " &
+                                      "VALUES (@eid, @name, @user, @pass, 1, @position, NOW())"
+            Dim userCmd As New MySqlCommand(userQuery, conn, tx)
+            userCmd.Parameters.AddWithValue("@eid", newEmployeeId)
+            userCmd.Parameters.AddWithValue("@name", txtFullName.Text.Trim())
+            userCmd.Parameters.AddWithValue("@user", txtFullName.Text.Trim())
+            userCmd.Parameters.AddWithValue("@pass", encryptedPassword)
+            userCmd.Parameters.AddWithValue("@position", selectedRole)
+            userCmd.ExecuteNonQuery()
+
+            tx.Commit()
 
             closeConn()
 

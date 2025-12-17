@@ -132,6 +132,7 @@ Public Class Orders
                 o.EmployeeID,
                 o.OrderType,
                 o.OrderSource,
+                o.WebsiteStatus,
                 o.ReceiptNumber,
                 o.NumberOfDiners,
                 o.OrderDate,
@@ -283,36 +284,42 @@ Public Class Orders
                     .Columns("OrderSource").DisplayIndex = 6
                 End If
 
+                If .Columns.Contains("WebsiteStatus") Then
+                    .Columns("WebsiteStatus").HeaderText = "Website Status"
+                    .Columns("WebsiteStatus").Width = 120
+                    .Columns("WebsiteStatus").DisplayIndex = 7
+                End If
+
                 If .Columns.Contains("NumberOfDiners") Then
                     .Columns("NumberOfDiners").HeaderText = "Diners"
                     .Columns("NumberOfDiners").Width = 70
-                    .Columns("NumberOfDiners").DisplayIndex = 7
+                    .Columns("NumberOfDiners").DisplayIndex = 8
                 End If
 
                 If .Columns.Contains("OrderDate") Then
                     .Columns("OrderDate").HeaderText = "Order Date"
                     .Columns("OrderDate").Width = 100
                     .Columns("OrderDate").DefaultCellStyle.Format = "MM/dd/yyyy"
-                    .Columns("OrderDate").DisplayIndex = 8
+                    .Columns("OrderDate").DisplayIndex = 9
                 End If
 
                 If .Columns.Contains("OrderTime") Then
                     .Columns("OrderTime").HeaderText = "Order Time"
                     .Columns("OrderTime").Width = 90
-                    .Columns("OrderTime").DisplayIndex = 9
+                    .Columns("OrderTime").DisplayIndex = 10
                 End If
 
                 If .Columns.Contains("ItemsOrderedCount") Then
                     .Columns("ItemsOrderedCount").HeaderText = "Items"
                     .Columns("ItemsOrderedCount").Width = 70
-                    .Columns("ItemsOrderedCount").DisplayIndex = 10
+                    .Columns("ItemsOrderedCount").DisplayIndex = 11
                 End If
 
                 If .Columns.Contains("OrderedProducts") Then
                     .Columns("OrderedProducts").HeaderText = "Ordered Products"
                     .Columns("OrderedProducts").Width = 250
                     .Columns("OrderedProducts").DefaultCellStyle.WrapMode = DataGridViewTriState.True
-                    .Columns("OrderedProducts").DisplayIndex = 11
+                    .Columns("OrderedProducts").DisplayIndex = 12
                 End If
 
                 If .Columns.Contains("TotalAmount") Then
@@ -320,25 +327,25 @@ Public Class Orders
                     .Columns("TotalAmount").Width = 120
                     .Columns("TotalAmount").DefaultCellStyle.Format = "₱#,##0.00"
                     .Columns("TotalAmount").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
-                    .Columns("TotalAmount").DisplayIndex = 12
+                    .Columns("TotalAmount").DisplayIndex = 13
                 End If
 
                 If .Columns.Contains("OrderStatus") Then
                     .Columns("OrderStatus").HeaderText = "Status"
                     .Columns("OrderStatus").Width = 100
-                    .Columns("OrderStatus").DisplayIndex = 13
+                    .Columns("OrderStatus").DisplayIndex = 14
                 End If
 
                 If .Columns.Contains("SpecialRequestFlag") Then
                     .Columns("SpecialRequestFlag").HeaderText = "Special Request"
                     .Columns("SpecialRequestFlag").Width = 110
-                    .Columns("SpecialRequestFlag").DisplayIndex = 14
+                    .Columns("SpecialRequestFlag").DisplayIndex = 15
                 End If
 
                 If .Columns.Contains("Remarks") Then
                     .Columns("Remarks").HeaderText = "Remarks"
                     .Columns("Remarks").Width = 150
-                    .Columns("Remarks").DisplayIndex = 15
+                    .Columns("Remarks").DisplayIndex = 16
                 End If
 
                 .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
@@ -492,13 +499,21 @@ Public Class Orders
     ' ============================================================
     ' UPDATE ORDER STATUS
     ' ============================================================
-    Private Sub UpdateOrderStatus(orderID As Integer, newStatus As String)
+    Private Sub UpdateOrderStatus(orderID As Integer, newStatus As String, Optional websiteStatus As String = Nothing)
         Try
             Using conn As New MySqlConnection("Server=127.0.0.1;User=root;Password=;Database=tabeya_system")
                 conn.Open()
-                Dim query As String = "UPDATE orders SET OrderStatus = @status, UpdatedDate = NOW() WHERE OrderID = @orderID"
+                Dim query As String
+                If websiteStatus Is Nothing Then
+                    query = "UPDATE orders SET OrderStatus = @status, UpdatedDate = NOW() WHERE OrderID = @orderID"
+                Else
+                    query = "UPDATE orders SET OrderStatus = @status, WebsiteStatus = @websiteStatus, UpdatedDate = NOW() WHERE OrderID = @orderID"
+                End If
                 Using cmd As New MySqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@status", newStatus)
+                    If websiteStatus IsNot Nothing Then
+                        cmd.Parameters.AddWithValue("@websiteStatus", websiteStatus)
+                    End If
                     cmd.Parameters.AddWithValue("@orderID", orderID)
                     cmd.ExecuteNonQuery()
                 End Using
@@ -782,12 +797,18 @@ Public Class Orders
             Dim currentStatus As String = selectedRow.Cells("OrderStatus").Value.ToString()
             Dim orderSource As String = If(selectedRow.Cells("OrderSource").Value IsNot Nothing,
                                           selectedRow.Cells("OrderSource").Value.ToString(), "")
+            Dim currentWebsiteStatus As String = ""
+            If selectedRow.Cells("WebsiteStatus") IsNot Nothing AndAlso
+               selectedRow.Cells("WebsiteStatus").Value IsNot Nothing Then
+                currentWebsiteStatus = selectedRow.Cells("WebsiteStatus").Value.ToString()
+            End If
             Dim customerName As String = GetCustomerName(selectedRow)
 
             ' Create status update form
             Dim statusForm As New Form()
             statusForm.Text = "Update Order Status"
-            statusForm.Size = New Size(450, 310)
+            Dim isWebsiteOrder As Boolean = orderSource.Trim().ToLower() = "website"
+            statusForm.Size = If(isWebsiteOrder, New Size(450, 380), New Size(450, 310))
             statusForm.StartPosition = FormStartPosition.CenterParent
             statusForm.FormBorderStyle = FormBorderStyle.FixedDialog
             statusForm.MaximizeBox = False
@@ -837,10 +858,38 @@ Public Class Orders
             lblInfo.BackColor = Color.FromArgb(245, 245, 245)
             statusForm.Controls.Add(lblInfo)
 
+            ' Website status (only for website orders)
+            Dim cboWebsiteStatus As ComboBox = Nothing
+            If isWebsiteOrder Then
+                Dim lblWebsiteStatus As New Label()
+                lblWebsiteStatus.Text = "Website Status:"
+                lblWebsiteStatus.Location = New Point(20, 160)
+                lblWebsiteStatus.Size = New Size(120, 23)
+                lblWebsiteStatus.Font = New Font("Segoe UI", 9)
+                statusForm.Controls.Add(lblWebsiteStatus)
+
+                cboWebsiteStatus = New ComboBox()
+                cboWebsiteStatus.Location = New Point(20, 185)
+                cboWebsiteStatus.Size = New Size(390, 23)
+                cboWebsiteStatus.DropDownStyle = ComboBoxStyle.DropDownList
+                cboWebsiteStatus.Font = New Font("Segoe UI", 9)
+                cboWebsiteStatus.Items.AddRange(New Object() {"Pending", "Confirmed", "Cancelled"})
+
+                If Not String.IsNullOrEmpty(currentWebsiteStatus) AndAlso
+                   cboWebsiteStatus.Items.Contains(currentWebsiteStatus) Then
+                    cboWebsiteStatus.SelectedItem = currentWebsiteStatus
+                Else
+                    cboWebsiteStatus.SelectedIndex = 0
+                End If
+
+                statusForm.Controls.Add(cboWebsiteStatus)
+            End If
+
             ' Buttons
             Dim btnUpdate As New Button()
             btnUpdate.Text = "Update Status"
-            btnUpdate.Location = New Point(150, 170)
+            Dim buttonY As Integer = If(isWebsiteOrder, 230, 170)
+            btnUpdate.Location = New Point(150, buttonY)
             btnUpdate.Size = New Size(120, 35)
             btnUpdate.Font = New Font("Segoe UI", 9, FontStyle.Bold)
             btnUpdate.BackColor = Color.FromArgb(52, 152, 219)
@@ -850,7 +899,13 @@ Public Class Orders
 
             AddHandler btnUpdate.Click, Sub()
                                             Dim newStatus As String = cboStatus.SelectedItem.ToString()
-                                            UpdateOrderStatus(orderID, newStatus)
+                                            Dim newWebsiteStatus As String = Nothing
+                                            If isWebsiteOrder AndAlso cboWebsiteStatus IsNot Nothing AndAlso
+                                               cboWebsiteStatus.SelectedItem IsNot Nothing Then
+                                                newWebsiteStatus = cboWebsiteStatus.SelectedItem.ToString()
+                                            End If
+
+                                            UpdateOrderStatus(orderID, newStatus, newWebsiteStatus)
                                             statusForm.Close()
                                             LoadOrdersAsync(CurrentCondition)
                                         End Sub
@@ -858,7 +913,7 @@ Public Class Orders
 
             Dim btnCancel As New Button()
             btnCancel.Text = "Cancel"
-            btnCancel.Location = New Point(280, 170)
+            btnCancel.Location = New Point(280, buttonY)
             btnCancel.Size = New Size(100, 35)
             btnCancel.Font = New Font("Segoe UI", 9)
             btnCancel.DialogResult = DialogResult.Cancel

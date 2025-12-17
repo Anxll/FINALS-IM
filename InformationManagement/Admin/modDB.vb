@@ -134,18 +134,33 @@ Module modDB
             ' 1. Create user_accounts table
             Dim sqlUser As String = "
                 CREATE TABLE IF NOT EXISTS user_accounts (
-                    UserID INT PRIMARY KEY AUTO_INCREMENT,
-                    FullName VARCHAR(100) NOT NULL,
-                    Username VARCHAR(50) UNIQUE NOT NULL,
-                    PasswordHash VARCHAR(255) NOT NULL,
-                    Role ENUM('Admin', 'Manager', 'Staff', 'Employee', 'Customer') NOT NULL DEFAULT 'Staff',
-                    Status ENUM('Active', 'Inactive', 'Suspended') DEFAULT 'Active',
-                    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                    LastLoginDate DATETIME NULL
+                    id INT PRIMARY KEY AUTO_INCREMENT,
+                    employee_id INT NULL,
+                    name VARCHAR(100) NOT NULL,
+                    username VARCHAR(50) UNIQUE NOT NULL,
+                    password VARCHAR(255) NOT NULL,
+                    type INT NOT NULL DEFAULT 1,
+                    position VARCHAR(100) NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 )"
             Dim cmdUser As New MySqlCommand(sqlUser, conn)
             cmdUser.ExecuteNonQuery()
+
+            ' Ensure employee_id column exists (for older databases)
+            Try
+                Dim colCheckSql As String = "SELECT COUNT(*) FROM information_schema.COLUMNS " &
+                                            "WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'user_accounts' AND COLUMN_NAME = 'employee_id'"
+                Using colCheckCmd As New MySqlCommand(colCheckSql, conn)
+                    Dim colCount As Integer = Convert.ToInt32(colCheckCmd.ExecuteScalar())
+                    If colCount = 0 Then
+                        Using alterCmd As New MySqlCommand("ALTER TABLE user_accounts ADD COLUMN employee_id INT NULL", conn)
+                            alterCmd.ExecuteNonQuery()
+                        End Using
+                    End If
+                End Using
+            Catch
+                ' Best-effort; don't block app startup on schema detection issues.
+            End Try
 
             ' 2. Create payroll table
             Dim sqlPayroll As String = "

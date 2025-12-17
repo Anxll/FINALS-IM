@@ -5,12 +5,19 @@ Imports System.Net
 
 Public Class OrderPayment
 
+    ' Pagination variables
+    Private CurrentPage As Integer = 1
+    Private RecordsPerPage As Integer = 50
+    Private TotalRecords As Integer = 0
+    Private CurrentCondition As String = ""
+
     ' =============================================================
     ' CONFIGURATION: Set your XAMPP htdocs path and localhost URL
     ' =============================================================
     Private Const WEB_BASE_URL As String = "http://localhost/TrialWeb/TrialWorkIM/Tabeya/"
 
     Private Sub OrderPayment_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        SetupPaginationControls()
         LoadPayments()
         UpdateTotal()
     End Sub
@@ -20,6 +27,8 @@ Public Class OrderPayment
     ' =================================================
     Private Sub LoadPayments(Optional condition As String = "")
         Try
+            CurrentCondition = condition
+
             Dim query As String =
             "SELECT 
                 p.PaymentID,
@@ -45,15 +54,34 @@ Public Class OrderPayment
              INNER JOIN orders o ON p.OrderID = o.OrderID
              LEFT JOIN customers c ON o.CustomerID = c.CustomerID"
 
+            Dim countQuery As String =
+            "SELECT COUNT(*) FROM payments p 
+             INNER JOIN orders o ON p.OrderID = o.OrderID
+             LEFT JOIN customers c ON o.CustomerID = c.CustomerID"
+
             If condition <> "" Then
                 query &= " WHERE " & condition
+                countQuery &= " WHERE " & condition
             End If
 
+            ' Total rows for pagination
+            Try
+                openConn()
+                Using countCmd As New MySqlCommand(countQuery, conn)
+                    TotalRecords = Convert.ToInt32(countCmd.ExecuteScalar())
+                End Using
+            Finally
+                closeConn()
+            End Try
+
+            Dim offset As Integer = (CurrentPage - 1) * RecordsPerPage
             query &= " ORDER BY p.PaymentDate DESC"
+            query &= $" LIMIT {RecordsPerPage} OFFSET {offset}"
 
             LoadToDGV(query, Order, "")
             FormatGrid()
             AddViewButtonColumn()
+            UpdatePaginationInfo()
 
         Catch ex As Exception
             MessageBox.Show("Error loading payments: " & ex.Message)
@@ -422,6 +450,7 @@ Public Class OrderPayment
     ' =================================================
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
         Dim keyword As String = txtSearch.Text.Trim()
+        CurrentPage = 1
 
         If keyword = "" Then
             LoadPayments()
@@ -445,6 +474,7 @@ Public Class OrderPayment
     ' =================================================
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         txtSearch.Clear()
+        CurrentPage = 1
         LoadPayments()
         UpdateTotal()
     End Sub
@@ -620,6 +650,89 @@ Public Class OrderPayment
         Catch ex As Exception
             MessageBox.Show("Error deleting payment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    ' =================================================
+    ' PAGINATION HELPERS
+    ' =================================================
+    Private Sub SetupPaginationControls()
+        Try
+            If cboRecordsPerPage IsNot Nothing Then
+                cboRecordsPerPage.Items.Clear()
+                cboRecordsPerPage.Items.AddRange(New Object() {10, 25, 50, 100})
+                cboRecordsPerPage.SelectedItem = 50
+                RecordsPerPage = CInt(cboRecordsPerPage.SelectedItem)
+            End If
+            UpdatePaginationButtons()
+        Catch ex As Exception
+            ' Ignore UI init errors
+        End Try
+    End Sub
+
+    Private Sub UpdatePaginationInfo()
+        Try
+            Dim totalPages As Integer = If(TotalRecords > 0, CInt(Math.Ceiling(TotalRecords / RecordsPerPage)), 1)
+            Dim startRecord As Integer = If(TotalRecords > 0, (CurrentPage - 1) * RecordsPerPage + 1, 0)
+            Dim endRecord As Integer = Math.Min(CurrentPage * RecordsPerPage, TotalRecords)
+
+            If lblTotalRecords IsNot Nothing Then
+                lblTotalRecords.Text = $"Total: {TotalRecords} | Showing {startRecord} - {endRecord}"
+            End If
+
+            If lblPageInfo IsNot Nothing Then
+                lblPageInfo.Text = $"Page {CurrentPage} of {totalPages}"
+            End If
+
+            UpdatePaginationButtons()
+        Catch ex As Exception
+            ' Ignore UI update errors
+        End Try
+    End Sub
+
+    Private Sub UpdatePaginationButtons()
+        Try
+            Dim totalPages As Integer = If(TotalRecords > 0, CInt(Math.Ceiling(TotalRecords / RecordsPerPage)), 1)
+            If btnFirstPage IsNot Nothing Then btnFirstPage.Enabled = (CurrentPage > 1)
+            If btnPrevPage IsNot Nothing Then btnPrevPage.Enabled = (CurrentPage > 1)
+            If btnNextPage IsNot Nothing Then btnNextPage.Enabled = (CurrentPage < totalPages)
+            If btnLastPage IsNot Nothing Then btnLastPage.Enabled = (CurrentPage < totalPages)
+        Catch ex As Exception
+            ' Ignore UI update errors
+        End Try
+    End Sub
+
+    Private Sub btnFirstPage_Click(sender As Object, e As EventArgs) Handles btnFirstPage.Click
+        CurrentPage = 1
+        LoadPayments(CurrentCondition)
+    End Sub
+
+    Private Sub btnPrevPage_Click(sender As Object, e As EventArgs) Handles btnPrevPage.Click
+        If CurrentPage > 1 Then
+            CurrentPage -= 1
+            LoadPayments(CurrentCondition)
+        End If
+    End Sub
+
+    Private Sub btnNextPage_Click(sender As Object, e As EventArgs) Handles btnNextPage.Click
+        Dim totalPages As Integer = If(TotalRecords > 0, CInt(Math.Ceiling(TotalRecords / RecordsPerPage)), 1)
+        If CurrentPage < totalPages Then
+            CurrentPage += 1
+            LoadPayments(CurrentCondition)
+        End If
+    End Sub
+
+    Private Sub btnLastPage_Click(sender As Object, e As EventArgs) Handles btnLastPage.Click
+        Dim totalPages As Integer = If(TotalRecords > 0, CInt(Math.Ceiling(TotalRecords / RecordsPerPage)), 1)
+        CurrentPage = totalPages
+        LoadPayments(CurrentCondition)
+    End Sub
+
+    Private Sub cboRecordsPerPage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRecordsPerPage.SelectedIndexChanged
+        If cboRecordsPerPage.SelectedItem IsNot Nothing Then
+            RecordsPerPage = CInt(cboRecordsPerPage.SelectedItem)
+            CurrentPage = 1
+            LoadPayments(CurrentCondition)
+        End If
     End Sub
 
 End Class

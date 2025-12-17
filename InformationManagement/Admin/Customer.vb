@@ -1,6 +1,5 @@
 ﻿Imports System.Drawing.Drawing2D
 Imports MySql.Data.MySqlClient
-
 Public Class Customer
 
     Private dbConnection As MySqlConnection

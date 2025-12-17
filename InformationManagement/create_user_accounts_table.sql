@@ -1,28 +1,26 @@
-    -- Create user_accounts table
+    -- Create user_accounts table (matches the VB app schema)
     -- Run this SQL script in your MySQL database
 
     -- Drop existing table if needed
     DROP TABLE IF EXISTS user_accounts;
 
-    -- Create user_accounts table
+    -- Create user_accounts table (legacy columns used by the app)
     CREATE TABLE user_accounts (
-        UserID INT PRIMARY KEY AUTO_INCREMENT,
-        FullName VARCHAR(100) NOT NULL,
-        Username VARCHAR(50) UNIQUE NOT NULL,
-        PasswordHash VARCHAR(255) NOT NULL,
-        Role ENUM('Admin', 'Manager', 'Staff', 'Employee', 'Customer') NOT NULL DEFAULT 'Staff',
-        Status ENUM('Active', 'Inactive', 'Suspended') DEFAULT 'Active',
-        CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-        UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        LastLoginDate DATETIME NULL,
-        INDEX idx_username (Username),
-        INDEX idx_status (Status)
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        employee_id INT NULL,
+        name VARCHAR(100) NOT NULL,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        type INT NOT NULL DEFAULT 1,
+        position VARCHAR(100) NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_username (username),
+        INDEX idx_employee_id (employee_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-    -- Insert a sample admin user for testing (password is encrypted "admin")
-    -- You should change this password after first login
-    INSERT INTO user_accounts (FullName, Username, PasswordHash, Role, Status)
-    VALUES ('Administrator', 'admin', 'encrypted_password_here', 'Admin', 'Active');
+    -- Insert a sample admin user for testing (password must be AES-encrypted by the app's Encrypt() function)
+    INSERT INTO user_accounts (employee_id, name, username, password, type, position)
+    VALUES (NULL, 'Administrator', 'admin', 'encrypted_password_here', 1, 'Admin');
 
     -- Verify the table structure
     DESCRIBE user_accounts;

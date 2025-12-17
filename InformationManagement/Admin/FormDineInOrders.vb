@@ -1,40 +1,75 @@
 ﻿Imports MySqlConnector
 Imports System.Data
+Imports System.Threading.Tasks
 
 Public Class FormDineInOrders
     Private ReadOnly connectionString As String = modDB.strConnection
+    Private _isLoading As Boolean = False
+    Private _baseTitle As String = ""
 
     Private Sub FormDineInOrders_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        LoadDineInOrders()
         ConfigureGrid()
+        _baseTitle = Label2.Text
+        BeginLoadDineInOrders()
     End Sub
 
-    Private Sub LoadDineInOrders()
-        Dim query As String =
-            "SELECT 
-                o.OrderID,
-                GROUP_CONCAT(CONCAT(oi.Quantity, 'x ', oi.ProductName) SEPARATOR ', ') AS ItemsOrdered,
-                IFNULL(o.TotalAmount, 0) AS TotalAmount,
-                o.OrderStatus AS Status,
-                CONCAT(o.OrderDate, ' ', o.OrderTime) AS OrderDateTime
-            FROM orders o
-            LEFT JOIN order_items oi ON oi.OrderID = o.OrderID
-            WHERE o.OrderType = 'Dine-in'
-            GROUP BY o.OrderID
-            ORDER BY o.OrderDate DESC, o.OrderTime DESC;"
+    Private Async Sub BeginLoadDineInOrders()
+        If _isLoading Then Return
+        _isLoading = True
+        SetLoadingState(True)
+
         Try
-            Using conn As New MySqlConnection(connectionString)
-                conn.Open()
-                Using cmd As New MySqlCommand(query, conn)
-                    Dim adapter As New MySqlDataAdapter(cmd)
+            Dim table As DataTable = Await Task.Run(Function() FetchDineInOrdersTable())
+
+            If Me.IsDisposed OrElse Not Me.IsHandleCreated Then Return
+            DataGridView1.DataSource = table
+            ConfigureGrid()
+        Catch ex As Exception
+            If Not Me.IsDisposed Then
+                MessageBox.Show("Error loading dine-in orders: " & ex.Message, "Database Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+        Finally
+            If Not Me.IsDisposed Then SetLoadingState(False)
+            _isLoading = False
+        End Try
+    End Sub
+
+    Private Function FetchDineInOrdersTable() As DataTable
+        Dim query As String =
+            "SELECT " &
+            "  o.OrderID, " &
+            "  GROUP_CONCAT(CONCAT(oi.Quantity, 'x ', oi.ProductName) ORDER BY oi.ProductName SEPARATOR ', ') AS ItemsOrdered, " &
+            "  IFNULL(o.TotalAmount, 0) AS TotalAmount, " &
+            "  o.OrderStatus AS Status, " &
+            "  CONCAT(o.OrderDate, ' ', o.OrderTime) AS OrderDateTime " &
+            "FROM orders o " &
+            "LEFT JOIN order_items oi ON oi.OrderID = o.OrderID " &
+            "WHERE o.OrderType = 'Dine-in' " &
+            "GROUP BY o.OrderID, o.TotalAmount, o.OrderStatus, o.OrderDate, o.OrderTime " &
+            "ORDER BY o.OrderDate DESC, o.OrderTime DESC;"
+
+        Using conn As New MySqlConnection(connectionString)
+            conn.Open()
+            Using cmd As New MySqlCommand(query, conn)
+                cmd.CommandTimeout = 60
+                Using adapter As New MySqlDataAdapter(cmd)
                     Dim table As New DataTable()
                     adapter.Fill(table)
-                    DataGridView1.DataSource = table
+                    Return table
                 End Using
             End Using
-        Catch ex As Exception
-            MessageBox.Show("Error loading dine-in orders: " & ex.Message, "Database Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Using
+    End Function
+
+    Private Sub SetLoadingState(isLoading As Boolean)
+        Try
+            Me.UseWaitCursor = isLoading
+            DataGridView1.Enabled = Not isLoading
+            Export.Enabled = Not isLoading
+            Label2.Text = If(isLoading, _baseTitle & " (Loading...)", _baseTitle)
+        Catch
+            ' Best-effort UI polish; don't fail data load due to UI state.
         End Try
     End Sub
 

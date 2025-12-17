@@ -24,6 +24,7 @@ Partial Class UsersAccounts
         Me.Label1 = New System.Windows.Forms.Label()
         Me.UsersAccountData = New System.Windows.Forms.DataGridView()
         Me.txtName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colUsername = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colRole = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colStatus = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colJoinDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -55,7 +56,7 @@ Partial Class UsersAccounts
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.Label1.Location = New System.Drawing.Point(29, 30)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(181, 32)
+        Me.Label1.Size = New System.Drawing.Size(226, 41)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Staff Members"
         '
@@ -71,7 +72,7 @@ Partial Class UsersAccounts
         Me.UsersAccountData.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
         DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
         DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
@@ -79,10 +80,10 @@ Partial Class UsersAccounts
         Me.UsersAccountData.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.UsersAccountData.ColumnHeadersHeight = 45
         Me.UsersAccountData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.UsersAccountData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.txtName, Me.colRole, Me.colStatus, Me.colJoinDate, Me.colEdit, Me.colDelete})
+        Me.UsersAccountData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.txtName, Me.colUsername, Me.colRole, Me.colStatus, Me.colJoinDate, Me.colEdit, Me.colDelete})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
         DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black
@@ -90,7 +91,7 @@ Partial Class UsersAccounts
         Me.UsersAccountData.DefaultCellStyle = DataGridViewCellStyle2
         Me.UsersAccountData.EnableHeadersVisualStyles = False
         Me.UsersAccountData.GridColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
-        Me.UsersAccountData.Location = New System.Drawing.Point(28, 200)
+        Me.UsersAccountData.Location = New System.Drawing.Point(28, 223)
         Me.UsersAccountData.Name = "UsersAccountData"
         Me.UsersAccountData.ReadOnly = True
         Me.UsersAccountData.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
@@ -114,6 +115,14 @@ Partial Class UsersAccounts
         Me.txtName.Name = "txtName"
         Me.txtName.ReadOnly = True
         Me.txtName.Width = 200
+        '
+        'colUsername
+        '
+        Me.colUsername.HeaderText = "Username"
+        Me.colUsername.MinimumWidth = 6
+        Me.colUsername.Name = "colUsername"
+        Me.colUsername.ReadOnly = True
+        Me.colUsername.Width = 180
         '
         'colRole
         '
@@ -172,7 +181,7 @@ Partial Class UsersAccounts
         Me.RoundedPane22.FillColor = System.Drawing.Color.White
         Me.RoundedPane22.Location = New System.Drawing.Point(28, 80)
         Me.RoundedPane22.Name = "RoundedPane22"
-        Me.RoundedPane22.Size = New System.Drawing.Size(280, 105)
+        Me.RoundedPane22.Size = New System.Drawing.Size(280, 90)
         Me.RoundedPane22.TabIndex = 12
         '
         'lblStaffs
@@ -181,9 +190,9 @@ Partial Class UsersAccounts
         Me.lblStaffs.BackColor = System.Drawing.Color.Transparent
         Me.lblStaffs.Font = New System.Drawing.Font("Segoe UI", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblStaffs.ForeColor = System.Drawing.Color.RoyalBlue
-        Me.lblStaffs.Location = New System.Drawing.Point(26, 52)
+        Me.lblStaffs.Location = New System.Drawing.Point(23, 44)
         Me.lblStaffs.Name = "lblStaffs"
-        Me.lblStaffs.Size = New System.Drawing.Size(33, 37)
+        Me.lblStaffs.Size = New System.Drawing.Size(40, 46)
         Me.lblStaffs.TabIndex = 3
         Me.lblStaffs.Text = "0"
         '
@@ -195,7 +204,7 @@ Partial Class UsersAccounts
         Me.Label6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.Label6.Location = New System.Drawing.Point(14, 19)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(136, 20)
+        Me.Label6.Size = New System.Drawing.Size(162, 25)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Total Staff Count"
         '
@@ -218,11 +227,11 @@ Partial Class UsersAccounts
         Me.Adduserbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Adduserbtn.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Adduserbtn.ForeColor = System.Drawing.Color.White
-        Me.Adduserbtn.Location = New System.Drawing.Point(929, 80)
+        Me.Adduserbtn.Location = New System.Drawing.Point(1014, 140)
         Me.Adduserbtn.Name = "Adduserbtn"
-        Me.Adduserbtn.Size = New System.Drawing.Size(150, 45)
+        Me.Adduserbtn.Size = New System.Drawing.Size(65, 45)
         Me.Adduserbtn.TabIndex = 14
-        Me.Adduserbtn.Text = "+ Add Staff"
+        Me.Adduserbtn.Text = "+"
         Me.Adduserbtn.UseVisualStyleBackColor = False
         '
         'PaginationPanel
@@ -273,7 +282,7 @@ Partial Class UsersAccounts
         Me.lblPageInfo.Location = New System.Drawing.Point(500, 16)
         Me.lblPageInfo.MinimumSize = New System.Drawing.Size(80, 0)
         Me.lblPageInfo.Name = "lblPageInfo"
-        Me.lblPageInfo.Size = New System.Drawing.Size(80, 17)
+        Me.lblPageInfo.Size = New System.Drawing.Size(94, 21)
         Me.lblPageInfo.TabIndex = 2
         Me.lblPageInfo.Text = "Page 1 of 1"
         Me.lblPageInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -330,10 +339,10 @@ Partial Class UsersAccounts
         '
         'UsersAccounts
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 19.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(248, Byte), Integer), CType(CType(252, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1121, 540)
+        Me.ClientSize = New System.Drawing.Size(1121, 553)
         Me.Controls.Add(Me.PaginationPanel)
         Me.Controls.Add(Me.Adduserbtn)
         Me.Controls.Add(Me.RoundedPane22)
@@ -341,10 +350,10 @@ Partial Class UsersAccounts
         Me.Controls.Add(Me.Label1)
         Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MinimumSize = New System.Drawing.Size(800, 600)
         Me.Name = "UsersAccounts"
         Me.Text = "Staff Management"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
-        Me.MinimumSize = New System.Drawing.Size(800, 600)
         CType(Me.UsersAccountData, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane22.ResumeLayout(False)
         Me.RoundedPane22.PerformLayout()
@@ -359,6 +368,7 @@ Partial Class UsersAccounts
     Friend WithEvents Label1 As Label
     Friend WithEvents UsersAccountData As DataGridView
     Friend WithEvents txtName As DataGridViewTextBoxColumn
+    Friend WithEvents colUsername As DataGridViewTextBoxColumn
     Friend WithEvents colRole As DataGridViewTextBoxColumn
     Friend WithEvents colStatus As DataGridViewTextBoxColumn
     Friend WithEvents colJoinDate As DataGridViewTextBoxColumn
