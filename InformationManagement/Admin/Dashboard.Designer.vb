@@ -681,7 +681,7 @@ Partial Class Dashboard
         Me.lblValueDinein.BackColor = System.Drawing.Color.Transparent
         Me.lblValueDinein.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblValueDinein.ForeColor = System.Drawing.Color.DimGray
-        Me.lblValueDinein.Location = New System.Drawing.Point(260, 26)
+        Me.lblValueDinein.Location = New System.Drawing.Point(247, 26)
         Me.lblValueDinein.Name = "lblValueDinein"
         Me.lblValueDinein.Size = New System.Drawing.Size(47, 17)
         Me.lblValueDinein.TabIndex = 6
@@ -739,7 +739,7 @@ Partial Class Dashboard
         Me.lblValueTakeout.BackColor = System.Drawing.Color.Transparent
         Me.lblValueTakeout.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblValueTakeout.ForeColor = System.Drawing.Color.DimGray
-        Me.lblValueTakeout.Location = New System.Drawing.Point(260, 26)
+        Me.lblValueTakeout.Location = New System.Drawing.Point(244, 26)
         Me.lblValueTakeout.Name = "lblValueTakeout"
         Me.lblValueTakeout.Size = New System.Drawing.Size(47, 17)
         Me.lblValueTakeout.TabIndex = 6
@@ -797,7 +797,7 @@ Partial Class Dashboard
         Me.lblValueCatering.BackColor = System.Drawing.Color.Transparent
         Me.lblValueCatering.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblValueCatering.ForeColor = System.Drawing.Color.DimGray
-        Me.lblValueCatering.Location = New System.Drawing.Point(260, 28)
+        Me.lblValueCatering.Location = New System.Drawing.Point(246, 28)
         Me.lblValueCatering.Name = "lblValueCatering"
         Me.lblValueCatering.Size = New System.Drawing.Size(47, 17)
         Me.lblValueCatering.TabIndex = 5
