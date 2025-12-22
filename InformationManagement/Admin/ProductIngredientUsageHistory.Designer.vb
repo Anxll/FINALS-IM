@@ -19,6 +19,14 @@
         Me.pnlMain = New System.Windows.Forms.Panel()
         Me.pnlGrid = New System.Windows.Forms.Panel()
         Me.dgvUsageHistory = New System.Windows.Forms.DataGridView()
+        Me.pnlPagination = New System.Windows.Forms.Panel()
+        Me.btnFirstPage = New System.Windows.Forms.Button()
+        Me.btnPreviousPage = New System.Windows.Forms.Button()
+        Me.lblPageInfo = New System.Windows.Forms.Label()
+        Me.btnNextPage = New System.Windows.Forms.Button()
+        Me.btnLastPage = New System.Windows.Forms.Button()
+        Me.lblPageSize = New System.Windows.Forms.Label()
+        Me.cmbPageSize = New System.Windows.Forms.ComboBox()
         Me.pnlFilters = New System.Windows.Forms.Panel()
         Me.grpFilters = New System.Windows.Forms.GroupBox()
         Me.lblStartDate = New System.Windows.Forms.Label()
@@ -41,6 +49,7 @@
         Me.pnlMain.SuspendLayout()
         Me.pnlGrid.SuspendLayout()
         CType(Me.dgvUsageHistory, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlPagination.SuspendLayout()
         Me.pnlFilters.SuspendLayout()
         Me.grpFilters.SuspendLayout()
         Me.pnlHeader.SuspendLayout()
@@ -51,6 +60,7 @@
         '
         Me.pnlMain.BackColor = System.Drawing.Color.GhostWhite
         Me.pnlMain.Controls.Add(Me.pnlGrid)
+        Me.pnlMain.Controls.Add(Me.pnlPagination)
         Me.pnlMain.Controls.Add(Me.pnlFilters)
         Me.pnlMain.Controls.Add(Me.pnlHeader)
         Me.pnlMain.Controls.Add(Me.pnlActions)
@@ -58,7 +68,7 @@
         Me.pnlMain.Location = New System.Drawing.Point(0, 0)
         Me.pnlMain.Name = "pnlMain"
         Me.pnlMain.Padding = New System.Windows.Forms.Padding(15)
-        Me.pnlMain.Size = New System.Drawing.Size(900, 600)
+        Me.pnlMain.Size = New System.Drawing.Size(1200, 700)
         Me.pnlMain.TabIndex = 0
         '
         'pnlGrid
@@ -69,7 +79,7 @@
         Me.pnlGrid.Location = New System.Drawing.Point(15, 175)
         Me.pnlGrid.Name = "pnlGrid"
         Me.pnlGrid.Padding = New System.Windows.Forms.Padding(10)
-        Me.pnlGrid.Size = New System.Drawing.Size(870, 350)
+        Me.pnlGrid.Size = New System.Drawing.Size(1170, 390)
         Me.pnlGrid.TabIndex = 0
         '
         'dgvUsageHistory
@@ -102,8 +112,120 @@
         Me.dgvUsageHistory.RowHeadersVisible = False
         Me.dgvUsageHistory.RowTemplate.Height = 35
         Me.dgvUsageHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgvUsageHistory.Size = New System.Drawing.Size(850, 330)
+        Me.dgvUsageHistory.Size = New System.Drawing.Size(1150, 370)
         Me.dgvUsageHistory.TabIndex = 0
+        '
+        'pnlPagination
+        '
+        Me.pnlPagination.BackColor = System.Drawing.Color.White
+        Me.pnlPagination.Controls.Add(Me.btnFirstPage)
+        Me.pnlPagination.Controls.Add(Me.btnPreviousPage)
+        Me.pnlPagination.Controls.Add(Me.lblPageInfo)
+        Me.pnlPagination.Controls.Add(Me.btnNextPage)
+        Me.pnlPagination.Controls.Add(Me.btnLastPage)
+        Me.pnlPagination.Controls.Add(Me.lblPageSize)
+        Me.pnlPagination.Controls.Add(Me.cmbPageSize)
+        Me.pnlPagination.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.pnlPagination.Location = New System.Drawing.Point(15, 565)
+        Me.pnlPagination.Name = "pnlPagination"
+        Me.pnlPagination.Padding = New System.Windows.Forms.Padding(10, 8, 10, 8)
+        Me.pnlPagination.Size = New System.Drawing.Size(1170, 60)
+        Me.pnlPagination.TabIndex = 4
+        '
+        'btnFirstPage
+        '
+        Me.btnFirstPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnFirstPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnFirstPage.FlatAppearance.BorderSize = 0
+        Me.btnFirstPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnFirstPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnFirstPage.ForeColor = System.Drawing.Color.White
+        Me.btnFirstPage.Location = New System.Drawing.Point(10, 11)
+        Me.btnFirstPage.Name = "btnFirstPage"
+        Me.btnFirstPage.Size = New System.Drawing.Size(45, 38)
+        Me.btnFirstPage.TabIndex = 0
+        Me.btnFirstPage.Text = "<<"
+        Me.btnFirstPage.UseVisualStyleBackColor = False
+        '
+        'btnPreviousPage
+        '
+        Me.btnPreviousPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnPreviousPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnPreviousPage.FlatAppearance.BorderSize = 0
+        Me.btnPreviousPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPreviousPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnPreviousPage.ForeColor = System.Drawing.Color.White
+        Me.btnPreviousPage.Location = New System.Drawing.Point(60, 11)
+        Me.btnPreviousPage.Name = "btnPreviousPage"
+        Me.btnPreviousPage.Size = New System.Drawing.Size(45, 38)
+        Me.btnPreviousPage.TabIndex = 1
+        Me.btnPreviousPage.Text = "<"
+        Me.btnPreviousPage.UseVisualStyleBackColor = False
+        '
+        'lblPageInfo
+        '
+        Me.lblPageInfo.AutoSize = True
+        Me.lblPageInfo.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.lblPageInfo.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblPageInfo.Location = New System.Drawing.Point(115, 21)
+        Me.lblPageInfo.Name = "lblPageInfo"
+        Me.lblPageInfo.Size = New System.Drawing.Size(80, 15)
+        Me.lblPageInfo.TabIndex = 2
+        Me.lblPageInfo.Text = "Page 1 of 10"
+        Me.lblPageInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'btnNextPage
+        '
+        Me.btnNextPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnNextPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnNextPage.FlatAppearance.BorderSize = 0
+        Me.btnNextPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNextPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnNextPage.ForeColor = System.Drawing.Color.White
+        Me.btnNextPage.Location = New System.Drawing.Point(205, 11)
+        Me.btnNextPage.Name = "btnNextPage"
+        Me.btnNextPage.Size = New System.Drawing.Size(45, 38)
+        Me.btnNextPage.TabIndex = 3
+        Me.btnNextPage.Text = ">"
+        Me.btnNextPage.UseVisualStyleBackColor = False
+        '
+        'btnLastPage
+        '
+        Me.btnLastPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.btnLastPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnLastPage.FlatAppearance.BorderSize = 0
+        Me.btnLastPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnLastPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnLastPage.ForeColor = System.Drawing.Color.White
+        Me.btnLastPage.Location = New System.Drawing.Point(255, 11)
+        Me.btnLastPage.Name = "btnLastPage"
+        Me.btnLastPage.Size = New System.Drawing.Size(45, 38)
+        Me.btnLastPage.TabIndex = 4
+        Me.btnLastPage.Text = ">>"
+        Me.btnLastPage.UseVisualStyleBackColor = False
+        '
+        'lblPageSize
+        '
+        Me.lblPageSize.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.lblPageSize.AutoSize = True
+        Me.lblPageSize.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblPageSize.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblPageSize.Location = New System.Drawing.Point(950, 21)
+        Me.lblPageSize.Name = "lblPageSize"
+        Me.lblPageSize.Size = New System.Drawing.Size(89, 15)
+        Me.lblPageSize.TabIndex = 5
+        Me.lblPageSize.Text = "Records/Page:"
+        '
+        'cmbPageSize
+        '
+        Me.cmbPageSize.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.cmbPageSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbPageSize.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbPageSize.FormattingEnabled = True
+        Me.cmbPageSize.Location = New System.Drawing.Point(1045, 17)
+        Me.cmbPageSize.Name = "cmbPageSize"
+        Me.cmbPageSize.Size = New System.Drawing.Size(115, 23)
+        Me.cmbPageSize.TabIndex = 6
         '
         'pnlFilters
         '
@@ -113,7 +235,7 @@
         Me.pnlFilters.Location = New System.Drawing.Point(15, 70)
         Me.pnlFilters.Name = "pnlFilters"
         Me.pnlFilters.Padding = New System.Windows.Forms.Padding(10)
-        Me.pnlFilters.Size = New System.Drawing.Size(870, 105)
+        Me.pnlFilters.Size = New System.Drawing.Size(1170, 105)
         Me.pnlFilters.TabIndex = 1
         '
         'grpFilters
@@ -132,7 +254,7 @@
         Me.grpFilters.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.grpFilters.Location = New System.Drawing.Point(10, 10)
         Me.grpFilters.Name = "grpFilters"
-        Me.grpFilters.Size = New System.Drawing.Size(850, 85)
+        Me.grpFilters.Size = New System.Drawing.Size(1150, 85)
         Me.grpFilters.TabIndex = 0
         Me.grpFilters.TabStop = False
         Me.grpFilters.Text = "Filter Options"
@@ -241,7 +363,7 @@
         Me.pnlHeader.Location = New System.Drawing.Point(15, 15)
         Me.pnlHeader.Name = "pnlHeader"
         Me.pnlHeader.Padding = New System.Windows.Forms.Padding(15, 10, 15, 10)
-        Me.pnlHeader.Size = New System.Drawing.Size(870, 55)
+        Me.pnlHeader.Size = New System.Drawing.Size(1170, 55)
         Me.pnlHeader.TabIndex = 2
         '
         'lblTitle
@@ -273,10 +395,10 @@
         Me.pnlActions.Controls.Add(Me.btnRefresh)
         Me.pnlActions.Controls.Add(Me.btnClose)
         Me.pnlActions.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.pnlActions.Location = New System.Drawing.Point(15, 525)
+        Me.pnlActions.Location = New System.Drawing.Point(15, 625)
         Me.pnlActions.Name = "pnlActions"
         Me.pnlActions.Padding = New System.Windows.Forms.Padding(10)
-        Me.pnlActions.Size = New System.Drawing.Size(870, 60)
+        Me.pnlActions.Size = New System.Drawing.Size(1170, 60)
         Me.pnlActions.TabIndex = 3
         '
         'btnClearHistory
@@ -316,7 +438,7 @@
         Me.btnClose.FlatAppearance.BorderSize = 0
         Me.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnClose.ForeColor = System.Drawing.Color.White
-        Me.btnClose.Location = New System.Drawing.Point(750, 10)
+        Me.btnClose.Location = New System.Drawing.Point(1050, 10)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(110, 38)
         Me.btnClose.TabIndex = 2
@@ -328,7 +450,7 @@
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(242, Byte), Integer), CType(CType(245, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(900, 600)
+        Me.ClientSize = New System.Drawing.Size(1200, 700)
         Me.Controls.Add(Me.pnlMain)
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -340,6 +462,8 @@
         Me.pnlMain.ResumeLayout(False)
         Me.pnlGrid.ResumeLayout(False)
         CType(Me.dgvUsageHistory, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlPagination.ResumeLayout(False)
+        Me.pnlPagination.PerformLayout()
         Me.pnlFilters.ResumeLayout(False)
         Me.grpFilters.ResumeLayout(False)
         Me.grpFilters.PerformLayout()
@@ -368,6 +492,14 @@
     Friend WithEvents btnResetFilters As Button
     Friend WithEvents pnlGrid As Panel
     Friend WithEvents dgvUsageHistory As DataGridView
+    Friend WithEvents pnlPagination As Panel
+    Friend WithEvents btnFirstPage As Button
+    Friend WithEvents btnPreviousPage As Button
+    Friend WithEvents lblPageInfo As Label
+    Friend WithEvents btnNextPage As Button
+    Friend WithEvents btnLastPage As Button
+    Friend WithEvents lblPageSize As Label
+    Friend WithEvents cmbPageSize As ComboBox
     Friend WithEvents pnlActions As Panel
     Friend WithEvents btnClearHistory As Button
     Friend WithEvents btnRefresh As Button
