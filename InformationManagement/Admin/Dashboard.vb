@@ -111,12 +111,12 @@ Public Class Dashboard
                 Return $"DATE({dateColumn}) = CURDATE()"
 
             Case "Weekly"
-                ' Last 7 days
-                Return $"{dateColumn} >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)"
+                ' Current Week (ISO)
+                Return $"YEARWEEK({dateColumn}, 1) = YEARWEEK(CURDATE(), 1)"
 
             Case "Monthly"
-                ' Last 30 days
-                Return $"{dateColumn} >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)"
+                ' Current calendar month
+                Return $"YEAR({dateColumn}) = YEAR(CURDATE()) AND MONTH({dateColumn}) = MONTH(CURDATE())"
 
             Case "Yearly"
                 ' Current year
@@ -152,7 +152,7 @@ Public Class Dashboard
                     (SELECT SUM(TotalAmount) FROM orders WHERE OrderStatus = 'Completed' AND {dateFilter}),
                     0
                 ) + COALESCE(
-                    (SELECT SUM(AmountPaid) FROM reservation_payments WHERE PaymentStatus = 'Completed' AND {dateFilterPayment}),
+                    (SELECT SUM(AmountPaid) FROM reservation_payments WHERE PaymentStatus IN ('Paid', 'Completed') AND {dateFilterPayment}),
                     0
                 ) as TotalRevenue", conn)
 
@@ -291,11 +291,13 @@ LIMIT 8;"
         With chartArea
             .AxisX.MajorGrid.Enabled = False
             .AxisX.LabelStyle.Font = New Font("Segoe UI", 9.0F)
-            ' REMOVE THE INTERVAL AND INTERVALTYPE LINES
+            
+            ' Value Axis (Horizontal for Bar Chart)
             .AxisY.LabelStyle.Format = "#,##0"
             .AxisY.LabelStyle.Font = New Font("Segoe UI", 9.0F)
             .AxisY.MajorGrid.LineColor = Color.LightGray
             .AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot
+            .AxisY.Interval = 1 ' Force integer steps to prevent "doubled" labels (0, 1, 1, 2, 2...)
             .BackColor = Color.White
         End With
 

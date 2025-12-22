@@ -83,7 +83,7 @@ Partial Class Reports
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(12, 80)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(10, 5, 10, 5)
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2433, 50)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(2399, 50)
         Me.FlowLayoutPanel1.TabIndex = 4
         Me.FlowLayoutPanel1.WrapContents = False
         '
