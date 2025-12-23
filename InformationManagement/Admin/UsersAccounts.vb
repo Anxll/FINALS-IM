@@ -76,7 +76,6 @@ Public Class UsersAccounts
 
             ' Set column widths proportionally based on Designer columns
             UsersAccountData.Columns("txtName").Width = CInt(totalWidth * 0.2) ' 20% - Name
-            UsersAccountData.Columns("colUsername").Width = CInt(totalWidth * 0.18) ' 18% - Username
             UsersAccountData.Columns("colRole").Width = CInt(totalWidth * 0.15) ' 15% - Role
             UsersAccountData.Columns("colStatus").Width = CInt(totalWidth * 0.15) ' 15% - Status
             UsersAccountData.Columns("colJoinDate").Width = CInt(totalWidth * 0.2) ' 20% - Join Date

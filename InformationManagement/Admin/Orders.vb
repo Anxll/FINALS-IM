@@ -815,7 +815,7 @@ Public Class Orders
         Try
             If DataGridView2.SelectedRows.Count = 0 Then
                 MessageBox.Show("Please select an order to confirm.", "No Selection",
-                              MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                          MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
 
@@ -823,10 +823,10 @@ Public Class Orders
             Dim orderID As Integer = CInt(selectedRow.Cells("OrderID").Value)
             Dim currentStatus As String = selectedRow.Cells("OrderStatus").Value.ToString()
             Dim orderSource As String = If(selectedRow.Cells("OrderSource").Value IsNot Nothing,
-                                          selectedRow.Cells("OrderSource").Value.ToString(), "")
+                                      selectedRow.Cells("OrderSource").Value.ToString(), "")
             Dim currentWebsiteStatus As String = ""
             If selectedRow.Cells("WebsiteStatus") IsNot Nothing AndAlso
-               selectedRow.Cells("WebsiteStatus").Value IsNot Nothing Then
+           selectedRow.Cells("WebsiteStatus").Value IsNot Nothing Then
                 currentWebsiteStatus = selectedRow.Cells("WebsiteStatus").Value.ToString()
             End If
             Dim customerName As String = GetCustomerName(selectedRow)
@@ -859,24 +859,30 @@ Public Class Orders
             Select Case currentStatus
                 Case "Preparing"
                     If orderSource.ToLower() = "website" Then
-                        cboStatus.Items.AddRange({"Completed", "Cancelled"})
+                        cboStatus.Items.AddRange({"Preparing", "Completed", "Cancelled"})
                     Else
-                        cboStatus.Items.AddRange({"Served", "Cancelled"})
+                        cboStatus.Items.AddRange({"Preparing", "Served", "Cancelled"})
                     End If
                 Case "Served"
-                    cboStatus.Items.Add("Completed")
+                    cboStatus.Items.AddRange({"Preparing", "Served", "Completed"})
                 Case Else
                     cboStatus.Items.AddRange({"Preparing", "Served", "Completed", "Cancelled"})
             End Select
 
-            If cboStatus.Items.Count > 0 Then cboStatus.SelectedIndex = 0
+            ' Set "Preparing" as default
+            If cboStatus.Items.Contains("Preparing") Then
+                cboStatus.SelectedItem = "Preparing"
+            ElseIf cboStatus.Items.Count > 0 Then
+                cboStatus.SelectedIndex = 0
+            End If
+
             statusForm.Controls.Add(cboStatus)
 
             ' Order info label
             Dim lblInfo As New Label()
             lblInfo.Text = $"Order ID: {orderID}" & vbCrLf &
-                          $"Customer: {customerName}" & vbCrLf &
-                          $"Current Status: {currentStatus}"
+                      $"Customer: {customerName}" & vbCrLf &
+                      $"Current Status: {currentStatus}"
             lblInfo.Location = New Point(20, 80)
             lblInfo.Size = New Size(390, 70)
             lblInfo.Font = New Font("Segoe UI", 9)
@@ -903,7 +909,7 @@ Public Class Orders
                 cboWebsiteStatus.Items.AddRange(New Object() {"Pending", "Confirmed", "Cancelled"})
 
                 If Not String.IsNullOrEmpty(currentWebsiteStatus) AndAlso
-                   cboWebsiteStatus.Items.Contains(currentWebsiteStatus) Then
+               cboWebsiteStatus.Items.Contains(currentWebsiteStatus) Then
                     cboWebsiteStatus.SelectedItem = currentWebsiteStatus
                 Else
                     cboWebsiteStatus.SelectedIndex = 0
@@ -928,7 +934,7 @@ Public Class Orders
                                             Dim newStatus As String = cboStatus.SelectedItem.ToString()
                                             Dim newWebsiteStatus As String = Nothing
                                             If isWebsiteOrder AndAlso cboWebsiteStatus IsNot Nothing AndAlso
-                                               cboWebsiteStatus.SelectedItem IsNot Nothing Then
+                                           cboWebsiteStatus.SelectedItem IsNot Nothing Then
                                                 newWebsiteStatus = cboWebsiteStatus.SelectedItem.ToString()
                                             End If
 

@@ -17,19 +17,12 @@ Partial Class UsersAccounts
 
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(UsersAccounts))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.UsersAccountData = New System.Windows.Forms.DataGridView()
-        Me.txtName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colUsername = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colRole = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colStatus = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colJoinDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colEdit = New System.Windows.Forms.DataGridViewImageColumn()
-        Me.colDelete = New System.Windows.Forms.DataGridViewImageColumn()
         Me.RoundedPane22 = New InformationManagement.RoundedPane2()
         Me.lblStaffs = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -44,6 +37,12 @@ Partial Class UsersAccounts
         Me.btnLastPage = New System.Windows.Forms.Button()
         Me.DataGridViewImageColumn1 = New System.Windows.Forms.DataGridViewImageColumn()
         Me.DataGridViewImageColumn2 = New System.Windows.Forms.DataGridViewImageColumn()
+        Me.txtName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colRole = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colStatus = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colJoinDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.colEdit = New System.Windows.Forms.DataGridViewImageColumn()
+        Me.colDelete = New System.Windows.Forms.DataGridViewImageColumn()
         CType(Me.UsersAccountData, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane22.SuspendLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -71,25 +70,25 @@ Partial Class UsersAccounts
         Me.UsersAccountData.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.UsersAccountData.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         Me.UsersAccountData.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.UsersAccountData.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.UsersAccountData.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.UsersAccountData.ColumnHeadersHeight = 45
         Me.UsersAccountData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.UsersAccountData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.txtName, Me.colUsername, Me.colRole, Me.colStatus, Me.colJoinDate, Me.colEdit, Me.colDelete})
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.UsersAccountData.DefaultCellStyle = DataGridViewCellStyle5
+        Me.UsersAccountData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.txtName, Me.colRole, Me.colStatus, Me.colJoinDate, Me.colEdit, Me.colDelete})
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.UsersAccountData.DefaultCellStyle = DataGridViewCellStyle2
         Me.UsersAccountData.EnableHeadersVisualStyles = False
         Me.UsersAccountData.GridColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
         Me.UsersAccountData.Location = New System.Drawing.Point(28, 223)
@@ -99,77 +98,15 @@ Partial Class UsersAccounts
         Me.UsersAccountData.RowHeadersVisible = False
         Me.UsersAccountData.RowHeadersWidth = 55
         Me.UsersAccountData.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle6.Padding = New System.Windows.Forms.Padding(5)
-        Me.UsersAccountData.RowsDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.Padding = New System.Windows.Forms.Padding(5)
+        Me.UsersAccountData.RowsDefaultCellStyle = DataGridViewCellStyle3
         Me.UsersAccountData.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.White
         Me.UsersAccountData.RowTemplate.Height = 40
         Me.UsersAccountData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.UsersAccountData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.UsersAccountData.Size = New System.Drawing.Size(1051, 413)
         Me.UsersAccountData.TabIndex = 9
-        '
-        'txtName
-        '
-        Me.txtName.HeaderText = "Name"
-        Me.txtName.MinimumWidth = 6
-        Me.txtName.Name = "txtName"
-        Me.txtName.ReadOnly = True
-        Me.txtName.Width = 200
-        '
-        'colUsername
-        '
-        Me.colUsername.HeaderText = "Username"
-        Me.colUsername.MinimumWidth = 6
-        Me.colUsername.Name = "colUsername"
-        Me.colUsername.ReadOnly = True
-        Me.colUsername.Width = 180
-        '
-        'colRole
-        '
-        Me.colRole.HeaderText = "Role"
-        Me.colRole.MinimumWidth = 6
-        Me.colRole.Name = "colRole"
-        Me.colRole.ReadOnly = True
-        Me.colRole.Width = 180
-        '
-        'colStatus
-        '
-        Me.colStatus.HeaderText = "Status"
-        Me.colStatus.MinimumWidth = 6
-        Me.colStatus.Name = "colStatus"
-        Me.colStatus.ReadOnly = True
-        Me.colStatus.Width = 150
-        '
-        'colJoinDate
-        '
-        Me.colJoinDate.HeaderText = "Join Date"
-        Me.colJoinDate.MinimumWidth = 6
-        Me.colJoinDate.Name = "colJoinDate"
-        Me.colJoinDate.ReadOnly = True
-        Me.colJoinDate.Width = 180
-        '
-        'colEdit
-        '
-        Me.colEdit.HeaderText = "Edit"
-        Me.colEdit.Image = Global.InformationManagement.My.Resources.Resources.edit
-        Me.colEdit.MinimumWidth = 6
-        Me.colEdit.Name = "colEdit"
-        Me.colEdit.ReadOnly = True
-        Me.colEdit.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.colEdit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.colEdit.Width = 80
-        '
-        'colDelete
-        '
-        Me.colDelete.HeaderText = "Delete"
-        Me.colDelete.Image = Global.InformationManagement.My.Resources.Resources.delete
-        Me.colDelete.MinimumWidth = 6
-        Me.colDelete.Name = "colDelete"
-        Me.colDelete.ReadOnly = True
-        Me.colDelete.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.colDelete.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.colDelete.Width = 80
         '
         'RoundedPane22
         '
@@ -341,6 +278,60 @@ Partial Class UsersAccounts
         Me.DataGridViewImageColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.DataGridViewImageColumn2.Width = 80
         '
+        'txtName
+        '
+        Me.txtName.HeaderText = "Name"
+        Me.txtName.MinimumWidth = 6
+        Me.txtName.Name = "txtName"
+        Me.txtName.ReadOnly = True
+        Me.txtName.Width = 200
+        '
+        'colRole
+        '
+        Me.colRole.HeaderText = "Role"
+        Me.colRole.MinimumWidth = 6
+        Me.colRole.Name = "colRole"
+        Me.colRole.ReadOnly = True
+        Me.colRole.Width = 180
+        '
+        'colStatus
+        '
+        Me.colStatus.HeaderText = "Status"
+        Me.colStatus.MinimumWidth = 6
+        Me.colStatus.Name = "colStatus"
+        Me.colStatus.ReadOnly = True
+        Me.colStatus.Width = 150
+        '
+        'colJoinDate
+        '
+        Me.colJoinDate.HeaderText = "Join Date"
+        Me.colJoinDate.MinimumWidth = 6
+        Me.colJoinDate.Name = "colJoinDate"
+        Me.colJoinDate.ReadOnly = True
+        Me.colJoinDate.Width = 180
+        '
+        'colEdit
+        '
+        Me.colEdit.HeaderText = "Edit"
+        Me.colEdit.Image = Global.InformationManagement.My.Resources.Resources.edit
+        Me.colEdit.MinimumWidth = 6
+        Me.colEdit.Name = "colEdit"
+        Me.colEdit.ReadOnly = True
+        Me.colEdit.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.colEdit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.colEdit.Width = 80
+        '
+        'colDelete
+        '
+        Me.colDelete.HeaderText = "Delete"
+        Me.colDelete.Image = Global.InformationManagement.My.Resources.Resources.delete
+        Me.colDelete.MinimumWidth = 6
+        Me.colDelete.Name = "colDelete"
+        Me.colDelete.ReadOnly = True
+        Me.colDelete.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.colDelete.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.colDelete.Width = 80
+        '
         'UsersAccounts
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 19.0!)
@@ -372,13 +363,6 @@ Partial Class UsersAccounts
 
     Friend WithEvents Label1 As Label
     Friend WithEvents UsersAccountData As DataGridView
-    Friend WithEvents txtName As DataGridViewTextBoxColumn
-    Friend WithEvents colUsername As DataGridViewTextBoxColumn
-    Friend WithEvents colRole As DataGridViewTextBoxColumn
-    Friend WithEvents colStatus As DataGridViewTextBoxColumn
-    Friend WithEvents colJoinDate As DataGridViewTextBoxColumn
-    Friend WithEvents colEdit As DataGridViewImageColumn
-    Friend WithEvents colDelete As DataGridViewImageColumn
     Friend WithEvents RoundedPane22 As RoundedPane2
     Friend WithEvents Label6 As Label
     Friend WithEvents PictureBox5 As PictureBox
@@ -393,4 +377,10 @@ Partial Class UsersAccounts
     Friend WithEvents DataGridViewImageColumn2 As DataGridViewImageColumn
     Friend WithEvents txtSearch As TextBox
     Friend WithEvents lblSearch As Label
+    Friend WithEvents txtName As DataGridViewTextBoxColumn
+    Friend WithEvents colRole As DataGridViewTextBoxColumn
+    Friend WithEvents colStatus As DataGridViewTextBoxColumn
+    Friend WithEvents colJoinDate As DataGridViewTextBoxColumn
+    Friend WithEvents colEdit As DataGridViewImageColumn
+    Friend WithEvents colDelete As DataGridViewImageColumn
 End Class
