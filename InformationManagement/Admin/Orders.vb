@@ -145,7 +145,7 @@ Public Class Orders
                     COALESCE(o.DeliveryAddress, '') AS DeliveryAddress,
                     o.CreatedDate,
                     o.UpdatedDate,
-                    COALESCE(p.PaymentMethod, IF(o.OrderSource = 'POS', 'Cash', 'GCash')) AS PaymentMethod,
+                    COALESCE(p.PaymentMethod, '') AS PaymentMethod,
                     COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
                     COALESCE(p.ReceiptFileName, '') AS ReceiptFileName,
                     COALESCE(
