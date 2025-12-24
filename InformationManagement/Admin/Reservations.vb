@@ -1,20 +1,25 @@
 ﻿Imports MySqlConnector
 Imports System.Data
+Imports System.IO
+Imports System.Net
 
 Public Class Reservations
     ' ==========================================
-    ' PAGINATION VARIABLES
+    ' PAGINATION VARIABLES - OPTIMIZED
     ' ==========================================
     Private CurrentPage As Integer = 1
-    Private RecordsPerPage As Integer = 50
+    Private RecordsPerPage As Integer = 20  ' Changed from 50 to 20 for faster loading
     Private TotalRecords As Integer = 0
     Private CurrentCondition As String = ""
 
+    ' Configuration for proof of payment
+    Private Const WEB_BASE_URL As String = "http://localhost/TrialWeb/TrialWorkIM/Tabeya/"
+
     Private Sub Reservations_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Initialize pagination dropdown
+        ' Initialize pagination dropdown with 20 as default
         cboRecordsPerPage.Items.Clear()
-        cboRecordsPerPage.Items.AddRange(New Object() {10, 25, 50, 100})
-        cboRecordsPerPage.SelectedItem = 50
+        cboRecordsPerPage.Items.AddRange(New Object() {10, 20, 50, 100})
+        cboRecordsPerPage.SelectedItem = 20  ' Changed from 50 to 20
 
         LoadReservations()
     End Sub
@@ -126,7 +131,7 @@ Public Class Reservations
                     newStatus = "Completed"
                 End If
 
-                ' Check if status is actually changing (case-insensitive comparison)
+                ' Check if status is actually changing
                 If newStatus.Equals(currentStatus, StringComparison.OrdinalIgnoreCase) Then
                     MessageBox.Show($"Reservation status is already '{currentStatus}'.", "No Change", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Return
@@ -142,30 +147,68 @@ Public Class Reservations
     End Sub
 
     ' ==========================================
-    ' UPDATE RESERVATION STATUS
+    ' UPDATE RESERVATION STATUS WITH AUTO PAYMENT UPDATE
     ' ==========================================
     Private Sub UpdateReservationStatus(reservationID As Integer, newStatus As String)
         Try
             openConn()
 
-            ' Use parameterized query to prevent SQL injection
-            Dim query As String = "UPDATE reservations SET ReservationStatus = @status, UpdatedDate = @updated WHERE ReservationID = @id"
+            ' Start transaction for data integrity
+            Dim transaction = conn.BeginTransaction()
 
-            Using cmd As New MySqlCommand(query, conn)
-                cmd.Parameters.AddWithValue("@status", newStatus)
-                cmd.Parameters.AddWithValue("@updated", DateTime.Now)
-                cmd.Parameters.AddWithValue("@id", reservationID)
+            Try
+                ' Update reservation status
+                Dim query As String = "UPDATE reservations SET ReservationStatus = @status, UpdatedDate = @updated WHERE ReservationID = @id"
+                Using cmd As New MySqlCommand(query, conn, transaction)
+                    cmd.Parameters.AddWithValue("@status", newStatus)
+                    cmd.Parameters.AddWithValue("@updated", DateTime.Now)
+                    cmd.Parameters.AddWithValue("@id", reservationID)
 
-                Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
+                    Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
 
-                If rowsAffected = 0 Then
-                    MessageBox.Show("No reservation was updated. Please check if the reservation exists.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                    closeConn()
-                    Return
+                    If rowsAffected = 0 Then
+                        transaction.Rollback()
+                        MessageBox.Show("No reservation was updated. Please check if the reservation exists.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        closeConn()
+                        Return
+                    End If
+                End Using
+
+                ' If status is changed to "Confirmed", auto-update payment status
+                If newStatus = "Confirmed" Then
+                    ' Check if payment record exists
+                    Dim checkQuery As String = "SELECT COUNT(*) FROM payments WHERE ReservationID = @reservationID"
+                    Dim paymentExists As Boolean = False
+
+                    Using checkCmd As New MySqlCommand(checkQuery, conn, transaction)
+                        checkCmd.Parameters.AddWithValue("@reservationID", reservationID)
+                        Dim count As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
+                        paymentExists = (count > 0)
+                    End Using
+
+                    If paymentExists Then
+                        ' Update existing payment record
+                        Dim updatePaymentQuery As String = "UPDATE payments SET PaymentStatus = 'Completed', PaymentDate = NOW() WHERE ReservationID = @reservationID"
+                        Using cmd As New MySqlCommand(updatePaymentQuery, conn, transaction)
+                            cmd.Parameters.AddWithValue("@reservationID", reservationID)
+                            cmd.ExecuteNonQuery()
+                        End Using
+                    End If
                 End If
-            End Using
 
-            MessageBox.Show($"Reservation #{reservationID} has been updated to '{newStatus}'.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                transaction.Commit()
+
+                Dim message As String = $"Reservation #{reservationID} has been updated to '{newStatus}'."
+                If newStatus = "Confirmed" Then
+                    message &= vbCrLf & "Payment status automatically set to 'Completed'."
+                End If
+
+                MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            Catch ex As Exception
+                transaction.Rollback()
+                Throw
+            End Try
 
         Catch ex As MySqlException
             MessageBox.Show("Database error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -178,14 +221,14 @@ Public Class Reservations
     End Sub
 
     ' ==========================================
-    ' LOAD RESERVATIONS WITH PAGINATION
+    ' LOAD RESERVATIONS WITH PAGINATION - OPTIMIZED
     ' ==========================================
     Private Sub LoadReservations(Optional condition As String = "")
         Try
             CurrentCondition = condition
 
             ' Get total count first
-            Dim countQuery As String = "SELECT COUNT(*) FROM reservations r INNER JOIN customers c ON r.CustomerID = c.CustomerID"
+            Dim countQuery As String = "SELECT COUNT(*) FROM reservations r LEFT JOIN customers c ON r.CustomerID = c.CustomerID"
             If condition <> "" Then
                 countQuery &= " WHERE " & condition
             End If
@@ -195,30 +238,32 @@ Public Class Reservations
             TotalRecords = Convert.ToInt32(countCmd.ExecuteScalar())
             closeConn()
 
-            ' Build main query with pagination
+            ' Build main query with pagination - OPTIMIZED with payment info
             Dim query As String =
-        "SELECT 
-            r.ReservationID,
-            r.CustomerID,
-            c.FirstName,
-            c.LastName,
-            c.Email,
-            c.ContactNumber AS CustomerContact,
-            r.ContactNumber AS ReservationContact,
-            r.ReservationType,
-            r.EventType,
-            r.EventDate,
-            r.EventTime,
-            r.NumberOfGuests,
-            r.ProductSelection,
-            r.SpecialRequests,
-            r.ReservationStatus,
-            r.ReservationDate,
-            r.DeliveryAddress,
-            r.DeliveryOption,
-            r.UpdatedDate
-         FROM reservations r
-         INNER JOIN customers c ON r.CustomerID = c.CustomerID"
+    "SELECT 
+        r.ReservationID,
+        r.CustomerID,
+        COALESCE(r.FullName, CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, ''))) AS CustomerName,
+        COALESCE(r.ContactNumber, c.ContactNumber) AS ContactNumber,
+        r.ReservationType,
+        r.EventType,
+        r.EventDate,
+        r.EventTime,
+        r.NumberOfGuests,
+        r.ProductSelection,
+        r.SpecialRequests,
+        r.ReservationStatus,
+        r.ReservationDate,
+        r.DeliveryAddress,
+        r.DeliveryOption,
+        r.UpdatedDate,
+        COALESCE(p.PaymentMethod, '') AS PaymentMethod,
+        COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
+        COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
+        COALESCE(p.ReceiptFileName, '') AS ReceiptFileName
+     FROM reservations r
+     LEFT JOIN customers c ON r.CustomerID = c.CustomerID
+     LEFT JOIN payments p ON r.ReservationID = p.ReservationID"
 
             If condition <> "" Then
                 query &= " WHERE " & condition
@@ -233,28 +278,35 @@ Public Class Reservations
             ' Load results into DGV
             LoadToDGV(query, Reservation)
 
-            ' Ensure newest reservations appear at the top (even if date column is stored as text)
+            ' Ensure newest reservations appear at the top
             If Reservation.Columns.Contains("ReservationID") Then
                 Try
                     Reservation.Sort(Reservation.Columns("ReservationID"), ComponentModel.ListSortDirection.Descending)
                 Catch
-                    ' Best-effort: SQL ordering still applies if bound sorting isn't supported.
                 End Try
             End If
             If Reservation.Rows.Count > 0 Then
                 Reservation.FirstDisplayedScrollingRowIndex = 0
             End If
 
-            ' Update pagination info
-            UpdatePaginationInfo()
-
-            ' Format the DataGridView columns
+            ' CRITICAL FIX: Call methods in the correct order
+            ' 1. Format columns FIRST
             FormatReservationColumns()
+
+            ' 2. Format data SECOND
+            FormatReservationData()
+
+            ' 3. Add button column LAST (after all other columns are positioned)
+            AddViewProofButtonColumn()
+
+            ' 4. Update pagination info
+            UpdatePaginationInfo()
 
         Catch ex As Exception
             MessageBox.Show("Error loading reservations: " & ex.Message)
         End Try
     End Sub
+
 
     ' ==========================================
     ' UPDATE PAGINATION INFO
@@ -278,81 +330,82 @@ Public Class Reservations
     End Sub
 
     ' ==========================================
-    ' FORMAT DATAGRIDVIEW COLUMNS
+    ' FORMAT DATAGRIDVIEW COLUMNS - UPDATED
     ' ==========================================
     Private Sub FormatReservationColumns()
         Try
             With Reservation
+                .SuspendLayout()
+
                 ' Hide ID columns
-                If .Columns.Contains("ReservationID") Then
-                    .Columns("ReservationID").Visible = False
+                If .Columns.Contains("ReservationID") Then .Columns("ReservationID").Visible = False
+                If .Columns.Contains("CustomerID") Then .Columns("CustomerID").Visible = False
+                If .Columns.Contains("ProofOfPayment") Then .Columns("ProofOfPayment").Visible = False
+                If .Columns.Contains("ReceiptFileName") Then .Columns("ReceiptFileName").Visible = False
+
+                ' Customer Name - CONSOLIDATED
+                If .Columns.Contains("CustomerName") Then
+                    .Columns("CustomerName").HeaderText = "Customer Name"
+                    .Columns("CustomerName").Width = 180
+                    .Columns("CustomerName").DisplayIndex = 0
                 End If
 
-                If .Columns.Contains("CustomerID") Then
-                    .Columns("CustomerID").Visible = False
-                End If
-
-                ' Set specific column widths - Customer Info
-                If .Columns.Contains("FirstName") Then
-                    .Columns("FirstName").HeaderText = "First Name"
-                    .Columns("FirstName").Width = 120
-                    .Columns("FirstName").DisplayIndex = 0
-                End If
-
-                If .Columns.Contains("LastName") Then
-                    .Columns("LastName").HeaderText = "Last Name"
-                    .Columns("LastName").Width = 120
-                    .Columns("LastName").DisplayIndex = 1
-                End If
-
-                If .Columns.Contains("Email") Then
-                    .Columns("Email").HeaderText = "Email"
-                    .Columns("Email").Width = 180
-                    .Columns("Email").DisplayIndex = 2
-                End If
-
-                If .Columns.Contains("CustomerContact") Then
-                    .Columns("CustomerContact").HeaderText = "Customer Phone"
-                    .Columns("CustomerContact").Width = 120
-                    .Columns("CustomerContact").DisplayIndex = 3
-                End If
-
-                If .Columns.Contains("ReservationContact") Then
-                    .Columns("ReservationContact").HeaderText = "Reservation Phone"
-                    .Columns("ReservationContact").Width = 130
-                    .Columns("ReservationContact").DisplayIndex = 4
+                ' Contact Number - SINGLE COLUMN
+                If .Columns.Contains("ContactNumber") Then
+                    .Columns("ContactNumber").HeaderText = "Contact Number"
+                    .Columns("ContactNumber").Width = 130
+                    .Columns("ContactNumber").DisplayIndex = 1
                 End If
 
                 ' Reservation Details
                 If .Columns.Contains("ReservationType") Then
                     .Columns("ReservationType").HeaderText = "Type"
-                    .Columns("ReservationType").Width = 100
-                    .Columns("ReservationType").DisplayIndex = 5
+                    .Columns("ReservationType").Width = 90
+                    .Columns("ReservationType").DisplayIndex = 2
                 End If
 
                 If .Columns.Contains("EventType") Then
                     .Columns("EventType").HeaderText = "Event"
                     .Columns("EventType").Width = 120
-                    .Columns("EventType").DisplayIndex = 6
+                    .Columns("EventType").DisplayIndex = 3
                 End If
 
                 If .Columns.Contains("EventDate") Then
                     .Columns("EventDate").HeaderText = "Event Date"
                     .Columns("EventDate").Width = 100
                     .Columns("EventDate").DefaultCellStyle.Format = "MM/dd/yyyy"
-                    .Columns("EventDate").DisplayIndex = 7
+                    .Columns("EventDate").DisplayIndex = 4
                 End If
 
                 If .Columns.Contains("EventTime") Then
                     .Columns("EventTime").HeaderText = "Time"
                     .Columns("EventTime").Width = 80
-                    .Columns("EventTime").DisplayIndex = 8
+                    .Columns("EventTime").DisplayIndex = 5
                 End If
 
                 If .Columns.Contains("NumberOfGuests") Then
                     .Columns("NumberOfGuests").HeaderText = "Guests"
                     .Columns("NumberOfGuests").Width = 70
-                    .Columns("NumberOfGuests").DisplayIndex = 9
+                    .Columns("NumberOfGuests").DisplayIndex = 6
+                End If
+
+                If .Columns.Contains("ProductSelection") Then
+                    .Columns("ProductSelection").HeaderText = "Products"
+                    .Columns("ProductSelection").Width = 150
+                    .Columns("ProductSelection").DisplayIndex = 7
+                End If
+
+                ' FIXED: Changed from "Delivery" to "Delivery Option"
+                If .Columns.Contains("DeliveryOption") Then
+                    .Columns("DeliveryOption").HeaderText = "Delivery Option"
+                    .Columns("DeliveryOption").Width = 120
+                    .Columns("DeliveryOption").DisplayIndex = 8
+                End If
+
+                If .Columns.Contains("DeliveryAddress") Then
+                    .Columns("DeliveryAddress").HeaderText = "Address"
+                    .Columns("DeliveryAddress").Width = 180
+                    .Columns("DeliveryAddress").DisplayIndex = 9
                 End If
 
                 If .Columns.Contains("ReservationStatus") Then
@@ -361,56 +414,278 @@ Public Class Reservations
                     .Columns("ReservationStatus").DisplayIndex = 10
                 End If
 
-                If .Columns.Contains("ReservationDate") Then
-                    .Columns("ReservationDate").HeaderText = "Reserved On"
-                    .Columns("ReservationDate").Width = 100
-                    .Columns("ReservationDate").DefaultCellStyle.Format = "MM/dd/yyyy"
-                    .Columns("ReservationDate").DisplayIndex = 11
+                If .Columns.Contains("PaymentMethod") Then
+                    .Columns("PaymentMethod").HeaderText = "Payment Method"
+                    .Columns("PaymentMethod").Width = 120
+                    .Columns("PaymentMethod").DisplayIndex = 11
                 End If
 
-                If .Columns.Contains("ProductSelection") Then
-                    .Columns("ProductSelection").HeaderText = "Products"
-                    .Columns("ProductSelection").Width = 150
-                    .Columns("ProductSelection").DisplayIndex = 12
-                End If
-
-                If .Columns.Contains("DeliveryOption") Then
-                    .Columns("DeliveryOption").HeaderText = "Delivery"
-                    .Columns("DeliveryOption").Width = 90
-                    .Columns("DeliveryOption").DisplayIndex = 13
-                End If
-
-                If .Columns.Contains("DeliveryAddress") Then
-                    .Columns("DeliveryAddress").HeaderText = "Address"
-                    .Columns("DeliveryAddress").Width = 180
-                    .Columns("DeliveryAddress").DisplayIndex = 14
+                If .Columns.Contains("PaymentStatus") Then
+                    .Columns("PaymentStatus").HeaderText = "Payment Status"
+                    .Columns("PaymentStatus").Width = 120
+                    .Columns("PaymentStatus").DisplayIndex = 12
                 End If
 
                 If .Columns.Contains("SpecialRequests") Then
                     .Columns("SpecialRequests").HeaderText = "Special Requests"
                     .Columns("SpecialRequests").Width = 150
-                    .Columns("SpecialRequests").DisplayIndex = 15
+                    .Columns("SpecialRequests").DisplayIndex = 13
+                End If
+
+                If .Columns.Contains("ReservationDate") Then
+                    .Columns("ReservationDate").HeaderText = "Reserved On"
+                    .Columns("ReservationDate").Width = 100
+                    .Columns("ReservationDate").DefaultCellStyle.Format = "MM/dd/yyyy"
+                    .Columns("ReservationDate").DisplayIndex = 14
                 End If
 
                 If .Columns.Contains("UpdatedDate") Then
                     .Columns("UpdatedDate").HeaderText = "Last Updated"
                     .Columns("UpdatedDate").Width = 100
                     .Columns("UpdatedDate").DefaultCellStyle.Format = "MM/dd/yyyy"
-                    .Columns("UpdatedDate").DisplayIndex = 16
+                    .Columns("UpdatedDate").DisplayIndex = 15
                 End If
 
-                ' Disable auto-sizing to keep fixed widths
                 .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
-
-                ' Optional: Allow horizontal scrolling if needed
                 .ScrollBars = ScrollBars.Both
 
+                .ResumeLayout()
             End With
 
         Catch ex As Exception
             ' Silently handle formatting errors
         End Try
     End Sub
+
+
+    ' ==========================================
+    ' FORMAT RESERVATION DATA - NEW
+    ' ==========================================
+    Private Sub FormatReservationData()
+        Try
+            Reservation.SuspendLayout()
+
+            For Each row As DataGridViewRow In Reservation.Rows
+                If row.IsNewRow Then Continue For
+
+                ' Handle empty customer name
+                Dim customerName As String = If(row.Cells("CustomerName").Value?.ToString(), "").Trim()
+                If String.IsNullOrWhiteSpace(customerName) Then
+                    row.Cells("CustomerName").Value = "Walk-in Customer"
+                    row.Cells("CustomerName").Style.ForeColor = Color.Gray
+                End If
+
+                ' Handle empty contact
+                If String.IsNullOrWhiteSpace(row.Cells("ContactNumber").Value?.ToString()) Then
+                    row.Cells("ContactNumber").Value = "N/A"
+                    row.Cells("ContactNumber").Style.ForeColor = Color.Gray
+                End If
+
+                ' Handle empty payment method
+                If String.IsNullOrWhiteSpace(row.Cells("PaymentMethod").Value?.ToString()) Then
+                    row.Cells("PaymentMethod").Value = "N/A"
+                    row.Cells("PaymentMethod").Style.ForeColor = Color.Gray
+                End If
+
+                ' Handle payment status
+                If String.IsNullOrWhiteSpace(row.Cells("PaymentStatus").Value?.ToString()) Then
+                    row.Cells("PaymentStatus").Value = "Pending"
+                    row.Cells("PaymentStatus").Style.ForeColor = Color.DarkOrange
+                End If
+
+                ' Handle empty special requests
+                If String.IsNullOrWhiteSpace(row.Cells("SpecialRequests").Value?.ToString()) Then
+                    row.Cells("SpecialRequests").Value = "N/A"
+                    row.Cells("SpecialRequests").Style.ForeColor = Color.Gray
+                End If
+
+                ' Handle empty delivery address
+                If String.IsNullOrWhiteSpace(row.Cells("DeliveryAddress").Value?.ToString()) Then
+                    row.Cells("DeliveryAddress").Value = "N/A"
+                    row.Cells("DeliveryAddress").Style.ForeColor = Color.Gray
+                End If
+            Next
+
+            Reservation.ResumeLayout()
+        Catch ex As Exception
+            ' Silently handle errors
+        End Try
+    End Sub
+
+    ' ==========================================
+    ' ADD VIEW PROOF BUTTON COLUMN
+    ' ==========================================
+    Private Sub AddViewProofButtonColumn()
+        Try
+            ' Remove existing button column if it exists
+            If Reservation.Columns.Contains("ViewProof") Then
+                Reservation.Columns.Remove("ViewProof")
+            End If
+
+            ' Create button column
+            Dim btnCol As New DataGridViewButtonColumn()
+            btnCol.Name = "ViewProof"
+            btnCol.HeaderText = "Proof of Payment"
+            btnCol.Text = "View"
+            btnCol.UseColumnTextForButtonValue = False
+            btnCol.Width = 120
+            btnCol.DefaultCellStyle.BackColor = Color.FromArgb(0, 123, 255)
+            btnCol.DefaultCellStyle.ForeColor = Color.White
+            btnCol.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 105, 217)
+            btnCol.DefaultCellStyle.SelectionForeColor = Color.White
+            btnCol.FlatStyle = FlatStyle.Flat
+
+            ' Add column at the end
+            Reservation.Columns.Add(btnCol)
+            btnCol.DisplayIndex = Reservation.Columns.Count - 1
+
+            ' Set button text based on proof availability
+            For Each row As DataGridViewRow In Reservation.Rows
+                If row.IsNewRow Then Continue For
+
+                Dim proofPath As String = If(row.Cells("ProofOfPayment").Value?.ToString(), "")
+
+                If Not String.IsNullOrEmpty(proofPath) Then
+                    row.Cells("ViewProof").Value = "View"
+                    row.Cells("ViewProof").Style.BackColor = Color.FromArgb(0, 123, 255)
+                Else
+                    row.Cells("ViewProof").Value = "N/A"
+                    row.Cells("ViewProof").Style.BackColor = Color.Gray
+                    row.Cells("ViewProof").ReadOnly = True
+                End If
+            Next
+
+        Catch ex As Exception
+            ' Handle silently
+        End Try
+    End Sub
+
+    ' ==========================================
+    ' HANDLE VIEW PROOF BUTTON CLICK
+    ' ==========================================
+    Private Sub Reservation_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles Reservation.CellContentClick
+        If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
+            If Reservation.Columns(e.ColumnIndex).Name = "ViewProof" Then
+                Dim row As DataGridViewRow = Reservation.Rows(e.RowIndex)
+                Dim proofPath As String = If(row.Cells("ProofOfPayment").Value?.ToString(), "")
+                Dim receiptFileName As String = If(row.Cells("ReceiptFileName").Value?.ToString(), "")
+
+                If String.IsNullOrEmpty(proofPath) Then
+                    MessageBox.Show("No proof of payment available for this reservation.", "No Image", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Return
+                End If
+
+                ' Show the image in fullscreen
+                ShowProofOfPayment(proofPath, receiptFileName)
+            End If
+        End If
+    End Sub
+
+    ' ==========================================
+    ' SHOW PROOF OF PAYMENT IN FULLSCREEN
+    ' ==========================================
+    Private Sub ShowProofOfPayment(imagePath As String, fileName As String)
+        Try
+            Dim imageForm As New Form()
+            imageForm.Text = "Proof of Payment - " & fileName
+            imageForm.WindowState = FormWindowState.Maximized
+            imageForm.BackColor = Color.Black
+            imageForm.FormBorderStyle = FormBorderStyle.None
+            imageForm.StartPosition = FormStartPosition.CenterScreen
+            imageForm.KeyPreview = True
+
+            Dim pictureBox As New PictureBox()
+            pictureBox.Dock = DockStyle.Fill
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom
+            pictureBox.BackColor = Color.Black
+
+            Dim controlPanel As New Panel()
+            controlPanel.Dock = DockStyle.Top
+            controlPanel.Height = 50
+            controlPanel.BackColor = Color.FromArgb(200, 30, 30, 30)
+
+            Dim btnClose As New Button()
+            btnClose.Text = "✕ Close (ESC)"
+            btnClose.Location = New Point(10, 10)
+            btnClose.Size = New Size(120, 30)
+            btnClose.BackColor = Color.FromArgb(220, 53, 69)
+            btnClose.ForeColor = Color.White
+            btnClose.FlatStyle = FlatStyle.Flat
+            btnClose.FlatAppearance.BorderSize = 0
+            btnClose.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+            AddHandler btnClose.Click, Sub() imageForm.Close()
+
+            Dim lblFileName As New Label()
+            lblFileName.Text = fileName
+            lblFileName.Location = New Point(150, 15)
+            lblFileName.AutoSize = True
+            lblFileName.ForeColor = Color.White
+            lblFileName.Font = New Font("Segoe UI", 11, FontStyle.Bold)
+
+            controlPanel.Controls.Add(btnClose)
+            controlPanel.Controls.Add(lblFileName)
+
+            imageForm.Controls.Add(pictureBox)
+            imageForm.Controls.Add(controlPanel)
+
+            AddHandler imageForm.KeyDown, Sub(s, e)
+                                              If e.KeyCode = Keys.Escape Then
+                                                  imageForm.Close()
+                                              End If
+                                          End Sub
+
+            Dim finalUrl As String = ConvertToWebUrl(imagePath)
+
+            Try
+                Dim webClient As New WebClient()
+                Dim imageBytes() As Byte = webClient.DownloadData(finalUrl)
+                Using ms As New MemoryStream(imageBytes)
+                    pictureBox.Image = Image.FromStream(ms)
+                End Using
+            Catch ex As Exception
+                MessageBox.Show("Error loading image from server." & vbCrLf & vbCrLf &
+                              "URL: " & finalUrl & vbCrLf & vbCrLf &
+                              "Error: " & ex.Message,
+                              "Error Loading Image", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                imageForm.Close()
+                Return
+            End Try
+
+            imageForm.ShowDialog()
+
+            If pictureBox.Image IsNot Nothing Then
+                pictureBox.Image.Dispose()
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error displaying proof of payment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' ==========================================
+    ' CONVERT FILE PATH TO WEB URL
+    ' ==========================================
+    Private Function ConvertToWebUrl(imagePath As String) As String
+        If imagePath.StartsWith("http://") OrElse imagePath.StartsWith("https://") Then
+            Return imagePath
+        End If
+
+        If imagePath.Contains(":\") AndAlso imagePath.ToLower().Contains("htdocs") Then
+            Dim htdocsIndex As Integer = imagePath.ToLower().IndexOf("htdocs")
+            If htdocsIndex > 0 Then
+                Dim webPath As String = imagePath.Substring(htdocsIndex + 7)
+                webPath = webPath.Replace("\", "/")
+                Return "http://localhost/" & webPath
+            End If
+        End If
+
+        Dim cleanPath As String = imagePath.Replace("\", "/")
+        If cleanPath.StartsWith("/") Then
+            cleanPath = cleanPath.Substring(1)
+        End If
+
+        Return WEB_BASE_URL & cleanPath
+    End Function
 
     ' ==========================================
     ' GENERIC LOAD FUNCTION
@@ -420,6 +695,7 @@ Public Class Reservations
             openConn()
 
             Dim cmd As New MySqlCommand(query, conn)
+            cmd.CommandTimeout = 120  ' Increased timeout
             Dim adapter As New MySqlDataAdapter(cmd)
             Dim dt As New DataTable()
 
@@ -482,7 +758,7 @@ Public Class Reservations
     End Sub
 
     ' ==========================================
-    ' SEARCH BAR (FIXED - NOW USES PARAMETERS)
+    ' SEARCH BAR - UPDATED
     ' ==========================================
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
         Dim keyword As String = txtSearch.Text.Trim()
@@ -493,21 +769,20 @@ Public Class Reservations
             Exit Sub
         End If
 
-        ' Use parameterized search
         CurrentPage = 1
         SearchReservations(keyword)
     End Sub
 
     ' ==========================================
-    ' SEARCH RESERVATIONS (NEW - SECURE)
+    ' SEARCH RESERVATIONS - UPDATED
     ' ==========================================
     Private Sub SearchReservations(keyword As String)
         Try
             ' Get total count for search results
             Dim countQuery As String = "SELECT COUNT(*) FROM reservations r " &
-                                      "INNER JOIN customers c ON r.CustomerID = c.CustomerID " &
+                                      "LEFT JOIN customers c ON r.CustomerID = c.CustomerID " &
                                       "WHERE CAST(r.ReservationID AS CHAR) LIKE @keyword " &
-                                      "OR CAST(r.CustomerID AS CHAR) LIKE @keyword " &
+                                      "OR r.FullName LIKE @keyword " &
                                       "OR c.FirstName LIKE @keyword " &
                                       "OR c.LastName LIKE @keyword " &
                                       "OR r.EventType LIKE @keyword " &
@@ -524,11 +799,8 @@ Public Class Reservations
         "SELECT 
             r.ReservationID,
             r.CustomerID,
-            c.FirstName,
-            c.LastName,
-            c.Email,
-            c.ContactNumber AS CustomerContact,
-            r.ContactNumber AS ReservationContact,
+            COALESCE(r.FullName, CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, ''))) AS CustomerName,
+            COALESCE(r.ContactNumber, c.ContactNumber) AS ContactNumber,
             r.ReservationType,
             r.EventType,
             r.EventDate,
@@ -540,11 +812,16 @@ Public Class Reservations
             r.ReservationDate,
             r.DeliveryAddress,
             r.DeliveryOption,
-            r.UpdatedDate
+            r.UpdatedDate,
+            COALESCE(p.PaymentMethod, '') AS PaymentMethod,
+            COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
+            COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
+            COALESCE(p.ReceiptFileName, '') AS ReceiptFileName
          FROM reservations r
-         INNER JOIN customers c ON r.CustomerID = c.CustomerID
+         LEFT JOIN customers c ON r.CustomerID = c.CustomerID
+         LEFT JOIN payments p ON r.ReservationID = p.ReservationID
          WHERE CAST(r.ReservationID AS CHAR) LIKE @keyword 
-         OR CAST(r.CustomerID AS CHAR) LIKE @keyword 
+         OR r.FullName LIKE @keyword 
          OR c.FirstName LIKE @keyword 
          OR c.LastName LIKE @keyword 
          OR r.EventType LIKE @keyword 
@@ -558,6 +835,7 @@ Public Class Reservations
             ' Load with parameters
             openConn()
             Dim cmd As New MySqlCommand(query, conn)
+            cmd.CommandTimeout = 120
             cmd.Parameters.AddWithValue("@keyword", "%" & keyword & "%")
 
             Dim adapter As New MySqlDataAdapter(cmd)
@@ -567,7 +845,6 @@ Public Class Reservations
             Reservation.DataSource = dt
             closeConn()
 
-            ' Ensure newest reservations appear at the top
             If Reservation.Columns.Contains("ReservationID") Then
                 Try
                     Reservation.Sort(Reservation.Columns("ReservationID"), ComponentModel.ListSortDirection.Descending)
@@ -578,9 +855,11 @@ Public Class Reservations
                 Reservation.FirstDisplayedScrollingRowIndex = 0
             End If
 
-            ' Update pagination info
-            UpdatePaginationInfo()
+            ' CRITICAL FIX: Same order here too
             FormatReservationColumns()
+            FormatReservationData()
+            AddViewProofButtonColumn()
+            UpdatePaginationInfo()
 
             lblFilter.Text = $"Search results for: {keyword}"
 
@@ -678,7 +957,7 @@ Public Class Reservations
     Private Sub cboRecordsPerPage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRecordsPerPage.SelectedIndexChanged
         If cboRecordsPerPage.SelectedItem IsNot Nothing Then
             RecordsPerPage = CInt(cboRecordsPerPage.SelectedItem)
-            CurrentPage = 1 ' Reset to first page when changing page size
+            CurrentPage = 1
 
             If txtSearch.Text.Trim() <> "" Then
                 SearchReservations(txtSearch.Text.Trim())
@@ -689,17 +968,16 @@ Public Class Reservations
     End Sub
 
     ' ============================================================
-    ' PAGE INFO LABEL CLICK (Go to specific page)
+    ' PAGE INFO LABEL CLICK
     ' ============================================================
     Private Sub lblPageInfo_Click(sender As Object, e As EventArgs) Handles lblPageInfo.Click
         Try
             Dim totalPages As Integer = If(TotalRecords > 0, Math.Ceiling(TotalRecords / RecordsPerPage), 1)
 
-            ' Prompt user for page number
             Dim input As String = InputBox($"Enter page number (1 to {totalPages}):", "Go to Page", CurrentPage.ToString())
 
             If String.IsNullOrWhiteSpace(input) Then
-                Return ' User cancelled
+                Return
             End If
 
             Dim pageNumber As Integer
@@ -723,5 +1001,12 @@ Public Class Reservations
             MessageBox.Show("Error navigating to page: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
+    Private Sub btnViewCalendar_Click(sender As Object, e As EventArgs) Handles btnViewCalendar.Click
+        Try
+            Dim calendarForm As New ReservationCalendar()
+            calendarForm.ShowDialog()
+        Catch ex As Exception
+            MessageBox.Show("Error opening calendar: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 End Class

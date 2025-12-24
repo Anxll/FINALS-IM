@@ -379,6 +379,12 @@
     <Compile Include="Admin\Reports.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Admin\ReservationCalendar.Designer.vb">
+      <DependentUpon>ReservationCalendar.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReservationCalendar.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Admin\ReservationChartHelper.vb" />
     <Compile Include="Admin\ReservationPayment.Designer.vb">
       <DependentUpon>ReservationPayment.vb</DependentUpon>
