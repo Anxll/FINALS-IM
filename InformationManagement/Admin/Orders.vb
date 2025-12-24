@@ -1128,14 +1128,20 @@ Public Class Orders
                     cboStatus.Items.AddRange({"Pending", "Confirmed", "Completed", "Cancelled"})
             End Select
 
-            If cboStatus.Items.Count > 0 Then cboStatus.SelectedIndex = 0
+            ' Set "Preparing" as default
+            If cboStatus.Items.Contains("Preparing") Then
+                cboStatus.SelectedItem = "Preparing"
+            ElseIf cboStatus.Items.Count > 0 Then
+                cboStatus.SelectedIndex = 0
+            End If
+
             statusForm.Controls.Add(cboStatus)
 
             ' Order info label
             Dim lblInfo As New Label()
             lblInfo.Text = $"Order ID: {orderID}" & vbCrLf &
-                          $"Customer: {customerName}" & vbCrLf &
-                          $"Current Status: {currentStatus}"
+                      $"Customer: {customerName}" & vbCrLf &
+                      $"Current Status: {currentStatus}"
             lblInfo.Location = New Point(20, 80)
             lblInfo.Size = New Size(390, 70)
             lblInfo.Font = New Font("Segoe UI", 9)

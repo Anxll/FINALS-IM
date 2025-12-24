@@ -17,14 +17,13 @@ Partial Class UsersAccounts
 
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(UsersAccounts))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.UsersAccountData = New System.Windows.Forms.DataGridView()
         Me.txtName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colUsername = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colRole = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colStatus = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.colJoinDate = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -33,7 +32,6 @@ Partial Class UsersAccounts
         Me.RoundedPane22 = New InformationManagement.RoundedPane2()
         Me.lblStaffs = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.PictureBox5 = New System.Windows.Forms.PictureBox()
         Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.lblSearch = New System.Windows.Forms.Label()
         Me.PaginationPanel = New System.Windows.Forms.Panel()
@@ -44,10 +42,13 @@ Partial Class UsersAccounts
         Me.btnLastPage = New System.Windows.Forms.Button()
         Me.DataGridViewImageColumn1 = New System.Windows.Forms.DataGridViewImageColumn()
         Me.DataGridViewImageColumn2 = New System.Windows.Forms.DataGridViewImageColumn()
+        Me.RoundedPane26 = New InformationManagement.RoundedPane2()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         CType(Me.UsersAccountData, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane22.SuspendLayout()
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PaginationPanel.SuspendLayout()
+        Me.RoundedPane26.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label1
@@ -57,7 +58,7 @@ Partial Class UsersAccounts
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.Label1.Location = New System.Drawing.Point(31, 7)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(226, 41)
+        Me.Label1.Size = New System.Drawing.Size(180, 32)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Staff Members"
         '
@@ -71,25 +72,25 @@ Partial Class UsersAccounts
         Me.UsersAccountData.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.UsersAccountData.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         Me.UsersAccountData.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.UsersAccountData.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.UsersAccountData.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.UsersAccountData.ColumnHeadersHeight = 45
         Me.UsersAccountData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.UsersAccountData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.txtName, Me.colUsername, Me.colRole, Me.colStatus, Me.colJoinDate, Me.colEdit, Me.colDelete})
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.UsersAccountData.DefaultCellStyle = DataGridViewCellStyle5
+        Me.UsersAccountData.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.txtName, Me.colRole, Me.colStatus, Me.colJoinDate, Me.colEdit, Me.colDelete})
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.UsersAccountData.DefaultCellStyle = DataGridViewCellStyle2
         Me.UsersAccountData.EnableHeadersVisualStyles = False
         Me.UsersAccountData.GridColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
         Me.UsersAccountData.Location = New System.Drawing.Point(28, 223)
@@ -99,9 +100,9 @@ Partial Class UsersAccounts
         Me.UsersAccountData.RowHeadersVisible = False
         Me.UsersAccountData.RowHeadersWidth = 55
         Me.UsersAccountData.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle6.Padding = New System.Windows.Forms.Padding(5)
-        Me.UsersAccountData.RowsDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.Padding = New System.Windows.Forms.Padding(5)
+        Me.UsersAccountData.RowsDefaultCellStyle = DataGridViewCellStyle3
         Me.UsersAccountData.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.White
         Me.UsersAccountData.RowTemplate.Height = 40
         Me.UsersAccountData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
@@ -116,14 +117,6 @@ Partial Class UsersAccounts
         Me.txtName.Name = "txtName"
         Me.txtName.ReadOnly = True
         Me.txtName.Width = 200
-        '
-        'colUsername
-        '
-        Me.colUsername.HeaderText = "Username"
-        Me.colUsername.MinimumWidth = 6
-        Me.colUsername.Name = "colUsername"
-        Me.colUsername.ReadOnly = True
-        Me.colUsername.Width = 180
         '
         'colRole
         '
@@ -175,11 +168,11 @@ Partial Class UsersAccounts
         '
         Me.RoundedPane22.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane22.BorderThickness = 1
+        Me.RoundedPane22.Controls.Add(Me.RoundedPane26)
         Me.RoundedPane22.Controls.Add(Me.lblStaffs)
         Me.RoundedPane22.Controls.Add(Me.Label6)
-        Me.RoundedPane22.Controls.Add(Me.PictureBox5)
         Me.RoundedPane22.CornerRadius = 15
-        Me.RoundedPane22.FillColor = System.Drawing.Color.White
+        Me.RoundedPane22.FillColor = System.Drawing.Color.FromArgb(CType(CType(59, Byte), Integer), CType(CType(130, Byte), Integer), CType(CType(246, Byte), Integer))
         Me.RoundedPane22.Location = New System.Drawing.Point(30, 57)
         Me.RoundedPane22.Name = "RoundedPane22"
         Me.RoundedPane22.Size = New System.Drawing.Size(280, 90)
@@ -190,10 +183,10 @@ Partial Class UsersAccounts
         Me.lblStaffs.AutoSize = True
         Me.lblStaffs.BackColor = System.Drawing.Color.Transparent
         Me.lblStaffs.Font = New System.Drawing.Font("Segoe UI", 20.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblStaffs.ForeColor = System.Drawing.Color.RoyalBlue
+        Me.lblStaffs.ForeColor = System.Drawing.Color.White
         Me.lblStaffs.Location = New System.Drawing.Point(23, 44)
         Me.lblStaffs.Name = "lblStaffs"
-        Me.lblStaffs.Size = New System.Drawing.Size(40, 46)
+        Me.lblStaffs.Size = New System.Drawing.Size(33, 37)
         Me.lblStaffs.TabIndex = 3
         Me.lblStaffs.Text = "0"
         '
@@ -202,30 +195,19 @@ Partial Class UsersAccounts
         Me.Label6.AutoSize = True
         Me.Label6.BackColor = System.Drawing.Color.Transparent
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 11.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
+        Me.Label6.ForeColor = System.Drawing.Color.White
         Me.Label6.Location = New System.Drawing.Point(14, 19)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(162, 25)
+        Me.Label6.Size = New System.Drawing.Size(128, 20)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "Total Staff Count"
-        '
-        'PictureBox5
-        '
-        Me.PictureBox5.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
-        Me.PictureBox5.Location = New System.Drawing.Point(229, 28)
-        Me.PictureBox5.Name = "PictureBox5"
-        Me.PictureBox5.Size = New System.Drawing.Size(35, 35)
-        Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.PictureBox5.TabIndex = 1
-        Me.PictureBox5.TabStop = False
         '
         'txtSearch
         '
         Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSearch.Location = New System.Drawing.Point(398, 121)
         Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(664, 30)
+        Me.txtSearch.Size = New System.Drawing.Size(664, 25)
         Me.txtSearch.TabIndex = 15
         '
         'lblSearch
@@ -234,7 +216,7 @@ Partial Class UsersAccounts
         Me.lblSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSearch.Location = New System.Drawing.Point(339, 124)
         Me.lblSearch.Name = "lblSearch"
-        Me.lblSearch.Size = New System.Drawing.Size(65, 23)
+        Me.lblSearch.Size = New System.Drawing.Size(52, 19)
         Me.lblSearch.TabIndex = 16
         Me.lblSearch.Text = "Search:"
         '
@@ -286,7 +268,7 @@ Partial Class UsersAccounts
         Me.lblPageInfo.Location = New System.Drawing.Point(500, 16)
         Me.lblPageInfo.MinimumSize = New System.Drawing.Size(80, 0)
         Me.lblPageInfo.Name = "lblPageInfo"
-        Me.lblPageInfo.Size = New System.Drawing.Size(94, 21)
+        Me.lblPageInfo.Size = New System.Drawing.Size(80, 17)
         Me.lblPageInfo.TabIndex = 2
         Me.lblPageInfo.Text = "Page 1 of 1"
         Me.lblPageInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -341,9 +323,32 @@ Partial Class UsersAccounts
         Me.DataGridViewImageColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.DataGridViewImageColumn2.Width = 80
         '
+        'RoundedPane26
+        '
+        Me.RoundedPane26.BackColor = System.Drawing.Color.Transparent
+        Me.RoundedPane26.BorderColor = System.Drawing.Color.Transparent
+        Me.RoundedPane26.BorderThickness = 1
+        Me.RoundedPane26.Controls.Add(Me.PictureBox2)
+        Me.RoundedPane26.CornerRadius = 8
+        Me.RoundedPane26.FillColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(165, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.RoundedPane26.Location = New System.Drawing.Point(213, 14)
+        Me.RoundedPane26.Name = "RoundedPane26"
+        Me.RoundedPane26.Size = New System.Drawing.Size(43, 38)
+        Me.RoundedPane26.TabIndex = 10
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
+        Me.PictureBox2.Location = New System.Drawing.Point(9, 6)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox2.TabIndex = 4
+        Me.PictureBox2.TabStop = False
+        '
         'UsersAccounts
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 19.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(248, Byte), Integer), CType(CType(252, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1121, 698)
@@ -362,9 +367,10 @@ Partial Class UsersAccounts
         CType(Me.UsersAccountData, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane22.ResumeLayout(False)
         Me.RoundedPane22.PerformLayout()
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PaginationPanel.ResumeLayout(False)
         Me.PaginationPanel.PerformLayout()
+        Me.RoundedPane26.ResumeLayout(False)
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -372,16 +378,8 @@ Partial Class UsersAccounts
 
     Friend WithEvents Label1 As Label
     Friend WithEvents UsersAccountData As DataGridView
-    Friend WithEvents txtName As DataGridViewTextBoxColumn
-    Friend WithEvents colUsername As DataGridViewTextBoxColumn
-    Friend WithEvents colRole As DataGridViewTextBoxColumn
-    Friend WithEvents colStatus As DataGridViewTextBoxColumn
-    Friend WithEvents colJoinDate As DataGridViewTextBoxColumn
-    Friend WithEvents colEdit As DataGridViewImageColumn
-    Friend WithEvents colDelete As DataGridViewImageColumn
     Friend WithEvents RoundedPane22 As RoundedPane2
     Friend WithEvents Label6 As Label
-    Friend WithEvents PictureBox5 As PictureBox
     Friend WithEvents lblStaffs As Label
     Friend WithEvents PaginationPanel As Panel
     Friend WithEvents btnFirstPage As Button
@@ -393,4 +391,12 @@ Partial Class UsersAccounts
     Friend WithEvents DataGridViewImageColumn2 As DataGridViewImageColumn
     Friend WithEvents txtSearch As TextBox
     Friend WithEvents lblSearch As Label
+    Friend WithEvents txtName As DataGridViewTextBoxColumn
+    Friend WithEvents colRole As DataGridViewTextBoxColumn
+    Friend WithEvents colStatus As DataGridViewTextBoxColumn
+    Friend WithEvents colJoinDate As DataGridViewTextBoxColumn
+    Friend WithEvents colEdit As DataGridViewImageColumn
+    Friend WithEvents colDelete As DataGridViewImageColumn
+    Friend WithEvents RoundedPane26 As RoundedPane2
+    Friend WithEvents PictureBox2 As PictureBox
 End Class

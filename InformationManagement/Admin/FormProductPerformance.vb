@@ -4,9 +4,13 @@ Imports MySqlConnector
 
 Public Class FormProductPerformance
 
+    Public Property DefaultView As String = "Product"
+
     Private ReadOnly currencyCulture As CultureInfo = CultureInfo.GetCultureInfo("en-PH")
     Private summaryTiles As List(Of SummaryTile)
-    Private topProductsLimit As Integer = 10 ' Default to top 10
+    Private topProductsLimit As Integer = 10
+    Private selectedCategory As String = "All Categories"
+    Private viewType As String = "Product" ' Options: "Product", "Category"
 
     Private Class SummaryTile
         Public Property NameLabel As Label
@@ -14,7 +18,16 @@ Public Class FormProductPerformance
     End Class
 
     Private Sub FormProductPerformance_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        viewType = DefaultView
         InitializeSummaryTiles()
+        InitializeControls()
+
+        ' Update combo boxes to match viewType
+        Dim comboViewType = TryCast(RoundedPane21.Controls("ComboBoxViewType"), ComboBox)
+        If comboViewType IsNot Nothing Then
+            comboViewType.SelectedIndex = If(viewType = "Category", 1, 0)
+        End If
+
         ConfigureChart()
         LoadProductPerformance()
     End Sub
@@ -28,6 +41,68 @@ Public Class FormProductPerformance
             New SummaryTile With {.NameLabel = Label13, .DetailLabel = Label12},
             New SummaryTile With {.NameLabel = Label11, .DetailLabel = Label10}
         }
+    End Sub
+
+    Private Sub InitializeControls()
+        ' Programmatically add ComboBoxViewType and ComboBoxCategory if they don't exist
+        Dim comboViewType = TryCast(RoundedPane21.Controls("ComboBoxViewType"), ComboBox)
+        If comboViewType Is Nothing Then
+            comboViewType = New ComboBox()
+            With comboViewType
+                .Name = "ComboBoxViewType"
+                .Location = New Point(Label1.Right + 20, Label1.Top + 5)
+                .Size = New Size(150, 30)
+                .DropDownStyle = ComboBoxStyle.DropDownList
+                .Items.AddRange(New String() {"View by Product", "View by Category"})
+                .SelectedIndex = 0
+                .Font = New Font("Segoe UI", 9.0F)
+            End With
+            RoundedPane21.Controls.Add(comboViewType)
+            AddHandler comboViewType.SelectedIndexChanged, AddressOf ComboBoxViewType_SelectedIndexChanged
+        End If
+
+        Dim comboCategory = TryCast(RoundedPane21.Controls("ComboBoxCategory"), ComboBox)
+        If comboCategory Is Nothing Then
+            comboCategory = New ComboBox()
+            With comboCategory
+                .Name = "ComboBoxCategory"
+                .Location = New Point(comboViewType.Right + 10, comboViewType.Top)
+                .Size = New Size(150, 30)
+                .DropDownStyle = ComboBoxStyle.DropDownList
+                .Items.AddRange(New String() {
+                    "All Categories",
+                    "Platter",
+                    "Rice Meal",
+                    "Spaghetti Meals",
+                    "Snacks",
+                    "Dessert",
+                    "Drinks"
+                })
+                .SelectedIndex = 0
+                .Font = New Font("Segoe UI", 9.0F)
+            End With
+            RoundedPane21.Controls.Add(comboCategory)
+            AddHandler comboCategory.SelectedIndexChanged, AddressOf ComboBoxCategory_SelectedIndexChanged
+        End If
+    End Sub
+
+    Private Sub ComboBoxViewType_SelectedIndexChanged(sender As Object, e As EventArgs)
+        Dim combo = DirectCast(sender, ComboBox)
+        viewType = If(combo.SelectedIndex = 1, "Category", "Product")
+
+        ' Show/Hide category filter based on view type
+        Dim comboCategory = RoundedPane21.Controls("ComboBoxCategory")
+        If comboCategory IsNot Nothing Then
+            comboCategory.Visible = (viewType = "Product")
+        End If
+
+        LoadProductPerformance()
+    End Sub
+
+    Private Sub ComboBoxCategory_SelectedIndexChanged(sender As Object, e As EventArgs)
+        Dim combo = DirectCast(sender, ComboBox)
+        selectedCategory = combo.SelectedItem.ToString()
+        LoadProductPerformance()
     End Sub
 
     Private Sub ConfigureChart()
@@ -47,13 +122,10 @@ Public Class FormProductPerformance
             .AxisX.LabelStyle.Angle = -45
             .AxisX.IsLabelAutoFit = True
 
-            ' Enable scrolling for many products
             .AxisX.ScaleView.Zoomable = True
             .AxisX.ScrollBar.Enabled = True
             .AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll
             .AxisX.ScrollBar.Size = 15
-
-            ' Show only 15 products at a time in the view
             .AxisX.ScaleView.Size = 15
 
             .AxisY.LabelStyle.Format = "₱#,##0"
@@ -75,7 +147,7 @@ Public Class FormProductPerformance
         End With
 
         Chart1.Titles.Add(New Title With {
-            .Text = "Revenue by Product (Completed Orders)",
+            .Text = "Revenue Performance",
             .Alignment = ContentAlignment.TopLeft,
             .Font = New Font("Segoe UI Semibold", 11.25F, FontStyle.Bold)
         })
@@ -93,36 +165,68 @@ Public Class FormProductPerformance
     End Sub
 
     Private Function FetchProductPerformanceData() As DataTable
-        ' Build the query with optional LIMIT
+        ' Use shared period from Reports form
+        Dim periodFilter As String = Reports.SelectedPeriod
+        Dim dateColumnReservations As String = "r.ReservationDate"
+        Dim dateColumnOrders As String = "o.OrderDate"
+
+        Dim whereClauseReservations As String = ""
+        Dim whereClauseOrders As String = ""
+
+        Select Case periodFilter
+            Case "Daily"
+                whereClauseReservations = $" AND DATE({dateColumnReservations}) = CURDATE()"
+                whereClauseOrders = $" AND DATE({dateColumnOrders}) = CURDATE()"
+            Case "Weekly"
+                whereClauseReservations = $" AND YEARWEEK({dateColumnReservations}, 1) = YEARWEEK(CURDATE(), 1)"
+                whereClauseOrders = $" AND YEARWEEK({dateColumnOrders}, 1) = YEARWEEK(CURDATE(), 1)"
+            Case "Monthly"
+                whereClauseReservations = $" AND MONTH({dateColumnReservations}) = MONTH(CURDATE()) AND YEAR({dateColumnReservations}) = YEAR(CURDATE())"
+                whereClauseOrders = $" AND MONTH({dateColumnOrders}) = MONTH(CURDATE()) AND YEAR({dateColumnOrders}) = YEAR(CURDATE())"
+            Case "Yearly"
+                whereClauseReservations = $" AND YEAR({dateColumnReservations}) = YEAR(CURDATE())"
+                whereClauseOrders = $" AND YEAR({dateColumnOrders}) = YEAR(CURDATE())"
+        End Select
+
+        Dim groupByColumn As String = If(viewType = "Category", "p.Category", "p.ProductName")
+        Dim selectItems As String = If(viewType = "Category", "p.Category AS DisplayName", "p.ProductName AS DisplayName")
+        Dim categoryFilterLine As String = If(viewType = "Product" AndAlso selectedCategory <> "All Categories", " AND p.Category = @Category", "")
+
         Dim query As String =
-"SELECT ProductName,
-        SUM(Quantity) AS TotalOrders,
-        SUM(TotalPrice) AS Revenue
+$"SELECT DisplayName,
+        SUM(TotalOrders) AS TotalOrders,
+        SUM(Revenue) AS Revenue
  FROM (
-        -- Reservation items with Confirmed or Served status
-        SELECT ri.ProductName,
-               ri.Quantity,
-               ri.TotalPrice
+        -- Reservation items
+        SELECT {selectItems},
+               SUM(ri.Quantity) AS TotalOrders,
+               SUM(ri.TotalPrice) AS Revenue
         FROM reservation_items ri
         INNER JOIN reservations r ON ri.ReservationID = r.ReservationID
+        INNER JOIN products p ON ri.ProductName = p.ProductName
         WHERE r.ReservationStatus IN ('Confirmed', 'Served')
+        {whereClauseReservations}
+        {categoryFilterLine}
+        GROUP BY {groupByColumn}
         
         UNION ALL
         
-        -- Order items with Served or Completed status
-        SELECT oi.ProductName,
-               oi.Quantity,
-               (oi.Quantity * oi.UnitPrice) AS TotalPrice
+        -- Order items
+        SELECT {selectItems},
+               SUM(oi.Quantity) AS TotalOrders,
+               SUM(oi.Quantity * (CASE WHEN oi.UnitPrice > 0 THEN oi.UnitPrice ELSE p.Price END)) AS Revenue
         FROM order_items oi
         INNER JOIN orders o ON oi.OrderID = o.OrderID
+        INNER JOIN products p ON oi.ProductName = p.ProductName
         WHERE o.OrderStatus IN ('Served', 'Completed')
+        {whereClauseOrders}
+        {categoryFilterLine}
+        GROUP BY {groupByColumn}
       ) AS combined
- GROUP BY ProductName
+ GROUP BY DisplayName
  ORDER BY Revenue DESC"
 
-        ' Add LIMIT clause based on topProductsLimit
-        ' If you want to show all products, set topProductsLimit to a very high number or 0
-        If topProductsLimit > 0 Then
+        If viewType = "Product" AndAlso topProductsLimit > 0 Then
             query &= " LIMIT " & topProductsLimit
         End If
 
@@ -133,6 +237,9 @@ Public Class FormProductPerformance
         Using connection As New MySqlConnection(strConnection)
             connection.Open()
             Using command As New MySqlCommand(query, connection)
+                If viewType = "Product" AndAlso selectedCategory <> "All Categories" Then
+                    command.Parameters.AddWithValue("@Category", selectedCategory)
+                End If
                 Using reader = command.ExecuteReader()
                     dt.Load(reader)
                 End Using
@@ -152,13 +259,16 @@ Public Class FormProductPerformance
         End If
 
         For Each row As DataRow In data.Rows
-            Dim productName = row("ProductName").ToString()
+            Dim displayName = row("DisplayName").ToString()
             Dim revenue = If(IsDBNull(row("Revenue")), 0D, Convert.ToDecimal(row("Revenue")))
-            series.Points.AddXY(productName, revenue)
+            series.Points.AddXY(displayName, revenue)
         Next
 
-        ' Update chart title to show count
-        Chart1.Titles(0).Text = $"Revenue by Product (Completed Orders) - Showing {data.Rows.Count} Products"
+        Dim periodText = $"({Reports.SelectedPeriod})"
+        Dim filterText = If(viewType = "Product" AndAlso selectedCategory <> "All Categories", $" - {selectedCategory}", "")
+        Dim viewTypeText = If(viewType = "Category", "by Category", "by Product")
+
+        Chart1.Titles(0).Text = $"Revenue {viewTypeText} {periodText}{filterText}"
     End Sub
 
     Private Sub UpdateSummaryTiles(data As DataTable)
@@ -169,13 +279,13 @@ Public Class FormProductPerformance
 
             If i < data.Rows.Count Then
                 Dim row = data.Rows(i)
-                Dim productName = row("ProductName").ToString()
-                Dim totalOrders = If(IsDBNull(row("TotalOrders")), 0, Convert.ToInt32(row("TotalOrders")))
+                Dim displayName = row("DisplayName").ToString()
+                Dim totalOrders = If(IsDBNull(row("TotalOrders")), 0, Convert.ToInt64(row("TotalOrders")))
                 Dim revenue = If(IsDBNull(row("Revenue")), 0D, Convert.ToDecimal(row("Revenue")))
                 Dim revenueText = String.Format(currencyCulture, "{0:C0}", revenue)
 
-                tile.NameLabel.Text = productName
-                tile.DetailLabel.Text = $"{totalOrders} total orders | {revenueText}"
+                tile.NameLabel.Text = displayName
+                tile.DetailLabel.Text = $"{totalOrders} orders | {revenueText}"
             Else
                 tile.NameLabel.Text = "N/A"
                 tile.DetailLabel.Text = "No data available"
@@ -186,9 +296,9 @@ Public Class FormProductPerformance
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Try
             Using dialog As New SaveFileDialog()
-                dialog.Title = "Export Product Performance Chart"
+                dialog.Title = "Export Performance Chart"
                 dialog.Filter = "PNG Image|*.png"
-                dialog.FileName = $"ProductPerformance_{Date.Now:yyyyMMddHHmmss}.png"
+                dialog.FileName = $"Performance_{viewType}_{Reports.SelectedPeriod}_{Date.Now:yyyyMMddHHmmss}.png"
 
                 If dialog.ShowDialog() = DialogResult.OK Then
                     Dim bmp As New Bitmap(Chart1.Width, Chart1.Height)

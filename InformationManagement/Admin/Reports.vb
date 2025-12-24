@@ -326,7 +326,7 @@ Public Class Reports
             Me.Activate()
             Me.Focus()
         Catch ex As Exception
-            MessageBox.Show("Error loading catering reservation report: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error loading product performance report: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 

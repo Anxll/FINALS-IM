@@ -16,7 +16,11 @@ Public Class Inventory
             ' Load data
             LoadInventorySummary()
             LoadInventoryStatistics()
-            UpdateNotificationButton()
+
+            ' Hide the notifications button
+            If Me.Controls.Contains(btnNotifications) Then
+                btnNotifications.Visible = False
+            End If
 
         Catch ex As Exception
             MessageBox.Show("Error loading form: " & ex.Message,
@@ -674,6 +678,7 @@ Public Class Inventory
         End Try
     End Sub
 
+    ' This event handler is kept but will not be triggered since button is hidden
     Private Sub btnNotifications_Click(sender As Object, e As EventArgs) Handles btnNotifications.Click
         Try
             Dim usageForm As New ProductIngredientUsageHistory()
@@ -687,6 +692,7 @@ Public Class Inventory
         End Try
     End Sub
 
+    ' These methods are kept but will not be called since button is hidden
     Private Function GetRecentDeductionCount() As Integer
         Try
             openConn()
@@ -710,19 +716,7 @@ Public Class Inventory
     End Function
 
     Private Sub UpdateNotificationButton()
-        Try
-            Dim count As Integer = GetRecentDeductionCount()
-
-            If count > 0 Then
-                btnNotifications.Text = "🔔 Usage History (" & count & ")"
-                btnNotifications.BackColor = Color.FromArgb(220, 53, 69) ' Red alert
-            Else
-                btnNotifications.Text = "🔔 View Usage History"
-                btnNotifications.BackColor = Color.FromArgb(111, 66, 193) ' Purple default
-            End If
-        Catch ex As Exception
-            ' Silent fail
-        End Try
+        ' Method kept for compatibility but does nothing since button is hidden
     End Sub
 
     ' Public refresh method
