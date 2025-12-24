@@ -22,29 +22,29 @@ Partial Class Dashboard
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim DataPoint1 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 12.0R)
-        Dim DataPoint2 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 28.0R)
-        Dim DataPoint3 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 5.0R)
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim DataPoint4 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 45.0R)
-        Dim DataPoint5 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 25.0R)
-        Dim DataPoint6 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 20.0R)
-        Dim DataPoint7 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 10.0R)
-        Dim Title1 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
+        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim DataPoint11 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 12.0R)
+        Dim DataPoint12 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 28.0R)
+        Dim DataPoint13 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 5.0R)
+        Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim DataPoint14 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 45.0R)
+        Dim DataPoint15 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 25.0R)
+        Dim DataPoint16 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 20.0R)
+        Dim DataPoint17 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 10.0R)
+        Dim Title3 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Dashboard))
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim LegendCellColumn1 As System.Windows.Forms.DataVisualization.Charting.LegendCellColumn = New System.Windows.Forms.DataVisualization.Charting.LegendCellColumn()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim DataPoint8 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 65.0R)
-        Dim DataPoint9 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 25.0R)
-        Dim DataPoint10 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 10.0R)
-        Dim Title2 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
+        Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend6 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim LegendCellColumn2 As System.Windows.Forms.DataVisualization.Charting.LegendCellColumn = New System.Windows.Forms.DataVisualization.Charting.LegendCellColumn()
+        Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim DataPoint18 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 65.0R)
+        Dim DataPoint19 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 25.0R)
+        Dim DataPoint20 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 10.0R)
+        Dim Title4 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
         Me.PictureBox7 = New System.Windows.Forms.PictureBox()
         Me.ActivereservationPercentage = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
@@ -86,7 +86,6 @@ Partial Class Dashboard
         Me.Label11 = New System.Windows.Forms.Label()
         Me.RoundedPane28 = New InformationManagement.RoundedPane2()
         Me.FlowLegends = New System.Windows.Forms.FlowLayoutPanel()
-        Me.RoundedPane29 = New InformationManagement.RoundedPane2()
         Me.lblValueDinein = New System.Windows.Forms.Label()
         Me.lblPercentDineIn = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -109,6 +108,7 @@ Partial Class Dashboard
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.RoundedPane26 = New InformationManagement.RoundedPane2()
         Me.PictureBox8 = New System.Windows.Forms.PictureBox()
+        Me.RoundedPane29 = New InformationManagement.RoundedPane2()
         CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.arrowincrease, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -131,7 +131,6 @@ Partial Class Dashboard
         Me.InventoryAlerts.SuspendLayout()
         Me.RoundedPane28.SuspendLayout()
         Me.FlowLegends.SuspendLayout()
-        Me.RoundedPane29.SuspendLayout()
         Me.RoundedPane210.SuspendLayout()
         Me.RoundedPane211.SuspendLayout()
         CType(Me.Chart2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -141,6 +140,7 @@ Partial Class Dashboard
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane26.SuspendLayout()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.RoundedPane29.SuspendLayout()
         Me.SuspendLayout()
         '
         'PictureBox7
@@ -274,40 +274,40 @@ Partial Class Dashboard
         Me.RoundedPane223.Controls.Add(Me.ChartTopProducts)
         Me.RoundedPane223.CornerRadius = 15
         Me.RoundedPane223.FillColor = System.Drawing.Color.White
-        Me.RoundedPane223.Location = New System.Drawing.Point(35, 738)
+        Me.RoundedPane223.Location = New System.Drawing.Point(35, 693)
         Me.RoundedPane223.Name = "RoundedPane223"
         Me.RoundedPane223.Size = New System.Drawing.Size(547, 315)
         Me.RoundedPane223.TabIndex = 41
         '
         'ChartTopProducts
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.ChartTopProducts.ChartAreas.Add(ChartArea1)
-        Legend1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Legend1.Name = "Legend1"
-        Me.ChartTopProducts.Legends.Add(Legend1)
+        ChartArea4.Name = "ChartArea1"
+        Me.ChartTopProducts.ChartAreas.Add(ChartArea4)
+        Legend4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Legend4.Name = "Legend1"
+        Me.ChartTopProducts.Legends.Add(Legend4)
         Me.ChartTopProducts.Location = New System.Drawing.Point(4, 14)
         Me.ChartTopProducts.Name = "ChartTopProducts"
         Me.ChartTopProducts.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel
-        Series1.ChartArea = "ChartArea1"
-        Series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bar
-        Series1.IsValueShownAsLabel = True
-        Series1.LabelForeColor = System.Drawing.Color.MediumSlateBlue
-        Series1.Legend = "Legend1"
-        Series1.Name = "ReservationStatus"
-        DataPoint1.AxisLabel = "Pending"
-        DataPoint1.Color = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
-        DataPoint1.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint2.AxisLabel = "Confirmed"
-        DataPoint2.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        DataPoint2.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint3.AxisLabel = "Cancelled"
-        DataPoint3.Color = System.Drawing.Color.Red
-        DataPoint3.LabelForeColor = System.Drawing.Color.Transparent
-        Series1.Points.Add(DataPoint1)
-        Series1.Points.Add(DataPoint2)
-        Series1.Points.Add(DataPoint3)
-        Me.ChartTopProducts.Series.Add(Series1)
+        Series4.ChartArea = "ChartArea1"
+        Series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bar
+        Series4.IsValueShownAsLabel = True
+        Series4.LabelForeColor = System.Drawing.Color.MediumSlateBlue
+        Series4.Legend = "Legend1"
+        Series4.Name = "ReservationStatus"
+        DataPoint11.AxisLabel = "Pending"
+        DataPoint11.Color = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
+        DataPoint11.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint12.AxisLabel = "Confirmed"
+        DataPoint12.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
+        DataPoint12.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint13.AxisLabel = "Cancelled"
+        DataPoint13.Color = System.Drawing.Color.Red
+        DataPoint13.LabelForeColor = System.Drawing.Color.Transparent
+        Series4.Points.Add(DataPoint11)
+        Series4.Points.Add(DataPoint12)
+        Series4.Points.Add(DataPoint13)
+        Me.ChartTopProducts.Series.Add(Series4)
         Me.ChartTopProducts.Size = New System.Drawing.Size(536, 298)
         Me.ChartTopProducts.TabIndex = 23
         Me.ChartTopProducts.Text = "Chart1"
@@ -320,48 +320,48 @@ Partial Class Dashboard
         Me.RoundedPane219.Controls.Add(Me.OrdersOverviewChart)
         Me.RoundedPane219.CornerRadius = 15
         Me.RoundedPane219.FillColor = System.Drawing.Color.White
-        Me.RoundedPane219.Location = New System.Drawing.Point(492, 282)
+        Me.RoundedPane219.Location = New System.Drawing.Point(492, 250)
         Me.RoundedPane219.Name = "RoundedPane219"
         Me.RoundedPane219.Size = New System.Drawing.Size(577, 427)
         Me.RoundedPane219.TabIndex = 39
         '
         'OrdersOverviewChart
         '
-        ChartArea2.Name = "ChartArea1"
-        Me.OrdersOverviewChart.ChartAreas.Add(ChartArea2)
-        Legend2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Legend2.Name = "Legend1"
-        Me.OrdersOverviewChart.Legends.Add(Legend2)
+        ChartArea5.Name = "ChartArea1"
+        Me.OrdersOverviewChart.ChartAreas.Add(ChartArea5)
+        Legend5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Legend5.Name = "Legend1"
+        Me.OrdersOverviewChart.Legends.Add(Legend5)
         Me.OrdersOverviewChart.Location = New System.Drawing.Point(8, 5)
         Me.OrdersOverviewChart.Name = "OrdersOverviewChart"
-        Series2.ChartArea = "ChartArea1"
-        Series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
-        Series2.Legend = "Legend1"
-        Series2.Name = "PopularCategories"
-        DataPoint4.AxisLabel = "Main Courses"
-        DataPoint4.Color = System.Drawing.Color.MediumPurple
-        DataPoint4.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint5.AxisLabel = "Appetizers"
-        DataPoint5.Color = System.Drawing.Color.LightGreen
-        DataPoint5.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint6.AxisLabel = "Desserts"
-        DataPoint6.Color = System.Drawing.Color.Goldenrod
-        DataPoint6.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint7.AxisLabel = "Beverages"
-        DataPoint7.Color = System.Drawing.Color.DarkOrange
-        DataPoint7.LabelForeColor = System.Drawing.Color.Transparent
-        Series2.Points.Add(DataPoint4)
-        Series2.Points.Add(DataPoint5)
-        Series2.Points.Add(DataPoint6)
-        Series2.Points.Add(DataPoint7)
-        Me.OrdersOverviewChart.Series.Add(Series2)
+        Series5.ChartArea = "ChartArea1"
+        Series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
+        Series5.Legend = "Legend1"
+        Series5.Name = "PopularCategories"
+        DataPoint14.AxisLabel = "Main Courses"
+        DataPoint14.Color = System.Drawing.Color.MediumPurple
+        DataPoint14.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint15.AxisLabel = "Appetizers"
+        DataPoint15.Color = System.Drawing.Color.LightGreen
+        DataPoint15.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint16.AxisLabel = "Desserts"
+        DataPoint16.Color = System.Drawing.Color.Goldenrod
+        DataPoint16.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint17.AxisLabel = "Beverages"
+        DataPoint17.Color = System.Drawing.Color.DarkOrange
+        DataPoint17.LabelForeColor = System.Drawing.Color.Transparent
+        Series5.Points.Add(DataPoint14)
+        Series5.Points.Add(DataPoint15)
+        Series5.Points.Add(DataPoint16)
+        Series5.Points.Add(DataPoint17)
+        Me.OrdersOverviewChart.Series.Add(Series5)
         Me.OrdersOverviewChart.Size = New System.Drawing.Size(562, 418)
         Me.OrdersOverviewChart.TabIndex = 0
         Me.OrdersOverviewChart.Text = "Chart1"
-        Title1.Alignment = System.Drawing.ContentAlignment.TopLeft
-        Title1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Title1.Name = "Popular Categories"
-        Me.OrdersOverviewChart.Titles.Add(Title1)
+        Title3.Alignment = System.Drawing.ContentAlignment.TopLeft
+        Title3.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Title3.Name = "Popular Categories"
+        Me.OrdersOverviewChart.Titles.Add(Title3)
         '
         'RoundedPane24
         '
@@ -374,7 +374,7 @@ Partial Class Dashboard
         Me.RoundedPane24.Controls.Add(Me.lblActiveReservations)
         Me.RoundedPane24.CornerRadius = 12
         Me.RoundedPane24.FillColor = System.Drawing.Color.MediumOrchid
-        Me.RoundedPane24.Location = New System.Drawing.Point(558, 126)
+        Me.RoundedPane24.Location = New System.Drawing.Point(559, 97)
         Me.RoundedPane24.Name = "RoundedPane24"
         Me.RoundedPane24.Size = New System.Drawing.Size(248, 130)
         Me.RoundedPane24.TabIndex = 38
@@ -439,7 +439,7 @@ Partial Class Dashboard
         Me.RoundedPane215.Controls.Add(Me.lblTotalRevenue)
         Me.RoundedPane215.CornerRadius = 12
         Me.RoundedPane215.FillColor = System.Drawing.Color.FromArgb(CType(CType(16, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(129, Byte), Integer))
-        Me.RoundedPane215.Location = New System.Drawing.Point(35, 126)
+        Me.RoundedPane215.Location = New System.Drawing.Point(35, 97)
         Me.RoundedPane215.Name = "RoundedPane215"
         Me.RoundedPane215.Size = New System.Drawing.Size(248, 130)
         Me.RoundedPane215.TabIndex = 37
@@ -504,7 +504,7 @@ Partial Class Dashboard
         Me.RoundedPane21.Controls.Add(Me.lblTotalOrder)
         Me.RoundedPane21.CornerRadius = 12
         Me.RoundedPane21.FillColor = System.Drawing.Color.RoyalBlue
-        Me.RoundedPane21.Location = New System.Drawing.Point(295, 126)
+        Me.RoundedPane21.Location = New System.Drawing.Point(298, 97)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(248, 130)
         Me.RoundedPane21.TabIndex = 36
@@ -569,7 +569,7 @@ Partial Class Dashboard
         Me.RoundedPane217.Controls.Add(Me.lblAverageOrder)
         Me.RoundedPane217.CornerRadius = 12
         Me.RoundedPane217.FillColor = System.Drawing.Color.DarkGoldenrod
-        Me.RoundedPane217.Location = New System.Drawing.Point(821, 126)
+        Me.RoundedPane217.Location = New System.Drawing.Point(821, 97)
         Me.RoundedPane217.Name = "RoundedPane217"
         Me.RoundedPane217.Size = New System.Drawing.Size(248, 130)
         Me.RoundedPane217.TabIndex = 16
@@ -632,7 +632,7 @@ Partial Class Dashboard
         Me.InventoryAlerts.Controls.Add(Me.Label11)
         Me.InventoryAlerts.CornerRadius = 15
         Me.InventoryAlerts.FillColor = System.Drawing.Color.White
-        Me.InventoryAlerts.Location = New System.Drawing.Point(617, 735)
+        Me.InventoryAlerts.Location = New System.Drawing.Point(617, 693)
         Me.InventoryAlerts.Name = "InventoryAlerts"
         Me.InventoryAlerts.Size = New System.Drawing.Size(452, 315)
         Me.InventoryAlerts.TabIndex = 25
@@ -659,7 +659,7 @@ Partial Class Dashboard
         Me.RoundedPane28.Controls.Add(Me.Chart2)
         Me.RoundedPane28.CornerRadius = 15
         Me.RoundedPane28.FillColor = System.Drawing.Color.White
-        Me.RoundedPane28.Location = New System.Drawing.Point(35, 282)
+        Me.RoundedPane28.Location = New System.Drawing.Point(35, 250)
         Me.RoundedPane28.Name = "RoundedPane28"
         Me.RoundedPane28.Size = New System.Drawing.Size(421, 427)
         Me.RoundedPane28.TabIndex = 22
@@ -678,22 +678,6 @@ Partial Class Dashboard
         Me.FlowLegends.Size = New System.Drawing.Size(349, 182)
         Me.FlowLegends.TabIndex = 23
         Me.FlowLegends.WrapContents = False
-        '
-        'RoundedPane29
-        '
-        Me.RoundedPane29.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane29.BorderColor = System.Drawing.Color.LightGray
-        Me.RoundedPane29.BorderThickness = 1
-        Me.RoundedPane29.Controls.Add(Me.lblValueDinein)
-        Me.RoundedPane29.Controls.Add(Me.lblPercentDineIn)
-        Me.RoundedPane29.Controls.Add(Me.Label3)
-        Me.RoundedPane29.Controls.Add(Me.Panel1)
-        Me.RoundedPane29.CornerRadius = 15
-        Me.RoundedPane29.FillColor = System.Drawing.Color.White
-        Me.RoundedPane29.Location = New System.Drawing.Point(13, 13)
-        Me.RoundedPane29.Name = "RoundedPane29"
-        Me.RoundedPane29.Size = New System.Drawing.Size(317, 48)
-        Me.RoundedPane29.TabIndex = 0
         '
         'lblValueDinein
         '
@@ -741,12 +725,12 @@ Partial Class Dashboard
         '
         Me.RoundedPane210.BackColor = System.Drawing.Color.Transparent
         Me.RoundedPane210.BorderColor = System.Drawing.Color.LightGray
-        Me.RoundedPane210.BorderThickness = 1
+        Me.RoundedPane210.BorderThickness = 0
         Me.RoundedPane210.Controls.Add(Me.lblValueTakeout)
         Me.RoundedPane210.Controls.Add(Me.lblPercentTakeout)
         Me.RoundedPane210.Controls.Add(Me.Label4)
         Me.RoundedPane210.Controls.Add(Me.Panel2)
-        Me.RoundedPane210.CornerRadius = 15
+        Me.RoundedPane210.CornerRadius = 8
         Me.RoundedPane210.FillColor = System.Drawing.Color.White
         Me.RoundedPane210.Location = New System.Drawing.Point(13, 67)
         Me.RoundedPane210.Name = "RoundedPane210"
@@ -799,12 +783,12 @@ Partial Class Dashboard
         '
         Me.RoundedPane211.BackColor = System.Drawing.Color.Transparent
         Me.RoundedPane211.BorderColor = System.Drawing.Color.LightGray
-        Me.RoundedPane211.BorderThickness = 1
+        Me.RoundedPane211.BorderThickness = 0
         Me.RoundedPane211.Controls.Add(Me.lblValueCatering)
         Me.RoundedPane211.Controls.Add(Me.lblPercentCatering)
         Me.RoundedPane211.Controls.Add(Me.Label12)
         Me.RoundedPane211.Controls.Add(Me.Panel3)
-        Me.RoundedPane211.CornerRadius = 15
+        Me.RoundedPane211.CornerRadius = 8
         Me.RoundedPane211.FillColor = System.Drawing.Color.White
         Me.RoundedPane211.Location = New System.Drawing.Point(13, 121)
         Me.RoundedPane211.Name = "RoundedPane211"
@@ -855,60 +839,60 @@ Partial Class Dashboard
         '
         'Chart2
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.Chart2.ChartAreas.Add(ChartArea3)
-        Legend3.Alignment = System.Drawing.StringAlignment.Center
-        Legend3.BackColor = System.Drawing.Color.Transparent
-        LegendCellColumn1.Name = "Column1"
-        Legend3.CellColumns.Add(LegendCellColumn1)
-        Legend3.Enabled = False
-        Legend3.Font = New System.Drawing.Font("Segoe UI Semibold", 8.0!, System.Drawing.FontStyle.Bold)
-        Legend3.IsTextAutoFit = False
-        Legend3.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Column
-        Legend3.Name = "Legend1"
-        Legend3.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Tall
-        Legend3.TitleSeparatorColor = System.Drawing.Color.DimGray
-        Me.Chart2.Legends.Add(Legend3)
+        ChartArea6.Name = "ChartArea1"
+        Me.Chart2.ChartAreas.Add(ChartArea6)
+        Legend6.Alignment = System.Drawing.StringAlignment.Center
+        Legend6.BackColor = System.Drawing.Color.Transparent
+        LegendCellColumn2.Name = "Column1"
+        Legend6.CellColumns.Add(LegendCellColumn2)
+        Legend6.Enabled = False
+        Legend6.Font = New System.Drawing.Font("Segoe UI Semibold", 8.0!, System.Drawing.FontStyle.Bold)
+        Legend6.IsTextAutoFit = False
+        Legend6.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Column
+        Legend6.Name = "Legend1"
+        Legend6.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Tall
+        Legend6.TitleSeparatorColor = System.Drawing.Color.DimGray
+        Me.Chart2.Legends.Add(Legend6)
         Me.Chart2.Location = New System.Drawing.Point(4, 5)
         Me.Chart2.Name = "Chart2"
-        Series3.BackImageAlignment = System.Windows.Forms.DataVisualization.Charting.ChartImageAlignmentStyle.Left
-        Series3.ChartArea = "ChartArea1"
-        Series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
-        Series3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Series3.IsValueShownAsLabel = True
-        Series3.IsVisibleInLegend = False
-        Series3.Label = "#PERCENT{P0}"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        DataPoint8.AxisLabel = "Dine In"
-        DataPoint8.BorderColor = System.Drawing.Color.White
-        DataPoint8.BorderWidth = 2
-        DataPoint8.Color = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(149, Byte), Integer), CType(CType(233, Byte), Integer))
-        DataPoint8.LabelBorderWidth = 1
-        DataPoint8.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint9.AxisLabel = "Takeout"
-        DataPoint9.BorderColor = System.Drawing.Color.White
-        DataPoint9.BorderWidth = 2
-        DataPoint9.Color = System.Drawing.Color.FromArgb(CType(CType(144, Byte), Integer), CType(CType(213, Byte), Integer), CType(CType(169, Byte), Integer))
-        DataPoint9.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint10.AxisLabel = "Catering"
-        DataPoint10.BorderColor = System.Drawing.Color.White
-        DataPoint10.BorderWidth = 2
-        DataPoint10.Color = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(203, Byte), Integer), CType(CType(119, Byte), Integer))
-        DataPoint10.LabelBackColor = System.Drawing.Color.Transparent
-        DataPoint10.LabelForeColor = System.Drawing.Color.Transparent
-        Series3.Points.Add(DataPoint8)
-        Series3.Points.Add(DataPoint9)
-        Series3.Points.Add(DataPoint10)
-        Me.Chart2.Series.Add(Series3)
+        Series6.BackImageAlignment = System.Windows.Forms.DataVisualization.Charting.ChartImageAlignmentStyle.Left
+        Series6.ChartArea = "ChartArea1"
+        Series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
+        Series6.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Series6.IsValueShownAsLabel = True
+        Series6.IsVisibleInLegend = False
+        Series6.Label = "#PERCENT{P0}"
+        Series6.Legend = "Legend1"
+        Series6.Name = "Series1"
+        DataPoint18.AxisLabel = "Dine In"
+        DataPoint18.BorderColor = System.Drawing.Color.White
+        DataPoint18.BorderWidth = 2
+        DataPoint18.Color = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(149, Byte), Integer), CType(CType(233, Byte), Integer))
+        DataPoint18.LabelBorderWidth = 1
+        DataPoint18.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint19.AxisLabel = "Takeout"
+        DataPoint19.BorderColor = System.Drawing.Color.White
+        DataPoint19.BorderWidth = 2
+        DataPoint19.Color = System.Drawing.Color.FromArgb(CType(CType(144, Byte), Integer), CType(CType(213, Byte), Integer), CType(CType(169, Byte), Integer))
+        DataPoint19.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint20.AxisLabel = "Catering"
+        DataPoint20.BorderColor = System.Drawing.Color.White
+        DataPoint20.BorderWidth = 2
+        DataPoint20.Color = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(203, Byte), Integer), CType(CType(119, Byte), Integer))
+        DataPoint20.LabelBackColor = System.Drawing.Color.Transparent
+        DataPoint20.LabelForeColor = System.Drawing.Color.Transparent
+        Series6.Points.Add(DataPoint18)
+        Series6.Points.Add(DataPoint19)
+        Series6.Points.Add(DataPoint20)
+        Me.Chart2.Series.Add(Series6)
         Me.Chart2.Size = New System.Drawing.Size(414, 218)
         Me.Chart2.TabIndex = 1
         Me.Chart2.Text = "Chart2"
-        Title2.Alignment = System.Drawing.ContentAlignment.TopLeft
-        Title2.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Title2.Name = "Sales by Channel"
-        Title2.Text = "Sales by Channel"
-        Me.Chart2.Titles.Add(Title2)
+        Title4.Alignment = System.Drawing.ContentAlignment.TopLeft
+        Title4.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Title4.Name = "Sales by Channel"
+        Title4.Text = "Sales by Channel"
+        Me.Chart2.Titles.Add(Title4)
         '
         'RoundedPane213
         '
@@ -990,6 +974,22 @@ Partial Class Dashboard
         Me.PictureBox8.TabIndex = 4
         Me.PictureBox8.TabStop = False
         '
+        'RoundedPane29
+        '
+        Me.RoundedPane29.BackColor = System.Drawing.Color.Transparent
+        Me.RoundedPane29.BorderColor = System.Drawing.Color.LightGray
+        Me.RoundedPane29.BorderThickness = 0
+        Me.RoundedPane29.Controls.Add(Me.lblValueDinein)
+        Me.RoundedPane29.Controls.Add(Me.lblPercentDineIn)
+        Me.RoundedPane29.Controls.Add(Me.Label3)
+        Me.RoundedPane29.Controls.Add(Me.Panel1)
+        Me.RoundedPane29.CornerRadius = 8
+        Me.RoundedPane29.FillColor = System.Drawing.Color.White
+        Me.RoundedPane29.Location = New System.Drawing.Point(13, 13)
+        Me.RoundedPane29.Name = "RoundedPane29"
+        Me.RoundedPane29.Size = New System.Drawing.Size(317, 48)
+        Me.RoundedPane29.TabIndex = 0
+        '
         'Dashboard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1039,8 +1039,6 @@ Partial Class Dashboard
         Me.RoundedPane28.ResumeLayout(False)
         Me.RoundedPane28.PerformLayout()
         Me.FlowLegends.ResumeLayout(False)
-        Me.RoundedPane29.ResumeLayout(False)
-        Me.RoundedPane29.PerformLayout()
         Me.RoundedPane210.ResumeLayout(False)
         Me.RoundedPane210.PerformLayout()
         Me.RoundedPane211.ResumeLayout(False)
@@ -1052,6 +1050,8 @@ Partial Class Dashboard
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane26.ResumeLayout(False)
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.RoundedPane29.ResumeLayout(False)
+        Me.RoundedPane29.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1063,7 +1063,6 @@ Partial Class Dashboard
     Friend WithEvents Chart2 As DataVisualization.Charting.Chart
     Friend WithEvents RoundedPane28 As RoundedPane2
     Friend WithEvents FlowLegends As FlowLayoutPanel
-    Friend WithEvents RoundedPane29 As RoundedPane2
     Friend WithEvents Panel1 As Panel
     Friend WithEvents RoundedPane210 As RoundedPane2
     Friend WithEvents RoundedPane211 As RoundedPane2
@@ -1121,4 +1120,5 @@ Partial Class Dashboard
     Friend WithEvents ChartTopProducts As DataVisualization.Charting.Chart
     Friend WithEvents Filters As ComboBox
     Friend WithEvents Label11 As Label
+    Friend WithEvents RoundedPane29 As RoundedPane2
 End Class

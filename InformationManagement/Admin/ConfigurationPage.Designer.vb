@@ -24,6 +24,7 @@ Partial Class ConfigurationPage
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConfigurationPage))
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
+        Me.lblServerStatus = New System.Windows.Forms.Label()
         Me.txtServer = New InformationManagement.RoundedTextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -38,7 +39,6 @@ Partial Class ConfigurationPage
         Me.btnTestConnection = New System.Windows.Forms.Button()
         Me.txtUsername = New InformationManagement.RoundedTextBox()
         Me.btnSaveAndContinue = New System.Windows.Forms.Button()
-        Me.lblServerStatus = New System.Windows.Forms.Label()
         Me.RoundedPane21.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -65,16 +65,28 @@ Partial Class ConfigurationPage
         Me.RoundedPane21.Controls.Add(Me.txtUsername)
         Me.RoundedPane21.Controls.Add(Me.btnSaveAndContinue)
         Me.RoundedPane21.CornerRadius = 12
-        Me.RoundedPane21.FillColor = System.Drawing.SystemColors.ActiveCaption
+        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
         Me.RoundedPane21.Location = New System.Drawing.Point(183, 29)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(494, 508)
         Me.RoundedPane21.TabIndex = 11
         '
+        'lblServerStatus
+        '
+        Me.lblServerStatus.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.lblServerStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Italic)
+        Me.lblServerStatus.ForeColor = System.Drawing.Color.Gray
+        Me.lblServerStatus.Location = New System.Drawing.Point(90, 400)
+        Me.lblServerStatus.Name = "lblServerStatus"
+        Me.lblServerStatus.Size = New System.Drawing.Size(314, 35)
+        Me.lblServerStatus.TabIndex = 12
+        Me.lblServerStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'txtServer
         '
         Me.txtServer.BackColor = System.Drawing.Color.Transparent
         Me.txtServer.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtServer.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtServer.Location = New System.Drawing.Point(89, 158)
         Me.txtServer.MaxLength = 32767
         Me.txtServer.MinimumSize = New System.Drawing.Size(50, 20)
@@ -94,7 +106,7 @@ Partial Class ConfigurationPage
         Me.Label2.AutoSize = True
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label2.ForeColor = System.Drawing.Color.White
         Me.Label2.Location = New System.Drawing.Point(86, 134)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(76, 21)
@@ -106,7 +118,7 @@ Partial Class ConfigurationPage
         Me.Label6.AutoSize = True
         Me.Label6.BackColor = System.Drawing.Color.Transparent
         Me.Label6.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label6.ForeColor = System.Drawing.Color.White
         Me.Label6.Location = New System.Drawing.Point(86, 338)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(79, 21)
@@ -118,7 +130,7 @@ Partial Class ConfigurationPage
         Me.Label4.AutoSize = True
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label4.ForeColor = System.Drawing.Color.White
         Me.Label4.Location = New System.Drawing.Point(86, 203)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(124, 21)
@@ -130,7 +142,7 @@ Partial Class ConfigurationPage
         Me.Label5.AutoSize = True
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label5.ForeColor = System.Drawing.Color.White
         Me.Label5.Location = New System.Drawing.Point(84, 271)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(83, 21)
@@ -142,7 +154,7 @@ Partial Class ConfigurationPage
         Me.Label3.AutoSize = True
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Label3.ForeColor = System.Drawing.Color.White
         Me.Label3.Location = New System.Drawing.Point(283, 134)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(40, 21)
@@ -153,9 +165,9 @@ Partial Class ConfigurationPage
         '
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(75, 63)
+        Me.PictureBox1.Location = New System.Drawing.Point(168, 25)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(38, 38)
+        Me.PictureBox1.Size = New System.Drawing.Size(155, 56)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox1.TabIndex = 10
         Me.PictureBox1.TabStop = False
@@ -164,6 +176,7 @@ Partial Class ConfigurationPage
         '
         Me.txtDatabasename.BackColor = System.Drawing.Color.Transparent
         Me.txtDatabasename.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtDatabasename.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtDatabasename.Location = New System.Drawing.Point(88, 227)
         Me.txtDatabasename.MaxLength = 32767
         Me.txtDatabasename.MinimumSize = New System.Drawing.Size(50, 20)
@@ -183,8 +196,8 @@ Partial Class ConfigurationPage
         Me.Label1.AutoSize = True
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Segoe UI", 21.75!, System.Drawing.FontStyle.Bold)
-        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(119, 61)
+        Me.Label1.ForeColor = System.Drawing.Color.White
+        Me.Label1.Location = New System.Drawing.Point(98, 75)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(306, 40)
         Me.Label1.TabIndex = 0
@@ -195,6 +208,7 @@ Partial Class ConfigurationPage
         '
         Me.txtPassword.BackColor = System.Drawing.Color.Transparent
         Me.txtPassword.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtPassword.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtPassword.Location = New System.Drawing.Point(89, 362)
         Me.txtPassword.MaxLength = 32767
         Me.txtPassword.MinimumSize = New System.Drawing.Size(50, 20)
@@ -213,6 +227,7 @@ Partial Class ConfigurationPage
         '
         Me.txtPort.BackColor = System.Drawing.Color.Transparent
         Me.txtPort.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtPort.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtPort.Location = New System.Drawing.Point(287, 158)
         Me.txtPort.MaxLength = 32767
         Me.txtPort.MinimumSize = New System.Drawing.Size(50, 20)
@@ -245,6 +260,7 @@ Partial Class ConfigurationPage
         '
         Me.txtUsername.BackColor = System.Drawing.Color.Transparent
         Me.txtUsername.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtUsername.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtUsername.Location = New System.Drawing.Point(88, 295)
         Me.txtUsername.MaxLength = 32767
         Me.txtUsername.MinimumSize = New System.Drawing.Size(50, 20)
@@ -261,7 +277,7 @@ Partial Class ConfigurationPage
         '
         'btnSaveAndContinue
         '
-        Me.btnSaveAndContinue.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.btnSaveAndContinue.BackColor = System.Drawing.Color.LightSlateGray
         Me.btnSaveAndContinue.FlatAppearance.BorderSize = 0
         Me.btnSaveAndContinue.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue
         Me.btnSaveAndContinue.FlatStyle = System.Windows.Forms.FlatStyle.Flat
@@ -273,17 +289,6 @@ Partial Class ConfigurationPage
         Me.btnSaveAndContinue.TabIndex = 10
         Me.btnSaveAndContinue.Text = "Save && Continue"
         Me.btnSaveAndContinue.UseVisualStyleBackColor = False
-        '
-        'lblServerStatus
-        '
-        Me.lblServerStatus.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.lblServerStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Italic)
-        Me.lblServerStatus.ForeColor = System.Drawing.Color.Gray
-        Me.lblServerStatus.Location = New System.Drawing.Point(90, 400)
-        Me.lblServerStatus.Name = "lblServerStatus"
-        Me.lblServerStatus.Size = New System.Drawing.Size(314, 35)
-        Me.lblServerStatus.TabIndex = 12
-        Me.lblServerStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ConfigurationPage
         '
