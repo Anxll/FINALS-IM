@@ -126,15 +126,11 @@ Public Class Orders
                 "SELECT 
                     o.OrderID,
                     o.CustomerID,
-                    COALESCE(c.FirstName, '') AS FirstName,
-                    COALESCE(c.LastName, '') AS LastName,
-                    COALESCE(c.Email, '') AS Email,
+                    CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, '')) AS CustomerName,
                     COALESCE(c.ContactNumber, '') AS CustomerContact,
                     o.EmployeeID,
                     o.OrderType,
-                    o.OrderSource,
                     o.DeliveryOption,
-                    o.ReceiptNumber,
                     o.NumberOfDiners,
                     o.OrderDate,
                     o.OrderTime,
@@ -146,6 +142,7 @@ Public Class Orders
                     o.CreatedDate,
                     o.UpdatedDate,
                     COALESCE(p.PaymentMethod, '') AS PaymentMethod,
+                    COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
                     COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
                     COALESCE(p.ReceiptFileName, '') AS ReceiptFileName,
                     COALESCE(
@@ -162,6 +159,7 @@ Public Class Orders
                  FROM orders o
                  LEFT JOIN customers c ON o.CustomerID = c.CustomerID
                  LEFT JOIN payments p ON o.OrderID = p.OrderID"
+
 
             If condition <> "" Then
                 query &= " WHERE " & condition
@@ -263,7 +261,7 @@ Public Class Orders
     Private Sub FormatDataGridView()
         Try
             With DataGridView2
-                .SuspendLayout() ' Suspend layout during bulk changes
+                .SuspendLayout()
 
                 ' Hide ID columns
                 If .Columns.Contains("OrderID") Then .Columns("OrderID").Visible = False
@@ -272,86 +270,62 @@ Public Class Orders
                 If .Columns.Contains("CreatedDate") Then .Columns("CreatedDate").Visible = False
                 If .Columns.Contains("UpdatedDate") Then .Columns("UpdatedDate").Visible = False
 
-                ' Customer Information Columns
-                If .Columns.Contains("FirstName") Then
-                    .Columns("FirstName").HeaderText = "First Name"
-                    .Columns("FirstName").Width = 120
-                    .Columns("FirstName").DisplayIndex = 0
-                End If
-
-                If .Columns.Contains("LastName") Then
-                    .Columns("LastName").HeaderText = "Last Name"
-                    .Columns("LastName").Width = 120
-                    .Columns("LastName").DisplayIndex = 1
-                End If
-
-                If .Columns.Contains("Email") Then
-                    .Columns("Email").HeaderText = "Email"
-                    .Columns("Email").Width = 180
-                    .Columns("Email").DisplayIndex = 2
+                ' Customer Information - CONSOLIDATED NAME
+                If .Columns.Contains("CustomerName") Then
+                    .Columns("CustomerName").HeaderText = "Customer Name"
+                    .Columns("CustomerName").Width = 180
+                    .Columns("CustomerName").DisplayIndex = 0
                 End If
 
                 If .Columns.Contains("CustomerContact") Then
                     .Columns("CustomerContact").HeaderText = "Contact Number"
-                    .Columns("CustomerContact").Width = 120
-                    .Columns("CustomerContact").DisplayIndex = 3
+                    .Columns("CustomerContact").Width = 130
+                    .Columns("CustomerContact").DisplayIndex = 1
                 End If
 
                 ' Order Information Columns
-                If .Columns.Contains("ReceiptNumber") Then
-                    .Columns("ReceiptNumber").HeaderText = "Receipt Number"
-                    .Columns("ReceiptNumber").Width = 120
-                    .Columns("ReceiptNumber").DisplayIndex = 4
-                End If
-
                 If .Columns.Contains("OrderType") Then
                     .Columns("OrderType").HeaderText = "Order Type"
                     .Columns("OrderType").Width = 100
-                    .Columns("OrderType").DisplayIndex = 5
-                End If
-
-                If .Columns.Contains("OrderSource") Then
-                    .Columns("OrderSource").HeaderText = "Order Source"
-                    .Columns("OrderSource").Width = 100
-                    .Columns("OrderSource").DisplayIndex = 6
+                    .Columns("OrderType").DisplayIndex = 2
                 End If
 
                 If .Columns.Contains("DeliveryOption") Then
                     .Columns("DeliveryOption").HeaderText = "Delivery Option"
                     .Columns("DeliveryOption").Width = 120
-                    .Columns("DeliveryOption").DisplayIndex = 7
+                    .Columns("DeliveryOption").DisplayIndex = 3
                 End If
 
                 If .Columns.Contains("NumberOfDiners") Then
                     .Columns("NumberOfDiners").HeaderText = "Diners"
                     .Columns("NumberOfDiners").Width = 70
-                    .Columns("NumberOfDiners").DisplayIndex = 8
+                    .Columns("NumberOfDiners").DisplayIndex = 4
                 End If
 
                 If .Columns.Contains("OrderDate") Then
                     .Columns("OrderDate").HeaderText = "Order Date"
                     .Columns("OrderDate").Width = 100
                     .Columns("OrderDate").DefaultCellStyle.Format = "MM/dd/yyyy"
-                    .Columns("OrderDate").DisplayIndex = 9
+                    .Columns("OrderDate").DisplayIndex = 5
                 End If
 
                 If .Columns.Contains("OrderTime") Then
                     .Columns("OrderTime").HeaderText = "Order Time"
                     .Columns("OrderTime").Width = 90
-                    .Columns("OrderTime").DisplayIndex = 10
+                    .Columns("OrderTime").DisplayIndex = 6
                 End If
 
                 If .Columns.Contains("ItemsOrderedCount") Then
                     .Columns("ItemsOrderedCount").HeaderText = "Items"
                     .Columns("ItemsOrderedCount").Width = 70
-                    .Columns("ItemsOrderedCount").DisplayIndex = 11
+                    .Columns("ItemsOrderedCount").DisplayIndex = 7
                 End If
 
                 If .Columns.Contains("OrderedProducts") Then
                     .Columns("OrderedProducts").HeaderText = "Ordered Products"
                     .Columns("OrderedProducts").Width = 250
                     .Columns("OrderedProducts").DefaultCellStyle.WrapMode = DataGridViewTriState.True
-                    .Columns("OrderedProducts").DisplayIndex = 12
+                    .Columns("OrderedProducts").DisplayIndex = 8
                 End If
 
                 If .Columns.Contains("TotalAmount") Then
@@ -359,53 +333,45 @@ Public Class Orders
                     .Columns("TotalAmount").Width = 120
                     .Columns("TotalAmount").DefaultCellStyle.Format = "₱#,##0.00"
                     .Columns("TotalAmount").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
-                    .Columns("TotalAmount").DisplayIndex = 13
+                    .Columns("TotalAmount").DisplayIndex = 9
                 End If
 
                 If .Columns.Contains("OrderStatus") Then
-                    .Columns("OrderStatus").HeaderText = "Status"
+                    .Columns("OrderStatus").HeaderText = "Order Status"
                     .Columns("OrderStatus").Width = 100
-                    .Columns("OrderStatus").DisplayIndex = 14
+                    .Columns("OrderStatus").DisplayIndex = 10
                 End If
 
-                If .Columns.Contains("SpecialRequests") Then
-                    .Columns("SpecialRequests").HeaderText = "Special Requests"
-                    .Columns("SpecialRequests").Width = 200
-                    .Columns("SpecialRequests").DefaultCellStyle.WrapMode = DataGridViewTriState.True
-                    .Columns("SpecialRequests").DisplayIndex = 15
-                End If
-
-                If .Columns.Contains("DeliveryAddress") Then
-                    .Columns("DeliveryAddress").HeaderText = "Delivery Address"
-                    .Columns("DeliveryAddress").Width = 200
-                    .Columns("DeliveryAddress").DefaultCellStyle.WrapMode = DataGridViewTriState.True
-                    .Columns("DeliveryAddress").DisplayIndex = 16
-                End If
                 If .Columns.Contains("PaymentMethod") Then
                     .Columns("PaymentMethod").HeaderText = "Payment Method"
                     .Columns("PaymentMethod").Width = 120
-                    .Columns("PaymentMethod").DisplayIndex = 15
+                    .Columns("PaymentMethod").DisplayIndex = 11
                 End If
 
-                ' Hide ProofOfPayment and ReceiptFileName columns - they are for internal use
-                If .Columns.Contains("ProofOfPayment") Then .Columns("ProofOfPayment").Visible = False
-                If .Columns.Contains("ReceiptFileName") Then .Columns("ReceiptFileName").Visible = False
+                If .Columns.Contains("PaymentStatus") Then
+                    .Columns("PaymentStatus").HeaderText = "Payment Status"
+                    .Columns("PaymentStatus").Width = 120
+                    .Columns("PaymentStatus").DisplayIndex = 12
+                End If
 
-                ' Update the SpecialRequests DisplayIndex to 16
                 If .Columns.Contains("SpecialRequests") Then
                     .Columns("SpecialRequests").HeaderText = "Special Requests"
                     .Columns("SpecialRequests").Width = 200
                     .Columns("SpecialRequests").DefaultCellStyle.WrapMode = DataGridViewTriState.True
-                    .Columns("SpecialRequests").DisplayIndex = 16
+                    .Columns("SpecialRequests").DisplayIndex = 13
                 End If
 
-                ' Update the DeliveryAddress DisplayIndex to 17
                 If .Columns.Contains("DeliveryAddress") Then
                     .Columns("DeliveryAddress").HeaderText = "Delivery Address"
                     .Columns("DeliveryAddress").Width = 200
                     .Columns("DeliveryAddress").DefaultCellStyle.WrapMode = DataGridViewTriState.True
-                    .Columns("DeliveryAddress").DisplayIndex = 17
+                    .Columns("DeliveryAddress").DisplayIndex = 14
                 End If
+
+                ' Hide ProofOfPayment and ReceiptFileName - internal use only
+                If .Columns.Contains("ProofOfPayment") Then .Columns("ProofOfPayment").Visible = False
+                If .Columns.Contains("ReceiptFileName") Then .Columns("ReceiptFileName").Visible = False
+
                 .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
                 .ScrollBars = ScrollBars.Both
                 .AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None
@@ -421,28 +387,26 @@ Public Class Orders
                 .ColumnHeadersDefaultCellStyle.ForeColor = Color.White
                 .ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI", 9, FontStyle.Bold)
                 .ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+
+                ' Add View Proof button at the end
                 AddViewProofButtonColumn()
-                .ResumeLayout() ' Resume layout after changes
+
+                .ResumeLayout()
             End With
         Catch ex As Exception
             ' Handle silently
         End Try
     End Sub
+
     Private Sub DataGridView2_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView2.CellContentClick
         ' Check if the clicked cell is the View Proof button
         If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
             If DataGridView2.Columns(e.ColumnIndex).Name = "ViewProof" Then
                 Dim row As DataGridViewRow = DataGridView2.Rows(e.RowIndex)
-                Dim orderSource As String = If(row.Cells("OrderSource").Value?.ToString(), "")
                 Dim proofPath As String = If(row.Cells("ProofOfPayment").Value?.ToString(), "")
                 Dim receiptFileName As String = If(row.Cells("ReceiptFileName").Value?.ToString(), "")
 
-                ' Only allow viewing for Website orders with proof
-                If orderSource.ToLower() <> "website" Then
-                    MessageBox.Show("Proof of payment is only available for Website orders.", "Not Available", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    Return
-                End If
-
+                ' Check if proof exists
                 If String.IsNullOrEmpty(proofPath) Then
                     MessageBox.Show("No proof of payment available for this order.", "No Image", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Return
@@ -581,7 +545,7 @@ Public Class Orders
             btnCol.Name = "ViewProof"
             btnCol.HeaderText = "Proof of Payment"
             btnCol.Text = "View"
-            btnCol.UseColumnTextForButtonValue = False ' Important: We'll set text per cell
+            btnCol.UseColumnTextForButtonValue = False
             btnCol.Width = 120
             btnCol.DefaultCellStyle.BackColor = Color.FromArgb(0, 123, 255)
             btnCol.DefaultCellStyle.ForeColor = Color.White
@@ -593,15 +557,14 @@ Public Class Orders
             DataGridView2.Columns.Add(btnCol)
             btnCol.DisplayIndex = DataGridView2.Columns.Count - 1
 
-            ' Set button text based on order source and proof availability
+            ' Set button text based on proof availability only
             For Each row As DataGridViewRow In DataGridView2.Rows
                 If row.IsNewRow Then Continue For
 
-                Dim orderSource As String = If(row.Cells("OrderSource").Value?.ToString(), "")
                 Dim proofPath As String = If(row.Cells("ProofOfPayment").Value?.ToString(), "")
 
-                ' Only show button for Website orders with proof
-                If orderSource.ToLower() = "website" AndAlso Not String.IsNullOrEmpty(proofPath) Then
+                ' Show button only if proof exists
+                If Not String.IsNullOrEmpty(proofPath) Then
                     row.Cells("ViewProof").Value = "View"
                     row.Cells("ViewProof").Style.BackColor = Color.FromArgb(0, 123, 255)
                 Else
@@ -612,7 +575,7 @@ Public Class Orders
             Next
 
         Catch ex As Exception
-            ' Handle silently
+            MessageBox.Show("Error adding view proof column: " & ex.Message)
         End Try
     End Sub
     ' ============================================================
@@ -688,26 +651,14 @@ Public Class Orders
             For Each row As DataGridViewRow In DataGridView2.Rows
                 If row.IsNewRow Then Continue For
 
-                Dim firstName As String = If(row.Cells("FirstName").Value?.ToString(), "")
-                Dim lastName As String = If(row.Cells("LastName").Value?.ToString(), "")
+                ' Handle Walk-in customers - check if CustomerName is empty or just spaces
+                Dim customerName As String = If(row.Cells("CustomerName").Value?.ToString(), "").Trim()
 
-                ' Handle Walk-in customers
-                If String.IsNullOrEmpty(firstName) AndAlso String.IsNullOrEmpty(lastName) Then
-                    row.Cells("FirstName").Value = "Walk-in"
-                    row.Cells("LastName").Value = "Customer"
-                    row.Cells("Email").Value = "N/A"
+                If String.IsNullOrWhiteSpace(customerName) Then
+                    row.Cells("CustomerName").Value = "Walk-in Customer"
                     row.Cells("CustomerContact").Value = "N/A"
-
-                    row.Cells("FirstName").Style.ForeColor = Color.Gray
-                    row.Cells("LastName").Style.ForeColor = Color.Gray
-                    row.Cells("Email").Style.ForeColor = Color.Gray
+                    row.Cells("CustomerName").Style.ForeColor = Color.Gray
                     row.Cells("CustomerContact").Style.ForeColor = Color.Gray
-                End If
-
-                ' Handle empty email
-                If String.IsNullOrWhiteSpace(row.Cells("Email").Value?.ToString()) Then
-                    row.Cells("Email").Value = "N/A"
-                    row.Cells("Email").Style.ForeColor = Color.Gray
                 End If
 
                 ' Handle empty contact
@@ -716,33 +667,49 @@ Public Class Orders
                     row.Cells("CustomerContact").Style.ForeColor = Color.Gray
                 End If
 
-                ' Handle empty delivery option (add this after the DeliveryAddress check)
-                If row.Cells("DeliveryOption").Value Is Nothing OrElse
-                    String.IsNullOrWhiteSpace(row.Cells("DeliveryOption").Value.ToString()) OrElse
-                    IsDBNull(row.Cells("DeliveryOption").Value) Then
-                    row.Cells("DeliveryOption").Value = "N/A"
-                    row.Cells("DeliveryOption").Style.ForeColor = Color.Gray
-                End If
-
                 ' Handle empty ordered products
                 If row.Cells("OrderedProducts").Value Is Nothing OrElse
-                   String.IsNullOrWhiteSpace(row.Cells("OrderedProducts").Value.ToString()) Then
+               String.IsNullOrWhiteSpace(row.Cells("OrderedProducts").Value.ToString()) Then
                     row.Cells("OrderedProducts").Value = "N/A"
                     row.Cells("OrderedProducts").Style.ForeColor = Color.Gray
                 End If
 
                 ' Handle empty special requests
                 If row.Cells("SpecialRequests").Value Is Nothing OrElse
-                   String.IsNullOrWhiteSpace(row.Cells("SpecialRequests").Value.ToString()) Then
+               String.IsNullOrWhiteSpace(row.Cells("SpecialRequests").Value.ToString()) Then
                     row.Cells("SpecialRequests").Value = "N/A"
                     row.Cells("SpecialRequests").Style.ForeColor = Color.Gray
                 End If
 
                 ' Handle empty delivery address
                 If row.Cells("DeliveryAddress").Value Is Nothing OrElse
-                   String.IsNullOrWhiteSpace(row.Cells("DeliveryAddress").Value.ToString()) Then
+               String.IsNullOrWhiteSpace(row.Cells("DeliveryAddress").Value.ToString()) Then
                     row.Cells("DeliveryAddress").Value = "N/A"
                     row.Cells("DeliveryAddress").Style.ForeColor = Color.Gray
+                End If
+
+                ' Handle empty delivery option
+                If row.Cells("DeliveryOption").Value Is Nothing OrElse
+               String.IsNullOrWhiteSpace(row.Cells("DeliveryOption").Value.ToString()) OrElse
+               IsDBNull(row.Cells("DeliveryOption").Value) Then
+                    row.Cells("DeliveryOption").Value = "N/A"
+                    row.Cells("DeliveryOption").Style.ForeColor = Color.Gray
+                End If
+
+                ' Handle empty payment method
+                If row.Cells("PaymentMethod").Value Is Nothing OrElse
+               String.IsNullOrWhiteSpace(row.Cells("PaymentMethod").Value.ToString()) OrElse
+               IsDBNull(row.Cells("PaymentMethod").Value) Then
+                    row.Cells("PaymentMethod").Value = "N/A"
+                    row.Cells("PaymentMethod").Style.ForeColor = Color.Gray
+                End If
+
+                ' Handle payment status
+                If row.Cells("PaymentStatus").Value Is Nothing OrElse
+               String.IsNullOrWhiteSpace(row.Cells("PaymentStatus").Value.ToString()) OrElse
+               IsDBNull(row.Cells("PaymentStatus").Value) Then
+                    row.Cells("PaymentStatus").Value = "Pending"
+                    row.Cells("PaymentStatus").Style.ForeColor = Color.DarkOrange
                 End If
             Next
 
@@ -761,40 +728,99 @@ Public Class Orders
     ' ============================================================
     Private Function GetCustomerName(row As DataGridViewRow) As String
         Try
-            Dim firstName As String = If(row.Cells("FirstName").Value?.ToString(), "")
-            Dim lastName As String = If(row.Cells("LastName").Value?.ToString(), "")
+            Dim customerName As String = If(row.Cells("CustomerName").Value?.ToString(), "").Trim()
 
-            If firstName = "Walk-in" AndAlso lastName = "Customer" Then
+            If customerName = "Walk-in Customer" OrElse String.IsNullOrWhiteSpace(customerName) Then
                 Return "Walk-in Customer"
-            ElseIf Not String.IsNullOrEmpty(firstName) OrElse Not String.IsNullOrEmpty(lastName) Then
-                Return $"{firstName} {lastName}".Trim()
             Else
-                Return "Walk-in Customer"
+                Return customerName
             End If
         Catch ex As Exception
             Return "Unknown"
         End Try
     End Function
-
     ' ============================================================
     ' UPDATE ORDER STATUS
     ' ============================================================
+    ' ============================================================
+    ' UPDATE UpdateOrderStatus() METHOD
+    ' Create payment record if it doesn't exist, then update to Completed
+    ' ============================================================
+
     Private Sub UpdateOrderStatus(orderID As Integer, newStatus As String)
         Try
             Using conn As New MySqlConnection("Server=127.0.0.1;User=root;Password=;Database=tabeya_system")
                 conn.Open()
-                Dim query As String = "UPDATE orders SET OrderStatus = @status, UpdatedDate = NOW() WHERE OrderID = @orderID"
-                Using cmd As New MySqlCommand(query, conn)
-                    cmd.Parameters.AddWithValue("@status", newStatus)
-                    cmd.Parameters.AddWithValue("@orderID", orderID)
-                    cmd.ExecuteNonQuery()
+
+                ' Start transaction for data integrity
+                Using transaction = conn.BeginTransaction()
+                    Try
+                        ' Update order status
+                        Dim orderQuery As String = "UPDATE orders SET OrderStatus = @status, UpdatedDate = NOW() WHERE OrderID = @orderID"
+                        Using cmd As New MySqlCommand(orderQuery, conn, transaction)
+                            cmd.Parameters.AddWithValue("@status", newStatus)
+                            cmd.Parameters.AddWithValue("@orderID", orderID)
+                            cmd.ExecuteNonQuery()
+                        End Using
+
+                        ' If status is changed to "Confirmed", auto-update/create payment status
+                        If newStatus = "Confirmed" Then
+                            ' Check if payment record exists
+                            Dim checkQuery As String = "SELECT COUNT(*) FROM payments WHERE OrderID = @orderID"
+                            Dim paymentExists As Boolean = False
+
+                            Using checkCmd As New MySqlCommand(checkQuery, conn, transaction)
+                                checkCmd.Parameters.AddWithValue("@orderID", orderID)
+                                Dim count As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
+                                paymentExists = (count > 0)
+                            End Using
+
+                            If paymentExists Then
+                                ' Update existing payment record
+                                Dim updatePaymentQuery As String = "UPDATE payments SET PaymentStatus = 'Completed', PaymentDate = NOW() WHERE OrderID = @orderID"
+                                Using cmd As New MySqlCommand(updatePaymentQuery, conn, transaction)
+                                    cmd.Parameters.AddWithValue("@orderID", orderID)
+                                    cmd.ExecuteNonQuery()
+                                End Using
+                            Else
+                                ' Create new payment record - get order details first
+                                Dim getOrderQuery As String = "SELECT TotalAmount FROM orders WHERE OrderID = @orderID"
+                                Dim totalAmount As Decimal = 0
+
+                                Using getCmd As New MySqlCommand(getOrderQuery, conn, transaction)
+                                    getCmd.Parameters.AddWithValue("@orderID", orderID)
+                                    totalAmount = Convert.ToDecimal(getCmd.ExecuteScalar())
+                                End Using
+
+                                ' Insert new payment record
+                                Dim insertPaymentQuery As String =
+                                "INSERT INTO payments (OrderID, PaymentDate, PaymentMethod, PaymentStatus, AmountPaid, PaymentSource) " &
+                                "VALUES (@orderID, NOW(), 'Cash', 'Completed', @amount, 'POS')"
+
+                                Using cmd As New MySqlCommand(insertPaymentQuery, conn, transaction)
+                                    cmd.Parameters.AddWithValue("@orderID", orderID)
+                                    cmd.Parameters.AddWithValue("@amount", totalAmount)
+                                    cmd.ExecuteNonQuery()
+                                End Using
+                            End If
+                        End If
+
+                        transaction.Commit()
+                    Catch ex As Exception
+                        transaction.Rollback()
+                        Throw
+                    End Try
                 End Using
             End Using
 
-            MessageBox.Show($"Order #{orderID} status updated to '{newStatus}' successfully!",
-                          "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Dim message As String = $"Order #{orderID} status updated to '{newStatus}' successfully!"
+            If newStatus = "Confirmed" Then
+                message &= vbCrLf & "Payment status automatically set to 'Completed'."
+            End If
+
+            MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Catch ex As Exception
-            MessageBox.Show("Error updating status: " & ex.Message)
+            MessageBox.Show("Error updating status: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
@@ -861,8 +887,7 @@ Public Class Orders
             Dim row As DataGridViewRow = DataGridView2.Rows(e.RowIndex)
             Dim orderID As Integer = CInt(row.Cells("OrderID").Value)
             Dim status As String = row.Cells("OrderStatus").Value.ToString()
-            Dim orderSource As String = If(row.Cells("OrderSource").Value IsNot Nothing,
-                                          row.Cells("OrderSource").Value.ToString(), "")
+            ' REMOVE THIS LINE: Dim orderSource As String = ...
 
             Dim contextMenu As New ContextMenuStrip()
             contextMenu.Font = New Font("Segoe UI", 9)
@@ -877,15 +902,10 @@ Public Class Orders
                 contextMenu.Items.Add(cancelItem)
                 contextMenu.Items.Add(New ToolStripSeparator())
             ElseIf status = "Confirmed" Then
-                If orderSource.ToLower() = "website" Then
-                    Dim completeItem As New ToolStripMenuItem("Complete Order")
-                    AddHandler completeItem.Click, Sub() CompleteOrder(orderID)
-                    contextMenu.Items.Add(completeItem)
-                Else
-                    Dim serveItem As New ToolStripMenuItem("Serve Order (Complete)")
-                    AddHandler serveItem.Click, Sub() CompleteOrder(orderID)
-                    contextMenu.Items.Add(serveItem)
-                End If
+                ' REMOVE the orderSource check here
+                Dim completeItem As New ToolStripMenuItem("Complete Order")
+                AddHandler completeItem.Click, Sub() CompleteOrder(orderID)
+                contextMenu.Items.Add(completeItem)
 
                 Dim cancelItem As New ToolStripMenuItem("Cancel Order")
                 AddHandler cancelItem.Click, Sub() CancelOrder(orderID)
@@ -908,7 +928,6 @@ Public Class Orders
             contextMenu.Show(DataGridView2, mousePos)
         End If
     End Sub
-
     Private Sub CompleteOrder(orderID As Integer)
         If MessageBox.Show($"Mark Order #{orderID} as Completed?",
                           "Complete Order", MessageBoxButtons.YesNo,
@@ -940,42 +959,42 @@ Public Class Orders
         Try
             Dim row As DataGridViewRow = DataGridView2.SelectedRows(0)
             Dim customerName As String = GetCustomerName(row)
-            Dim email As String = If(row.Cells("Email").Value?.ToString(), "N/A")
             Dim contact As String = If(row.Cells("CustomerContact").Value?.ToString(), "N/A")
             Dim orderedProducts As String = If(row.Cells("OrderedProducts").Value?.ToString(), "N/A")
             Dim specialRequests As String = If(row.Cells("SpecialRequests").Value?.ToString(), "N/A")
             Dim deliveryAddress As String = If(row.Cells("DeliveryAddress").Value?.ToString(), "N/A")
             Dim deliveryOption As String = If(row.Cells("DeliveryOption").Value?.ToString(), "N/A")
             Dim paymentMethod As String = If(row.Cells("PaymentMethod").Value?.ToString(), "N/A")
+            Dim paymentStatus As String = If(row.Cells("PaymentStatus").Value?.ToString(), "Pending")
+
             Dim details As String = $"Order Details:" & vbCrLf & vbCrLf &
-                                   $"Order ID: {orderID}" & vbCrLf &
-                                   $"Customer: {customerName}" & vbCrLf
+                               $"Order ID: {orderID}" & vbCrLf &
+                               $"Customer: {customerName}" & vbCrLf
 
             If customerName <> "Walk-in Customer" Then
-                details &= $"Email: {email}" & vbCrLf &
-                          $"Contact: {contact}" & vbCrLf
+                details &= $"Contact: {contact}" & vbCrLf
             End If
 
-            details &= $"Receipt Number: {row.Cells("ReceiptNumber").Value}" & vbCrLf &
-                      $"Order Type: {row.Cells("OrderType").Value}" & vbCrLf &
-                      $"Order Source: {row.Cells("OrderSource").Value}" & vbCrLf &
-                      $"Delivery Option: {deliveryOption}" & vbCrLf &
-                      $"Payment Method: {paymentMethod}" & vbCrLf &
-                      $"Number of Diners: {row.Cells("NumberOfDiners").Value}" & vbCrLf &
-                      $"Order Date: {row.Cells("OrderDate").Value}" & vbCrLf &
-                      $"Order Time: {row.Cells("OrderTime").Value}" & vbCrLf &
-                      $"Items Ordered: {row.Cells("ItemsOrderedCount").Value}" & vbCrLf &
-                      $"Ordered Products: {orderedProducts}" & vbCrLf &
-                      $"Total Amount: ₱{CDec(row.Cells("TotalAmount").Value):N2}" & vbCrLf &
-                      $"Status: {row.Cells("OrderStatus").Value}" & vbCrLf &
-                      $"Special Requests: {specialRequests}" & vbCrLf &
-                      $"Delivery Address: {deliveryAddress}"
+            details &= $"Order Type: {row.Cells("OrderType").Value}" & vbCrLf &
+                  $"Delivery Option: {deliveryOption}" & vbCrLf &
+                  $"Number of Diners: {row.Cells("NumberOfDiners").Value}" & vbCrLf &
+                  $"Order Date: {row.Cells("OrderDate").Value}" & vbCrLf &
+                  $"Order Time: {row.Cells("OrderTime").Value}" & vbCrLf &
+                  $"Items Ordered: {row.Cells("ItemsOrderedCount").Value}" & vbCrLf &
+                  $"Ordered Products: {orderedProducts}" & vbCrLf &
+                  $"Total Amount: ₱{CDec(row.Cells("TotalAmount").Value):N2}" & vbCrLf &
+                  $"Order Status: {row.Cells("OrderStatus").Value}" & vbCrLf &
+                  $"Payment Method: {paymentMethod}" & vbCrLf &
+                  $"Payment Status: {paymentStatus}" & vbCrLf &
+                  $"Special Requests: {specialRequests}" & vbCrLf &
+                  $"Delivery Address: {deliveryAddress}"
 
             MessageBox.Show(details, "Order Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Catch ex As Exception
             MessageBox.Show("Error viewing details: " & ex.Message)
         End Try
     End Sub
+
 
     ' ============================================================
     ' FILTER BUTTONS
@@ -1031,18 +1050,16 @@ Public Class Orders
                 Exit Sub
             End If
 
-            ' Use parameterized-like approach for better performance
             ' Escape special characters to prevent SQL injection
             search = search.Replace("'", "''")
 
-            ' Optimized search query - using indexed columns first
+            ' Optimized search query - removed Email and ReceiptNumber
             Dim condition As String = $"(o.OrderID LIKE '%{search}%'
-                        OR o.ReceiptNumber LIKE '%{search}%'
-                        OR o.OrderStatus LIKE '%{search}%'
-                        OR c.FirstName LIKE '%{search}%'
-                        OR c.LastName LIKE '%{search}%'
-                        OR c.Email LIKE '%{search}%'
-                        OR o.CustomerID LIKE '%{search}%')"
+                    OR o.OrderStatus LIKE '%{search}%'
+                    OR c.FirstName LIKE '%{search}%'
+                    OR c.LastName LIKE '%{search}%'
+                    OR c.ContactNumber LIKE '%{search}%'
+                    OR o.CustomerID LIKE '%{search}%')"
 
             LoadOrdersAsync(condition)
             lblFilter.Text = "Search Results"
@@ -1075,8 +1092,7 @@ Public Class Orders
             Dim selectedRow As DataGridViewRow = DataGridView2.SelectedRows(0)
             Dim orderID As Integer = CInt(selectedRow.Cells("OrderID").Value)
             Dim currentStatus As String = selectedRow.Cells("OrderStatus").Value.ToString()
-            Dim orderSource As String = If(selectedRow.Cells("OrderSource").Value IsNot Nothing,
-                                          selectedRow.Cells("OrderSource").Value.ToString(), "")
+
             Dim customerName As String = GetCustomerName(selectedRow)
 
             ' Create status update form
