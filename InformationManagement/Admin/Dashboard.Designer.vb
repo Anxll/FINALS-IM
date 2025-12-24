@@ -57,6 +57,7 @@ Partial Class Dashboard
         Me.Label5 = New System.Windows.Forms.Label()
         Me.lblTotalOrders = New System.Windows.Forms.Label()
         Me.lblTitle = New System.Windows.Forms.Label()
+        Me.Filters = New System.Windows.Forms.ComboBox()
         Me.RoundedPane223 = New InformationManagement.RoundedPane2()
         Me.ChartTopProducts = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.RoundedPane219 = New InformationManagement.RoundedPane2()
@@ -108,7 +109,6 @@ Partial Class Dashboard
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.RoundedPane26 = New InformationManagement.RoundedPane2()
         Me.PictureBox8 = New System.Windows.Forms.PictureBox()
-        Me.Filters = New System.Windows.Forms.ComboBox()
         CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.arrowincrease, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -250,6 +250,22 @@ Partial Class Dashboard
         Me.lblTitle.TabIndex = 40
         Me.lblTitle.Text = "Dashboard Overview"
         '
+        'Filters
+        '
+        Me.Filters.BackColor = System.Drawing.SystemColors.ScrollBar
+        Me.Filters.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
+        Me.Filters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.Filters.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Filters.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Filters.FormattingEnabled = True
+        Me.Filters.ItemHeight = 22
+        Me.Filters.Items.AddRange(New Object() {"Daily", "Weekly", "Monthly", "Yearly"})
+        Me.Filters.Location = New System.Drawing.Point(948, 39)
+        Me.Filters.Name = "Filters"
+        Me.Filters.Size = New System.Drawing.Size(121, 28)
+        Me.Filters.TabIndex = 42
+        Me.Filters.UseWaitCursor = True
+        '
         'RoundedPane223
         '
         Me.RoundedPane223.BackColor = System.Drawing.Color.Transparent
@@ -357,7 +373,7 @@ Partial Class Dashboard
         Me.RoundedPane24.Controls.Add(Me.Label9)
         Me.RoundedPane24.Controls.Add(Me.lblActiveReservations)
         Me.RoundedPane24.CornerRadius = 12
-        Me.RoundedPane24.FillColor = System.Drawing.Color.White
+        Me.RoundedPane24.FillColor = System.Drawing.Color.MediumOrchid
         Me.RoundedPane24.Location = New System.Drawing.Point(558, 126)
         Me.RoundedPane24.Name = "RoundedPane24"
         Me.RoundedPane24.Size = New System.Drawing.Size(248, 130)
@@ -366,11 +382,11 @@ Partial Class Dashboard
         'RoundedPane222
         '
         Me.RoundedPane222.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane222.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.RoundedPane222.BorderColor = System.Drawing.Color.Transparent
         Me.RoundedPane222.BorderThickness = 1
         Me.RoundedPane222.Controls.Add(Me.PictureBox12)
         Me.RoundedPane222.CornerRadius = 8
-        Me.RoundedPane222.FillColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.RoundedPane222.FillColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(132, Byte), Integer), CType(CType(252, Byte), Integer))
         Me.RoundedPane222.Location = New System.Drawing.Point(27, 27)
         Me.RoundedPane222.Name = "RoundedPane222"
         Me.RoundedPane222.Size = New System.Drawing.Size(43, 38)
@@ -391,9 +407,9 @@ Partial Class Dashboard
         Me.Label9.AutoSize = True
         Me.Label9.BackColor = System.Drawing.Color.Transparent
         Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.ForeColor = System.Drawing.Color.Gray
+        Me.Label9.ForeColor = System.Drawing.Color.White
         Me.Label9.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Label9.Location = New System.Drawing.Point(91, 39)
+        Me.Label9.Location = New System.Drawing.Point(89, 39)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(118, 15)
         Me.Label9.TabIndex = 0
@@ -405,6 +421,7 @@ Partial Class Dashboard
         Me.lblActiveReservations.AutoSize = True
         Me.lblActiveReservations.BackColor = System.Drawing.Color.Transparent
         Me.lblActiveReservations.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblActiveReservations.ForeColor = System.Drawing.Color.White
         Me.lblActiveReservations.Location = New System.Drawing.Point(23, 81)
         Me.lblActiveReservations.Name = "lblActiveReservations"
         Me.lblActiveReservations.Size = New System.Drawing.Size(27, 20)
@@ -421,7 +438,7 @@ Partial Class Dashboard
         Me.RoundedPane215.Controls.Add(Me.Label17)
         Me.RoundedPane215.Controls.Add(Me.lblTotalRevenue)
         Me.RoundedPane215.CornerRadius = 12
-        Me.RoundedPane215.FillColor = System.Drawing.Color.White
+        Me.RoundedPane215.FillColor = System.Drawing.Color.FromArgb(CType(CType(16, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(129, Byte), Integer))
         Me.RoundedPane215.Location = New System.Drawing.Point(35, 126)
         Me.RoundedPane215.Name = "RoundedPane215"
         Me.RoundedPane215.Size = New System.Drawing.Size(248, 130)
@@ -430,11 +447,11 @@ Partial Class Dashboard
         'RoundedPane221
         '
         Me.RoundedPane221.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane221.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.RoundedPane221.BorderColor = System.Drawing.Color.Transparent
         Me.RoundedPane221.BorderThickness = 1
         Me.RoundedPane221.Controls.Add(Me.PictureBox11)
         Me.RoundedPane221.CornerRadius = 8
-        Me.RoundedPane221.FillColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.RoundedPane221.FillColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(153, Byte), Integer))
         Me.RoundedPane221.Location = New System.Drawing.Point(27, 27)
         Me.RoundedPane221.Name = "RoundedPane221"
         Me.RoundedPane221.Size = New System.Drawing.Size(43, 38)
@@ -455,9 +472,9 @@ Partial Class Dashboard
         Me.Label17.AutoSize = True
         Me.Label17.BackColor = System.Drawing.Color.Transparent
         Me.Label17.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label17.ForeColor = System.Drawing.Color.Gray
+        Me.Label17.ForeColor = System.Drawing.Color.White
         Me.Label17.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Label17.Location = New System.Drawing.Point(100, 39)
+        Me.Label17.Location = New System.Drawing.Point(91, 39)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(87, 15)
         Me.Label17.TabIndex = 0
@@ -469,6 +486,7 @@ Partial Class Dashboard
         Me.lblTotalRevenue.AutoSize = True
         Me.lblTotalRevenue.BackColor = System.Drawing.Color.Transparent
         Me.lblTotalRevenue.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTotalRevenue.ForeColor = System.Drawing.Color.White
         Me.lblTotalRevenue.Location = New System.Drawing.Point(23, 81)
         Me.lblTotalRevenue.Name = "lblTotalRevenue"
         Me.lblTotalRevenue.Size = New System.Drawing.Size(81, 20)
@@ -485,7 +503,7 @@ Partial Class Dashboard
         Me.RoundedPane21.Controls.Add(Me.Label10)
         Me.RoundedPane21.Controls.Add(Me.lblTotalOrder)
         Me.RoundedPane21.CornerRadius = 12
-        Me.RoundedPane21.FillColor = System.Drawing.Color.White
+        Me.RoundedPane21.FillColor = System.Drawing.Color.RoyalBlue
         Me.RoundedPane21.Location = New System.Drawing.Point(295, 126)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(248, 130)
@@ -494,11 +512,11 @@ Partial Class Dashboard
         'RoundedPane23
         '
         Me.RoundedPane23.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane23.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.RoundedPane23.BorderColor = System.Drawing.Color.Transparent
         Me.RoundedPane23.BorderThickness = 1
         Me.RoundedPane23.Controls.Add(Me.PictureBox10)
         Me.RoundedPane23.CornerRadius = 8
-        Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(165, Byte), Integer), CType(CType(250, Byte), Integer))
         Me.RoundedPane23.Location = New System.Drawing.Point(27, 27)
         Me.RoundedPane23.Name = "RoundedPane23"
         Me.RoundedPane23.Size = New System.Drawing.Size(43, 38)
@@ -519,9 +537,9 @@ Partial Class Dashboard
         Me.Label10.AutoSize = True
         Me.Label10.BackColor = System.Drawing.Color.Transparent
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.ForeColor = System.Drawing.Color.Gray
+        Me.Label10.ForeColor = System.Drawing.Color.White
         Me.Label10.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Label10.Location = New System.Drawing.Point(95, 39)
+        Me.Label10.Location = New System.Drawing.Point(90, 39)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(75, 15)
         Me.Label10.TabIndex = 0
@@ -533,6 +551,7 @@ Partial Class Dashboard
         Me.lblTotalOrder.AutoSize = True
         Me.lblTotalOrder.BackColor = System.Drawing.Color.Transparent
         Me.lblTotalOrder.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTotalOrder.ForeColor = System.Drawing.Color.White
         Me.lblTotalOrder.Location = New System.Drawing.Point(32, 81)
         Me.lblTotalOrder.Name = "lblTotalOrder"
         Me.lblTotalOrder.Size = New System.Drawing.Size(27, 20)
@@ -549,7 +568,7 @@ Partial Class Dashboard
         Me.RoundedPane217.Controls.Add(Me.Label8)
         Me.RoundedPane217.Controls.Add(Me.lblAverageOrder)
         Me.RoundedPane217.CornerRadius = 12
-        Me.RoundedPane217.FillColor = System.Drawing.Color.White
+        Me.RoundedPane217.FillColor = System.Drawing.Color.DarkGoldenrod
         Me.RoundedPane217.Location = New System.Drawing.Point(821, 126)
         Me.RoundedPane217.Name = "RoundedPane217"
         Me.RoundedPane217.Size = New System.Drawing.Size(248, 130)
@@ -558,11 +577,11 @@ Partial Class Dashboard
         'RoundedPane218
         '
         Me.RoundedPane218.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane218.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.RoundedPane218.BorderColor = System.Drawing.Color.Transparent
         Me.RoundedPane218.BorderThickness = 1
         Me.RoundedPane218.Controls.Add(Me.PictureBox5)
         Me.RoundedPane218.CornerRadius = 8
-        Me.RoundedPane218.FillColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.RoundedPane218.FillColor = System.Drawing.Color.Goldenrod
         Me.RoundedPane218.Location = New System.Drawing.Point(27, 27)
         Me.RoundedPane218.Name = "RoundedPane218"
         Me.RoundedPane218.Size = New System.Drawing.Size(43, 38)
@@ -583,9 +602,9 @@ Partial Class Dashboard
         Me.Label8.AutoSize = True
         Me.Label8.BackColor = System.Drawing.Color.Transparent
         Me.Label8.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.ForeColor = System.Drawing.Color.Gray
+        Me.Label8.ForeColor = System.Drawing.Color.White
         Me.Label8.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Label8.Location = New System.Drawing.Point(105, 39)
+        Me.Label8.Location = New System.Drawing.Point(96, 39)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(90, 15)
         Me.Label8.TabIndex = 0
@@ -597,6 +616,7 @@ Partial Class Dashboard
         Me.lblAverageOrder.AutoSize = True
         Me.lblAverageOrder.BackColor = System.Drawing.Color.Transparent
         Me.lblAverageOrder.Font = New System.Drawing.Font("Segoe UI", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblAverageOrder.ForeColor = System.Drawing.Color.White
         Me.lblAverageOrder.Location = New System.Drawing.Point(23, 81)
         Me.lblAverageOrder.Name = "lblAverageOrder"
         Me.lblAverageOrder.Size = New System.Drawing.Size(68, 20)
@@ -969,22 +989,6 @@ Partial Class Dashboard
         Me.PictureBox8.Size = New System.Drawing.Size(28, 28)
         Me.PictureBox8.TabIndex = 4
         Me.PictureBox8.TabStop = False
-        '
-        'Filters
-        '
-        Me.Filters.BackColor = System.Drawing.SystemColors.ScrollBar
-        Me.Filters.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-        Me.Filters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.Filters.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Filters.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Filters.FormattingEnabled = True
-        Me.Filters.ItemHeight = 22
-        Me.Filters.Items.AddRange(New Object() {"Daily", "Weekly", "Monthly", "Yearly"})
-        Me.Filters.Location = New System.Drawing.Point(948, 39)
-        Me.Filters.Name = "Filters"
-        Me.Filters.Size = New System.Drawing.Size(121, 28)
-        Me.Filters.TabIndex = 42
-        Me.Filters.UseWaitCursor = True
         '
         'Dashboard
         '
