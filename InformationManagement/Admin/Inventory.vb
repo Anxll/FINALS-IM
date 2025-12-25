@@ -101,34 +101,10 @@ Public Class Inventory
 
             ' Search label
             If Me.Controls.Contains(Label6) Then
-                Label6.Location = New Point(leftMargin, searchTop)
+
             End If
 
-            ' Search textbox - takes 60% width
-            Dim searchWidth As Integer = CInt((formWidth - (leftMargin * 2) - spacing) * 0.6)
-            If Me.Controls.Contains(TextBox1) Then
-                TextBox1.Location = New Point(leftMargin, searchTop + 25)
-                TextBox1.Size = New Size(searchWidth, 22)
-            End If
 
-            ' Category label
-            If Me.Controls.Contains(Label7) Then
-                Label7.Location = New Point(leftMargin + searchWidth + spacing, searchTop)
-            End If
-
-            ' Category dropdown
-            Dim categoryWidth As Integer = formWidth - (leftMargin * 2) - searchWidth - spacing
-            If Me.Controls.Contains(Category) Then
-                Category.Location = New Point(leftMargin + searchWidth + spacing, searchTop + 25)
-                Category.Size = New Size(categoryWidth, 24)
-            End If
-
-            ' DataGrid
-            Dim gridTop As Integer = searchTop + 60
-            Dim gridHeight As Integer = formHeight - gridTop - 30
-
-            InventoryGrid.Location = New Point(leftMargin, gridTop)
-            InventoryGrid.Size = New Size(formWidth - (leftMargin * 2), gridHeight)
 
             ' Adjust DataGrid columns
             AdjustGridColumns()
