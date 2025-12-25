@@ -1234,5 +1234,12 @@ Public Class Orders
             LoadOrdersAsync(CurrentCondition)
         End If
     End Sub
-
+    Private Sub btnViewCalendar_Click(sender As Object, e As EventArgs) Handles btnViewCalendar.Click
+        Try
+            Dim calendarForm As New OrderCalendar()
+            calendarForm.ShowDialog()
+        Catch ex As Exception
+            MessageBox.Show("Error opening calendar: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 End Class

@@ -293,6 +293,12 @@
     <Compile Include="Admin\InventoryMovementHistory.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Admin\OrderCalendar.Designer.vb">
+      <DependentUpon>OrderCalendar.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\OrderCalendar.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Admin\OrderPayment.Designer.vb">
       <DependentUpon>OrderPayment.vb</DependentUpon>
     </Compile>
