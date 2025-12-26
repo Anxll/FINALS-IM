@@ -107,7 +107,7 @@ Partial Class FormProductPerformance
         Me.RoundedPane28.Location = New System.Drawing.Point(28, 329)
         Me.RoundedPane28.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane28.Name = "RoundedPane28"
-        Me.RoundedPane28.Size = New System.Drawing.Size(1383, 624)
+        Me.RoundedPane28.Size = New System.Drawing.Size(1597, 624)
         Me.RoundedPane28.TabIndex = 16
         '
         'Chart1
@@ -142,7 +142,7 @@ Partial Class FormProductPerformance
         Series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.[String]
         Series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Int64
         Me.Chart1.Series.Add(Series1)
-        Me.Chart1.Size = New System.Drawing.Size(1560, 438)
+        Me.Chart1.Size = New System.Drawing.Size(1609, 438)
         Me.Chart1.TabIndex = 0
         Me.Chart1.Text = "Chart1"
         Title1.Alignment = System.Drawing.ContentAlignment.TopLeft
@@ -472,7 +472,7 @@ Partial Class FormProductPerformance
         '
         'Button1
         '
-        Me.Button1.BackColor = System.Drawing.Color.FromArgb(99, 102, 241)
+        Me.Button1.BackColor = System.Drawing.Color.FromArgb(CType(CType(99, Byte), Integer), CType(CType(102, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.Button1.Cursor = System.Windows.Forms.Cursors.Hand
         Me.Button1.FlatAppearance.BorderSize = 0
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat

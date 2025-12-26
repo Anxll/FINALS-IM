@@ -114,8 +114,10 @@ Public Class FormDineInOrders
             ConfigureGrid()
             ApplyStatusColors()
             ' UpdatePaginationUI() ' This function is not yet defined, will be added later
-            UpdateSummaryTiles(table) ' We'll update summary based on current page or we might need another query for total stats.
-            ' For now, keeping it simple with current page stats or total if needed.
+            ' UpdateSummaryTiles(table) ' Replaced with UpdateTotalSummaryAsync
+            
+            ' Update summary with total stats (non-paginated)
+            Await UpdateTotalSummaryAsync(searchText)
         Catch ex As Exception
             If Not Me.IsDisposed Then
                 MessageBox.Show("Error refreshing dine-in orders: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -194,6 +196,50 @@ Public Class FormDineInOrders
             End Using
         End Using
         Return dt
+    End Function
+
+    Private Async Function UpdateTotalSummaryAsync(searchText As String) As Task
+        Dim totalCount As Integer = 0
+        Dim totalRevenue As Decimal = 0
+        Dim avgValue As Decimal = 0
+
+        Try
+            Await Task.Run(Sub()
+                               ' Re-use the same period filter logic
+                               Dim periodFilter As String = ""
+                               Select Case Reports.SelectedPeriod
+                                   Case "Daily" : periodFilter = " AND DATE(OrderDate) = CURDATE() "
+                                   Case "Weekly" : periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                                   Case "Monthly" : periodFilter = " AND MONTH(OrderDate) = MONTH(CURDATE()) AND YEAR(OrderDate) = YEAR(CURDATE()) "
+                                   Case "Yearly" : periodFilter = " AND YEAR(OrderDate) = YEAR(CURDATE()) "
+                               End Select
+
+                               Using conn As New MySqlConnection(connectionString)
+                                   conn.Open()
+                                   Dim sql = "SELECT COUNT(*), COALESCE(SUM(TotalAmount), 0) FROM orders WHERE OrderType = 'Dine-in' " & periodFilter & " AND (OrderID LIKE @search OR OrderStatus LIKE @search)"
+                                   Using cmd As New MySqlCommand(sql, conn)
+                                       cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
+                                       Using reader = cmd.ExecuteReader()
+                                           If reader.Read() Then
+                                               totalCount = reader.GetInt32(0)
+                                               totalRevenue = reader.GetDecimal(1)
+                                           End If
+                                       End Using
+                                   End Using
+                               End Using
+                           End Sub)
+
+            If totalCount > 0 Then avgValue = totalRevenue / totalCount
+
+            ' Update UI labels
+            Me.Invoke(Sub()
+                          Label4.Text = totalCount.ToString("N0")
+                          Label6.Text = "₱" & totalRevenue.ToString("N2")
+                          Label7.Text = "₱" & avgValue.ToString("N2")
+                      End Sub)
+        Catch
+            ' Silent fail
+        End Try
     End Function
 
     Private Sub UpdateSummaryTiles(dt As DataTable)
@@ -401,10 +447,17 @@ Public Class FormDineInOrders
         End If
     End Sub
 
-    Private Sub btnPrev_Click(sender As Object, e As EventArgs) Handles btnPrev.Click
+    Private Async Sub btnPrev_Click(sender As Object, e As EventArgs) Handles btnPrev.Click
         If _currentPage > 1 Then
             _currentPage -= 1
-            BeginLoadDineInOrders()
+            Await BeginLoadDineInOrders()
+        End If
+    End Sub
+
+    Private Async Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        If _currentPage < _totalPages Then
+            _currentPage += 1
+            Await BeginLoadDineInOrders()
         End If
     End Sub
 

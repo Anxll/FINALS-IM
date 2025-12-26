@@ -51,11 +51,14 @@ Public Class FormTakeOutOrders
             ' Update UI on UI thread
             Me.Invoke(Sub()
                           DataGridView1.DataSource = dt
-                          UpdateSummaryTiles(dt)
+                          ' UpdateTotalSummaryAsync(searchText) ' Called below
                           FormatGrid()
                           UpdatePaginationUI()
                           Label10.Text = "Recent Take-Out Orders"
                       End Sub)
+
+            ' Update summary with total stats (non-paginated)
+            Await UpdateTotalSummaryAsync(searchText)
                       
         Catch ex As Exception
             If Not Me.IsDisposed Then
@@ -137,6 +140,50 @@ Public Class FormTakeOutOrders
             Throw ex
         End Try
         Return dt
+    End Function
+
+    Private Async Function UpdateTotalSummaryAsync(searchText As String) As Task
+        Dim totalCount As Integer = 0
+        Dim totalRevenue As Decimal = 0
+        Dim avgValue As Decimal = 0
+
+        Try
+            Await Task.Run(Sub()
+                               ' Re-use the same period filter logic
+                               Dim periodFilter As String = ""
+                               Select Case Reports.SelectedPeriod
+                                   Case "Daily" : periodFilter = " AND DATE(OrderTime) = CURDATE() "
+                                   Case "Weekly" : periodFilter = " AND YEARWEEK(OrderTime, 1) = YEARWEEK(CURDATE(), 1) "
+                                   Case "Monthly" : periodFilter = " AND MONTH(OrderTime) = MONTH(CURDATE()) AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                                   Case "Yearly" : periodFilter = " AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                               End Select
+
+                               Using conn As New MySqlConnection(connectionString)
+                                   conn.Open()
+                                   Dim sql = "SELECT COUNT(*), COALESCE(SUM(TotalAmount), 0) FROM orders WHERE OrderType = 'Takeout' " & periodFilter & " AND (OrderID LIKE @search OR OrderStatus LIKE @search)"
+                                   Using cmd As New MySqlCommand(sql, conn)
+                                       cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
+                                       Using reader = cmd.ExecuteReader()
+                                           If reader.Read() Then
+                                               totalCount = reader.GetInt32(0)
+                                               totalRevenue = reader.GetDecimal(1)
+                                           End If
+                                       End Using
+                                   End Using
+                               End Using
+                           End Sub)
+
+            If totalCount > 0 Then avgValue = totalRevenue / totalCount
+
+            ' Update UI labels
+            Me.Invoke(Sub()
+                          Label4.Text = totalCount.ToString("N0")
+                          Label6.Text = "₱" & totalRevenue.ToString("N2")
+                          Label7.Text = "₱" & avgValue.ToString("N2")
+                      End Sub)
+        Catch
+            ' Silent fail
+        End Try
     End Function
 
     Private Sub UpdateSummaryTiles(dt As DataTable)
