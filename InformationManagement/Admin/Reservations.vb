@@ -194,6 +194,28 @@ Public Class Reservations
                             cmd.ExecuteNonQuery()
                         End Using
                     End If
+
+                End If
+                ' If status is changed to "Cancelled", auto-update payment status to "Refunded"
+                If newStatus = "Cancelled" Then
+                    ' Check if payment record exists
+                    Dim checkQuery As String = "SELECT COUNT(*) FROM payments WHERE ReservationID = @reservationID"
+                    Dim paymentExists As Boolean = False
+
+                    Using checkCmd As New MySqlCommand(checkQuery, conn, transaction)
+                        checkCmd.Parameters.AddWithValue("@reservationID", reservationID)
+                        Dim count As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
+                        paymentExists = (count > 0)
+                    End Using
+
+                    If paymentExists Then
+                        ' Update existing payment record to Refunded
+                        Dim updatePaymentQuery As String = "UPDATE payments SET PaymentStatus = 'Refunded', PaymentDate = NOW() WHERE ReservationID = @reservationID"
+                        Using cmd As New MySqlCommand(updatePaymentQuery, conn, transaction)
+                            cmd.Parameters.AddWithValue("@reservationID", reservationID)
+                            cmd.ExecuteNonQuery()
+                        End Using
+                    End If
                 End If
 
                 transaction.Commit()
@@ -201,8 +223,9 @@ Public Class Reservations
                 Dim message As String = $"Reservation #{reservationID} has been updated to '{newStatus}'."
                 If newStatus = "Confirmed" Then
                     message &= vbCrLf & "Payment status automatically set to 'Completed'."
+                ElseIf newStatus = "Cancelled" Then
+                    message &= vbCrLf & "Payment status automatically set to 'Refunded'."
                 End If
-
                 MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             Catch ex As Exception

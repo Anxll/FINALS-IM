@@ -66,7 +66,7 @@ Partial Class FormDineInOrders
         Me.RoundedPane21.Controls.Add(Me.Label1)
         Me.RoundedPane21.Controls.Add(Me.PictureBox1)
         Me.RoundedPane21.CornerRadius = 15
-        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(250, Byte), Integer), CType(CType(252, Byte), Integer))
+        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(133, Byte), Integer), CType(CType(244, Byte), Integer))
         Me.RoundedPane21.Location = New System.Drawing.Point(30, 105)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(337, 125)
@@ -77,10 +77,10 @@ Partial Class FormDineInOrders
         Me.Label5.AutoSize = True
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
+        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Label5.Location = New System.Drawing.Point(75, 50)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(112, 20)
+        Me.Label5.Size = New System.Drawing.Size(90, 15)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "Total for Month"
         '
@@ -89,10 +89,10 @@ Partial Class FormDineInOrders
         Me.Label4.AutoSize = True
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
-        Me.Label4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
+        Me.Label4.ForeColor = System.Drawing.Color.White
         Me.Label4.Location = New System.Drawing.Point(75, 75)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(69, 41)
+        Me.Label4.Size = New System.Drawing.Size(56, 32)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "240"
         '
@@ -101,17 +101,17 @@ Partial Class FormDineInOrders
         Me.Label1.AutoSize = True
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
-        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
+        Me.Label1.ForeColor = System.Drawing.Color.White
         Me.Label1.Location = New System.Drawing.Point(75, 25)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(115, 25)
+        Me.Label1.Size = New System.Drawing.Size(92, 20)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Total Orders"
         '
         'PictureBox1
         '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox1.Image = Global.InformationManagement.My.Resources.Resources.fork_and_knife
+        Me.PictureBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(157, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
         Me.PictureBox1.Location = New System.Drawing.Point(20, 25)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(40, 40)
@@ -128,7 +128,7 @@ Partial Class FormDineInOrders
         Me.RoundedPane22.Controls.Add(Me.Label2)
         Me.RoundedPane22.Controls.Add(Me.PictureBox2)
         Me.RoundedPane22.CornerRadius = 15
-        Me.RoundedPane22.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(250, Byte), Integer), CType(CType(252, Byte), Integer))
+        Me.RoundedPane22.FillColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(77, Byte), Integer))
         Me.RoundedPane22.Location = New System.Drawing.Point(384, 105)
         Me.RoundedPane22.Name = "RoundedPane22"
         Me.RoundedPane22.Size = New System.Drawing.Size(337, 125)
@@ -139,10 +139,10 @@ Partial Class FormDineInOrders
         Me.Label8.AutoSize = True
         Me.Label8.BackColor = System.Drawing.Color.Transparent
         Me.Label8.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
+        Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Label8.Location = New System.Drawing.Point(75, 50)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(112, 20)
+        Me.Label8.Size = New System.Drawing.Size(90, 15)
         Me.Label8.TabIndex = 3
         Me.Label8.Text = "Total for Month"
         '
@@ -151,10 +151,10 @@ Partial Class FormDineInOrders
         Me.Label6.AutoSize = True
         Me.Label6.BackColor = System.Drawing.Color.Transparent
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
-        Me.Label6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
+        Me.Label6.ForeColor = System.Drawing.Color.White
         Me.Label6.Location = New System.Drawing.Point(75, 75)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(189, 41)
+        Me.Label6.Size = New System.Drawing.Size(155, 32)
         Me.Label6.TabIndex = 2
         Me.Label6.Text = "₱125,420.00"
         '
@@ -163,17 +163,17 @@ Partial Class FormDineInOrders
         Me.Label2.AutoSize = True
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
-        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
+        Me.Label2.ForeColor = System.Drawing.Color.White
         Me.Label2.Location = New System.Drawing.Point(75, 25)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(131, 25)
+        Me.Label2.Size = New System.Drawing.Size(105, 20)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Total Revenue"
         '
         'PictureBox2
         '
-        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox2.Image = Global.InformationManagement.My.Resources.Resources.philippines_peso_currency_symbol__2_
+        Me.PictureBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(92, Byte), Integer), CType(CType(219, Byte), Integer), CType(CType(113, Byte), Integer))
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
         Me.PictureBox2.Location = New System.Drawing.Point(20, 25)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(40, 40)
@@ -190,7 +190,7 @@ Partial Class FormDineInOrders
         Me.RoundedPane23.Controls.Add(Me.Label3)
         Me.RoundedPane23.Controls.Add(Me.PictureBox3)
         Me.RoundedPane23.CornerRadius = 15
-        Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(250, Byte), Integer), CType(CType(252, Byte), Integer))
+        Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(140, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.RoundedPane23.Location = New System.Drawing.Point(738, 105)
         Me.RoundedPane23.Name = "RoundedPane23"
         Me.RoundedPane23.Size = New System.Drawing.Size(337, 125)
@@ -201,10 +201,10 @@ Partial Class FormDineInOrders
         Me.Label9.AutoSize = True
         Me.Label9.BackColor = System.Drawing.Color.Transparent
         Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
+        Me.Label9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Label9.Location = New System.Drawing.Point(75, 50)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(108, 20)
+        Me.Label9.Size = New System.Drawing.Size(85, 15)
         Me.Label9.TabIndex = 2
         Me.Label9.Text = "Average/Order"
         '
@@ -213,10 +213,10 @@ Partial Class FormDineInOrders
         Me.Label7.AutoSize = True
         Me.Label7.BackColor = System.Drawing.Color.Transparent
         Me.Label7.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
-        Me.Label7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
+        Me.Label7.ForeColor = System.Drawing.Color.White
         Me.Label7.Location = New System.Drawing.Point(75, 75)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(130, 41)
+        Me.Label7.Size = New System.Drawing.Size(106, 32)
         Me.Label7.TabIndex = 1
         Me.Label7.Text = "₱520.00"
         '
@@ -225,17 +225,17 @@ Partial Class FormDineInOrders
         Me.Label3.AutoSize = True
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
-        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
+        Me.Label3.ForeColor = System.Drawing.Color.White
         Me.Label3.Location = New System.Drawing.Point(75, 25)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(152, 25)
+        Me.Label3.Size = New System.Drawing.Size(122, 20)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "Avg Order Value"
         '
         'PictureBox3
         '
-        Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox3.Image = Global.InformationManagement.My.Resources.Resources.philippines_peso_currency_symbol__2_
+        Me.PictureBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(252, Byte), Integer), CType(CType(166, Byte), Integer), CType(CType(5, Byte), Integer))
+        Me.PictureBox3.Image = CType(resources.GetObject("PictureBox3.Image"), System.Drawing.Image)
         Me.PictureBox3.Location = New System.Drawing.Point(20, 25)
         Me.PictureBox3.Name = "PictureBox3"
         Me.PictureBox3.Size = New System.Drawing.Size(40, 40)
@@ -304,7 +304,7 @@ Partial Class FormDineInOrders
         Me.lblPageStatus.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
         Me.lblPageStatus.Location = New System.Drawing.Point(0, 10)
         Me.lblPageStatus.Name = "lblPageStatus"
-        Me.lblPageStatus.Size = New System.Drawing.Size(158, 20)
+        Me.lblPageStatus.Size = New System.Drawing.Size(124, 15)
         Me.lblPageStatus.TabIndex = 0
         Me.lblPageStatus.Text = "Page 1 of 1 (0 records)"
         '
@@ -329,7 +329,7 @@ Partial Class FormDineInOrders
         Me.TextBoxSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(148, Byte), Integer), CType(CType(163, Byte), Integer), CType(CType(184, Byte), Integer))
         Me.TextBoxSearch.Location = New System.Drawing.Point(15, 12)
         Me.TextBoxSearch.Name = "TextBoxSearch"
-        Me.TextBoxSearch.Size = New System.Drawing.Size(250, 25)
+        Me.TextBoxSearch.Size = New System.Drawing.Size(250, 20)
         Me.TextBoxSearch.TabIndex = 0
         Me.TextBoxSearch.Text = "Search orders..."
         '
@@ -359,7 +359,7 @@ Partial Class FormDineInOrders
         Me.Label10.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
         Me.Label10.Location = New System.Drawing.Point(32, 28)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(212, 30)
+        Me.Label10.Size = New System.Drawing.Size(179, 25)
         Me.Label10.TabIndex = 7
         Me.Label10.Text = "Recent Table Orders"
         '
@@ -389,7 +389,7 @@ Partial Class FormDineInOrders
         Me.LabelHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
         Me.LabelHeader.Location = New System.Drawing.Point(30, 25)
         Me.LabelHeader.Name = "LabelHeader"
-        Me.LabelHeader.Size = New System.Drawing.Size(491, 50)
+        Me.LabelHeader.Size = New System.Drawing.Size(400, 41)
         Me.LabelHeader.TabIndex = 8
         Me.LabelHeader.Text = "Dine-In Order Management"
         '
@@ -400,13 +400,13 @@ Partial Class FormDineInOrders
         Me.LabelSubHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
         Me.LabelSubHeader.Location = New System.Drawing.Point(32, 68)
         Me.LabelSubHeader.Name = "LabelSubHeader"
-        Me.LabelSubHeader.Size = New System.Drawing.Size(444, 25)
+        Me.LabelSubHeader.Size = New System.Drawing.Size(343, 19)
         Me.LabelSubHeader.TabIndex = 9
         Me.LabelSubHeader.Text = "Track and manage table orders and customer presence"
         '
         'FormDineInOrders
         '
-        Me.ClientSize = New System.Drawing.Size(1186, 850)
+        Me.ClientSize = New System.Drawing.Size(1186, 749)
         Me.Controls.Add(Me.LabelSubHeader)
         Me.Controls.Add(Me.LabelHeader)
         Me.Controls.Add(Me.RoundedPane24)
