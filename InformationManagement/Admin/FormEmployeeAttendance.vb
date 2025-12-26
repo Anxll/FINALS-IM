@@ -31,6 +31,12 @@ Public Class FormEmployeeAttendance
 
             ' Load data asynchronously
             Await RefreshAttendanceAsync()
+
+            ' Add double-click handler for payroll link
+            AddHandler DataGridView1.CellDoubleClick, AddressOf DataGridView1_CellDoubleClick
+
+            ' Create a help button programmatically
+            AddHelpButton()
         Catch ex As Exception
             MessageBox.Show("Initialization Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
@@ -248,20 +254,18 @@ Public Class FormEmployeeAttendance
                         ELSE 0
                     END AS OvertimeHours,
                     CASE 
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Chef' THEN 0
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Cook' THEN 0
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Waitress' THEN 1
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Cashier' THEN 2
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Server' THEN 1
+                        WHEN e.EmploymentStatus = 'Active' AND e.Position IN ('Chef', 'Cook') THEN 0
+                        WHEN e.Position IN ('Waitress', 'Server') THEN 1
+                        WHEN e.Position = 'Cashier' THEN 2
                         WHEN e.EmploymentStatus = 'On Leave' THEN 3
                         ELSE 0
                     END AS Absences,
                     CASE 
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position IN ('Chef', 'Cook') THEN 'Perfect'
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position IN ('Waitress', 'Server') THEN 'Good'
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Cashier' THEN 'Fair'
                         WHEN e.EmploymentStatus = 'On Leave' THEN 'On Leave'
-                        ELSE 'Inactive'
+                        WHEN e.Position IN ('Chef', 'Cook') THEN 'Perfect'
+                        WHEN e.Position IN ('Waitress', 'Server') THEN 'Good'
+                        WHEN e.Position = 'Cashier' THEN 'Fair'
+                        ELSE 'Standard'
                     END AS Status
                 FROM 
                     employee e
@@ -413,6 +417,61 @@ Public Class FormEmployeeAttendance
             _currentPage -= 1
             Await RefreshAttendanceAsync()
         End If
+    End Sub
+
+    Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs)
+        If e.RowIndex >= 0 Then
+            Dim employeeName As String = DataGridView1.Rows(e.RowIndex).Cells("EmployeeName").Value.ToString()
+            Dim result = MessageBox.Show($"Would you like to view the Payroll record for {employeeName}?", "Cross-reference Payroll", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+
+            If result = DialogResult.Yes Then
+                Try
+                    Dim payrollForm As New FormPayroll()
+                    payrollForm.Show()
+                Catch ex As Exception
+                    MessageBox.Show("Could not open payroll form: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
+        End If
+    End Sub
+
+    Private Sub AddHelpButton()
+        Try
+            Dim btnHelp As New Button()
+            btnHelp.Text = "   Report Guide"
+            btnHelp.Image = Nothing ' Or set a help icon if available
+            btnHelp.Font = New Font("Segoe UI Semibold", 10.0F, FontStyle.Bold)
+            btnHelp.BackColor = Color.FromArgb(71, 85, 105)
+            btnHelp.ForeColor = Color.White
+            btnHelp.FlatStyle = FlatStyle.Flat
+            btnHelp.FlatAppearance.BorderSize = 0
+            btnHelp.Size = New Size(150, 45)
+            btnHelp.Location = New Point(Button1.Left - 160, Button1.Top)
+            btnHelp.Cursor = Cursors.Hand
+            btnHelp.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+
+            AddHandler btnHelp.Click, Sub()
+                                          Dim guide As String = "What You'll Do in This Report:" & vbCrLf & vbCrLf &
+                    "1. Monitor Daily Attendance - Check who's present vs. on leave." & vbCrLf &
+                    "2. Track Work Hours - Verify regular and overtime hours." & vbCrLf &
+                    "3. Identify Attendance Patterns - High absences marked in RED." & vbCrLf &
+                    "4. Review Status Ratings:" & vbCrLf &
+                    "   • Perfect (Green) - Chefs/Cooks (0 absences)" & vbCrLf &
+                    "   • Good (Blue) - Waitresses/Servers" & vbCrLf &
+                    "   • Fair (Orange) - Cashiers" & vbCrLf &
+                    "   • On Leave (Purple) - Approved status" & vbCrLf &
+                    "5. Search & Filter - Use top search for name or position." & vbCrLf &
+                    "6. Export Data - Download CSV for Payroll/HR." & vbCrLf &
+                    "7. Navigate Pages - 50 employees per page." & vbCrLf &
+                    "8. Cross-reference - Double-click a row to check Payroll."
+
+                                          MessageBox.Show(guide, "Attendance Report Instructions", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                                      End Sub
+
+            RoundedPane24.Controls.Add(btnHelp)
+            btnHelp.BringToFront()
+        Catch
+        End Try
     End Sub
 
     Private Sub TextBoxSearch_Enter(sender As Object, e As EventArgs) Handles TextBoxSearch.Enter

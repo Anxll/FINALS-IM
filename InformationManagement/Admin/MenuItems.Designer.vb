@@ -275,13 +275,11 @@ Partial Class MenuItems
         Me.Panel4.Size = New System.Drawing.Size(1442, 35)
         Me.Panel4.TabIndex = 1
         '
-        'lblTotalItems
-        '
+        Me.lblTotalItems.AutoSize = True
         Me.lblTotalItems.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.lblTotalItems.ForeColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(73, Byte), Integer), CType(CType(94, Byte), Integer))
         Me.lblTotalItems.Location = New System.Drawing.Point(13, 9)
         Me.lblTotalItems.Name = "lblTotalItems"
-        Me.lblTotalItems.Size = New System.Drawing.Size(100, 23)
         Me.lblTotalItems.TabIndex = 0
         Me.lblTotalItems.Text = "Total Items: 0"
         '

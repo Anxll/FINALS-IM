@@ -75,12 +75,29 @@ Public Class UsersAccounts
             Dim totalWidth As Integer = UsersAccountData.Width - 20 ' Account for scrollbar
 
             ' Set column widths proportionally based on Designer columns
-            UsersAccountData.Columns("txtName").Width = CInt(totalWidth * 0.2) ' 20% - Name
-            UsersAccountData.Columns("colRole").Width = CInt(totalWidth * 0.15) ' 15% - Role
-            UsersAccountData.Columns("colStatus").Width = CInt(totalWidth * 0.15) ' 15% - Status
-            UsersAccountData.Columns("colJoinDate").Width = CInt(totalWidth * 0.2) ' 20% - Join Date
-            UsersAccountData.Columns("colEdit").Width = 80 ' Fixed width
-            UsersAccountData.Columns("colDelete").Width = 80 ' Fixed width
+            If UsersAccountData.Columns.Contains("txtName") Then
+                UsersAccountData.Columns("txtName").Width = CInt(totalWidth * 0.25) ' 25% - Name
+            End If
+
+            If UsersAccountData.Columns.Contains("colRole") Then
+                UsersAccountData.Columns("colRole").Width = CInt(totalWidth * 0.15) ' 15% - Role
+            End If
+
+            If UsersAccountData.Columns.Contains("colStatus") Then
+                UsersAccountData.Columns("colStatus").Width = CInt(totalWidth * 0.15) ' 15% - Status
+            End If
+
+            If UsersAccountData.Columns.Contains("colJoinDate") Then
+                UsersAccountData.Columns("colJoinDate").Width = CInt(totalWidth * 0.25) ' 25% - Join Date
+            End If
+
+            If UsersAccountData.Columns.Contains("colEdit") Then
+                UsersAccountData.Columns("colEdit").Width = 80 ' Fixed width
+            End If
+
+            If UsersAccountData.Columns.Contains("colDelete") Then
+                UsersAccountData.Columns("colDelete").Width = 80 ' Fixed width
+            End If
 
         Catch ex As Exception
             Debug.WriteLine("Column width adjustment error: " & ex.Message)
@@ -248,11 +265,22 @@ Public Class UsersAccounts
                 Dim newRow As DataGridViewRow = UsersAccountData.Rows(rowIndex)
 
                 ' Set cell values (matching Designer column names)
-                newRow.Cells("txtName").Value = firstName & " " & lastName ' Combined name
-                newRow.Cells("colUsername").Value = "N/A" ' Not in database query
-                newRow.Cells("colRole").Value = "Staff" ' All are staff
-                newRow.Cells("colStatus").Value = "Active" ' Default status
-                newRow.Cells("colJoinDate").Value = hireDate
+                ' FIXED: Removed colUsername reference that was causing the error
+                If UsersAccountData.Columns.Contains("txtName") Then
+                    newRow.Cells("txtName").Value = firstName & " " & lastName ' Combined name
+                End If
+
+                If UsersAccountData.Columns.Contains("colRole") Then
+                    newRow.Cells("colRole").Value = "Staff" ' All are staff
+                End If
+
+                If UsersAccountData.Columns.Contains("colStatus") Then
+                    newRow.Cells("colStatus").Value = "Active" ' Default status
+                End If
+
+                If UsersAccountData.Columns.Contains("colJoinDate") Then
+                    newRow.Cells("colJoinDate").Value = hireDate
+                End If
 
                 ' Store ID for delete operations
                 newRow.Tag = If(row("ID") IsNot DBNull.Value, Convert.ToInt32(row("ID")), 0)
@@ -290,8 +318,10 @@ Public Class UsersAccounts
         Dim selectedRow As DataGridViewRow = UsersAccountData.Rows(e.RowIndex)
 
         ' Get the full name from the combined Name column
-        Dim fullName As String = If(selectedRow.Cells("txtName").Value IsNot Nothing,
-                                    selectedRow.Cells("txtName").Value.ToString().Trim(), "Unknown")
+        Dim fullName As String = "Unknown"
+        If UsersAccountData.Columns.Contains("txtName") AndAlso selectedRow.Cells("txtName").Value IsNot Nothing Then
+            fullName = selectedRow.Cells("txtName").Value.ToString().Trim()
+        End If
 
         Dim userID As Integer = If(selectedRow.Tag IsNot Nothing, CInt(selectedRow.Tag), 0)
 
@@ -301,7 +331,7 @@ Public Class UsersAccounts
         End If
 
         ' DELETE BUTTON
-        If e.ColumnIndex = UsersAccountData.Columns("colDelete").Index Then
+        If UsersAccountData.Columns.Contains("colDelete") AndAlso e.ColumnIndex = UsersAccountData.Columns("colDelete").Index Then
             Dim result As DialogResult = MessageBox.Show(
                 $"Are you sure you want to delete {fullName}?{vbNewLine}{vbNewLine}This action cannot be undone.",
                 "Confirm Delete",
@@ -315,7 +345,7 @@ Public Class UsersAccounts
         End If
 
         ' EDIT BUTTON (Optional - add functionality if needed)
-        If e.ColumnIndex = UsersAccountData.Columns("colEdit").Index Then
+        If UsersAccountData.Columns.Contains("colEdit") AndAlso e.ColumnIndex = UsersAccountData.Columns("colEdit").Index Then
             MessageBox.Show($"Edit functionality for {fullName} coming soon!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
@@ -435,7 +465,6 @@ Public Class UsersAccounts
     Private Sub lblStaffs_Click(sender As Object, e As EventArgs) Handles lblStaffs.Click
 
     End Sub
-
 
 End Class
 
