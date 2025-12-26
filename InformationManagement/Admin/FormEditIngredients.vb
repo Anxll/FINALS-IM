@@ -5,23 +5,18 @@ Public Class FormEditIngredients
     Private currentProductId As Integer = 0
     Private currentProductName As String = ""
 
-    ' =======================================================
-    ' LOAD PRODUCT DATA
-    ' =======================================================
     Public Sub LoadProductData(productId As Integer)
         currentProductId = productId
 
         Try
             openConn()
 
-            ' Get product name
             Dim cmdProduct As New MySqlCommand("SELECT ProductName FROM products WHERE ProductID = @id", conn)
             cmdProduct.Parameters.AddWithValue("@id", productId)
             currentProductName = cmdProduct.ExecuteScalar()?.ToString()
 
             conn.Close()
 
-            ' Update UI
             InitializeUI()
             LoadCurrentIngredients()
             LoadAvailableIngredients()
@@ -35,11 +30,7 @@ Public Class FormEditIngredients
         End Try
     End Sub
 
-    ' =======================================================
-    ' INITIALIZE UI COMPONENTS
-    ' =======================================================
     Private Sub InitializeUI()
-        ' Form settings
         Me.Text = "Edit Ingredients - " & currentProductName
         Me.Size = New Size(900, 700)
         Me.StartPosition = FormStartPosition.CenterScreen
@@ -47,16 +38,13 @@ Public Class FormEditIngredients
         Me.FormBorderStyle = FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
 
-        ' Clear existing controls
         Me.Controls.Clear()
 
-        ' Main panel
         Dim mainPanel As New Panel()
         mainPanel.Dock = DockStyle.Fill
         mainPanel.Padding = New Padding(20)
         Me.Controls.Add(mainPanel)
 
-        ' Title
         Dim lblTitle As New Label()
         lblTitle.Text = "✏️ Edit Ingredients for: " & currentProductName
         lblTitle.Font = New Font("Segoe UI", 16, FontStyle.Bold)
@@ -65,7 +53,6 @@ Public Class FormEditIngredients
         lblTitle.ForeColor = Color.FromArgb(52, 73, 94)
         mainPanel.Controls.Add(lblTitle)
 
-        ' Left panel - Current Ingredients
         Dim leftPanel As New Panel()
         leftPanel.Location = New Point(20, 70)
         leftPanel.Size = New Size(420, 500)
@@ -81,7 +68,6 @@ Public Class FormEditIngredients
         lblCurrent.ForeColor = Color.FromArgb(41, 128, 185)
         leftPanel.Controls.Add(lblCurrent)
 
-        ' DataGridView for current ingredients
         Dim dgvCurrent As New DataGridView()
         dgvCurrent.Name = "dgvCurrentIngredients"
         dgvCurrent.Location = New Point(10, 45)
@@ -90,11 +76,11 @@ Public Class FormEditIngredients
         dgvCurrent.ReadOnly = False
         dgvCurrent.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         dgvCurrent.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+        dgvCurrent.MultiSelect = False
         dgvCurrent.BackgroundColor = Color.White
         dgvCurrent.BorderStyle = BorderStyle.None
         leftPanel.Controls.Add(dgvCurrent)
 
-        ' Remove button
         Dim btnRemove As New Button()
         btnRemove.Name = "btnRemove"
         btnRemove.Text = "🗑️ Remove Selected"
@@ -109,7 +95,6 @@ Public Class FormEditIngredients
         AddHandler btnRemove.Click, AddressOf RemoveIngredient_Click
         leftPanel.Controls.Add(btnRemove)
 
-        ' Right panel - Add New Ingredient
         Dim rightPanel As New Panel()
         rightPanel.Location = New Point(460, 70)
         rightPanel.Size = New Size(420, 500)
@@ -125,7 +110,6 @@ Public Class FormEditIngredients
         lblAdd.ForeColor = Color.FromArgb(39, 174, 96)
         rightPanel.Controls.Add(lblAdd)
 
-        ' Radio buttons for selection mode
         Dim rbExisting As New RadioButton()
         rbExisting.Name = "rbExisting"
         rbExisting.Text = "Select from existing ingredients"
@@ -145,7 +129,6 @@ Public Class FormEditIngredients
         AddHandler rbNewIngredient.CheckedChanged, AddressOf RadioButton_CheckedChanged
         rightPanel.Controls.Add(rbNewIngredient)
 
-        ' === EXISTING INGREDIENT PANEL ===
         Dim pnlExisting As New Panel()
         pnlExisting.Name = "pnlExisting"
         pnlExisting.Location = New Point(10, 75)
@@ -154,7 +137,6 @@ Public Class FormEditIngredients
         pnlExisting.BorderStyle = BorderStyle.FixedSingle
         rightPanel.Controls.Add(pnlExisting)
 
-        ' Ingredient selection
         Dim lblSelectIngredient As New Label()
         lblSelectIngredient.Text = "Select Ingredient:"
         lblSelectIngredient.Font = New Font("Segoe UI", 10)
@@ -170,7 +152,6 @@ Public Class FormEditIngredients
         cmbIngredients.DropDownStyle = ComboBoxStyle.DropDownList
         pnlExisting.Controls.Add(cmbIngredients)
 
-        ' Quantity for existing
         Dim lblQuantityExist As New Label()
         lblQuantityExist.Text = "Quantity:"
         lblQuantityExist.Font = New Font("Segoe UI", 10)
@@ -185,7 +166,6 @@ Public Class FormEditIngredients
         txtQuantityExist.Size = New Size(180, 30)
         pnlExisting.Controls.Add(txtQuantityExist)
 
-        ' Unit for existing
         Dim lblUnitExist As New Label()
         lblUnitExist.Text = "Unit:"
         lblUnitExist.Font = New Font("Segoe UI", 10)
@@ -193,14 +173,16 @@ Public Class FormEditIngredients
         lblUnitExist.Size = New Size(150, 25)
         pnlExisting.Controls.Add(lblUnitExist)
 
-        Dim txtUnitExist As New TextBox()
-        txtUnitExist.Name = "txtUnitExist"
-        txtUnitExist.Font = New Font("Segoe UI", 10)
-        txtUnitExist.Location = New Point(210, 110)
-        txtUnitExist.Size = New Size(180, 30)
-        pnlExisting.Controls.Add(txtUnitExist)
+        ' DROPDOWN for Unit
+        Dim cmbUnitExist As New ComboBox()
+        cmbUnitExist.Name = "cmbUnitExist"
+        cmbUnitExist.Font = New Font("Segoe UI", 10)
+        cmbUnitExist.Location = New Point(210, 110)
+        cmbUnitExist.Size = New Size(180, 30)
+        cmbUnitExist.DropDownStyle = ComboBoxStyle.DropDown
+        cmbUnitExist.Items.AddRange(New String() {"g", "kg", "ml", "L", "pcs", "tbsp", "tsp", "cup", "oz", "lb", "bottle", "can", "pack", "bundle"})
+        pnlExisting.Controls.Add(cmbUnitExist)
 
-        ' === NEW INGREDIENT PANEL ===
         Dim pnlNewIngredient As New Panel()
         pnlNewIngredient.Name = "pnlNewIngredient"
         pnlNewIngredient.Location = New Point(10, 75)
@@ -210,7 +192,6 @@ Public Class FormEditIngredients
         pnlNewIngredient.Visible = False
         rightPanel.Controls.Add(pnlNewIngredient)
 
-        ' New ingredient name
         Dim lblNewName As New Label()
         lblNewName.Text = "Ingredient Name:"
         lblNewName.Font = New Font("Segoe UI", 10)
@@ -225,7 +206,6 @@ Public Class FormEditIngredients
         txtNewName.Size = New Size(380, 30)
         pnlNewIngredient.Controls.Add(txtNewName)
 
-        ' Stock unit type
         Dim lblStockUnit As New Label()
         lblStockUnit.Text = "Stock Unit (for inventory):"
         lblStockUnit.Font = New Font("Segoe UI", 10)
@@ -233,15 +213,16 @@ Public Class FormEditIngredients
         lblStockUnit.Size = New Size(200, 25)
         pnlNewIngredient.Controls.Add(lblStockUnit)
 
-        Dim txtStockUnit As New TextBox()
-        txtStockUnit.Name = "txtStockUnit"
-        txtStockUnit.Font = New Font("Segoe UI", 10)
-        txtStockUnit.Location = New Point(10, 110)
-        txtStockUnit.Size = New Size(180, 30)
-        txtStockUnit.Text = "kg"
-        pnlNewIngredient.Controls.Add(txtStockUnit)
+        Dim cmbStockUnit As New ComboBox()
+        cmbStockUnit.Name = "cmbStockUnit"
+        cmbStockUnit.Font = New Font("Segoe UI", 10)
+        cmbStockUnit.Location = New Point(10, 110)
+        cmbStockUnit.Size = New Size(180, 30)
+        cmbStockUnit.DropDownStyle = ComboBoxStyle.DropDown
+        cmbStockUnit.Items.AddRange(New String() {"kg", "g", "L", "ml", "pack", "bottle", "can", "bundle", "tray", "jar"})
+        cmbStockUnit.Text = "kg"
+        pnlNewIngredient.Controls.Add(cmbStockUnit)
 
-        ' Is Perishable checkbox
         Dim chkPerishable As New CheckBox()
         chkPerishable.Name = "chkPerishable"
         chkPerishable.Text = "Perishable"
@@ -251,7 +232,6 @@ Public Class FormEditIngredients
         chkPerishable.Checked = True
         pnlNewIngredient.Controls.Add(chkPerishable)
 
-        ' Quantity used in recipe
         Dim lblQuantityNew As New Label()
         lblQuantityNew.Text = "Quantity Used (in recipe):"
         lblQuantityNew.Font = New Font("Segoe UI", 10)
@@ -266,7 +246,6 @@ Public Class FormEditIngredients
         txtQuantityNew.Size = New Size(180, 30)
         pnlNewIngredient.Controls.Add(txtQuantityNew)
 
-        ' Unit for recipe
         Dim lblUnitNew As New Label()
         lblUnitNew.Text = "Unit (recipe):"
         lblUnitNew.Font = New Font("Segoe UI", 10)
@@ -274,14 +253,15 @@ Public Class FormEditIngredients
         lblUnitNew.Size = New Size(150, 25)
         pnlNewIngredient.Controls.Add(lblUnitNew)
 
-        Dim txtUnitNew As New TextBox()
-        txtUnitNew.Name = "txtUnitNew"
-        txtUnitNew.Font = New Font("Segoe UI", 10)
-        txtUnitNew.Location = New Point(210, 180)
-        txtUnitNew.Size = New Size(180, 30)
-        pnlNewIngredient.Controls.Add(txtUnitNew)
+        Dim cmbUnitNew As New ComboBox()
+        cmbUnitNew.Name = "cmbUnitNew"
+        cmbUnitNew.Font = New Font("Segoe UI", 10)
+        cmbUnitNew.Location = New Point(210, 180)
+        cmbUnitNew.Size = New Size(180, 30)
+        cmbUnitNew.DropDownStyle = ComboBoxStyle.DropDown
+        cmbUnitNew.Items.AddRange(New String() {"g", "kg", "ml", "L", "pcs", "tbsp", "tsp", "cup", "oz", "lb"})
+        pnlNewIngredient.Controls.Add(cmbUnitNew)
 
-        ' Helper text
         Dim lblHelper As New Label()
         lblHelper.Text = "💡 Tip: Stock unit is for inventory (e.g., kg)," & vbCrLf &
                         "Recipe unit is for cooking (e.g., g, ml)"
@@ -291,7 +271,6 @@ Public Class FormEditIngredients
         lblHelper.ForeColor = Color.Gray
         pnlNewIngredient.Controls.Add(lblHelper)
 
-        ' Add button
         Dim btnAdd As New Button()
         btnAdd.Name = "btnAdd"
         btnAdd.Text = "➕ Add to Product"
@@ -306,7 +285,6 @@ Public Class FormEditIngredients
         AddHandler btnAdd.Click, AddressOf AddIngredient_Click
         rightPanel.Controls.Add(btnAdd)
 
-        ' Instructions panel
         Dim instructionsPanel As New Panel()
         instructionsPanel.Location = New Point(10, 445)
         instructionsPanel.Size = New Size(400, 45)
@@ -323,7 +301,6 @@ Public Class FormEditIngredients
         lblInstructions.ForeColor = Color.FromArgb(127, 140, 141)
         instructionsPanel.Controls.Add(lblInstructions)
 
-        ' Bottom buttons
         Dim btnSave As New Button()
         btnSave.Text = "💾 Save Changes"
         btnSave.Font = New Font("Segoe UI", 11, FontStyle.Bold)
@@ -355,7 +332,7 @@ Public Class FormEditIngredients
     End Sub
 
     ' =======================================================
-    ' LOAD CURRENT INGREDIENTS
+    ' LOAD CURRENT INGREDIENTS - USING DATATAG TO STORE ID
     ' =======================================================
     Private Sub LoadCurrentIngredients()
         Dim dgv As DataGridView = CType(Me.Controls.Find("dgvCurrentIngredients", True)(0), DataGridView)
@@ -366,9 +343,9 @@ Public Class FormEditIngredients
             Dim query As String = "
                 SELECT 
                     pi.ProductIngredientID,
-                    i.IngredientName AS 'Ingredient',
-                    pi.QuantityUsed AS 'Quantity',
-                    pi.UnitType AS 'Unit'
+                    i.IngredientName,
+                    pi.QuantityUsed,
+                    pi.UnitType
                 FROM product_ingredients pi
                 INNER JOIN ingredients i ON pi.IngredientID = i.IngredientID
                 WHERE pi.ProductID = @productId
@@ -382,28 +359,41 @@ Public Class FormEditIngredients
             Dim dt As New DataTable()
             da.Fill(dt)
 
-            dgv.DataSource = dt
+            ' Clear DataGridView
+            dgv.DataSource = Nothing
+            dgv.Rows.Clear()
+            dgv.Columns.Clear()
 
-            ' Hide ID column
-            If dgv.Columns.Contains("ProductIngredientID") Then
-                dgv.Columns("ProductIngredientID").Visible = False
-            End If
+            ' Create columns
+            dgv.Columns.Add("Ingredient", "Ingredient")
+            dgv.Columns.Add("Quantity", "Quantity")
 
-            ' Make quantity and unit editable
-            If dgv.Columns.Contains("Quantity") Then
-                dgv.Columns("Quantity").ReadOnly = False
-            End If
-            If dgv.Columns.Contains("Unit") Then
-                dgv.Columns("Unit").ReadOnly = False
-            End If
+            ' Unit column as ComboBox
+            Dim unitColumn As New DataGridViewComboBoxColumn()
+            unitColumn.Name = "Unit"
+            unitColumn.HeaderText = "Unit"
+            unitColumn.Items.AddRange(New String() {"g", "kg", "ml", "L", "pcs", "tbsp", "tsp", "cup", "oz", "lb", "bottle", "can", "pack", "bundle"})
+            dgv.Columns.Add(unitColumn)
 
-            ' Make ingredient name read-only
-            If dgv.Columns.Contains("Ingredient") Then
-                dgv.Columns("Ingredient").ReadOnly = True
-            End If
+            ' Set properties
+            dgv.Columns("Ingredient").ReadOnly = True
+            dgv.Columns("Quantity").ReadOnly = False
+            dgv.Columns("Unit").ReadOnly = False
+
+            ' Add rows and store ProductIngredientID in Tag
+            For Each row As DataRow In dt.Rows
+                Dim rowIndex As Integer = dgv.Rows.Add(
+                    row("IngredientName"),
+                    row("QuantityUsed"),
+                    row("UnitType")
+                )
+
+                ' CRITICAL: Store ProductIngredientID in the row's Tag property
+                dgv.Rows(rowIndex).Tag = Convert.ToInt32(row("ProductIngredientID"))
+            Next
 
         Catch ex As Exception
-            MessageBox.Show("Error loading current ingredients: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error loading ingredients: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -411,9 +401,6 @@ Public Class FormEditIngredients
         End Try
     End Sub
 
-    ' =======================================================
-    ' LOAD AVAILABLE INGREDIENTS
-    ' =======================================================
     Private Sub LoadAvailableIngredients()
         Dim cmb As ComboBox = CType(Me.Controls.Find("cmbIngredients", True)(0), ComboBox)
         cmb.Items.Clear()
@@ -421,13 +408,7 @@ Public Class FormEditIngredients
         Try
             openConn()
 
-            Dim query As String = "
-                SELECT IngredientID, IngredientName 
-                FROM ingredients 
-                WHERE IsActive = 1 
-                ORDER BY IngredientName ASC
-            "
-
+            Dim query As String = "SELECT IngredientID, IngredientName FROM ingredients WHERE IsActive = 1 ORDER BY IngredientName ASC"
             Dim cmd As New MySqlCommand(query, conn)
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
 
@@ -441,7 +422,7 @@ Public Class FormEditIngredients
             reader.Close()
 
         Catch ex As Exception
-            MessageBox.Show("Error loading available ingredients: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error loading ingredients: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -449,15 +430,10 @@ Public Class FormEditIngredients
         End Try
     End Sub
 
-    ' =======================================================
-    ' RADIO BUTTON CHANGED - TOGGLE PANELS
-    ' =======================================================
     Private Sub RadioButton_CheckedChanged(sender As Object, e As EventArgs)
         Dim rb As RadioButton = CType(sender, RadioButton)
-
         If Not rb.Checked Then Return
 
-        ' Find panels
         Dim pnlExisting As Panel = CType(Me.Controls.Find("pnlExisting", True)(0), Panel)
         Dim pnlNewIngredient As Panel = CType(Me.Controls.Find("pnlNewIngredient", True)(0), Panel)
 
@@ -470,19 +446,13 @@ Public Class FormEditIngredients
         End If
     End Sub
 
-    ' =======================================================
-    ' ADD INGREDIENT
-    ' =======================================================
     Private Sub AddIngredient_Click(sender As Object, e As EventArgs)
-        ' Check which radio button is selected
         Try
             Dim rbExisting As RadioButton = CType(Me.Controls.Find("rbExisting", True)(0), RadioButton)
 
             If rbExisting.Checked Then
-                ' Add from existing ingredient
                 AddExistingIngredient()
             Else
-                ' Create new ingredient and add it
                 CreateAndAddNewIngredient()
             End If
         Catch ex As Exception
@@ -490,15 +460,11 @@ Public Class FormEditIngredients
         End Try
     End Sub
 
-    ' =======================================================
-    ' ADD EXISTING INGREDIENT TO PRODUCT
-    ' =======================================================
     Private Sub AddExistingIngredient()
         Dim cmbIngredients As ComboBox = CType(Me.Controls.Find("cmbIngredients", True)(0), ComboBox)
         Dim txtQuantityExist As TextBox = CType(Me.Controls.Find("txtQuantityExist", True)(0), TextBox)
-        Dim txtUnitExist As TextBox = CType(Me.Controls.Find("txtUnitExist", True)(0), TextBox)
+        Dim cmbUnitExist As ComboBox = CType(Me.Controls.Find("cmbUnitExist", True)(0), ComboBox)
 
-        ' Validation
         If cmbIngredients.SelectedItem Is Nothing Then
             MessageBox.Show("Please select an ingredient.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
@@ -506,12 +472,12 @@ Public Class FormEditIngredients
 
         Dim quantity As Decimal
         If Not Decimal.TryParse(txtQuantityExist.Text, quantity) OrElse quantity <= 0 Then
-            MessageBox.Show("Please enter a valid quantity (positive number).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Please enter a valid quantity.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        If String.IsNullOrWhiteSpace(txtUnitExist.Text) Then
-            MessageBox.Show("Please enter a unit (e.g., g, kg, ml, pcs).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        If String.IsNullOrWhiteSpace(cmbUnitExist.Text) Then
+            MessageBox.Show("Please select or enter a unit.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
@@ -520,51 +486,36 @@ Public Class FormEditIngredients
         Try
             openConn()
 
-            ' Check if ingredient already exists for this product
-            Dim checkQuery As String = "
-                SELECT COUNT(*) 
-                FROM product_ingredients 
-                WHERE ProductID = @productId AND IngredientID = @ingredientId
-            "
+            Dim checkQuery As String = "SELECT COUNT(*) FROM product_ingredients WHERE ProductID = @productId AND IngredientID = @ingredientId"
             Dim checkCmd As New MySqlCommand(checkQuery, conn)
             checkCmd.Parameters.AddWithValue("@productId", currentProductId)
             checkCmd.Parameters.AddWithValue("@ingredientId", selectedIngredient.Id)
 
-            Dim count As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
-
-            If count > 0 Then
-                MessageBox.Show("This ingredient is already added. Please edit it in the current ingredients list.", "Duplicate Ingredient", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            If Convert.ToInt32(checkCmd.ExecuteScalar()) > 0 Then
+                MessageBox.Show("This ingredient is already added.", "Duplicate", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 conn.Close()
                 Return
             End If
 
-            ' Insert new ingredient
-            Dim insertQuery As String = "
-                INSERT INTO product_ingredients 
-                (ProductID, IngredientID, QuantityUsed, UnitType, CreatedDate, UpdatedDate) 
-                VALUES 
-                (@productId, @ingredientId, @quantity, @unit, NOW(), NOW())
-            "
+            Dim insertQuery As String = "INSERT INTO product_ingredients (ProductID, IngredientID, QuantityUsed, UnitType, CreatedDate, UpdatedDate) VALUES (@productId, @ingredientId, @quantity, @unit, NOW(), NOW())"
             Dim insertCmd As New MySqlCommand(insertQuery, conn)
             insertCmd.Parameters.AddWithValue("@productId", currentProductId)
             insertCmd.Parameters.AddWithValue("@ingredientId", selectedIngredient.Id)
             insertCmd.Parameters.AddWithValue("@quantity", quantity)
-            insertCmd.Parameters.AddWithValue("@unit", txtUnitExist.Text.Trim())
+            insertCmd.Parameters.AddWithValue("@unit", cmbUnitExist.Text.Trim())
 
             insertCmd.ExecuteNonQuery()
 
-            MessageBox.Show("✓ Ingredient added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("✓ Ingredient added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-            ' Clear fields
             cmbIngredients.SelectedIndex = -1
             txtQuantityExist.Clear()
-            txtUnitExist.Clear()
+            cmbUnitExist.Text = ""
 
-            ' Refresh current ingredients list
             LoadCurrentIngredients()
 
         Catch ex As Exception
-            MessageBox.Show("Error adding ingredient: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -572,46 +523,38 @@ Public Class FormEditIngredients
         End Try
     End Sub
 
-    ' =======================================================
-    ' CREATE NEW INGREDIENT AND ADD TO PRODUCT
-    ' =======================================================
     Private Sub CreateAndAddNewIngredient()
         Dim txtNewName As TextBox = CType(Me.Controls.Find("txtNewName", True)(0), TextBox)
-        Dim txtStockUnit As TextBox = CType(Me.Controls.Find("txtStockUnit", True)(0), TextBox)
+        Dim cmbStockUnit As ComboBox = CType(Me.Controls.Find("cmbStockUnit", True)(0), ComboBox)
         Dim chkPerishable As CheckBox = CType(Me.Controls.Find("chkPerishable", True)(0), CheckBox)
         Dim txtQuantityNew As TextBox = CType(Me.Controls.Find("txtQuantityNew", True)(0), TextBox)
-        Dim txtUnitNew As TextBox = CType(Me.Controls.Find("txtUnitNew", True)(0), TextBox)
+        Dim cmbUnitNew As ComboBox = CType(Me.Controls.Find("cmbUnitNew", True)(0), ComboBox)
 
-        ' Validation
         If String.IsNullOrWhiteSpace(txtNewName.Text) Then
             MessageBox.Show("Please enter an ingredient name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            txtNewName.Focus()
             Return
         End If
 
-        If String.IsNullOrWhiteSpace(txtStockUnit.Text) Then
-            MessageBox.Show("Please enter a stock unit (e.g., kg, pack, liter).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            txtStockUnit.Focus()
+        If String.IsNullOrWhiteSpace(cmbStockUnit.Text) Then
+            MessageBox.Show("Please select or enter a stock unit.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        If String.IsNullOrWhiteSpace(cmbUnitNew.Text) Then
+            MessageBox.Show("Please select or enter a recipe unit.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
         Dim quantity As Decimal
         If Not Decimal.TryParse(txtQuantityNew.Text, quantity) OrElse quantity <= 0 Then
-            MessageBox.Show("Please enter a valid quantity used in recipe (positive number).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            txtQuantityNew.Focus()
-            Return
-        End If
-
-        If String.IsNullOrWhiteSpace(txtUnitNew.Text) Then
-            MessageBox.Show("Please enter a recipe unit (e.g., g, ml, pcs).", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            txtUnitNew.Focus()
+            MessageBox.Show("Please enter a valid quantity.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
         Try
             openConn()
 
-            ' Check if ingredient name already exists
+            ' Check if ingredient already exists
             Dim checkQuery As String = "SELECT IngredientID FROM ingredients WHERE IngredientName = @name"
             Dim checkCmd As New MySqlCommand(checkQuery, conn)
             checkCmd.Parameters.AddWithValue("@name", txtNewName.Text.Trim())
@@ -622,139 +565,121 @@ Public Class FormEditIngredients
             If existingId IsNot Nothing Then
                 ' Ingredient already exists, use existing ID
                 ingredientId = Convert.ToInt32(existingId)
-                Dim result As DialogResult = MessageBox.Show(
-                    $"An ingredient named '{txtNewName.Text}' already exists." & vbCrLf & vbCrLf &
-                    "Do you want to use the existing ingredient?",
-                    "Ingredient Exists",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                )
-
-                If result = DialogResult.No Then
-                    conn.Close()
-                    Return
-                End If
             Else
-                ' Create new ingredient in ingredients table
-                Dim insertIngredientQuery As String = "
-                    INSERT INTO ingredients 
-                    (IngredientName, UnitType, StockQuantity, IsActive, IsPerishable, LastRestockedDate) 
-                    VALUES 
-                    (@name, @unitType, 0, 1, @isPerishable, NOW());
-                    SELECT LAST_INSERT_ID();
-                "
+                ' Get the next available IngredientID manually
+                Dim getMaxIdQuery As String = "SELECT COALESCE(MAX(IngredientID), 0) + 1 FROM ingredients"
+                Dim getMaxIdCmd As New MySqlCommand(getMaxIdQuery, conn)
+                Dim nextId As Integer = Convert.ToInt32(getMaxIdCmd.ExecuteScalar())
+
+                ' Insert new ingredient with explicit ID
+                Dim insertIngredientQuery As String = "INSERT INTO ingredients (IngredientID, IngredientName, UnitType, StockQuantity, IsActive, IsPerishable, LastRestockedDate, MinStockLevel, MaxStockLevel) VALUES (@id, @name, @unitType, 0, 1, @isPerishable, NOW(), 5.00, 100.00)"
                 Dim insertIngredientCmd As New MySqlCommand(insertIngredientQuery, conn)
+                insertIngredientCmd.Parameters.AddWithValue("@id", nextId)
                 insertIngredientCmd.Parameters.AddWithValue("@name", txtNewName.Text.Trim())
-                insertIngredientCmd.Parameters.AddWithValue("@unitType", txtStockUnit.Text.Trim())
+                insertIngredientCmd.Parameters.AddWithValue("@unitType", cmbStockUnit.Text.Trim())
                 insertIngredientCmd.Parameters.AddWithValue("@isPerishable", If(chkPerishable.Checked, 1, 0))
 
-                ingredientId = Convert.ToInt32(insertIngredientCmd.ExecuteScalar())
-                Console.WriteLine($"Created new ingredient with ID: {ingredientId}")
+                insertIngredientCmd.ExecuteNonQuery()
+                ingredientId = nextId
             End If
 
-            ' Check if this ingredient is already added to the product
-            Dim checkProductQuery As String = "
-                SELECT COUNT(*) 
-                FROM product_ingredients 
-                WHERE ProductID = @productId AND IngredientID = @ingredientId
-            "
-            Dim checkProductCmd As New MySqlCommand(checkProductQuery, conn)
+            ' Check if this ingredient is already linked to the product
+            Dim checkProductIngredientQuery As String = "SELECT COUNT(*) FROM product_ingredients WHERE ProductID = @productId AND IngredientID = @ingredientId"
+            Dim checkProductCmd As New MySqlCommand(checkProductIngredientQuery, conn)
             checkProductCmd.Parameters.AddWithValue("@productId", currentProductId)
             checkProductCmd.Parameters.AddWithValue("@ingredientId", ingredientId)
 
-            Dim count As Integer = Convert.ToInt32(checkProductCmd.ExecuteScalar())
-
-            If count > 0 Then
+            If Convert.ToInt32(checkProductCmd.ExecuteScalar()) > 0 Then
                 MessageBox.Show("This ingredient is already added to this product.", "Duplicate", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 conn.Close()
                 Return
             End If
 
-            ' Add ingredient to product
-            Dim insertProductIngredientQuery As String = "
-                INSERT INTO product_ingredients 
-                (ProductID, IngredientID, QuantityUsed, UnitType, CreatedDate, UpdatedDate) 
-                VALUES 
-                (@productId, @ingredientId, @quantity, @unit, NOW(), NOW())
-            "
+            ' Get next ProductIngredientID
+            Dim getMaxPIIdQuery As String = "SELECT COALESCE(MAX(ProductIngredientID), 0) + 1 FROM product_ingredients"
+            Dim getMaxPIIdCmd As New MySqlCommand(getMaxPIIdQuery, conn)
+            Dim nextPIId As Integer = Convert.ToInt32(getMaxPIIdCmd.ExecuteScalar())
+
+            ' Insert into product_ingredients with explicit ID
+            Dim insertProductIngredientQuery As String = "INSERT INTO product_ingredients (ProductIngredientID, ProductID, IngredientID, QuantityUsed, UnitType, CreatedDate, UpdatedDate) VALUES (@piid, @productId, @ingredientId, @quantity, @unit, NOW(), NOW())"
             Dim insertProductCmd As New MySqlCommand(insertProductIngredientQuery, conn)
+            insertProductCmd.Parameters.AddWithValue("@piid", nextPIId)
             insertProductCmd.Parameters.AddWithValue("@productId", currentProductId)
             insertProductCmd.Parameters.AddWithValue("@ingredientId", ingredientId)
             insertProductCmd.Parameters.AddWithValue("@quantity", quantity)
-            insertProductCmd.Parameters.AddWithValue("@unit", txtUnitNew.Text.Trim())
+            insertProductCmd.Parameters.AddWithValue("@unit", cmbUnitNew.Text.Trim())
 
             insertProductCmd.ExecuteNonQuery()
 
-            MessageBox.Show("✓ New ingredient created and added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("✓ Ingredient created and added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-            ' Clear fields
             txtNewName.Clear()
-            txtStockUnit.Text = "kg"
-            chkPerishable.Checked = True
             txtQuantityNew.Clear()
-            txtUnitNew.Clear()
+            cmbUnitNew.Text = ""
 
-            ' Refresh lists
             LoadCurrentIngredients()
             LoadAvailableIngredients()
 
         Catch ex As Exception
-            MessageBox.Show("Error creating ingredient: " & ex.Message & vbCrLf & vbCrLf & ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             If conn.State = ConnectionState.Open Then
                 conn.Close()
             End If
         End Try
     End Sub
-
     ' =======================================================
-    ' REMOVE INGREDIENT
+    ' REMOVE INGREDIENT - USING ROW.TAG FOR ID
     ' =======================================================
     Private Sub RemoveIngredient_Click(sender As Object, e As EventArgs)
         Dim dgv As DataGridView = CType(Me.Controls.Find("dgvCurrentIngredients", True)(0), DataGridView)
 
-        If dgv.SelectedRows.Count = 0 Then
+        If dgv.SelectedRows.Count = 0 AndAlso dgv.CurrentRow Is Nothing Then
             MessageBox.Show("Please select an ingredient to remove.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
-        Dim result As DialogResult = MessageBox.Show(
-            "Are you sure you want to remove this ingredient?" & vbCrLf & vbCrLf &
-            "Ingredient: " & dgv.SelectedRows(0).Cells("Ingredient").Value.ToString(),
-            "Confirm Remove",
-            MessageBoxButtons.YesNo,
-            MessageBoxIcon.Question
-        )
+        Dim selectedRow As DataGridViewRow = If(dgv.SelectedRows.Count > 0, dgv.SelectedRows(0), dgv.CurrentRow)
 
-        If result = DialogResult.Yes Then
-            Try
-                openConn()
-
-                Dim productIngredientId As Integer = Convert.ToInt32(dgv.SelectedRows(0).Cells("ProductIngredientID").Value)
-
-                Dim deleteQuery As String = "DELETE FROM product_ingredients WHERE ProductIngredientID = @id"
-                Dim cmd As New MySqlCommand(deleteQuery, conn)
-                cmd.Parameters.AddWithValue("@id", productIngredientId)
-                cmd.ExecuteNonQuery()
-
-                MessageBox.Show("✓ Ingredient removed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-                ' Refresh list
-                LoadCurrentIngredients()
-
-            Catch ex As Exception
-                MessageBox.Show("Error removing ingredient: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Finally
-                If conn.State = ConnectionState.Open Then
-                    conn.Close()
-                End If
-            End Try
+        If selectedRow Is Nothing OrElse selectedRow.Tag Is Nothing Then
+            MessageBox.Show("Invalid row selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
         End If
+
+        ' Get ProductIngredientID from Row.Tag
+        Dim productIngredientId As Integer = Convert.ToInt32(selectedRow.Tag)
+        Dim ingredientName As String = selectedRow.Cells("Ingredient").Value.ToString()
+
+        If MessageBox.Show($"Remove '{ingredientName}'?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) <> DialogResult.Yes Then
+            Return
+        End If
+
+        Try
+            openConn()
+
+            Dim deleteQuery As String = "DELETE FROM product_ingredients WHERE ProductIngredientID = @piid AND ProductID = @pid LIMIT 1"
+            Dim cmd As New MySqlCommand(deleteQuery, conn)
+            cmd.Parameters.AddWithValue("@piid", productIngredientId)
+            cmd.Parameters.AddWithValue("@pid", currentProductId)
+
+            Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
+
+            If rowsAffected = 1 Then
+                MessageBox.Show($"✓ Removed '{ingredientName}'!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                LoadCurrentIngredients()
+            Else
+                MessageBox.Show("Could not delete ingredient.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            If conn IsNot Nothing AndAlso conn.State = ConnectionState.Open Then
+                conn.Close()
+            End If
+        End Try
     End Sub
 
-    ' =======================================================
-    ' SAVE CHANGES (UPDATE QUANTITIES/UNITS)
-    ' =======================================================
     Private Sub SaveChanges_Click(sender As Object, e As EventArgs)
         Dim dgv As DataGridView = CType(Me.Controls.Find("dgvCurrentIngredients", True)(0), DataGridView)
 
@@ -762,31 +687,28 @@ Public Class FormEditIngredients
             openConn()
 
             For Each row As DataGridViewRow In dgv.Rows
-                If row.IsNewRow Then Continue For
+                If row.IsNewRow OrElse row.Tag Is Nothing Then Continue For
 
-                Dim productIngredientId As Integer = Convert.ToInt32(row.Cells("ProductIngredientID").Value)
+                Dim productIngredientId As Integer = Convert.ToInt32(row.Tag)
                 Dim quantity As Decimal = Convert.ToDecimal(row.Cells("Quantity").Value)
                 Dim unit As String = row.Cells("Unit").Value.ToString()
 
-                Dim updateQuery As String = "
-                    UPDATE product_ingredients 
-                    SET QuantityUsed = @quantity, UnitType = @unit, UpdatedDate = NOW()
-                    WHERE ProductIngredientID = @id
-                "
+                Dim updateQuery As String = "UPDATE product_ingredients SET QuantityUsed = @quantity, UnitType = @unit, UpdatedDate = NOW() WHERE ProductIngredientID = @id AND ProductID = @pid"
                 Dim cmd As New MySqlCommand(updateQuery, conn)
                 cmd.Parameters.AddWithValue("@quantity", quantity)
                 cmd.Parameters.AddWithValue("@unit", unit)
                 cmd.Parameters.AddWithValue("@id", productIngredientId)
+                cmd.Parameters.AddWithValue("@pid", currentProductId)
                 cmd.ExecuteNonQuery()
             Next
 
-            MessageBox.Show("✓ All changes saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("✓ Changes saved!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             Me.DialogResult = DialogResult.OK
             Me.Close()
 
         Catch ex As Exception
-            MessageBox.Show("Error saving changes: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -794,9 +716,6 @@ Public Class FormEditIngredients
         End Try
     End Sub
 
-    ' =======================================================
-    ' HELPER CLASS FOR COMBOBOX ITEMS
-    ' =======================================================
     Private Class IngredientItem
         Public Property Id As Integer
         Public Property Name As String

@@ -10,6 +10,7 @@ Public Class FormCheckIngredients
     Private flowPanel As FlowLayoutPanel
     Private cmbCategory As ComboBox
     Private txtSearch As TextBox
+    Private isLoading As Boolean = False
 
     Private Sub FormCheckIngredients_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitializeUI()
@@ -23,10 +24,11 @@ Public Class FormCheckIngredients
     Private Sub InitializeUI()
         ' Form settings - CENTERED ON SCREEN
         Me.Text = "Product Ingredients Viewer"
-        Me.Size = New Size(1400, 900)  ' Larger for better 3-column layout
-        Me.StartPosition = FormStartPosition.CenterScreen  ' CENTER THE FORM
+        Me.Size = New Size(1400, 900)
+        Me.StartPosition = FormStartPosition.CenterScreen
         Me.BackColor = Color.FromArgb(245, 245, 245)
         Me.WindowState = FormWindowState.Normal
+        Me.DoubleBuffered = True ' Prevent flickering
 
         ' Main container panel
         Dim mainPanel As New Panel()
@@ -58,7 +60,7 @@ Public Class FormCheckIngredients
         lblCategory.AutoSize = True
         topPanel.Controls.Add(lblCategory)
 
-        ' Category ComboBox - Store as class variable
+        ' Category ComboBox
         cmbCategory = New ComboBox()
         cmbCategory.Name = "cmbCategory"
         cmbCategory.Font = New Font("Segoe UI", 10)
@@ -68,7 +70,7 @@ Public Class FormCheckIngredients
         AddHandler cmbCategory.SelectedIndexChanged, AddressOf Category_Changed
         topPanel.Controls.Add(cmbCategory)
 
-        ' Search textbox - Store as class variable
+        ' Search textbox
         txtSearch = New TextBox()
         txtSearch.Name = "txtSearch"
         txtSearch.Font = New Font("Segoe UI", 10)
@@ -81,11 +83,25 @@ Public Class FormCheckIngredients
         AddHandler txtSearch.TextChanged, AddressOf SearchBox_Changed
         topPanel.Controls.Add(txtSearch)
 
+        ' Refresh button (NEW)
+        Dim btnRefresh As New Button()
+        btnRefresh.Text = "🔄 Refresh"
+        btnRefresh.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+        btnRefresh.Location = New Point(760, 72)
+        btnRefresh.Size = New Size(100, 30)
+        btnRefresh.BackColor = Color.FromArgb(52, 152, 219)
+        btnRefresh.ForeColor = Color.White
+        btnRefresh.FlatStyle = FlatStyle.Flat
+        btnRefresh.FlatAppearance.BorderSize = 0
+        btnRefresh.Cursor = Cursors.Hand
+        AddHandler btnRefresh.Click, AddressOf RefreshButton_Click
+        topPanel.Controls.Add(btnRefresh)
+
         ' Close button
         Dim btnClose As New Button()
         btnClose.Text = "✕ Close"
         btnClose.Font = New Font("Segoe UI", 10, FontStyle.Bold)
-        btnClose.Location = New Point(760, 72)
+        btnClose.Location = New Point(870, 72)
         btnClose.Size = New Size(100, 30)
         btnClose.BackColor = Color.FromArgb(231, 76, 60)
         btnClose.ForeColor = Color.White
@@ -95,8 +111,7 @@ Public Class FormCheckIngredients
         AddHandler btnClose.Click, Sub() Me.Close()
         topPanel.Controls.Add(btnClose)
 
-        ' FlowLayoutPanel for product cards - Store as class variable
-        ' RESPONSIVE 3-COLUMN LAYOUT
+        ' FlowLayoutPanel for product cards
         flowPanel = New FlowLayoutPanel()
         flowPanel.Name = "flowPanel"
         flowPanel.Dock = DockStyle.Fill
@@ -107,33 +122,37 @@ Public Class FormCheckIngredients
         flowPanel.FlowDirection = FlowDirection.LeftToRight
         mainPanel.Controls.Add(flowPanel)
 
-        ' Handle form resize to maintain 3-column layout
+        ' Handle form resize
         AddHandler Me.Resize, AddressOf Form_Resize
+    End Sub
+
+    ' =======================================================
+    ' REFRESH BUTTON CLICK
+    ' =======================================================
+    Private Sub RefreshButton_Click(sender As Object, e As EventArgs)
+        Dim searchText As String = If(txtSearch IsNot Nothing AndAlso txtSearch.ForeColor = Color.Black, txtSearch.Text, "")
+        LoadProductCards(searchText, cmbCategory.Text)
     End Sub
 
     ' =======================================================
     ' HANDLE FORM RESIZE FOR RESPONSIVE CARDS
     ' =======================================================
     Private Sub Form_Resize(sender As Object, e As EventArgs)
-        If flowPanel IsNot Nothing AndAlso flowPanel.Width > 0 Then
-            ' Calculate card width for 3 columns with proper spacing
-            Dim availableWidth As Integer = flowPanel.ClientSize.Width - 60 ' Account for padding and scrollbar
-            Dim cardWidth As Integer = (availableWidth \ 3) - 20 ' 3 cards per row with margins
+        If flowPanel IsNot Nothing AndAlso flowPanel.Width > 0 AndAlso Not isLoading Then
+            Dim availableWidth As Integer = flowPanel.ClientSize.Width - 60
+            Dim cardWidth As Integer = (availableWidth \ 3) - 20
 
-            ' Minimum card width
             If cardWidth < 300 Then cardWidth = 300
 
-            ' Update all existing cards
             For Each ctrl As Control In flowPanel.Controls
                 If TypeOf ctrl Is Panel Then
                     Dim card As Panel = CType(ctrl, Panel)
                     card.Width = cardWidth
-                    ' Adjust internal controls proportionally
                     For Each innerCtrl As Control In card.Controls
                         If TypeOf innerCtrl Is PictureBox Then
                             innerCtrl.Width = cardWidth
                         ElseIf TypeOf innerCtrl Is Label OrElse TypeOf innerCtrl Is Panel OrElse TypeOf innerCtrl Is Button Then
-                            If innerCtrl.Width > 50 Then ' Only resize wider controls
+                            If innerCtrl.Width > 50 Then
                                 innerCtrl.Width = cardWidth - 20
                             End If
                         End If
@@ -165,18 +184,26 @@ Public Class FormCheckIngredients
     End Sub
 
     ' =======================================================
-    ' LOAD PRODUCT CARDS WITH INGREDIENTS - BUFFERED LOADING
+    ' LOAD PRODUCT CARDS - FIXED TO PREVENT GLITCHING
     ' =======================================================
     Private Sub LoadProductCards(Optional searchTerm As String = "", Optional categoryFilter As String = "All Categories")
-        If flowPanel Is Nothing Then
-            MessageBox.Show("Flow panel not initialized!", "Debug Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return
-        End If
+        If flowPanel Is Nothing Then Return
+        If isLoading Then Return ' Prevent multiple simultaneous loads
 
-        flowPanel.SuspendLayout() ' Suspend layout for better performance
+        isLoading = True
+        Me.Cursor = Cursors.WaitCursor
+
+        ' COMPLETELY HIDE THE PANEL DURING LOADING TO PREVENT GLITCHING
+        flowPanel.Visible = False
+        flowPanel.SuspendLayout()
+
+        ' Clear all existing controls and dispose them properly
+        For Each ctrl As Control In flowPanel.Controls.Cast(Of Control).ToList()
+            flowPanel.Controls.Remove(ctrl)
+            ctrl.Dispose()
+        Next
         flowPanel.Controls.Clear()
 
-        ' Build query to get products with their ingredients
         Dim query As String = "
             SELECT DISTINCT
                 p.ProductID,
@@ -187,7 +214,6 @@ Public Class FormCheckIngredients
             WHERE 1=1
         "
 
-        ' Add filters
         If Not String.IsNullOrWhiteSpace(searchTerm) AndAlso searchTerm <> "Search products..." Then
             query &= " AND (p.ProductName LIKE @search OR p.ProductCode LIKE @search)"
         End If
@@ -198,7 +224,6 @@ Public Class FormCheckIngredients
 
         query &= " ORDER BY p.ProductName ASC"
 
-        ' Store product data in a list first, then close the reader before creating cards
         Dim productList As New List(Of ProductData)
 
         Try
@@ -216,7 +241,6 @@ Public Class FormCheckIngredients
 
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
 
-            ' Read all products into memory first
             While reader.Read()
                 Dim productData As New ProductData()
                 productData.ProductID = Convert.ToInt32(reader("ProductID"))
@@ -229,38 +253,9 @@ Public Class FormCheckIngredients
             reader.Close()
             conn.Close()
 
-            ' Debug output
-            Console.WriteLine($"Loaded {productList.Count} products from database")
             Me.Text = $"Product Ingredients Viewer - {productList.Count} products found"
 
-            ' BUFFERED LOADING - Load cards in batches for smooth UI
-            Const BATCH_SIZE As Integer = 15 ' Load 15 cards at a time
-            Dim cardWidth As Integer = CalculateCardWidth()
-
-            For batchStart As Integer = 0 To productList.Count - 1 Step BATCH_SIZE
-                Dim batchEnd As Integer = Math.Min(batchStart + BATCH_SIZE - 1, productList.Count - 1)
-
-                ' Create cards for this batch
-                For i As Integer = batchStart To batchEnd
-                    Dim productData As ProductData = productList(i)
-                    Console.WriteLine($"Creating card for: {productData.ProductName}")
-                    Dim card As Panel = CreateProductCard(productData.ProductID, productData.ProductName, productData.Category, productData.ImagePath, cardWidth)
-                    flowPanel.Controls.Add(card)
-                Next
-
-                ' Allow UI to update after each batch
-                Application.DoEvents()
-
-                ' Small delay for smooth visual loading (optional, can be removed if too slow)
-                If batchStart + BATCH_SIZE < productList.Count Then
-                    System.Threading.Thread.Sleep(10) ' 10ms delay between batches
-                End If
-            Next
-
-            Console.WriteLine($"Total cards added to flowPanel: {flowPanel.Controls.Count}")
-
             If productList.Count = 0 Then
-                ' Show a message when no products found
                 Dim lblNoProducts As New Label()
                 lblNoProducts.Text = "No products found. Please check your database or filters."
                 lblNoProducts.Font = New Font("Segoe UI", 14, FontStyle.Bold)
@@ -268,15 +263,29 @@ Public Class FormCheckIngredients
                 lblNoProducts.AutoSize = True
                 lblNoProducts.Location = New Point(50, 50)
                 flowPanel.Controls.Add(lblNoProducts)
+            Else
+                ' Calculate card width once
+                Dim cardWidth As Integer = CalculateCardWidth()
+
+                ' Create ALL cards at once WITHOUT DoEvents() to prevent glitching
+                For Each productData In productList
+                    Dim card As Panel = CreateProductCard(productData.ProductID, productData.ProductName, productData.Category, productData.ImagePath, cardWidth)
+                    flowPanel.Controls.Add(card)
+                Next
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Error loading products: " & ex.Message & vbCrLf & vbCrLf & ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error loading products: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             If conn.State = ConnectionState.Open Then
                 conn.Close()
             End If
-            flowPanel.ResumeLayout() ' Resume layout after all cards loaded
+
+            ' Resume layout and show panel AFTER all cards are added
+            flowPanel.ResumeLayout(True)
+            flowPanel.Visible = True
+            Me.Cursor = Cursors.Default
+            isLoading = False
         End Try
     End Sub
 
@@ -285,14 +294,12 @@ Public Class FormCheckIngredients
     ' =======================================================
     Private Function CalculateCardWidth() As Integer
         If flowPanel Is Nothing OrElse flowPanel.Width <= 0 Then
-            Return 400 ' Default width
+            Return 400
         End If
 
-        ' Calculate width for 3 cards per row
-        Dim availableWidth As Integer = flowPanel.ClientSize.Width - 60 ' Account for padding and scrollbar
-        Dim cardWidth As Integer = (availableWidth \ 3) - 20 ' 3 cards with margins
+        Dim availableWidth As Integer = flowPanel.ClientSize.Width - 60
+        Dim cardWidth As Integer = (availableWidth \ 3) - 20
 
-        ' Minimum and maximum constraints
         If cardWidth < 300 Then cardWidth = 300
         If cardWidth > 500 Then cardWidth = 500
 
@@ -311,9 +318,8 @@ Public Class FormCheckIngredients
     ' CREATE PRODUCT CARD WITH IMAGE AND INGREDIENTS
     ' =======================================================
     Private Function CreateProductCard(productId As Integer, productName As String, category As String, imagePath As String, cardWidth As Integer) As Panel
-        ' Main card panel with dynamic width
         Dim card As New Panel()
-        card.Size = New Size(cardWidth, 520) ' Dynamic width, fixed height
+        card.Size = New Size(cardWidth, 520)
         card.BackColor = Color.White
         card.Margin = New Padding(10)
         card.BorderStyle = BorderStyle.FixedSingle
@@ -335,7 +341,6 @@ Public Class FormCheckIngredients
                     picBox.Image = Image.FromStream(ms)
                 End Using
             Catch ex As Exception
-                ' Use placeholder if image fails to load
                 picBox.BackColor = Color.FromArgb(220, 220, 220)
                 Dim lblNoImg As New Label()
                 lblNoImg.Text = "No Image"
@@ -386,20 +391,13 @@ Public Class FormCheckIngredients
         ingredientsPanel.BackColor = Color.FromArgb(250, 250, 250)
 
         ' Load ingredients
-        Dim ingredientsList As String = ""
-        Try
-            ingredientsList = GetProductIngredients(productId)
-            Console.WriteLine($"Ingredients loaded for {productName}: {ingredientsList.Length} characters")
-        Catch ex As Exception
-            ingredientsList = $"Error loading ingredients:{vbCrLf}{ex.Message}"
-            Console.WriteLine($"ERROR in CreateProductCard for {productName}: {ex.Message}")
-        End Try
+        Dim ingredientsList As String = GetProductIngredients(productId)
 
         Dim lblIngredients As New Label()
         lblIngredients.Text = ingredientsList
         lblIngredients.Font = New Font("Segoe UI", 9)
         lblIngredients.Location = New Point(5, 5)
-        lblIngredients.Size = New Size(cardWidth - 45, 1000) ' Auto height
+        lblIngredients.Size = New Size(cardWidth - 45, 1000)
         lblIngredients.AutoSize = True
         lblIngredients.ForeColor = If(ingredientsList.Contains("Error"), Color.Red, Color.FromArgb(52, 73, 94))
         ingredientsPanel.Controls.Add(lblIngredients)
@@ -417,7 +415,7 @@ Public Class FormCheckIngredients
         btnEdit.FlatStyle = FlatStyle.Flat
         btnEdit.FlatAppearance.BorderSize = 0
         btnEdit.Cursor = Cursors.Hand
-        btnEdit.Tag = productId ' Store product ID in tag
+        btnEdit.Tag = productId
         AddHandler btnEdit.Click, AddressOf EditIngredients_Click
         card.Controls.Add(btnEdit)
 
@@ -431,18 +429,13 @@ Public Class FormCheckIngredients
         Dim ingredientsList As New System.Text.StringBuilder()
 
         Try
-            ' Make sure connection is available
             If conn Is Nothing Then
-                Console.WriteLine($"ERROR: Connection object is null for product {productId}")
                 Return "Error: Database connection not initialized"
             End If
 
-            ' Open connection
             If conn.State = ConnectionState.Closed Then
                 openConn()
             End If
-
-            Console.WriteLine($"Loading ingredients for product ID: {productId}")
 
             Dim query As String = "
                 SELECT 
@@ -460,45 +453,22 @@ Public Class FormCheckIngredients
 
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
 
-            Dim ingredientCount As Integer = 0
             If Not reader.HasRows Then
-                Console.WriteLine($"No ingredients found for product {productId}")
                 ingredientsList.AppendLine("No ingredients listed yet")
             Else
                 While reader.Read()
-                    Try
-                        Dim name As String = If(IsDBNull(reader("IngredientName")), "Unknown", reader("IngredientName").ToString())
-                        Dim quantity As Decimal = If(IsDBNull(reader("QuantityUsed")), 0, Convert.ToDecimal(reader("QuantityUsed")))
-                        Dim unit As String = If(IsDBNull(reader("UnitType")), "", reader("UnitType").ToString())
-                        ingredientsList.AppendLine($"• {name} - {quantity} {unit}")
-                        ingredientCount += 1
-                    Catch rowEx As Exception
-                        Console.WriteLine($"Error reading ingredient row: {rowEx.Message}")
-                        ingredientsList.AppendLine($"• [Error reading ingredient]")
-                    End Try
+                    Dim name As String = If(IsDBNull(reader("IngredientName")), "Unknown", reader("IngredientName").ToString())
+                    Dim quantity As Decimal = If(IsDBNull(reader("QuantityUsed")), 0, Convert.ToDecimal(reader("QuantityUsed")))
+                    Dim unit As String = If(IsDBNull(reader("UnitType")), "", reader("UnitType").ToString())
+                    ingredientsList.AppendLine($"• {name} - {quantity} {unit}")
                 End While
-                Console.WriteLine($"Loaded {ingredientCount} ingredients for product {productId}")
             End If
 
             reader.Close()
 
         Catch ex As Exception
-            Console.WriteLine($"ERROR loading ingredients for product {productId}: {ex.Message}")
-            Console.WriteLine($"Stack trace: {ex.StackTrace}")
             ingredientsList.Clear()
-            ingredientsList.AppendLine($"Error loading ingredients:")
-            ingredientsList.AppendLine($"{ex.Message}")
-
-            ' Show more specific error info
-            If ex.Message.Contains("Table") AndAlso ex.Message.Contains("doesn't exist") Then
-                ingredientsList.AppendLine("")
-                ingredientsList.AppendLine("Check that 'product_ingredients'")
-                ingredientsList.AppendLine("table exists in your database")
-            ElseIf ex.Message.Contains("Unknown column") Then
-                ingredientsList.AppendLine("")
-                ingredientsList.AppendLine("Database schema mismatch")
-                ingredientsList.AppendLine("Please update the code")
-            End If
+            ingredientsList.AppendLine($"Error loading ingredients: {ex.Message}")
         Finally
             If conn IsNot Nothing AndAlso conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -569,7 +539,6 @@ Public Class FormCheckIngredients
             Dim editForm As New FormEditIngredients()
             editForm.LoadProductData(productId)
             If editForm.ShowDialog() = DialogResult.OK Then
-                ' Refresh the cards
                 Dim searchText As String = If(txtSearch IsNot Nothing AndAlso txtSearch.ForeColor = Color.Black, txtSearch.Text, "")
                 LoadProductCards(searchText, cmbCategory.Text)
             End If

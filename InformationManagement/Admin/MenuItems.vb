@@ -163,14 +163,15 @@ Public Class MenuItems
             ' Format other columns
             FormatColumns()
 
-            ' Update total items count
-            lblTotalItems.Text = $"Total Items: {dt.Rows.Count}"
+
+
 
         Catch ex As Exception
             MessageBox.Show("Error loading data: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         Finally
             conn.Close()
+
         End Try
 
     End Sub
@@ -367,6 +368,37 @@ Public Class MenuItems
         deleteBtn.Width = 90
         DataGridMenu.Columns.Add(deleteBtn)
 
+    End Sub
+    ' =======================================================
+    ' ✨ NEW: HANDLE IMAGE CLICK IN DATAGRIDVIEW
+    ' =======================================================
+    Private Sub DataGridMenu_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridMenu.CellClick
+        ' Check if clicked on the Image column
+        If e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
+            If DataGridMenu.Columns(e.ColumnIndex).Name = "ImageDisplay" Then
+                Dim imagePath As String = ""
+                Dim productName As String = ""
+
+                ' Get the image path
+                If DataGridMenu.Columns.Contains("ImagePath") AndAlso
+               DataGridMenu.Rows(e.RowIndex).Cells("ImagePath").Value IsNot Nothing Then
+                    imagePath = DataGridMenu.Rows(e.RowIndex).Cells("ImagePath").Value.ToString()
+                End If
+
+                ' Get the product name
+                If DataGridMenu.Columns.Contains("ProductName") AndAlso
+               DataGridMenu.Rows(e.RowIndex).Cells("ProductName").Value IsNot Nothing Then
+                    productName = DataGridMenu.Rows(e.RowIndex).Cells("ProductName").Value.ToString()
+                End If
+
+                ' Show fullscreen if image exists
+                If Not String.IsNullOrEmpty(imagePath) Then
+                    ShowProductImageFullscreen(imagePath, productName)
+                Else
+                    MessageBox.Show("No image available for this product.", "No Image", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                End If
+            End If
+        End If
     End Sub
 
     ' =======================================================
@@ -762,14 +794,29 @@ Public Class MenuItems
     End Sub
 
     Private Sub DataGridMenu_DataBindingComplete(sender As Object, e As DataGridViewBindingCompleteEventArgs) Handles DataGridMenu.DataBindingComplete
+        ' Hide columns
         If DataGridMenu.Columns.Contains("ProductID") Then
             DataGridMenu.Columns("ProductID").Visible = False
         End If
         If DataGridMenu.Columns.Contains("ImagePath") Then
             DataGridMenu.Columns("ImagePath").Visible = False
         End If
-    End Sub
 
+        ' Update total items count AFTER data binding is complete
+        ' Use a slight delay to ensure rows are fully rendered
+        If lblTotalItems IsNot Nothing Then
+            Dim rowCount As Integer = 0
+            If DataGridMenu.DataSource IsNot Nothing Then
+                Dim dt As DataTable = TryCast(DataGridMenu.DataSource, DataTable)
+                If dt IsNot Nothing Then
+                    rowCount = dt.Rows.Count
+                Else
+                    rowCount = DataGridMenu.Rows.Count
+                End If
+            End If
+            lblTotalItems.Text = $"Total Items: {rowCount}"
+        End If
+    End Sub
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Edit.Click
 
     End Sub
