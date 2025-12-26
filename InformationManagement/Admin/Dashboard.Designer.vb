@@ -22,23 +22,23 @@ Partial Class Dashboard
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim ChartArea9 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend9 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series9 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim DataPoint29 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 45.0R)
-        Dim DataPoint30 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 25.0R)
-        Dim DataPoint31 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 20.0R)
-        Dim DataPoint32 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 10.0R)
-        Dim Title9 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim DataPoint1 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 45.0R)
+        Dim DataPoint2 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 25.0R)
+        Dim DataPoint3 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 20.0R)
+        Dim DataPoint4 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 10.0R)
+        Dim Title1 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Dashboard))
-        Dim ChartArea10 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend10 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim LegendCellColumn5 As System.Windows.Forms.DataVisualization.Charting.LegendCellColumn = New System.Windows.Forms.DataVisualization.Charting.LegendCellColumn()
-        Dim Series10 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim DataPoint33 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 65.0R)
-        Dim DataPoint34 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 25.0R)
-        Dim DataPoint35 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 10.0R)
-        Dim Title10 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim LegendCellColumn1 As System.Windows.Forms.DataVisualization.Charting.LegendCellColumn = New System.Windows.Forms.DataVisualization.Charting.LegendCellColumn()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim DataPoint5 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 65.0R)
+        Dim DataPoint6 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 25.0R)
+        Dim DataPoint7 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 10.0R)
+        Dim Title2 As System.Windows.Forms.DataVisualization.Charting.Title = New System.Windows.Forms.DataVisualization.Charting.Title()
         Me.PictureBox7 = New System.Windows.Forms.PictureBox()
         Me.ActivereservationPercentage = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
@@ -53,6 +53,7 @@ Partial Class Dashboard
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.Filters = New System.Windows.Forms.ComboBox()
         Me.RoundedPane223 = New InformationManagement.RoundedPane2()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.ChartTopProducts = New System.Windows.Forms.FlowLayoutPanel()
         Me.RoundedPane219 = New InformationManagement.RoundedPane2()
         Me.OrdersOverviewChart = New System.Windows.Forms.DataVisualization.Charting.Chart()
@@ -77,20 +78,22 @@ Partial Class Dashboard
         Me.Label8 = New System.Windows.Forms.Label()
         Me.lblAverageOrder = New System.Windows.Forms.Label()
         Me.Panel = New InformationManagement.RoundedPane2()
+        Me.InventoryAlerts = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.RoundedPane28 = New InformationManagement.RoundedPane2()
-        Me.lblValueDinein = New System.Windows.Forms.Label()
-        Me.lblPercentDineIn = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.lblValueTakeout = New System.Windows.Forms.Label()
-        Me.lblPercentTakeout = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.lblValueCatering = New System.Windows.Forms.Label()
         Me.lblPercentCatering = New System.Windows.Forms.Label()
+        Me.lblValueTakeout = New System.Windows.Forms.Label()
+        Me.lblValueDinein = New System.Windows.Forms.Label()
+        Me.lblPercentTakeout = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.lblPercentDineIn = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.Chart2 = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RoundedPane213 = New InformationManagement.RoundedPane2()
         Me.RoundedPane212 = New InformationManagement.RoundedPane2()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
@@ -98,9 +101,6 @@ Partial Class Dashboard
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.RoundedPane26 = New InformationManagement.RoundedPane2()
         Me.PictureBox8 = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.InventoryAlerts = New System.Windows.Forms.FlowLayoutPanel()
         CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.arrowincrease, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -266,6 +266,16 @@ Partial Class Dashboard
         Me.RoundedPane223.Size = New System.Drawing.Size(547, 315)
         Me.RoundedPane223.TabIndex = 41
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(16, 17)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(124, 20)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Top Selling Items"
+        '
         'ChartTopProducts
         '
         Me.ChartTopProducts.BackColor = System.Drawing.Color.White
@@ -290,41 +300,41 @@ Partial Class Dashboard
         '
         'OrdersOverviewChart
         '
-        ChartArea9.Name = "ChartArea1"
-        Me.OrdersOverviewChart.ChartAreas.Add(ChartArea9)
-        Legend9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Legend9.Name = "Legend1"
-        Me.OrdersOverviewChart.Legends.Add(Legend9)
+        ChartArea1.Name = "ChartArea1"
+        Me.OrdersOverviewChart.ChartAreas.Add(ChartArea1)
+        Legend1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Legend1.Name = "Legend1"
+        Me.OrdersOverviewChart.Legends.Add(Legend1)
         Me.OrdersOverviewChart.Location = New System.Drawing.Point(3, 5)
         Me.OrdersOverviewChart.Name = "OrdersOverviewChart"
-        Series9.ChartArea = "ChartArea1"
-        Series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
-        Series9.Legend = "Legend1"
-        Series9.Name = "PopularCategories"
-        DataPoint29.AxisLabel = "Main Courses"
-        DataPoint29.Color = System.Drawing.Color.MediumPurple
-        DataPoint29.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint30.AxisLabel = "Appetizers"
-        DataPoint30.Color = System.Drawing.Color.LightGreen
-        DataPoint30.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint31.AxisLabel = "Desserts"
-        DataPoint31.Color = System.Drawing.Color.Goldenrod
-        DataPoint31.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint32.AxisLabel = "Beverages"
-        DataPoint32.Color = System.Drawing.Color.DarkOrange
-        DataPoint32.LabelForeColor = System.Drawing.Color.Transparent
-        Series9.Points.Add(DataPoint29)
-        Series9.Points.Add(DataPoint30)
-        Series9.Points.Add(DataPoint31)
-        Series9.Points.Add(DataPoint32)
-        Me.OrdersOverviewChart.Series.Add(Series9)
+        Series1.ChartArea = "ChartArea1"
+        Series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
+        Series1.Legend = "Legend1"
+        Series1.Name = "PopularCategories"
+        DataPoint1.AxisLabel = "Main Courses"
+        DataPoint1.Color = System.Drawing.Color.MediumPurple
+        DataPoint1.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint2.AxisLabel = "Appetizers"
+        DataPoint2.Color = System.Drawing.Color.LightGreen
+        DataPoint2.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint3.AxisLabel = "Desserts"
+        DataPoint3.Color = System.Drawing.Color.Goldenrod
+        DataPoint3.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint4.AxisLabel = "Beverages"
+        DataPoint4.Color = System.Drawing.Color.DarkOrange
+        DataPoint4.LabelForeColor = System.Drawing.Color.Transparent
+        Series1.Points.Add(DataPoint1)
+        Series1.Points.Add(DataPoint2)
+        Series1.Points.Add(DataPoint3)
+        Series1.Points.Add(DataPoint4)
+        Me.OrdersOverviewChart.Series.Add(Series1)
         Me.OrdersOverviewChart.Size = New System.Drawing.Size(567, 375)
         Me.OrdersOverviewChart.TabIndex = 0
         Me.OrdersOverviewChart.Text = "Chart1"
-        Title9.Alignment = System.Drawing.ContentAlignment.TopLeft
-        Title9.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Title9.Name = "Popular Categories"
-        Me.OrdersOverviewChart.Titles.Add(Title9)
+        Title1.Alignment = System.Drawing.ContentAlignment.TopLeft
+        Title1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Title1.Name = "Popular Categories"
+        Me.OrdersOverviewChart.Titles.Add(Title1)
         '
         'RoundedPane24
         '
@@ -401,7 +411,7 @@ Partial Class Dashboard
         Me.RoundedPane215.Controls.Add(Me.Label17)
         Me.RoundedPane215.Controls.Add(Me.lblTotalRevenue)
         Me.RoundedPane215.CornerRadius = 12
-        Me.RoundedPane215.FillColor = System.Drawing.Color.FromArgb(CType(CType(16, Byte), Integer), CType(CType(185, Byte), Integer), CType(CType(129, Byte), Integer))
+        Me.RoundedPane215.FillColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(77, Byte), Integer))
         Me.RoundedPane215.Location = New System.Drawing.Point(35, 97)
         Me.RoundedPane215.Name = "RoundedPane215"
         Me.RoundedPane215.Size = New System.Drawing.Size(248, 130)
@@ -414,7 +424,7 @@ Partial Class Dashboard
         Me.RoundedPane221.BorderThickness = 1
         Me.RoundedPane221.Controls.Add(Me.PictureBox11)
         Me.RoundedPane221.CornerRadius = 8
-        Me.RoundedPane221.FillColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(153, Byte), Integer))
+        Me.RoundedPane221.FillColor = System.Drawing.Color.FromArgb(CType(CType(92, Byte), Integer), CType(CType(219, Byte), Integer), CType(CType(113, Byte), Integer))
         Me.RoundedPane221.Location = New System.Drawing.Point(27, 27)
         Me.RoundedPane221.Name = "RoundedPane221"
         Me.RoundedPane221.Size = New System.Drawing.Size(43, 38)
@@ -466,7 +476,7 @@ Partial Class Dashboard
         Me.RoundedPane21.Controls.Add(Me.Label10)
         Me.RoundedPane21.Controls.Add(Me.lblTotalOrder)
         Me.RoundedPane21.CornerRadius = 12
-        Me.RoundedPane21.FillColor = System.Drawing.Color.RoyalBlue
+        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(133, Byte), Integer), CType(CType(244, Byte), Integer))
         Me.RoundedPane21.Location = New System.Drawing.Point(298, 97)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(248, 130)
@@ -531,7 +541,7 @@ Partial Class Dashboard
         Me.RoundedPane217.Controls.Add(Me.Label8)
         Me.RoundedPane217.Controls.Add(Me.lblAverageOrder)
         Me.RoundedPane217.CornerRadius = 12
-        Me.RoundedPane217.FillColor = System.Drawing.Color.DarkGoldenrod
+        Me.RoundedPane217.FillColor = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(140, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.RoundedPane217.Location = New System.Drawing.Point(821, 97)
         Me.RoundedPane217.Name = "RoundedPane217"
         Me.RoundedPane217.Size = New System.Drawing.Size(248, 130)
@@ -544,7 +554,7 @@ Partial Class Dashboard
         Me.RoundedPane218.BorderThickness = 1
         Me.RoundedPane218.Controls.Add(Me.PictureBox5)
         Me.RoundedPane218.CornerRadius = 8
-        Me.RoundedPane218.FillColor = System.Drawing.Color.Goldenrod
+        Me.RoundedPane218.FillColor = System.Drawing.Color.FromArgb(CType(CType(252, Byte), Integer), CType(CType(166, Byte), Integer), CType(CType(5, Byte), Integer))
         Me.RoundedPane218.Location = New System.Drawing.Point(27, 27)
         Me.RoundedPane218.Name = "RoundedPane218"
         Me.RoundedPane218.Size = New System.Drawing.Size(43, 38)
@@ -601,6 +611,25 @@ Partial Class Dashboard
         Me.Panel.Size = New System.Drawing.Size(452, 315)
         Me.Panel.TabIndex = 25
         '
+        'InventoryAlerts
+        '
+        Me.InventoryAlerts.AutoScroll = True
+        Me.InventoryAlerts.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.InventoryAlerts.Location = New System.Drawing.Point(3, 40)
+        Me.InventoryAlerts.Name = "InventoryAlerts"
+        Me.InventoryAlerts.Size = New System.Drawing.Size(449, 272)
+        Me.InventoryAlerts.TabIndex = 1
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold)
+        Me.Label7.Location = New System.Drawing.Point(16, 17)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(119, 20)
+        Me.Label7.TabIndex = 1
+        Me.Label7.Text = "Inventory Alerts"
+        '
         'RoundedPane28
         '
         Me.RoundedPane28.AutoSize = True
@@ -627,90 +656,6 @@ Partial Class Dashboard
         Me.RoundedPane28.Size = New System.Drawing.Size(421, 386)
         Me.RoundedPane28.TabIndex = 22
         '
-        'lblValueDinein
-        '
-        Me.lblValueDinein.AutoSize = True
-        Me.lblValueDinein.BackColor = System.Drawing.Color.Transparent
-        Me.lblValueDinein.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblValueDinein.ForeColor = System.Drawing.Color.DimGray
-        Me.lblValueDinein.Location = New System.Drawing.Point(285, 261)
-        Me.lblValueDinein.Name = "lblValueDinein"
-        Me.lblValueDinein.Size = New System.Drawing.Size(47, 17)
-        Me.lblValueDinein.TabIndex = 6
-        Me.lblValueDinein.Text = "₱1,950"
-        '
-        'lblPercentDineIn
-        '
-        Me.lblPercentDineIn.AutoSize = True
-        Me.lblPercentDineIn.BackColor = System.Drawing.Color.Transparent
-        Me.lblPercentDineIn.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPercentDineIn.Location = New System.Drawing.Point(289, 245)
-        Me.lblPercentDineIn.Name = "lblPercentDineIn"
-        Me.lblPercentDineIn.Size = New System.Drawing.Size(38, 20)
-        Me.lblPercentDineIn.TabIndex = 2
-        Me.lblPercentDineIn.Text = "65%"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.BackColor = System.Drawing.Color.Transparent
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(120, 246)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(58, 20)
-        Me.Label3.TabIndex = 1
-        Me.Label3.Text = "Dine In"
-        '
-        'Panel1
-        '
-        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(149, Byte), Integer), CType(CType(233, Byte), Integer))
-        Me.Panel1.Location = New System.Drawing.Point(76, 245)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(24, 22)
-        Me.Panel1.TabIndex = 0
-        '
-        'lblValueTakeout
-        '
-        Me.lblValueTakeout.AutoSize = True
-        Me.lblValueTakeout.BackColor = System.Drawing.Color.Transparent
-        Me.lblValueTakeout.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblValueTakeout.ForeColor = System.Drawing.Color.DimGray
-        Me.lblValueTakeout.Location = New System.Drawing.Point(286, 312)
-        Me.lblValueTakeout.Name = "lblValueTakeout"
-        Me.lblValueTakeout.Size = New System.Drawing.Size(47, 17)
-        Me.lblValueTakeout.TabIndex = 6
-        Me.lblValueTakeout.Text = "₱7,000"
-        '
-        'lblPercentTakeout
-        '
-        Me.lblPercentTakeout.AutoSize = True
-        Me.lblPercentTakeout.BackColor = System.Drawing.Color.Transparent
-        Me.lblPercentTakeout.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPercentTakeout.Location = New System.Drawing.Point(289, 294)
-        Me.lblPercentTakeout.Name = "lblPercentTakeout"
-        Me.lblPercentTakeout.Size = New System.Drawing.Size(38, 20)
-        Me.lblPercentTakeout.TabIndex = 3
-        Me.lblPercentTakeout.Text = "25%"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.BackColor = System.Drawing.Color.Transparent
-        Me.Label4.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(117, 297)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(63, 20)
-        Me.Label4.TabIndex = 2
-        Me.Label4.Text = "Takeout"
-        '
-        'Panel2
-        '
-        Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(144, Byte), Integer), CType(CType(213, Byte), Integer), CType(CType(169, Byte), Integer))
-        Me.Panel2.Location = New System.Drawing.Point(76, 296)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(24, 22)
-        Me.Panel2.TabIndex = 1
-        '
         'lblValueCatering
         '
         Me.lblValueCatering.AutoSize = True
@@ -734,6 +679,41 @@ Partial Class Dashboard
         Me.lblPercentCatering.TabIndex = 4
         Me.lblPercentCatering.Text = "10%"
         '
+        'lblValueTakeout
+        '
+        Me.lblValueTakeout.AutoSize = True
+        Me.lblValueTakeout.BackColor = System.Drawing.Color.Transparent
+        Me.lblValueTakeout.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblValueTakeout.ForeColor = System.Drawing.Color.DimGray
+        Me.lblValueTakeout.Location = New System.Drawing.Point(286, 312)
+        Me.lblValueTakeout.Name = "lblValueTakeout"
+        Me.lblValueTakeout.Size = New System.Drawing.Size(47, 17)
+        Me.lblValueTakeout.TabIndex = 6
+        Me.lblValueTakeout.Text = "₱7,000"
+        '
+        'lblValueDinein
+        '
+        Me.lblValueDinein.AutoSize = True
+        Me.lblValueDinein.BackColor = System.Drawing.Color.Transparent
+        Me.lblValueDinein.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblValueDinein.ForeColor = System.Drawing.Color.DimGray
+        Me.lblValueDinein.Location = New System.Drawing.Point(285, 261)
+        Me.lblValueDinein.Name = "lblValueDinein"
+        Me.lblValueDinein.Size = New System.Drawing.Size(47, 17)
+        Me.lblValueDinein.TabIndex = 6
+        Me.lblValueDinein.Text = "₱1,950"
+        '
+        'lblPercentTakeout
+        '
+        Me.lblPercentTakeout.AutoSize = True
+        Me.lblPercentTakeout.BackColor = System.Drawing.Color.Transparent
+        Me.lblPercentTakeout.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPercentTakeout.Location = New System.Drawing.Point(289, 294)
+        Me.lblPercentTakeout.Name = "lblPercentTakeout"
+        Me.lblPercentTakeout.Size = New System.Drawing.Size(38, 20)
+        Me.lblPercentTakeout.TabIndex = 3
+        Me.lblPercentTakeout.Text = "25%"
+        '
         'Label12
         '
         Me.Label12.AutoSize = True
@@ -745,6 +725,28 @@ Partial Class Dashboard
         Me.Label12.TabIndex = 2
         Me.Label12.Text = "Catering"
         '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.BackColor = System.Drawing.Color.Transparent
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(117, 297)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(63, 20)
+        Me.Label4.TabIndex = 2
+        Me.Label4.Text = "Takeout"
+        '
+        'lblPercentDineIn
+        '
+        Me.lblPercentDineIn.AutoSize = True
+        Me.lblPercentDineIn.BackColor = System.Drawing.Color.Transparent
+        Me.lblPercentDineIn.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPercentDineIn.Location = New System.Drawing.Point(289, 245)
+        Me.lblPercentDineIn.Name = "lblPercentDineIn"
+        Me.lblPercentDineIn.Size = New System.Drawing.Size(38, 20)
+        Me.lblPercentDineIn.TabIndex = 2
+        Me.lblPercentDineIn.Text = "65%"
+        '
         'Panel3
         '
         Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(203, Byte), Integer), CType(CType(119, Byte), Integer))
@@ -753,63 +755,90 @@ Partial Class Dashboard
         Me.Panel3.Size = New System.Drawing.Size(24, 22)
         Me.Panel3.TabIndex = 1
         '
+        'Panel2
+        '
+        Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(144, Byte), Integer), CType(CType(213, Byte), Integer), CType(CType(169, Byte), Integer))
+        Me.Panel2.Location = New System.Drawing.Point(76, 296)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(24, 22)
+        Me.Panel2.TabIndex = 1
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.BackColor = System.Drawing.Color.Transparent
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(120, 246)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(58, 20)
+        Me.Label3.TabIndex = 1
+        Me.Label3.Text = "Dine In"
+        '
         'Chart2
         '
-        ChartArea10.Name = "ChartArea1"
-        Me.Chart2.ChartAreas.Add(ChartArea10)
-        Legend10.Alignment = System.Drawing.StringAlignment.Center
-        Legend10.BackColor = System.Drawing.Color.Transparent
-        LegendCellColumn5.Name = "Column1"
-        Legend10.CellColumns.Add(LegendCellColumn5)
-        Legend10.Enabled = False
-        Legend10.Font = New System.Drawing.Font("Segoe UI Semibold", 8.0!, System.Drawing.FontStyle.Bold)
-        Legend10.IsTextAutoFit = False
-        Legend10.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Column
-        Legend10.Name = "Legend1"
-        Legend10.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Tall
-        Legend10.TitleSeparatorColor = System.Drawing.Color.DimGray
-        Me.Chart2.Legends.Add(Legend10)
+        ChartArea2.Name = "ChartArea1"
+        Me.Chart2.ChartAreas.Add(ChartArea2)
+        Legend2.Alignment = System.Drawing.StringAlignment.Center
+        Legend2.BackColor = System.Drawing.Color.Transparent
+        LegendCellColumn1.Name = "Column1"
+        Legend2.CellColumns.Add(LegendCellColumn1)
+        Legend2.Enabled = False
+        Legend2.Font = New System.Drawing.Font("Segoe UI Semibold", 8.0!, System.Drawing.FontStyle.Bold)
+        Legend2.IsTextAutoFit = False
+        Legend2.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Column
+        Legend2.Name = "Legend1"
+        Legend2.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Tall
+        Legend2.TitleSeparatorColor = System.Drawing.Color.DimGray
+        Me.Chart2.Legends.Add(Legend2)
         Me.Chart2.Location = New System.Drawing.Point(4, 5)
         Me.Chart2.Name = "Chart2"
-        Series10.BackImageAlignment = System.Windows.Forms.DataVisualization.Charting.ChartImageAlignmentStyle.Left
-        Series10.ChartArea = "ChartArea1"
-        Series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut
-        Series10.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Series10.IsValueShownAsLabel = True
-        Series10.IsVisibleInLegend = False
-        Series10.Label = "#PERCENT{P0}"
-        Series10.Legend = "Legend1"
-        Series10.Name = "Series1"
-        DataPoint33.AxisLabel = "Dine In"
-        DataPoint33.BorderColor = System.Drawing.Color.White
-        DataPoint33.BorderWidth = 2
-        DataPoint33.Color = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(149, Byte), Integer), CType(CType(233, Byte), Integer))
-        DataPoint33.LabelBorderWidth = 1
-        DataPoint33.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint34.AxisLabel = "Takeout"
-        DataPoint34.BorderColor = System.Drawing.Color.White
-        DataPoint34.BorderWidth = 2
-        DataPoint34.Color = System.Drawing.Color.FromArgb(CType(CType(144, Byte), Integer), CType(CType(213, Byte), Integer), CType(CType(169, Byte), Integer))
-        DataPoint34.LabelForeColor = System.Drawing.Color.Transparent
-        DataPoint35.AxisLabel = "Catering"
-        DataPoint35.BorderColor = System.Drawing.Color.White
-        DataPoint35.BorderWidth = 2
-        DataPoint35.Color = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(203, Byte), Integer), CType(CType(119, Byte), Integer))
-        DataPoint35.LabelBackColor = System.Drawing.Color.Transparent
-        DataPoint35.LabelForeColor = System.Drawing.Color.Transparent
-        Series10.Points.Add(DataPoint33)
-        Series10.Points.Add(DataPoint34)
-        Series10.Points.Add(DataPoint35)
-        Me.Chart2.Series.Add(Series10)
+        Series2.BackImageAlignment = System.Windows.Forms.DataVisualization.Charting.ChartImageAlignmentStyle.Left
+        Series2.ChartArea = "ChartArea1"
+        Series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut
+        Series2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Series2.IsValueShownAsLabel = True
+        Series2.IsVisibleInLegend = False
+        Series2.Label = "#PERCENT{P0}"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        DataPoint5.AxisLabel = "Dine In"
+        DataPoint5.BorderColor = System.Drawing.Color.White
+        DataPoint5.BorderWidth = 2
+        DataPoint5.Color = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(149, Byte), Integer), CType(CType(233, Byte), Integer))
+        DataPoint5.LabelBorderWidth = 1
+        DataPoint5.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint6.AxisLabel = "Takeout"
+        DataPoint6.BorderColor = System.Drawing.Color.White
+        DataPoint6.BorderWidth = 2
+        DataPoint6.Color = System.Drawing.Color.FromArgb(CType(CType(144, Byte), Integer), CType(CType(213, Byte), Integer), CType(CType(169, Byte), Integer))
+        DataPoint6.LabelForeColor = System.Drawing.Color.Transparent
+        DataPoint7.AxisLabel = "Catering"
+        DataPoint7.BorderColor = System.Drawing.Color.White
+        DataPoint7.BorderWidth = 2
+        DataPoint7.Color = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(203, Byte), Integer), CType(CType(119, Byte), Integer))
+        DataPoint7.LabelBackColor = System.Drawing.Color.Transparent
+        DataPoint7.LabelForeColor = System.Drawing.Color.Transparent
+        Series2.Points.Add(DataPoint5)
+        Series2.Points.Add(DataPoint6)
+        Series2.Points.Add(DataPoint7)
+        Me.Chart2.Series.Add(Series2)
         Me.Chart2.Size = New System.Drawing.Size(414, 218)
         Me.Chart2.TabIndex = 1
         Me.Chart2.Text = "Chart2"
-        Title10.Alignment = System.Drawing.ContentAlignment.TopLeft
-        Title10.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Title10.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Title10.Name = "Sales by Channel"
-        Title10.Text = "Sales by Channel"
-        Me.Chart2.Titles.Add(Title10)
+        Title2.Alignment = System.Drawing.ContentAlignment.TopLeft
+        Title2.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Title2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Title2.Name = "Sales by Channel"
+        Title2.Text = "Sales by Channel"
+        Me.Chart2.Titles.Add(Title2)
+        '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(165, Byte), Integer), CType(CType(149, Byte), Integer), CType(CType(233, Byte), Integer))
+        Me.Panel1.Location = New System.Drawing.Point(76, 245)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(24, 22)
+        Me.Panel1.TabIndex = 0
         '
         'RoundedPane213
         '
@@ -890,35 +919,6 @@ Partial Class Dashboard
         Me.PictureBox8.Size = New System.Drawing.Size(28, 28)
         Me.PictureBox8.TabIndex = 4
         Me.PictureBox8.TabStop = False
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(16, 17)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(124, 20)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Top Selling Items"
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Segoe UI Semibold", 11.25!, System.Drawing.FontStyle.Bold)
-        Me.Label7.Location = New System.Drawing.Point(16, 17)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(119, 20)
-        Me.Label7.TabIndex = 1
-        Me.Label7.Text = "Inventory Alerts"
-        '
-        'InventoryAlerts
-        '
-        Me.InventoryAlerts.AutoScroll = True
-        Me.InventoryAlerts.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
-        Me.InventoryAlerts.Location = New System.Drawing.Point(3, 40)
-        Me.InventoryAlerts.Name = "InventoryAlerts"
-        Me.InventoryAlerts.Size = New System.Drawing.Size(449, 272)
-        Me.InventoryAlerts.TabIndex = 1
         '
         'Dashboard
         '
