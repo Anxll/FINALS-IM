@@ -480,6 +480,19 @@ Public Class FormOrders
     ' BUILD ORDERS QUERY
     ' =======================================================================
     Private Function BuildOrdersQuery(filterStatus As String, search As String) As String
+        ' Get period filter from Reports form
+        Dim periodFilter As String = ""
+        Select Case Reports.SelectedPeriod
+            Case "Daily"
+                periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
+            Case "Weekly"
+                periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+            Case "Monthly"
+                periodFilter = " AND MONTH(o.OrderDate) = MONTH(CURDATE()) AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
+            Case "Yearly"
+                periodFilter = " AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
+        End Select
+
         ' Build query based on actual table structure
         Dim sql As String = "
             SELECT 
@@ -499,13 +512,15 @@ Public Class FormOrders
             FROM orders o
             WHERE 1=1
         "
+        sql &= periodFilter
+
         If filterStatus <> "All" AndAlso Not String.IsNullOrEmpty(filterStatus) Then
             sql &= $" AND o.OrderStatus = '{filterStatus}'"
         End If
         If Not String.IsNullOrEmpty(search) Then
             sql &= $" AND (o.OrderID LIKE '%{search}%' OR o.ReceiptNumber LIKE '%{search}%' OR o.OrderStatus LIKE '%{search}%')"
         End If
-        sql &= " ORDER BY o.OrderID DESC LIMIT 1000"
+        sql &= " ORDER BY o.OrderDate DESC, o.OrderTime DESC LIMIT 1000"
         Return sql
     End Function
     ' =======================================================================
@@ -706,6 +721,10 @@ Public Class FormOrders
     ' REFRESH DATA
     ' =======================================================================
     Public Sub RefreshData()
+        ' Reload charts to reflect potentially changed period
+        LoadOrdersTrendChart()
+        LoadCategoriesChart()
+        ' Reload grid
         LoadOrdersData(currentFilter, searchText)
         UpdateStatistics()
     End Sub

@@ -15,7 +15,7 @@ Module modDB
     Public db_name As String = "tabeya_system"
 
     Public strConnection As String =
-        $"Server={db_server};Port=3306;Database={db_name};Uid={db_uid};Pwd={db_pwd};SslMode=None;AllowUserVariables=True;"
+        $"Server={db_server};Port=3306;Database={db_name};Uid={db_uid};Pwd={db_pwd};AllowUserVariables=True;"
 
     Public Structure LoggedUser
         Dim id As Integer

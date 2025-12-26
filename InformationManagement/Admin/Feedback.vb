@@ -1,9 +1,9 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports MySqlConnector
 Imports System.Data
 
 Public Class Feedback
-    ' Database connection string
-    Private connectionString As String = "Server=localhost;Database=tabeya_system;Uid=root;Pwd=;"
+    ' Database connection string using global modDB
+    Private connectionString As String = modDB.strConnection
     Private conn As MySqlConnection
     Private adapter As MySqlDataAdapter
     Private dt As DataTable

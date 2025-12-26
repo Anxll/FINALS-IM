@@ -40,12 +40,63 @@ Partial Class Employee
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.lblTotalEmployees = New System.Windows.Forms.Label()
+        Me.PaginationContainer = New System.Windows.Forms.Panel()
+        Me.btnNext = New System.Windows.Forms.Button()
+        Me.btnPrev = New System.Windows.Forms.Button()
+        Me.lblPageStatus = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
+        Me.PaginationContainer.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'PaginationContainer
+        '
+        Me.PaginationContainer.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PaginationContainer.Controls.Add(Me.btnNext)
+        Me.PaginationContainer.Controls.Add(Me.btnPrev)
+        Me.PaginationContainer.Controls.Add(Me.lblPageStatus)
+        Me.PaginationContainer.Location = New System.Drawing.Point(750, 2)
+        Me.PaginationContainer.Name = "PaginationContainer"
+        Me.PaginationContainer.Size = New System.Drawing.Size(320, 35)
+        Me.PaginationContainer.TabIndex = 1
+        '
+        'btnNext
+        '
+        Me.btnNext.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNext.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnNext.Location = New System.Drawing.Point(235, 2)
+        Me.btnNext.Name = "btnNext"
+        Me.btnNext.Size = New System.Drawing.Size(80, 28)
+        Me.btnNext.TabIndex = 2
+        Me.btnNext.Text = "Next →"
+        Me.btnNext.UseVisualStyleBackColor = True
+        '
+        'btnPrev
+        '
+        Me.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPrev.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnPrev.Location = New System.Drawing.Point(150, 2)
+        Me.btnPrev.Name = "btnPrev"
+        Me.btnPrev.Size = New System.Drawing.Size(80, 28)
+        Me.btnPrev.TabIndex = 1
+        Me.btnPrev.Text = "← Prev"
+        Me.btnPrev.UseVisualStyleBackColor = True
+        '
+        'lblPageStatus
+        '
+        Me.lblPageStatus.AutoSize = True
+        Me.lblPageStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblPageStatus.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139)
+        Me.lblPageStatus.Location = New System.Drawing.Point(10, 8)
+        Me.lblPageStatus.Name = "lblPageStatus"
+        Me.lblPageStatus.Size = New System.Drawing.Size(66, 15)
+        Me.lblPageStatus.TabIndex = 0
+        Me.lblPageStatus.Text = "Page 1 of 1"
         '
         'Panel1
         '
@@ -280,19 +331,20 @@ Partial Class Employee
         'Panel4
         '
         Me.Panel4.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.Panel4.Controls.Add(Me.PaginationContainer)
         Me.Panel4.Controls.Add(Me.lblTotalEmployees)
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel4.Location = New System.Drawing.Point(0, 546)
+        Me.Panel4.Location = New System.Drawing.Point(0, 532)
         Me.Panel4.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(1080, 26)
+        Me.Panel4.Size = New System.Drawing.Size(1080, 40)
         Me.Panel4.TabIndex = 4
         '
         'lblTotalEmployees
         '
         Me.lblTotalEmployees.AutoSize = True
         Me.lblTotalEmployees.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.lblTotalEmployees.Location = New System.Drawing.Point(10, 6)
+        Me.lblTotalEmployees.Location = New System.Drawing.Point(10, 12)
         Me.lblTotalEmployees.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblTotalEmployees.Name = "lblTotalEmployees"
         Me.lblTotalEmployees.Size = New System.Drawing.Size(109, 15)
@@ -346,4 +398,8 @@ Partial Class Employee
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents Panel4 As Panel
     Friend WithEvents lblTotalEmployees As Label
+    Friend WithEvents PaginationContainer As Panel
+    Friend WithEvents btnNext As Button
+    Friend WithEvents btnPrev As Button
+    Friend WithEvents lblPageStatus As Label
 End Class
