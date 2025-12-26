@@ -804,6 +804,26 @@ Public Class Orders
                                 End Using
                             End If
                         End If
+                        If newStatus = "Cancelled" Then
+                            ' Check if payment record exists
+                            Dim checkQuery As String = "SELECT COUNT(*) FROM payments WHERE OrderID = @orderID"
+                            Dim paymentExists As Boolean = False
+
+                            Using checkCmd As New MySqlCommand(checkQuery, conn, transaction)
+                                checkCmd.Parameters.AddWithValue("@orderID", orderID)
+                                Dim count As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
+                                paymentExists = (count > 0)
+                            End Using
+
+                            If paymentExists Then
+                                ' Update existing payment record to Refunded
+                                Dim updatePaymentQuery As String = "UPDATE payments SET PaymentStatus = 'Refunded', PaymentDate = NOW() WHERE OrderID = @orderID"
+                                Using cmd As New MySqlCommand(updatePaymentQuery, conn, transaction)
+                                    cmd.Parameters.AddWithValue("@orderID", orderID)
+                                    cmd.ExecuteNonQuery()
+                                End Using
+                            End If
+                        End If
 
                         transaction.Commit()
                     Catch ex As Exception
@@ -813,9 +833,12 @@ Public Class Orders
                 End Using
             End Using
 
+
             Dim message As String = $"Order #{orderID} status updated to '{newStatus}' successfully!"
             If newStatus = "Confirmed" Then
                 message &= vbCrLf & "Payment status automatically set to 'Completed'."
+            ElseIf newStatus = "Cancelled" Then
+                message &= vbCrLf & "Payment status automatically set to 'Refunded'."
             End If
 
             MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
