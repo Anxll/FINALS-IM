@@ -23,7 +23,7 @@ Partial Class FormCateringReservations
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormCateringReservations))
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -75,11 +75,10 @@ Partial Class FormCateringReservations
         Me.Label1.AutoSize = True
         Me.Label1.BackColor = System.Drawing.Color.Transparent
         Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
-        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(100, 31)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label1.ForeColor = System.Drawing.Color.White
+        Me.Label1.Location = New System.Drawing.Point(75, 25)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(167, 25)
+        Me.Label1.Size = New System.Drawing.Size(133, 20)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Total Reservations"
         '
@@ -88,11 +87,10 @@ Partial Class FormCateringReservations
         Me.Label2.AutoSize = True
         Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
-        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
-        Me.Label2.Location = New System.Drawing.Point(100, 31)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label2.ForeColor = System.Drawing.Color.White
+        Me.Label2.Location = New System.Drawing.Point(75, 25)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(114, 25)
+        Me.Label2.Size = New System.Drawing.Size(90, 20)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Total Events"
         '
@@ -101,11 +99,10 @@ Partial Class FormCateringReservations
         Me.Label3.AutoSize = True
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
-        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
-        Me.Label3.Location = New System.Drawing.Point(100, 31)
-        Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label3.ForeColor = System.Drawing.Color.White
+        Me.Label3.Location = New System.Drawing.Point(75, 25)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(188, 25)
+        Me.Label3.Size = New System.Drawing.Size(150, 20)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "Average Event Value"
         '
@@ -115,10 +112,9 @@ Partial Class FormCateringReservations
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.Font = New System.Drawing.Font("Segoe UI Semibold", 13.0!, System.Drawing.FontStyle.Bold)
         Me.Label4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
-        Me.Label4.Location = New System.Drawing.Point(43, 34)
-        Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label4.Location = New System.Drawing.Point(32, 28)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(248, 30)
+        Me.Label4.Size = New System.Drawing.Size(209, 25)
         Me.Label4.TabIndex = 3
         Me.Label4.Text = "Reservation Breakdown"
         '
@@ -127,10 +123,9 @@ Partial Class FormCateringReservations
         Me.LabelHeader.AutoSize = True
         Me.LabelHeader.Font = New System.Drawing.Font("Segoe UI Semibold", 22.0!, System.Drawing.FontStyle.Bold)
         Me.LabelHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
-        Me.LabelHeader.Location = New System.Drawing.Point(40, 31)
-        Me.LabelHeader.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelHeader.Location = New System.Drawing.Point(30, 25)
         Me.LabelHeader.Name = "LabelHeader"
-        Me.LabelHeader.Size = New System.Drawing.Size(549, 50)
+        Me.LabelHeader.Size = New System.Drawing.Size(448, 41)
         Me.LabelHeader.TabIndex = 11
         Me.LabelHeader.Text = "Catering Reservations Analytics"
         '
@@ -139,10 +134,9 @@ Partial Class FormCateringReservations
         Me.LabelSubHeader.AutoSize = True
         Me.LabelSubHeader.Font = New System.Drawing.Font("Segoe UI", 10.5!)
         Me.LabelSubHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
-        Me.LabelSubHeader.Location = New System.Drawing.Point(45, 84)
-        Me.LabelSubHeader.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelSubHeader.Location = New System.Drawing.Point(34, 68)
         Me.LabelSubHeader.Name = "LabelSubHeader"
-        Me.LabelSubHeader.Size = New System.Drawing.Size(525, 25)
+        Me.LabelSubHeader.Size = New System.Drawing.Size(406, 19)
         Me.LabelSubHeader.TabIndex = 12
         Me.LabelSubHeader.Text = "Detailed overview of reservation patterns and event performance"
         '
@@ -153,10 +147,9 @@ Partial Class FormCateringReservations
         Me.Export.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold)
         Me.Export.ForeColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.Export.Image = CType(resources.GetObject("Export.Image"), System.Drawing.Image)
-        Me.Export.Location = New System.Drawing.Point(1184, 18)
-        Me.Export.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Export.Location = New System.Drawing.Point(888, 15)
         Me.Export.Name = "Export"
-        Me.Export.Size = New System.Drawing.Size(173, 49)
+        Me.Export.Size = New System.Drawing.Size(130, 40)
         Me.Export.TabIndex = 7
         Me.Export.Text = "   Export CSV"
         Me.Export.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -168,11 +161,10 @@ Partial Class FormCateringReservations
         Me.LabelSubtitle1.AutoSize = True
         Me.LabelSubtitle1.BackColor = System.Drawing.Color.Transparent
         Me.LabelSubtitle1.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.LabelSubtitle1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
-        Me.LabelSubtitle1.Location = New System.Drawing.Point(100, 62)
-        Me.LabelSubtitle1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelSubtitle1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.LabelSubtitle1.Location = New System.Drawing.Point(75, 50)
         Me.LabelSubtitle1.Name = "LabelSubtitle1"
-        Me.LabelSubtitle1.Size = New System.Drawing.Size(107, 20)
+        Me.LabelSubtitle1.Size = New System.Drawing.Size(85, 15)
         Me.LabelSubtitle1.TabIndex = 2
         Me.LabelSubtitle1.Text = "Total bookings"
         '
@@ -181,11 +173,10 @@ Partial Class FormCateringReservations
         Me.LabelSubtitle2.AutoSize = True
         Me.LabelSubtitle2.BackColor = System.Drawing.Color.Transparent
         Me.LabelSubtitle2.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.LabelSubtitle2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
-        Me.LabelSubtitle2.Location = New System.Drawing.Point(100, 62)
-        Me.LabelSubtitle2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelSubtitle2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.LabelSubtitle2.Location = New System.Drawing.Point(75, 50)
         Me.LabelSubtitle2.Name = "LabelSubtitle2"
-        Me.LabelSubtitle2.Size = New System.Drawing.Size(125, 20)
+        Me.LabelSubtitle2.Size = New System.Drawing.Size(101, 15)
         Me.LabelSubtitle2.TabIndex = 3
         Me.LabelSubtitle2.Text = "Confirmed events"
         '
@@ -194,11 +185,10 @@ Partial Class FormCateringReservations
         Me.LabelSubtitle3.AutoSize = True
         Me.LabelSubtitle3.BackColor = System.Drawing.Color.Transparent
         Me.LabelSubtitle3.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.LabelSubtitle3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
-        Me.LabelSubtitle3.Location = New System.Drawing.Point(100, 62)
-        Me.LabelSubtitle3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelSubtitle3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.LabelSubtitle3.Location = New System.Drawing.Point(75, 50)
         Me.LabelSubtitle3.Name = "LabelSubtitle3"
-        Me.LabelSubtitle3.Size = New System.Drawing.Size(130, 20)
+        Me.LabelSubtitle3.Size = New System.Drawing.Size(102, 15)
         Me.LabelSubtitle3.TabIndex = 3
         Me.LabelSubtitle3.Text = "Average per event"
         '
@@ -212,11 +202,10 @@ Partial Class FormCateringReservations
         Me.RoundedPane21.Controls.Add(Me.Label5)
         Me.RoundedPane21.Controls.Add(Me.Label1)
         Me.RoundedPane21.CornerRadius = 15
-        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(250, Byte), Integer), CType(CType(252, Byte), Integer))
-        Me.RoundedPane21.Location = New System.Drawing.Point(40, 129)
-        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(133, Byte), Integer), CType(CType(244, Byte), Integer))
+        Me.RoundedPane21.Location = New System.Drawing.Point(30, 105)
         Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(449, 154)
+        Me.RoundedPane21.Size = New System.Drawing.Size(337, 125)
         Me.RoundedPane21.TabIndex = 8
         '
         'RoundedPane221
@@ -226,21 +215,19 @@ Partial Class FormCateringReservations
         Me.RoundedPane221.BorderThickness = 1
         Me.RoundedPane221.Controls.Add(Me.PictureBox11)
         Me.RoundedPane221.CornerRadius = 8
-        Me.RoundedPane221.FillColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(212, Byte), Integer), CType(CType(191, Byte), Integer))
-        Me.RoundedPane221.Location = New System.Drawing.Point(33, 27)
-        Me.RoundedPane221.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane221.FillColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(165, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.RoundedPane221.Location = New System.Drawing.Point(25, 22)
         Me.RoundedPane221.Name = "RoundedPane221"
-        Me.RoundedPane221.Size = New System.Drawing.Size(57, 47)
+        Me.RoundedPane221.Size = New System.Drawing.Size(43, 38)
         Me.RoundedPane221.TabIndex = 7
         '
         'PictureBox11
         '
         Me.PictureBox11.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox11.Image = CType(resources.GetObject("PictureBox11.Image"), System.Drawing.Image)
-        Me.PictureBox11.Location = New System.Drawing.Point(12, 7)
-        Me.PictureBox11.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox11.Location = New System.Drawing.Point(9, 6)
         Me.PictureBox11.Name = "PictureBox11"
-        Me.PictureBox11.Size = New System.Drawing.Size(37, 34)
+        Me.PictureBox11.Size = New System.Drawing.Size(28, 28)
         Me.PictureBox11.TabIndex = 4
         Me.PictureBox11.TabStop = False
         '
@@ -249,11 +236,10 @@ Partial Class FormCateringReservations
         Me.Label5.AutoSize = True
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
-        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
-        Me.Label5.Location = New System.Drawing.Point(100, 92)
-        Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label5.ForeColor = System.Drawing.Color.White
+        Me.Label5.Location = New System.Drawing.Point(75, 75)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(35, 41)
+        Me.Label5.Size = New System.Drawing.Size(28, 32)
         Me.Label5.TabIndex = 1
         Me.Label5.Text = "0"
         '
@@ -267,11 +253,10 @@ Partial Class FormCateringReservations
         Me.RoundedPane22.Controls.Add(Me.Label6)
         Me.RoundedPane22.Controls.Add(Me.Label2)
         Me.RoundedPane22.CornerRadius = 15
-        Me.RoundedPane22.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(250, Byte), Integer), CType(CType(252, Byte), Integer))
-        Me.RoundedPane22.Location = New System.Drawing.Point(512, 129)
-        Me.RoundedPane22.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane22.FillColor = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(140, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.RoundedPane22.Location = New System.Drawing.Point(384, 105)
         Me.RoundedPane22.Name = "RoundedPane22"
-        Me.RoundedPane22.Size = New System.Drawing.Size(449, 154)
+        Me.RoundedPane22.Size = New System.Drawing.Size(337, 125)
         Me.RoundedPane22.TabIndex = 9
         '
         'RoundedPane25
@@ -282,20 +267,19 @@ Partial Class FormCateringReservations
         Me.RoundedPane25.Controls.Add(Me.PictureBox1)
         Me.RoundedPane25.CornerRadius = 8
         Me.RoundedPane25.FillColor = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(191, Byte), Integer), CType(CType(36, Byte), Integer))
-        Me.RoundedPane25.Location = New System.Drawing.Point(33, 27)
-        Me.RoundedPane25.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane25.Location = New System.Drawing.Point(25, 22)
         Me.RoundedPane25.Name = "RoundedPane25"
-        Me.RoundedPane25.Size = New System.Drawing.Size(57, 47)
+        Me.RoundedPane25.Size = New System.Drawing.Size(43, 38)
         Me.RoundedPane25.TabIndex = 7
         '
         'PictureBox1
         '
+        Me.PictureBox1.AccessibleName = "252, 166, 5"
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(12, 7)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox1.Location = New System.Drawing.Point(9, 6)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(37, 34)
+        Me.PictureBox1.Size = New System.Drawing.Size(28, 28)
         Me.PictureBox1.TabIndex = 4
         Me.PictureBox1.TabStop = False
         '
@@ -304,11 +288,10 @@ Partial Class FormCateringReservations
         Me.Label6.AutoSize = True
         Me.Label6.BackColor = System.Drawing.Color.Transparent
         Me.Label6.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
-        Me.Label6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
-        Me.Label6.Location = New System.Drawing.Point(100, 92)
-        Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label6.ForeColor = System.Drawing.Color.White
+        Me.Label6.Location = New System.Drawing.Point(75, 75)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(35, 41)
+        Me.Label6.Size = New System.Drawing.Size(28, 32)
         Me.Label6.TabIndex = 2
         Me.Label6.Text = "0"
         '
@@ -322,11 +305,10 @@ Partial Class FormCateringReservations
         Me.RoundedPane23.Controls.Add(Me.Label7)
         Me.RoundedPane23.Controls.Add(Me.Label3)
         Me.RoundedPane23.CornerRadius = 15
-        Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(250, Byte), Integer), CType(CType(252, Byte), Integer))
-        Me.RoundedPane23.Location = New System.Drawing.Point(984, 129)
-        Me.RoundedPane23.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(68, Byte), Integer), CType(CType(68, Byte), Integer))
+        Me.RoundedPane23.Location = New System.Drawing.Point(738, 105)
         Me.RoundedPane23.Name = "RoundedPane23"
-        Me.RoundedPane23.Size = New System.Drawing.Size(449, 154)
+        Me.RoundedPane23.Size = New System.Drawing.Size(337, 125)
         Me.RoundedPane23.TabIndex = 10
         '
         'RoundedPane218
@@ -336,21 +318,19 @@ Partial Class FormCateringReservations
         Me.RoundedPane218.BorderThickness = 1
         Me.RoundedPane218.Controls.Add(Me.PictureBox5)
         Me.RoundedPane218.CornerRadius = 8
-        Me.RoundedPane218.FillColor = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(113, Byte), Integer), CType(CType(133, Byte), Integer))
-        Me.RoundedPane218.Location = New System.Drawing.Point(33, 27)
-        Me.RoundedPane218.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane218.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(113, Byte), Integer), CType(CType(113, Byte), Integer))
+        Me.RoundedPane218.Location = New System.Drawing.Point(25, 22)
         Me.RoundedPane218.Name = "RoundedPane218"
-        Me.RoundedPane218.Size = New System.Drawing.Size(57, 47)
+        Me.RoundedPane218.Size = New System.Drawing.Size(43, 38)
         Me.RoundedPane218.TabIndex = 6
         '
         'PictureBox5
         '
         Me.PictureBox5.BackColor = System.Drawing.Color.Transparent
         Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
-        Me.PictureBox5.Location = New System.Drawing.Point(12, 7)
-        Me.PictureBox5.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox5.Location = New System.Drawing.Point(9, 6)
         Me.PictureBox5.Name = "PictureBox5"
-        Me.PictureBox5.Size = New System.Drawing.Size(37, 34)
+        Me.PictureBox5.Size = New System.Drawing.Size(28, 28)
         Me.PictureBox5.TabIndex = 4
         Me.PictureBox5.TabStop = False
         '
@@ -359,11 +339,10 @@ Partial Class FormCateringReservations
         Me.Label7.AutoSize = True
         Me.Label7.BackColor = System.Drawing.Color.Transparent
         Me.Label7.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
-        Me.Label7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
-        Me.Label7.Location = New System.Drawing.Point(100, 92)
-        Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label7.ForeColor = System.Drawing.Color.White
+        Me.Label7.Location = New System.Drawing.Point(75, 75)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(96, 41)
+        Me.Label7.Size = New System.Drawing.Size(78, 32)
         Me.Label7.TabIndex = 2
         Me.Label7.Text = "₱0.00"
         '
@@ -377,10 +356,9 @@ Partial Class FormCateringReservations
         Me.RoundedPane24.Controls.Add(Me.PaginationContainer)
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
-        Me.RoundedPane24.Location = New System.Drawing.Point(40, 314)
-        Me.RoundedPane24.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane24.Location = New System.Drawing.Point(30, 255)
         Me.RoundedPane24.Name = "RoundedPane24"
-        Me.RoundedPane24.Size = New System.Drawing.Size(1393, 578)
+        Me.RoundedPane24.Size = New System.Drawing.Size(1045, 470)
         Me.RoundedPane24.TabIndex = 4
         '
         'DataGridView1
@@ -393,26 +371,25 @@ Partial Class FormCateringReservations
         Me.DataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.DataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         Me.DataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(250, Byte), Integer))
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(250, Byte), Integer))
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(250, Byte), Integer))
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(249, Byte), Integer), CType(CType(250, Byte), Integer))
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle7
         Me.DataGridView1.ColumnHeadersHeight = 45
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Period, Me.Reservations, Me.TotalGuests, Me.TotalAmount})
         Me.DataGridView1.EnableHeadersVisualStyles = False
         Me.DataGridView1.GridColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(241, Byte), Integer))
-        Me.DataGridView1.Location = New System.Drawing.Point(33, 75)
-        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.DataGridView1.Location = New System.Drawing.Point(25, 61)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowHeadersWidth = 51
         Me.DataGridView1.RowTemplate.Height = 40
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1324, 440)
+        Me.DataGridView1.Size = New System.Drawing.Size(993, 358)
         Me.DataGridView1.TabIndex = 6
         '
         'Period
@@ -452,10 +429,9 @@ Partial Class FormCateringReservations
         Me.PaginationContainer.Controls.Add(Me.btnNext)
         Me.PaginationContainer.Controls.Add(Me.btnPrev)
         Me.PaginationContainer.Controls.Add(Me.lblPageStatus)
-        Me.PaginationContainer.Location = New System.Drawing.Point(33, 517)
-        Me.PaginationContainer.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PaginationContainer.Location = New System.Drawing.Point(25, 420)
         Me.PaginationContainer.Name = "PaginationContainer"
-        Me.PaginationContainer.Size = New System.Drawing.Size(1324, 49)
+        Me.PaginationContainer.Size = New System.Drawing.Size(993, 40)
         Me.PaginationContainer.TabIndex = 12
         '
         'btnNext
@@ -465,10 +441,9 @@ Partial Class FormCateringReservations
         Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnNext.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnNext.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
-        Me.btnNext.Location = New System.Drawing.Point(1211, 6)
-        Me.btnNext.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnNext.Location = New System.Drawing.Point(908, 5)
         Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(107, 37)
+        Me.btnNext.Size = New System.Drawing.Size(80, 30)
         Me.btnNext.TabIndex = 2
         Me.btnNext.Text = "Next →"
         Me.btnNext.UseVisualStyleBackColor = True
@@ -480,10 +455,9 @@ Partial Class FormCateringReservations
         Me.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnPrev.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnPrev.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
-        Me.btnPrev.Location = New System.Drawing.Point(1096, 6)
-        Me.btnPrev.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnPrev.Location = New System.Drawing.Point(822, 5)
         Me.btnPrev.Name = "btnPrev"
-        Me.btnPrev.Size = New System.Drawing.Size(107, 37)
+        Me.btnPrev.Size = New System.Drawing.Size(80, 30)
         Me.btnPrev.TabIndex = 1
         Me.btnPrev.Text = "← Prev"
         Me.btnPrev.UseVisualStyleBackColor = True
@@ -493,20 +467,19 @@ Partial Class FormCateringReservations
         Me.lblPageStatus.AutoSize = True
         Me.lblPageStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblPageStatus.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
-        Me.lblPageStatus.Location = New System.Drawing.Point(13, 15)
-        Me.lblPageStatus.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lblPageStatus.Location = New System.Drawing.Point(10, 12)
         Me.lblPageStatus.Name = "lblPageStatus"
-        Me.lblPageStatus.Size = New System.Drawing.Size(83, 20)
+        Me.lblPageStatus.Size = New System.Drawing.Size(65, 15)
         Me.lblPageStatus.TabIndex = 0
         Me.lblPageStatus.Text = "Page 1 of 1"
         '
         'FormCateringReservations
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1467, 923)
+        Me.ClientSize = New System.Drawing.Size(1150, 609)
         Me.Controls.Add(Me.LabelSubHeader)
         Me.Controls.Add(Me.LabelHeader)
         Me.Controls.Add(Me.RoundedPane24)
@@ -514,7 +487,6 @@ Partial Class FormCateringReservations
         Me.Controls.Add(Me.RoundedPane22)
         Me.Controls.Add(Me.RoundedPane21)
         Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "FormCateringReservations"
         Me.Text = "Catering Reservations Analytics"
         Me.RoundedPane21.ResumeLayout(False)
