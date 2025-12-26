@@ -249,7 +249,7 @@ Public Class FormReservationStatus
                 point1.AxisLabel = "Pending"
                 point1.Label = $"Pending ({pending})"
                 point1.LegendText = $"Pending ({pending})"
-                point1.Color = Color.FromArgb(255, 165, 0) ' Orange
+                point1.Color = Color.FromArgb(245, 158, 11) ' Orange
                 point1.LabelForeColor = Color.White
                 Chart1.Series("ReservationStatus").Points.Add(point1)
             End If

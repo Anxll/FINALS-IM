@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms.DataVisualization.Charting
 Imports MySqlConnector
+Imports Org.BouncyCastle.Tls
 
 Public Class Dashboard
     Private WithEvents refreshTimer As New Timer()
@@ -278,90 +279,139 @@ LIMIT 8;"
     ' UPDATE TOP PRODUCTS CHART
     ' ============================================
     Private Sub ConfigureTopProductsChart()
-        ' Assuming your chart control is named ChartTopProducts
-        ChartTopProducts.Series.Clear()
-        ChartTopProducts.Titles.Clear()
-        ChartTopProducts.Legends.Clear()
-
-        If ChartTopProducts.ChartAreas.Count = 0 Then
-            ChartTopProducts.ChartAreas.Add(New ChartArea("ChartArea1"))
-        End If
-
-        Dim chartArea = ChartTopProducts.ChartAreas(0)
-        With chartArea
-            .AxisX.MajorGrid.Enabled = False
-            .AxisX.LabelStyle.Font = New Font("Segoe UI", 9.0F)
-            
-            ' Value Axis (Horizontal for Bar Chart)
-            .AxisY.LabelStyle.Format = "#,##0"
-            .AxisY.LabelStyle.Font = New Font("Segoe UI", 9.0F)
-            .AxisY.MajorGrid.LineColor = Color.LightGray
-            .AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dot
-            .AxisY.Interval = 1 ' Force integer steps to prevent "doubled" labels (0, 1, 1, 2, 2...)
-            .BackColor = Color.White
-        End With
-
-        Dim series = ChartTopProducts.Series.Add("Quantity")
-        With series
-            .ChartType = SeriesChartType.Bar
-            .Color = Color.FromArgb(45, 45, 45)
-            .BorderWidth = 0
-            .IsValueShownAsLabel = False
-            .Font = New Font("Segoe UI", 9.0F)
-            ' REMOVE .IsXValueIndexed = True
-        End With
-
-        ChartTopProducts.Titles.Add(New Title With {
-        .Text = "Top Products",
-        .Alignment = ContentAlignment.TopLeft,
-        .Font = New Font("Segoe UI Semibold", 12.0F, FontStyle.Bold),
-        .ForeColor = Color.FromArgb(45, 45, 45)
-    })
-
-        ChartTopProducts.Titles.Add(New Title With {
-        .Text = "Best selling items by selected period",
-        .Alignment = ContentAlignment.TopLeft,
-        .Font = New Font("Segoe UI", 9.0F),
-        .ForeColor = Color.Gray,
-        .Docking = Docking.Top
-    })
+        ' Configure the FlowLayoutPanel
+        ChartTopProducts.AutoScroll = True
+        ChartTopProducts.FlowDirection = FlowDirection.TopDown
+        ChartTopProducts.WrapContents = False
+        ChartTopProducts.BackColor = Color.White
     End Sub
 
     ' ============================================
     ' UPDATE TOP PRODUCTS CHART
-    ' ============================================
     Private Sub UpdateTopProductsChart(data As DataTable)
-        Dim series = ChartTopProducts.Series("Quantity")
-        series.Points.Clear()
+        ' Clear the FlowLayoutPanel
+        ChartTopProducts.Controls.Clear()
+
+
 
         If data.Rows.Count = 0 Then
             ' Show "No data" message
-            ChartTopProducts.Annotations.Clear()
-            Dim noDataAnnotation As New TextAnnotation()
-            noDataAnnotation.Text = "No Product Data Available"
-            noDataAnnotation.Font = New Font("Segoe UI", 12, FontStyle.Bold)
-            noDataAnnotation.ForeColor = Color.Gray
-            noDataAnnotation.X = 50
-            noDataAnnotation.Y = 50
-            noDataAnnotation.Alignment = ContentAlignment.MiddleCenter
-            ChartTopProducts.Annotations.Add(noDataAnnotation)
+            Dim noDataLabel As New Label()
+            noDataLabel.Text = "No Product Data Available"
+            noDataLabel.Font = New Font("Segoe UI", 12, FontStyle.Bold)
+            noDataLabel.ForeColor = Color.Gray
+            noDataLabel.Margin = New Padding(20, 20, 20, 20)
+            noDataLabel.AutoSize = True
+            ChartTopProducts.Controls.Add(noDataLabel)
             Return
         End If
 
-        ' Clear any previous annotations
-        ChartTopProducts.Annotations.Clear()
+        ' Display top products in list format
+        Dim rankColors As Color() = {
+            Color.FromArgb(255, 152, 0),  ' Orange for #1
+            Color.FromArgb(158, 158, 158), ' Gray for #2
+            Color.FromArgb(205, 127, 50),  ' Bronze for #3
+            Color.FromArgb(100, 100, 100), ' Dark gray for others
+            Color.FromArgb(100, 100, 100),
+            Color.FromArgb(100, 100, 100),
+            Color.FromArgb(100, 100, 100),
+            Color.FromArgb(100, 100, 100)
+        }
 
-        ' Reverse order for bar chart (highest at top)
-        For i As Integer = data.Rows.Count - 1 To 0 Step -1
+        For i As Integer = 0 To Math.Min(data.Rows.Count - 1, 7) ' Top 8 products
             Dim row = data.Rows(i)
-            Dim productName = row("ProductName").ToString()
-            Dim quantity = If(IsDBNull(row("TotalQuantity")), 0, Convert.ToInt32(row("TotalQuantity")))
-            series.Points.AddXY(productName, quantity)
+            Dim productName As String = row("ProductName").ToString()
+            Dim quantity As Integer = If(IsDBNull(row("TotalQuantity")), 0, Convert.ToInt32(row("TotalQuantity")))
+            Dim revenue As Decimal = If(IsDBNull(row("Revenue")), 0D, Convert.ToDecimal(row("Revenue")))
+
+            ' Create product item panel
+            Dim itemPanel As New Panel()
+            itemPanel.Size = New Size(ChartTopProducts.Width - 23, 60)
+            itemPanel.BackColor = Color.FromArgb(255, 250, 240)
+            itemPanel.Cursor = Cursors.Hand
+            itemPanel.Margin = New Padding(10, 5, 10, 5)
+
+            ' Rank badge (circular)
+            Dim lblRank As New Label()
+            lblRank.Text = (i + 1).ToString()
+            lblRank.Font = New Font("Segoe UI", 12, FontStyle.Bold)
+            lblRank.ForeColor = Color.White
+            lblRank.BackColor = rankColors(i)
+            lblRank.Size = New Size(35, 35)
+            lblRank.Location = New Point(10, 12)
+            lblRank.TextAlign = ContentAlignment.MiddleCenter
+            ' Make it circular
+            Dim rankPath As New System.Drawing.Drawing2D.GraphicsPath()
+            rankPath.AddEllipse(0, 0, lblRank.Width, lblRank.Height)
+            lblRank.Region = New Region(rankPath)
+            itemPanel.Controls.Add(lblRank)
+
+            ' Product name
+            Dim lblProduct As New Label()
+            lblProduct.Text = productName
+            lblProduct.Font = New Font("Segoe UI", 11, FontStyle.Bold)
+            lblProduct.ForeColor = Color.FromArgb(45, 45, 45)
+            lblProduct.Location = New Point(55, 8)
+            lblProduct.AutoSize = True
+            itemPanel.Controls.Add(lblProduct)
+
+            ' Quantity sold
+            Dim lblQuantity As New Label()
+            lblQuantity.Text = quantity.ToString() & " sold"
+            lblQuantity.Font = New Font("Segoe UI", 9)
+            lblQuantity.ForeColor = Color.Gray
+            lblQuantity.Location = New Point(55, 30)
+            lblQuantity.AutoSize = True
+            itemPanel.Controls.Add(lblQuantity)
+
+            ' Revenue (right aligned)
+            Dim lblRevenue As New Label()
+            lblRevenue.Text = "₱" & revenue.ToString("N0")
+            lblRevenue.Font = New Font("Segoe UI", 12, FontStyle.Bold)
+            lblRevenue.ForeColor = Color.FromArgb(34, 197, 94)
+            lblRevenue.Location = New Point(itemPanel.Width - 120, 18)
+            lblRevenue.Size = New Size(110, 25)
+            lblRevenue.TextAlign = ContentAlignment.MiddleRight
+            itemPanel.Controls.Add(lblRevenue)
+
+            ' Add separator line (except for last item)
+            If i < Math.Min(data.Rows.Count - 1, 7) Then
+                Dim separator As New Panel()
+                separator.Height = 1
+                separator.Width = itemPanel.Width - 20
+                separator.BackColor = Color.FromArgb(230, 230, 230)
+                separator.Location = New Point(10, 59)
+                itemPanel.Controls.Add(separator)
+            End If
+
+            ChartTopProducts.Controls.Add(itemPanel)
         Next
     End Sub
 
+    ' ============================================
+    ' GET OR CREATE PRODUCTS PANEL
+    ' ============================================
+    Private Function GetOrCreateProductsPanel() As Panel
+        ' Check if products panel already exists
+        Dim existingPanel As Panel = TryCast(Me.Controls.Find("pnlTopProducts", True).FirstOrDefault(), Panel)
 
+        If existingPanel IsNot Nothing Then
+            Return existingPanel
+        End If
 
+        ' Create new panel with same location and size as ChartTopProducts
+        Dim newPanel As New Panel()
+        newPanel.Name = "pnlTopProducts"
+        newPanel.Location = ChartTopProducts.Location
+        newPanel.Size = ChartTopProducts.Size
+        newPanel.BackColor = Color.White
+
+        ' Add to the same parent as ChartTopProducts
+        ChartTopProducts.Parent.Controls.Add(newPanel)
+        newPanel.BringToFront()
+
+        Return newPanel
+    End Function
     Private Sub LoadAverageOrder()
         Try
             openConn()
@@ -521,6 +571,11 @@ LIMIT 8;"
 
     Private Sub LoadInventoryAlerts()
         Try
+            If Me.Controls.Contains(InventoryAlerts) Then
+                InventoryAlerts.BringToFront()
+                InventoryAlerts.Visible = True
+                InventoryAlerts.AutoScroll = True ' Allow scrolling if items exceed panel height
+            End If
             openConn()
 
             ' Query to get critical and low stock items
@@ -554,62 +609,43 @@ LIMIT 8;"
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
 
             ' Clear existing alert items
-            InventoryAlerts.Controls.Clear()
 
-            ' Add header with icon
-            Dim headerPanel As New Panel()
-            headerPanel.Size = New Size(InventoryAlerts.Width - 20, 35)
-            headerPanel.Location = New Point(10, 10)
-            headerPanel.BackColor = Color.Transparent
 
             ' Warning icon label
-            Dim lblIcon As New Label()
-            lblIcon.Text = "⚠"
-            lblIcon.Font = New Font("Segoe UI", 14, FontStyle.Bold)
-            lblIcon.ForeColor = Color.FromArgb(255, 193, 7)
-            lblIcon.Location = New Point(0, 5)
-            lblIcon.Size = New Size(30, 25)
-            headerPanel.Controls.Add(lblIcon)
-
-            ' Header title
-            Dim lblHeader As New Label()
-            lblHeader.Text = "Inventory Alerts"
-            lblHeader.Font = New Font("Segoe UI", 12, FontStyle.Bold)
-            lblHeader.ForeColor = Color.FromArgb(45, 45, 45)
-            lblHeader.Location = New Point(35, 7)
-            lblHeader.AutoSize = True
-            headerPanel.Controls.Add(lblHeader)
 
             ' View All button
-            Dim btnViewAll As New Button()
-            btnViewAll.Text = "View All"
-            btnViewAll.Font = New Font("Segoe UI", 8, FontStyle.Regular)
-            btnViewAll.ForeColor = Color.FromArgb(111, 66, 193)
-            btnViewAll.BackColor = Color.Transparent
-            btnViewAll.FlatStyle = FlatStyle.Flat
-            btnViewAll.FlatAppearance.BorderSize = 0
-            btnViewAll.Cursor = Cursors.Hand
-            btnViewAll.Size = New Size(70, 25)
-            btnViewAll.Location = New Point(headerPanel.Width - 75, 5)
+            Dim label11 As New Button()
+            label11.Text = "View All"
+            label11.FlatStyle = FlatStyle.Flat
+            label11.FlatAppearance.BorderSize = 0
+            label11.BackColor = Color.Transparent
+            label11.Location = New Point(390, 17)
+            label11.ForeColor = Color.FromArgb(111, 66, 193)
+            label11.Font = New Font("Segoe UI", 8, FontStyle.Regular)
+            label11.Size = New Size(60, 25)
+            label11.Cursor = Cursors.Hand
+            label11.TextAlign = ContentAlignment.MiddleRight
+
+
 
             ' Add click event handler
-            AddHandler btnViewAll.Click, AddressOf ViewAllInventory_Click
+            AddHandler label11.Click, AddressOf ViewAllInventory_Click
 
             ' Add hover effects
-            AddHandler btnViewAll.MouseEnter, Sub(s, ev)
-                                                  btnViewAll.ForeColor = Color.FromArgb(90, 50, 160)
-                                                  btnViewAll.Font = New Font("Segoe UI", 8, FontStyle.Underline)
-                                              End Sub
-            AddHandler btnViewAll.MouseLeave, Sub(s, ev)
-                                                  btnViewAll.ForeColor = Color.FromArgb(111, 66, 193)
-                                                  btnViewAll.Font = New Font("Segoe UI", 8, FontStyle.Regular)
-                                              End Sub
+            AddHandler label11.MouseEnter, Sub(s, ev)
+                                               label11.ForeColor = Color.FromArgb(90, 50, 160)
+                                               label11.Font = New Font("Segoe UI", 8, FontStyle.Underline)
+                                           End Sub
+            AddHandler label11.MouseLeave, Sub(s, ev)
+                                               label11.ForeColor = Color.FromArgb(111, 66, 193)
+                                               label11.Font = New Font("Segoe UI", 8, FontStyle.Regular)
+                                           End Sub
+            Panel.Controls.Add(label11)
+            InventoryAlerts.AutoScroll = True
+            InventoryAlerts.WrapContents = False
+            InventoryAlerts.FlowDirection = FlowDirection.TopDown
 
-            headerPanel.Controls.Add(btnViewAll)
-
-            InventoryAlerts.Controls.Add(headerPanel)
-
-            Dim yPosition As Integer = 55
+            Dim yPosition As Integer = 40
             Dim alertCount As Integer = 0
 
             While reader.Read() AndAlso alertCount < 5
@@ -620,9 +656,10 @@ LIMIT 8;"
 
                 ' Create alert item panel
                 Dim alertItem As New Panel()
-                alertItem.Size = New Size(InventoryAlerts.Width - 20, 50)
-                alertItem.Location = New Point(10, yPosition)
+                alertItem.Size = New Size(InventoryAlerts.Width - 6, 50)
+                alertItem.Location = New Point(3, yPosition)
                 alertItem.BackColor = Color.White
+                alertItem.BorderStyle = BorderStyle.None
 
                 ' Item name label
                 Dim lblItem As New Label()
@@ -667,9 +704,9 @@ LIMIT 8;"
                 If alertCount < 4 Then
                     Dim separator As New Panel()
                     separator.Height = 1
-                    separator.Width = alertItem.Width - 20
+                    separator.Width = alertItem.Width - 6
                     separator.BackColor = Color.FromArgb(230, 230, 230)
-                    separator.Location = New Point(10, 49)
+                    separator.Location = New Point(3, 49)
                     alertItem.Controls.Add(separator)
                 End If
 
@@ -761,7 +798,7 @@ LIMIT 8;"
         Dim completedSeries = OrdersOverviewChart.Series.Add("Completed")
         With completedSeries
             .ChartType = SeriesChartType.Column
-            .Color = Color.FromArgb(0, 0, 0) ' Black
+            .Color = Color.FromArgb(34, 197, 94) ' Black
             .BorderWidth = 0
             .IsValueShownAsLabel = False
         End With
@@ -770,7 +807,7 @@ LIMIT 8;"
         Dim cancelledSeries = OrdersOverviewChart.Series.Add("Cancelled")
         With cancelledSeries
             .ChartType = SeriesChartType.Column
-            .Color = Color.FromArgb(209, 213, 219) ' Light gray
+            .Color = Color.FromArgb(239, 68, 68) ' Light gray
             .BorderWidth = 0
             .IsValueShownAsLabel = False
         End With
@@ -1254,7 +1291,7 @@ LIMIT 8;"
             MessageBox.Show("Error navigating to orders: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Private Sub ChartTopProducts_Click(sender As Object, e As EventArgs) Handles ChartTopProducts.Click
+    Private Sub ChartTopProducts_Click(sender As Object, e As EventArgs)
         Try
             ' Get reference to AdminDashboard (parent form)
             Dim adminDashboard As AdminDashboard = TryCast(Me.ParentForm, AdminDashboard)
@@ -1278,12 +1315,12 @@ LIMIT 8;"
             MessageBox.Show("Error navigating to orders: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-    Private Sub ChartTopProducts_MouseEnter(sender As Object, e As EventArgs) Handles ChartTopProducts.MouseEnter
+    Private Sub ChartTopProducts_MouseEnter(sender As Object, e As EventArgs)
         Chart2.Cursor = Cursors.Hand
         RoundedPane28.BackColor = Color.FromArgb(248, 248, 250)
     End Sub
 
-    Private Sub ChartTopProducts_MouseLeave(sender As Object, e As EventArgs) Handles ChartTopProducts.MouseLeave
+    Private Sub ChartTopProducts_MouseLeave(sender As Object, e As EventArgs)
         Chart2.Cursor = Cursors.Default
         RoundedPane28.BackColor = Color.White
     End Sub
@@ -1578,9 +1615,7 @@ LIMIT 8;"
 
     End Sub
 
-    Private Sub Label11_Click(sender As Object, e As EventArgs) Handles Label11.Click
 
-    End Sub
 
 
     ' ============================================

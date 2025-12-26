@@ -435,6 +435,8 @@ Public Class UsersAccounts
     Private Sub lblStaffs_Click(sender As Object, e As EventArgs) Handles lblStaffs.Click
 
     End Sub
+
+
 End Class
 
 ' Extension module for DataGridView double buffering

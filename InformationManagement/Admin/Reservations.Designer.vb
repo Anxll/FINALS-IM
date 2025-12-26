@@ -34,6 +34,7 @@ Partial Class Reservations
         Me.btnPrevPage = New System.Windows.Forms.Button()
         Me.btnFirstPage = New System.Windows.Forms.Button()
         Me.btnViewAll = New System.Windows.Forms.Button()
+        Me.btnViewCalendar = New System.Windows.Forms.Button()
         Me.btnViewCancelled = New System.Windows.Forms.Button()
         Me.btnViewConfirmed = New System.Windows.Forms.Button()
         Me.btnViewPending = New System.Windows.Forms.Button()
@@ -119,6 +120,27 @@ Partial Class Reservations
         Me.btnDelete.TabIndex = 4
         Me.btnDelete.Text = "Delete"
         Me.btnDelete.UseVisualStyleBackColor = False
+
+
+        '
+        'btnViewCalendar
+        '
+        Me.btnViewCalendar.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnViewCalendar.BackColor = System.Drawing.Color.FromArgb(CType(CType(23, Byte), Integer), CType(CType(162, Byte), Integer), CType(CType(184, Byte), Integer))
+        Me.btnViewCalendar.FlatAppearance.BorderSize = 0
+        Me.btnViewCalendar.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnViewCalendar.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnViewCalendar.ForeColor = System.Drawing.Color.White
+        Me.btnViewCalendar.Location = New System.Drawing.Point(902, 16)
+        Me.btnViewCalendar.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnViewCalendar.Name = "btnViewCalendar"
+        Me.btnViewCalendar.Size = New System.Drawing.Size(150, 37)
+        Me.btnViewCalendar.TabIndex = 10
+        Me.btnViewCalendar.Text = "📅 View Calendar"
+        Me.btnViewCalendar.UseVisualStyleBackColor = False
+
+        ' Add to Panel2.Controls:
+        Me.Panel2.Controls.Add(Me.btnViewCalendar)
         '
         'btnRefresh
         '
@@ -430,7 +452,14 @@ Partial Class Reservations
         Me.Panel4.PerformLayout()
         Me.ResumeLayout(False)
 
+      
+
     End Sub
+
+    ' ============================================================
+    ' ADD THIS LINE at the very bottom of the Designer.vb file
+    ' Right after the last "Friend WithEvents" declaration
+    ' ============================================================
 
     Friend WithEvents Panel1 As Panel
     Friend WithEvents lblTitle As Label
@@ -456,4 +485,5 @@ Partial Class Reservations
     Friend WithEvents Label1 As Label
     Friend WithEvents cboRecordsPerPage As ComboBox
     Friend WithEvents lblPageInfo As Label
+    Friend WithEvents btnViewCalendar As Button   ' <-- ADD THIS LINE
 End Class

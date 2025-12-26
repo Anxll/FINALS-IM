@@ -253,7 +253,7 @@ Public Class AdminDashboard
         Dim result As DialogResult = MessageBox.Show("Are you sure you want to log out?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
         If result = DialogResult.Yes Then
-            Panel1.Controls.Clear()
+            Application.Exit()
 
         End If
     End Sub
