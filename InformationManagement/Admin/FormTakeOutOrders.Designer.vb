@@ -23,7 +23,7 @@ Partial Class FormTakeOutOrders
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormTakeOutOrders))
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -40,6 +40,10 @@ Partial Class FormTakeOutOrders
         Me.Label3 = New System.Windows.Forms.Label()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
+        Me.PaginationContainer = New System.Windows.Forms.Panel()
+        Me.btnNext = New System.Windows.Forms.Button()
+        Me.btnPrev = New System.Windows.Forms.Button()
+        Me.lblPageStatus = New System.Windows.Forms.Label()
         Me.SearchContainer = New InformationManagement.RoundedPane2()
         Me.TextBoxSearch = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -47,10 +51,6 @@ Partial Class FormTakeOutOrders
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.LabelHeader = New System.Windows.Forms.Label()
         Me.LabelSubHeader = New System.Windows.Forms.Label()
-        Me.PaginationContainer = New System.Windows.Forms.Panel()
-        Me.btnNext = New System.Windows.Forms.Button()
-        Me.btnPrev = New System.Windows.Forms.Button()
-        Me.lblPageStatus = New System.Windows.Forms.Label()
         Me.RoundedPane21.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane22.SuspendLayout()
@@ -62,6 +62,208 @@ Partial Class FormTakeOutOrders
         Me.SearchContainer.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
+        '
+        'RoundedPane21
+        '
+        Me.RoundedPane21.BorderColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(249, Byte), Integer))
+        Me.RoundedPane21.BorderThickness = 1
+        Me.RoundedPane21.Controls.Add(Me.Label5)
+        Me.RoundedPane21.Controls.Add(Me.Label4)
+        Me.RoundedPane21.Controls.Add(Me.Label1)
+        Me.RoundedPane21.Controls.Add(Me.PictureBox1)
+        Me.RoundedPane21.CornerRadius = 15
+        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(133, Byte), Integer), CType(CType(244, Byte), Integer))
+        Me.RoundedPane21.Location = New System.Drawing.Point(30, 105)
+        Me.RoundedPane21.Name = "RoundedPane21"
+        Me.RoundedPane21.Size = New System.Drawing.Size(337, 125)
+        Me.RoundedPane21.TabIndex = 3
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.BackColor = System.Drawing.Color.Transparent
+        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.Label5.Location = New System.Drawing.Point(75, 50)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(90, 15)
+        Me.Label5.TabIndex = 2
+        Me.Label5.Text = "Total for Month"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.BackColor = System.Drawing.Color.Transparent
+        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
+        Me.Label4.ForeColor = System.Drawing.Color.White
+        Me.Label4.Location = New System.Drawing.Point(75, 75)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(56, 32)
+        Me.Label4.TabIndex = 1
+        Me.Label4.Text = "240"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.BackColor = System.Drawing.Color.Transparent
+        Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
+        Me.Label1.ForeColor = System.Drawing.Color.White
+        Me.Label1.Location = New System.Drawing.Point(75, 25)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(92, 20)
+        Me.Label1.TabIndex = 0
+        Me.Label1.Text = "Total Orders"
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(157, Byte), Integer), CType(CType(246, Byte), Integer))
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(20, 25)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(40, 40)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox1.TabIndex = 5
+        Me.PictureBox1.TabStop = False
+        '
+        'RoundedPane22
+        '
+        Me.RoundedPane22.BorderColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(249, Byte), Integer))
+        Me.RoundedPane22.BorderThickness = 1
+        Me.RoundedPane22.Controls.Add(Me.Label8)
+        Me.RoundedPane22.Controls.Add(Me.Label6)
+        Me.RoundedPane22.Controls.Add(Me.Label2)
+        Me.RoundedPane22.Controls.Add(Me.PictureBox2)
+        Me.RoundedPane22.CornerRadius = 15
+        Me.RoundedPane22.FillColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(77, Byte), Integer))
+        Me.RoundedPane22.Location = New System.Drawing.Point(384, 105)
+        Me.RoundedPane22.Name = "RoundedPane22"
+        Me.RoundedPane22.Size = New System.Drawing.Size(337, 125)
+        Me.RoundedPane22.TabIndex = 4
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.BackColor = System.Drawing.Color.Transparent
+        Me.Label8.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.Label8.Location = New System.Drawing.Point(75, 50)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(90, 15)
+        Me.Label8.TabIndex = 3
+        Me.Label8.Text = "Total for Month"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.BackColor = System.Drawing.Color.Transparent
+        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
+        Me.Label6.ForeColor = System.Drawing.Color.White
+        Me.Label6.Location = New System.Drawing.Point(75, 75)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(141, 32)
+        Me.Label6.TabIndex = 2
+        Me.Label6.Text = "₱85,420.00"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.BackColor = System.Drawing.Color.Transparent
+        Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
+        Me.Label2.ForeColor = System.Drawing.Color.White
+        Me.Label2.Location = New System.Drawing.Point(75, 25)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(105, 20)
+        Me.Label2.TabIndex = 0
+        Me.Label2.Text = "Total Revenue"
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(92, Byte), Integer), CType(CType(219, Byte), Integer), CType(CType(113, Byte), Integer))
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
+        Me.PictureBox2.Location = New System.Drawing.Point(20, 25)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(40, 40)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox2.TabIndex = 5
+        Me.PictureBox2.TabStop = False
+        '
+        'RoundedPane23
+        '
+        Me.RoundedPane23.BorderColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(249, Byte), Integer))
+        Me.RoundedPane23.BorderThickness = 1
+        Me.RoundedPane23.Controls.Add(Me.Label9)
+        Me.RoundedPane23.Controls.Add(Me.Label7)
+        Me.RoundedPane23.Controls.Add(Me.Label3)
+        Me.RoundedPane23.Controls.Add(Me.PictureBox3)
+        Me.RoundedPane23.CornerRadius = 15
+        Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(140, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.RoundedPane23.Location = New System.Drawing.Point(738, 105)
+        Me.RoundedPane23.Name = "RoundedPane23"
+        Me.RoundedPane23.Size = New System.Drawing.Size(337, 125)
+        Me.RoundedPane23.TabIndex = 5
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.BackColor = System.Drawing.Color.Transparent
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.Label9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.Label9.Location = New System.Drawing.Point(75, 50)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(85, 15)
+        Me.Label9.TabIndex = 2
+        Me.Label9.Text = "Average/Order"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.BackColor = System.Drawing.Color.Transparent
+        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
+        Me.Label7.ForeColor = System.Drawing.Color.White
+        Me.Label7.Location = New System.Drawing.Point(75, 75)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(106, 32)
+        Me.Label7.TabIndex = 1
+        Me.Label7.Text = "₱356.00"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.BackColor = System.Drawing.Color.Transparent
+        Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
+        Me.Label3.ForeColor = System.Drawing.Color.White
+        Me.Label3.Location = New System.Drawing.Point(75, 25)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(122, 20)
+        Me.Label3.TabIndex = 0
+        Me.Label3.Text = "Avg Order Value"
+        '
+        'PictureBox3
+        '
+        Me.PictureBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(252, Byte), Integer), CType(CType(166, Byte), Integer), CType(CType(5, Byte), Integer))
+        Me.PictureBox3.Image = CType(resources.GetObject("PictureBox3.Image"), System.Drawing.Image)
+        Me.PictureBox3.Location = New System.Drawing.Point(20, 25)
+        Me.PictureBox3.Name = "PictureBox3"
+        Me.PictureBox3.Size = New System.Drawing.Size(40, 40)
+        Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.PictureBox3.TabIndex = 5
+        Me.PictureBox3.TabStop = False
+        '
+        'RoundedPane24
+        '
+        Me.RoundedPane24.BorderColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(249, Byte), Integer))
+        Me.RoundedPane24.BorderThickness = 1
+        Me.RoundedPane24.Controls.Add(Me.PaginationContainer)
+        Me.RoundedPane24.Controls.Add(Me.SearchContainer)
+        Me.RoundedPane24.Controls.Add(Me.Button1)
+        Me.RoundedPane24.Controls.Add(Me.Label10)
+        Me.RoundedPane24.Controls.Add(Me.DataGridView1)
+        Me.RoundedPane24.CornerRadius = 15
+        Me.RoundedPane24.FillColor = System.Drawing.Color.White
+        Me.RoundedPane24.Location = New System.Drawing.Point(30, 255)
+        Me.RoundedPane24.Name = "RoundedPane24"
+        Me.RoundedPane24.Size = New System.Drawing.Size(1140, 463)
+        Me.RoundedPane24.TabIndex = 7
         '
         'PaginationContainer
         '
@@ -105,214 +307,12 @@ Partial Class FormTakeOutOrders
         '
         Me.lblPageStatus.AutoSize = True
         Me.lblPageStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblPageStatus.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139)
+        Me.lblPageStatus.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
         Me.lblPageStatus.Location = New System.Drawing.Point(0, 10)
         Me.lblPageStatus.Name = "lblPageStatus"
-        Me.lblPageStatus.Size = New System.Drawing.Size(125, 20)
+        Me.lblPageStatus.Size = New System.Drawing.Size(124, 15)
         Me.lblPageStatus.TabIndex = 0
         Me.lblPageStatus.Text = "Page 1 of 1 (0 records)"
-        '
-        'RoundedPane21
-        '
-        Me.RoundedPane21.BorderColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(249, Byte), Integer))
-        Me.RoundedPane21.BorderThickness = 1
-        Me.RoundedPane21.Controls.Add(Me.Label5)
-        Me.RoundedPane21.Controls.Add(Me.Label4)
-        Me.RoundedPane21.Controls.Add(Me.Label1)
-        Me.RoundedPane21.Controls.Add(Me.PictureBox1)
-        Me.RoundedPane21.CornerRadius = 15
-        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(250, Byte), Integer), CType(CType(252, Byte), Integer))
-        Me.RoundedPane21.Location = New System.Drawing.Point(30, 105)
-        Me.RoundedPane21.Name = "RoundedPane21"
-        Me.RoundedPane21.Size = New System.Drawing.Size(337, 125)
-        Me.RoundedPane21.TabIndex = 3
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.BackColor = System.Drawing.Color.Transparent
-        Me.Label5.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
-        Me.Label5.Location = New System.Drawing.Point(75, 50)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(112, 20)
-        Me.Label5.TabIndex = 2
-        Me.Label5.Text = "Total for Month"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.BackColor = System.Drawing.Color.Transparent
-        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
-        Me.Label4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
-        Me.Label4.Location = New System.Drawing.Point(75, 75)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(69, 41)
-        Me.Label4.TabIndex = 1
-        Me.Label4.Text = "240"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.BackColor = System.Drawing.Color.Transparent
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
-        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(75, 25)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(115, 25)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Total Orders"
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox1.Image = Global.InformationManagement.My.Resources.Resources.dashboard__1_
-        Me.PictureBox1.Location = New System.Drawing.Point(20, 25)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(40, 40)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox1.TabIndex = 5
-        Me.PictureBox1.TabStop = False
-        '
-        'RoundedPane22
-        '
-        Me.RoundedPane22.BorderColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(249, Byte), Integer))
-        Me.RoundedPane22.BorderThickness = 1
-        Me.RoundedPane22.Controls.Add(Me.Label8)
-        Me.RoundedPane22.Controls.Add(Me.Label6)
-        Me.RoundedPane22.Controls.Add(Me.Label2)
-        Me.RoundedPane22.Controls.Add(Me.PictureBox2)
-        Me.RoundedPane22.CornerRadius = 15
-        Me.RoundedPane22.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(250, Byte), Integer), CType(CType(252, Byte), Integer))
-        Me.RoundedPane22.Location = New System.Drawing.Point(384, 105)
-        Me.RoundedPane22.Name = "RoundedPane22"
-        Me.RoundedPane22.Size = New System.Drawing.Size(337, 125)
-        Me.RoundedPane22.TabIndex = 4
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.BackColor = System.Drawing.Color.Transparent
-        Me.Label8.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
-        Me.Label8.Location = New System.Drawing.Point(75, 50)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(112, 20)
-        Me.Label8.TabIndex = 3
-        Me.Label8.Text = "Total for Month"
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.BackColor = System.Drawing.Color.Transparent
-        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
-        Me.Label6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
-        Me.Label6.Location = New System.Drawing.Point(75, 75)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(172, 41)
-        Me.Label6.TabIndex = 2
-        Me.Label6.Text = "₱85,420.00"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.BackColor = System.Drawing.Color.Transparent
-        Me.Label2.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
-        Me.Label2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
-        Me.Label2.Location = New System.Drawing.Point(75, 25)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(131, 25)
-        Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Total Revenue"
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox2.Image = Global.InformationManagement.My.Resources.Resources.philippines_peso_currency_symbol__2_
-        Me.PictureBox2.Location = New System.Drawing.Point(20, 25)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(40, 40)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox2.TabIndex = 5
-        Me.PictureBox2.TabStop = False
-        '
-        'RoundedPane23
-        '
-        Me.RoundedPane23.BorderColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(249, Byte), Integer))
-        Me.RoundedPane23.BorderThickness = 1
-        Me.RoundedPane23.Controls.Add(Me.Label9)
-        Me.RoundedPane23.Controls.Add(Me.Label7)
-        Me.RoundedPane23.Controls.Add(Me.Label3)
-        Me.RoundedPane23.Controls.Add(Me.PictureBox3)
-        Me.RoundedPane23.CornerRadius = 15
-        Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(250, Byte), Integer), CType(CType(252, Byte), Integer))
-        Me.RoundedPane23.Location = New System.Drawing.Point(738, 105)
-        Me.RoundedPane23.Name = "RoundedPane23"
-        Me.RoundedPane23.Size = New System.Drawing.Size(337, 125)
-        Me.RoundedPane23.TabIndex = 5
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.BackColor = System.Drawing.Color.Transparent
-        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.Label9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
-        Me.Label9.Location = New System.Drawing.Point(75, 50)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(108, 20)
-        Me.Label9.TabIndex = 2
-        Me.Label9.Text = "Average/Order"
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.BackColor = System.Drawing.Color.Transparent
-        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Bold)
-        Me.Label7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
-        Me.Label7.Location = New System.Drawing.Point(75, 75)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(130, 41)
-        Me.Label7.TabIndex = 1
-        Me.Label7.Text = "₱356.00"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.BackColor = System.Drawing.Color.Transparent
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 11.0!, System.Drawing.FontStyle.Bold)
-        Me.Label3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(71, Byte), Integer), CType(CType(85, Byte), Integer), CType(CType(105, Byte), Integer))
-        Me.Label3.Location = New System.Drawing.Point(75, 25)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(152, 25)
-        Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Avg Order Value"
-        '
-        'PictureBox3
-        '
-        Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox3.Image = Global.InformationManagement.My.Resources.Resources.philippines_peso_currency_symbol__2_
-        Me.PictureBox3.Location = New System.Drawing.Point(20, 25)
-        Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(40, 40)
-        Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
-        Me.PictureBox3.TabIndex = 5
-        Me.PictureBox3.TabStop = False
-        '
-        'RoundedPane24
-        '
-        Me.RoundedPane24.BorderColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(249, Byte), Integer))
-        Me.RoundedPane24.BorderThickness = 1
-        Me.RoundedPane24.Controls.Add(Me.PaginationContainer)
-        Me.RoundedPane24.Controls.Add(Me.SearchContainer)
-        Me.RoundedPane24.Controls.Add(Me.Button1)
-        Me.RoundedPane24.Controls.Add(Me.Label10)
-        Me.RoundedPane24.Controls.Add(Me.DataGridView1)
-        Me.RoundedPane24.CornerRadius = 15
-        Me.RoundedPane24.FillColor = System.Drawing.Color.White
-        Me.RoundedPane24.Location = New System.Drawing.Point(30, 255)
-        Me.RoundedPane24.Name = "RoundedPane24"
-        Me.RoundedPane24.Size = New System.Drawing.Size(1140, 463)
-        Me.RoundedPane24.TabIndex = 7
         '
         'SearchContainer
         '
@@ -335,7 +335,7 @@ Partial Class FormTakeOutOrders
         Me.TextBoxSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(148, Byte), Integer), CType(CType(163, Byte), Integer), CType(CType(184, Byte), Integer))
         Me.TextBoxSearch.Location = New System.Drawing.Point(15, 12)
         Me.TextBoxSearch.Name = "TextBoxSearch"
-        Me.TextBoxSearch.Size = New System.Drawing.Size(250, 25)
+        Me.TextBoxSearch.Size = New System.Drawing.Size(250, 20)
         Me.TextBoxSearch.TabIndex = 0
         Me.TextBoxSearch.Text = "Search orders..."
         '
@@ -365,7 +365,7 @@ Partial Class FormTakeOutOrders
         Me.Label10.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
         Me.Label10.Location = New System.Drawing.Point(32, 28)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(154, 30)
+        Me.Label10.Size = New System.Drawing.Size(131, 25)
         Me.Label10.TabIndex = 7
         Me.Label10.Text = "Recent Orders"
         '
@@ -375,14 +375,14 @@ Partial Class FormTakeOutOrders
         Me.DataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.DataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None
         Me.DataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.White
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.White
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
         Me.DataGridView1.ColumnHeadersHeight = 40
         Me.DataGridView1.Location = New System.Drawing.Point(24, 85)
         Me.DataGridView1.Name = "DataGridView1"
@@ -397,7 +397,7 @@ Partial Class FormTakeOutOrders
         Me.LabelHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
         Me.LabelHeader.Location = New System.Drawing.Point(30, 25)
         Me.LabelHeader.Name = "LabelHeader"
-        Me.LabelHeader.Size = New System.Drawing.Size(494, 50)
+        Me.LabelHeader.Size = New System.Drawing.Size(405, 41)
         Me.LabelHeader.TabIndex = 8
         Me.LabelHeader.Text = "Takeout Order Management"
         '
@@ -408,13 +408,13 @@ Partial Class FormTakeOutOrders
         Me.LabelSubHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
         Me.LabelSubHeader.Location = New System.Drawing.Point(32, 68)
         Me.LabelSubHeader.Name = "LabelSubHeader"
-        Me.LabelSubHeader.Size = New System.Drawing.Size(417, 25)
+        Me.LabelSubHeader.Size = New System.Drawing.Size(321, 19)
         Me.LabelSubHeader.TabIndex = 9
         Me.LabelSubHeader.Text = "Monitor and manage takeout/pickup order records"
         '
         'FormTakeOutOrders
         '
-        Me.ClientSize = New System.Drawing.Size(1248, 796)
+        Me.ClientSize = New System.Drawing.Size(1248, 749)
         Me.Controls.Add(Me.LabelSubHeader)
         Me.Controls.Add(Me.LabelHeader)
         Me.Controls.Add(Me.RoundedPane24)
@@ -434,6 +434,8 @@ Partial Class FormTakeOutOrders
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane24.ResumeLayout(False)
         Me.RoundedPane24.PerformLayout()
+        Me.PaginationContainer.ResumeLayout(False)
+        Me.PaginationContainer.PerformLayout()
         Me.SearchContainer.ResumeLayout(False)
         Me.SearchContainer.PerformLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
