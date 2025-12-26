@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text
-Imports MySql.Data.MySqlClient
+Imports MySqlConnector
 
 Public Class DatabaseConfigManager
     ' Configuration paths

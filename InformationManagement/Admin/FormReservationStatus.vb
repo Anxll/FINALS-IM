@@ -35,9 +35,16 @@ Public Class FormReservationStatus
     ' =======================================================================
     Private Sub InitializeForm()
         Try
-            ' Set default period
+            ' Set default period based on global selection
             If ComboBox1.Items.Count > 0 Then
-                ComboBox1.SelectedIndex = 2 ' Monthly
+                Select Case Reports.SelectedPeriod
+                    Case "Daily" : ComboBox1.SelectedIndex = 0
+                    Case "Weekly" : ComboBox1.SelectedIndex = 1
+                    Case "Monthly" : ComboBox1.SelectedIndex = 2
+                    Case "Yearly" : ComboBox1.SelectedIndex = 3
+                    Case Else : ComboBox1.SelectedIndex = 2 ' Monthly default
+                End Select
+                filterPeriod = Reports.SelectedPeriod
             End If
 
             ' Configure chart colors

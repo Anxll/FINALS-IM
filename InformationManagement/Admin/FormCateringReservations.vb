@@ -1,146 +1,177 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports MySqlConnector
+Imports System.Threading.Tasks
+Imports System.Collections.Generic
 
 Public Class FormCateringReservations
-    ' Database connection string
-    Private connectionString As String = "Server=localhost;Database=tabeya_system;Uid=root;Pwd=;"
+    ' Database connection string using global modDB
+    Private connectionString As String = modDB.strConnection
 
-    Private Sub FormCateringReservations_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub FormCateringReservations_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Initialize ComboBox with filter options
         ComboBox1.Items.Clear()
         ComboBox1.Items.AddRange(New String() {"Daily", "Weekly", "Monthly"})
         ComboBox1.SelectedIndex = 0 ' Default to Daily
 
-        ' Load initial data
-        LoadReservationSummary()
-        LoadReservationBreakdown()
+        ' Load initial data asynchronously
+        Await RefreshAnalyticsAsync()
     End Sub
 
-    Private Sub LoadReservationSummary()
+    Private Async Function RefreshAnalyticsAsync() As Task
         Try
-            Using conn As New MySqlConnection(connectionString)
-                conn.Open()
-
-                ' Get Total Reservations count
-                Dim cmdTotalReservations As New MySqlCommand("SELECT COUNT(*) FROM reservations", conn)
-                Dim totalReservations As Integer = Convert.ToInt32(cmdTotalReservations.ExecuteScalar())
-                Label5.Text = totalReservations.ToString()
-
-                ' Get Total Events (assuming ReservationStatus = 'Confirmed')
-                Dim cmdTotalEvents As New MySqlCommand("SELECT COUNT(*) FROM reservations WHERE ReservationStatus = 'Confirmed'", conn)
-                Dim totalEvents As Integer = Convert.ToInt32(cmdTotalEvents.ExecuteScalar())
-                Label6.Text = totalEvents.ToString()
-
-                ' Calculate Average Event Value from actual payments
-                Dim cmdAvgValue As New MySqlCommand("
-                    SELECT AVG(TotalPaid) 
-                    FROM (
-                        SELECT ReservationID, SUM(AmountPaid) AS TotalPaid
-                        FROM reservation_payments
-                        GROUP BY ReservationID
-                    ) AS totals
-                ", conn)
-
-                Dim avgValue As Object = cmdAvgValue.ExecuteScalar()
-                Label7.Text = If(avgValue IsNot Nothing AndAlso Not IsDBNull(avgValue),
-                                 "₱" & Convert.ToDecimal(avgValue).ToString("N2"),
-                                 "₱0.00")
-
-            End Using
+            ' Run database queries concurrently
+            Dim summaryTask As Task = LoadReservationSummaryAsync()
+            Dim breakdownTask As Task = LoadReservationBreakdownAsync()
+            
+            Await Task.WhenAll(summaryTask, breakdownTask)
+            
         Catch ex As Exception
-            MessageBox.Show("Error loading reservation summary: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error refreshing catering analytics: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
-    End Sub
+    End Function
 
-    Private Sub LoadReservationBreakdown()
+    Private Async Function LoadReservationSummaryAsync() As Task
         Try
-            Using conn As New MySqlConnection(connectionString)
-                conn.Open()
+            Dim totalReservations As Integer = 0
+            Dim totalEvents As Integer = 0
+            Dim avgValue As Decimal = 0
 
-                ' Clear existing rows
+            Await Task.Run(Sub()
+                Using conn As New MySqlConnection(connectionString)
+                    conn.Open()
+
+                    ' Get Total Reservations count
+                    Dim cmdTotalReservations As New MySqlCommand("SELECT COUNT(*) FROM reservations", conn)
+                    totalReservations = Convert.ToInt32(cmdTotalReservations.ExecuteScalar())
+
+                    ' Get Total Events (Confirmed)
+                    Dim cmdTotalEvents As New MySqlCommand("SELECT COUNT(*) FROM reservations WHERE ReservationStatus = 'Confirmed'", conn)
+                    totalEvents = Convert.ToInt32(cmdTotalEvents.ExecuteScalar())
+
+                    ' Calculate Average Event Value
+                    Dim cmdAvgValue As New MySqlCommand("
+                        SELECT AVG(TotalPaid) 
+                        FROM (
+                            SELECT ReservationID, SUM(AmountPaid) AS TotalPaid
+                            FROM reservation_payments
+                            GROUP BY ReservationID
+                        ) AS totals
+                    ", conn)
+
+                    Dim result As Object = cmdAvgValue.ExecuteScalar()
+                    avgValue = If(result IsNot Nothing AndAlso Not IsDBNull(result), Convert.ToDecimal(result), 0D)
+                End Using
+            End Sub)
+
+            ' Update UI on UI thread
+            Me.Invoke(Sub()
+                Label5.Text = totalReservations.ToString("N0")
+                Label6.Text = totalEvents.ToString("N0")
+                Label7.Text = "₱" & avgValue.ToString("N2")
+            End Sub)
+
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
+    Private Async Function LoadReservationBreakdownAsync() As Task
+        Try
+            Dim dt As New DataTable()
+            Dim selectedFilter As String = ""
+            
+            Me.Invoke(Sub() selectedFilter = If(ComboBox1.SelectedItem IsNot Nothing, ComboBox1.SelectedItem.ToString(), "Daily"))
+
+            Await Task.Run(Sub()
+                Using conn As New MySqlConnection(connectionString)
+                    conn.Open()
+
+                    Dim query As String = ""
+                    Select Case selectedFilter
+                        Case "Daily"
+                            query = "
+                                SELECT 
+                                    DATE(r.EventDate) AS Period, 
+                                    COUNT(*) AS ReservationCount, 
+                                    SUM(r.NumberOfGuests) AS TotalGuests, 
+                                    COALESCE(SUM(p.TotalPaid), 0) AS TotalAmount 
+                                FROM reservations r
+                                LEFT JOIN (
+                                    SELECT ReservationID, SUM(AmountPaid) AS TotalPaid
+                                    FROM reservation_payments
+                                    GROUP BY ReservationID
+                                ) AS p ON p.ReservationID = r.ReservationID
+                                GROUP BY DATE(r.EventDate)
+                                ORDER BY Period DESC 
+                                LIMIT 20"
+
+                        Case "Weekly"
+                            query = "
+                                SELECT 
+                                    CONCAT(YEAR(r.EventDate), '-W', LPAD(WEEK(r.EventDate), 2, '0')) AS Period, 
+                                    COUNT(*) AS ReservationCount, 
+                                    SUM(r.NumberOfGuests) AS TotalGuests, 
+                                    COALESCE(SUM(p.TotalPaid), 0) AS TotalAmount
+                                FROM reservations r
+                                LEFT JOIN (
+                                    SELECT ReservationID, SUM(AmountPaid) AS TotalPaid
+                                    FROM reservation_payments
+                                    GROUP BY ReservationID
+                                ) AS p ON p.ReservationID = r.ReservationID
+                                GROUP BY YEAR(r.EventDate), WEEK(r.EventDate)
+                                ORDER BY YEAR(r.EventDate) DESC, WEEK(r.EventDate) DESC 
+                                LIMIT 20"
+
+                        Case "Monthly"
+                            query = "
+                                SELECT 
+                                    DATE_FORMAT(r.EventDate, '%Y-%m') AS Period, 
+                                    COUNT(*) AS ReservationCount, 
+                                    SUM(r.NumberOfGuests) AS TotalGuests, 
+                                    COALESCE(SUM(p.TotalPaid), 0) AS TotalAmount
+                                FROM reservations r
+                                LEFT JOIN (
+                                    SELECT ReservationID, SUM(AmountPaid) AS TotalPaid
+                                    FROM reservation_payments
+                                    GROUP BY ReservationID
+                                ) AS p ON p.ReservationID = r.ReservationID
+                                GROUP BY YEAR(r.EventDate), MONTH(r.EventDate)
+                                ORDER BY Period DESC 
+                                LIMIT 20"
+                    End Select
+
+                    Using cmd As New MySqlCommand(query, conn)
+                        Using adapter As New MySqlDataAdapter(cmd)
+                            adapter.Fill(dt)
+                        End Using
+                    End Using
+                End Using
+            End Sub)
+
+            ' Update UI on UI thread
+            Me.Invoke(Sub()
                 DataGridView1.Rows.Clear()
+                For Each row As DataRow In dt.Rows
+                    Dim period As String = row("Period").ToString()
+                    Dim count As Integer = Convert.ToInt32(row("ReservationCount"))
+                    Dim guests As Integer = Convert.ToInt32(row("TotalGuests"))
+                    Dim amount As Decimal = Convert.ToDecimal(row("TotalAmount"))
+                    
+                    DataGridView1.Rows.Add(period, count, guests, "₱" & amount.ToString("N2"))
+                Next
+            End Sub)
 
-                Dim query As String = ""
-                Dim selectedFilter As String = If(ComboBox1.SelectedItem IsNot Nothing, ComboBox1.SelectedItem.ToString(), "Daily")
-
-                Select Case selectedFilter
-                    Case "Daily"
-                        ' Group by day
-                        query = "
-                            SELECT 
-                                DATE(r.EventDate) AS Period, 
-                                COUNT(*) AS ReservationCount, 
-                                SUM(r.NumberOfGuests) AS TotalGuests, 
-                                COALESCE(SUM(p.TotalPaid), 0) AS TotalAmount 
-                            FROM reservations r
-                            LEFT JOIN (
-                                SELECT ReservationID, SUM(AmountPaid) AS TotalPaid
-                                FROM reservation_payments
-                                GROUP BY ReservationID
-                            ) AS p ON p.ReservationID = r.ReservationID
-                            GROUP BY DATE(r.EventDate)
-                            ORDER BY Period DESC 
-                            LIMIT 10"
-
-                    Case "Weekly"
-                        ' Group by week
-                        query = "
-                            SELECT 
-                                CONCAT(YEAR(r.EventDate), '-W', LPAD(WEEK(r.EventDate), 2, '0')) AS Period, 
-                                COUNT(*) AS ReservationCount, 
-                                SUM(r.NumberOfGuests) AS TotalGuests, 
-                                COALESCE(SUM(p.TotalPaid), 0) AS TotalAmount
-                            FROM reservations r
-                            LEFT JOIN (
-                                SELECT ReservationID, SUM(AmountPaid) AS TotalPaid
-                                FROM reservation_payments
-                                GROUP BY ReservationID
-                            ) AS p ON p.ReservationID = r.ReservationID
-                            GROUP BY YEAR(r.EventDate), WEEK(r.EventDate)
-                            ORDER BY YEAR(r.EventDate) DESC, WEEK(r.EventDate) DESC 
-                            LIMIT 10"
-
-                    Case "Monthly"
-                        ' Group by month
-                        query = "
-                            SELECT 
-                                DATE_FORMAT(r.EventDate, '%Y-%m') AS Period, 
-                                COUNT(*) AS ReservationCount, 
-                                SUM(r.NumberOfGuests) AS TotalGuests, 
-                                COALESCE(SUM(p.TotalPaid), 0) AS TotalAmount
-                            FROM reservations r
-                            LEFT JOIN (
-                                SELECT ReservationID, SUM(AmountPaid) AS TotalPaid
-                                FROM reservation_payments
-                                GROUP BY ReservationID
-                            ) AS p ON p.ReservationID = r.ReservationID
-                            GROUP BY YEAR(r.EventDate), MONTH(r.EventDate)
-                            ORDER BY Period DESC 
-                            LIMIT 10"
-                End Select
-
-                Dim cmd As New MySqlCommand(query, conn)
-                Dim reader As MySqlDataReader = cmd.ExecuteReader()
-
-                While reader.Read()
-                    Dim period As String = reader("Period").ToString()
-                    Dim reservationCount As Integer = Convert.ToInt32(reader("ReservationCount"))
-                    Dim totalGuests As Integer = Convert.ToInt32(reader("TotalGuests"))
-                    Dim totalAmount As Decimal = If(IsDBNull(reader("TotalAmount")), 0D, Convert.ToDecimal(reader("TotalAmount")))
-
-                    DataGridView1.Rows.Add(period, reservationCount, totalGuests, "₱" & totalAmount.ToString("N2"))
-                End While
-
-                reader.Close()
-
-            End Using
         Catch ex As Exception
-            MessageBox.Show("Error loading reservation breakdown: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Throw ex
         End Try
-    End Sub
+    End Function
 
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        ' Reload data when filter changes
-        LoadReservationBreakdown()
+    Private Async Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        ' Reload breakdown when filter changes
+        Try
+            Await LoadReservationBreakdownAsync()
+        Catch ex As Exception
+            ' Error handled in parent but for safety
+        End Try
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Export.Click
@@ -175,10 +206,9 @@ Public Class FormCateringReservations
                                     Dim cellVal As Object = row.Cells(column.Index).Value
                                     Dim cellValue As String = If(cellVal IsNot Nothing, cellVal.ToString(), "")
 
-                                    ' Remove currency symbols and format properly
-                                    cellValue = cellValue.Replace("₱", "").Trim()
+                                    ' Clean up for CSV
+                                    cellValue = cellValue.Replace("₱", "").Replace(",", "").Trim()
 
-                                    ' Escape commas and quotes
                                     If cellValue.Contains(",") OrElse cellValue.Contains("""") Then
                                         cellValue = """" & cellValue.Replace("""", """""") & """"
                                     End If
@@ -191,9 +221,6 @@ Public Class FormCateringReservations
                 End Using
 
                 MessageBox.Show("Catering reservations report exported successfully!", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-                ' Open file location
-                Process.Start("explorer.exe", String.Format("/select,""{0}""", saveDialog.FileName))
             End If
 
         Catch ex As Exception

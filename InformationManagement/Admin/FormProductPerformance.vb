@@ -69,21 +69,56 @@ Public Class FormProductPerformance
                 .Location = New Point(comboViewType.Right + 10, comboViewType.Top)
                 .Size = New Size(150, 30)
                 .DropDownStyle = ComboBoxStyle.DropDownList
-                .Items.AddRange(New String() {
-                    "All Categories",
-                    "Platter",
-                    "Rice Meal",
-                    "Spaghetti Meals",
-                    "Snacks",
-                    "Dessert",
-                    "Drinks"
-                })
-                .SelectedIndex = 0
                 .Font = New Font("Segoe UI", 9.0F)
             End With
             RoundedPane21.Controls.Add(comboCategory)
+
+            ' Load categories dynamically from database
+            LoadCategories(comboCategory)
+
             AddHandler comboCategory.SelectedIndexChanged, AddressOf ComboBoxCategory_SelectedIndexChanged
         End If
+    End Sub
+
+    Private Sub LoadCategories(comboBox As ComboBox)
+        Try
+            comboBox.Items.Clear()
+            comboBox.Items.Add("All Categories")
+
+            ' Fetch distinct categories from database
+            Dim query As String = "SELECT DISTINCT Category FROM products WHERE Category IS NOT NULL AND Category <> '' ORDER BY Category"
+
+            Using connection As New MySqlConnection(strConnection)
+                connection.Open()
+                Using command As New MySqlCommand(query, connection)
+                    Using reader = command.ExecuteReader()
+                        While reader.Read()
+                            Dim category = reader("Category").ToString().Trim()
+                            If Not String.IsNullOrWhiteSpace(category) Then
+                                comboBox.Items.Add(category)
+                            End If
+                        End While
+                    End Using
+                End Using
+            End Using
+
+            comboBox.SelectedIndex = 0
+        Catch ex As Exception
+            ' Fallback to hardcoded categories if database query fails
+            comboBox.Items.AddRange(New String() {
+                "All Categories",
+                "Platter",
+                "Rice Meal",
+                "Spaghetti Meals",
+                "Snacks",
+                "Dessert",
+                "Drinks"
+            })
+            comboBox.SelectedIndex = 0
+
+            MessageBox.Show($"Could not load categories from database. Using default categories.{Environment.NewLine}{ex.Message}",
+                            "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End Try
     End Sub
 
     Private Sub ComboBoxViewType_SelectedIndexChanged(sender As Object, e As EventArgs)
@@ -153,14 +188,29 @@ Public Class FormProductPerformance
         })
     End Sub
 
-    Private Sub LoadProductPerformance()
+    Private Async Sub LoadProductPerformance()
         Try
-            Dim performanceData = FetchProductPerformanceData()
+            ' Disable refresh while loading
+            Dim comboViewType = TryCast(RoundedPane21.Controls("ComboBoxViewType"), ComboBox)
+            If comboViewType IsNot Nothing Then comboViewType.Enabled = False
+
+            Dim periodText = $"({Reports.SelectedPeriod})"
+            Dim filterText = If(viewType = "Product" AndAlso selectedCategory <> "All Categories", $" - {selectedCategory}", "")
+            Dim viewTypeText = If(viewType = "Category", "by Category", "by Product")
+
+            Chart1.Titles(0).Text = $"Loading {viewTypeText} {periodText}..."
+
+            ' Fetch data asynchronously
+            Dim performanceData = Await Task.Run(Function() FetchProductPerformanceData())
+
             UpdateChart(performanceData)
             UpdateSummaryTiles(performanceData)
+
+            If comboViewType IsNot Nothing Then comboViewType.Enabled = True
         Catch ex As Exception
             MessageBox.Show($"Unable to load product performance.{Environment.NewLine}{ex.Message}",
                             "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Chart1.Titles(0).Text = "Error Loading Data"
         End Try
     End Sub
 
@@ -190,7 +240,12 @@ Public Class FormProductPerformance
 
         Dim groupByColumn As String = If(viewType = "Category", "p.Category", "p.ProductName")
         Dim selectItems As String = If(viewType = "Category", "p.Category AS DisplayName", "p.ProductName AS DisplayName")
-        Dim categoryFilterLine As String = If(viewType = "Product" AndAlso selectedCategory <> "All Categories", " AND p.Category = @Category", "")
+
+        ' Fix: Use TRIM to remove any extra spaces and make category comparison case-insensitive
+        Dim categoryFilterLine As String = ""
+        If viewType = "Product" AndAlso selectedCategory <> "All Categories" Then
+            categoryFilterLine = " AND TRIM(p.Category) = @Category"
+        End If
 
         Dim query As String =
 $"SELECT DisplayName,
@@ -203,7 +258,7 @@ $"SELECT DisplayName,
                SUM(ri.TotalPrice) AS Revenue
         FROM reservation_items ri
         INNER JOIN reservations r ON ri.ReservationID = r.ReservationID
-        INNER JOIN products p ON ri.ProductName = p.ProductName
+        INNER JOIN products p ON TRIM(ri.ProductName) = TRIM(p.ProductName)
         WHERE r.ReservationStatus IN ('Confirmed', 'Served')
         {whereClauseReservations}
         {categoryFilterLine}
@@ -217,7 +272,7 @@ $"SELECT DisplayName,
                SUM(oi.Quantity * (CASE WHEN oi.UnitPrice > 0 THEN oi.UnitPrice ELSE p.Price END)) AS Revenue
         FROM order_items oi
         INNER JOIN orders o ON oi.OrderID = o.OrderID
-        INNER JOIN products p ON oi.ProductName = p.ProductName
+        INNER JOIN products p ON TRIM(oi.ProductName) = TRIM(p.ProductName)
         WHERE o.OrderStatus IN ('Served', 'Completed')
         {whereClauseOrders}
         {categoryFilterLine}
@@ -238,7 +293,7 @@ $"SELECT DisplayName,
             connection.Open()
             Using command As New MySqlCommand(query, connection)
                 If viewType = "Product" AndAlso selectedCategory <> "All Categories" Then
-                    command.Parameters.AddWithValue("@Category", selectedCategory)
+                    command.Parameters.AddWithValue("@Category", selectedCategory.Trim())
                 End If
                 Using reader = command.ExecuteReader()
                     dt.Load(reader)
@@ -261,8 +316,38 @@ $"SELECT DisplayName,
         For Each row As DataRow In data.Rows
             Dim displayName = row("DisplayName").ToString()
             Dim revenue = If(IsDBNull(row("Revenue")), 0D, Convert.ToDecimal(row("Revenue")))
-            series.Points.AddXY(displayName, revenue)
+
+            Dim pointIndex = series.Points.AddXY(displayName, revenue)
+            ' Add some visual polish to the points
+            Dim point = series.Points(pointIndex)
+            point.ToolTip = $"{displayName}: {String.Format(currencyCulture, "{0:C0}", revenue)}"
         Next
+
+        ' Smart label density
+        If data.Rows.Count <= 12 Then
+            series.IsValueShownAsLabel = True
+            series.LabelFormat = "₱#,##0"
+            series.LabelForeColor = Color.FromArgb(71, 85, 105)
+        Else
+            series.IsValueShownAsLabel = False
+        End If
+
+        ' Axis and Scrolling
+        Dim chartArea = Chart1.ChartAreas(0)
+        chartArea.AxisX.Interval = 1
+        chartArea.AxisX.LabelStyle.Font = New Font("Segoe UI", 9.0!)
+        
+        If data.Rows.Count > 15 Then
+            chartArea.AxisX.ScrollBar.Enabled = True
+            chartArea.AxisX.ScaleView.Zoomable = True
+            chartArea.AxisX.ScaleView.Size = 15
+            chartArea.AxisX.ScaleView.Position = 1
+            chartArea.AxisX.LabelStyle.Angle = -45
+        Else
+            chartArea.AxisX.ScrollBar.Enabled = False
+            chartArea.AxisX.ScaleView.ZoomReset()
+            chartArea.AxisX.LabelStyle.Angle = If(data.Rows.Count > 8, -45, 0)
+        End If
 
         Dim periodText = $"({Reports.SelectedPeriod})"
         Dim filterText = If(viewType = "Product" AndAlso selectedCategory <> "All Categories", $" - {selectedCategory}", "")

@@ -11,11 +11,25 @@ Public Class FormDineInOrders
     Private _lastRefresh As DateTime = DateTime.MinValue
     Private ReadOnly _cacheTimeout As TimeSpan = TimeSpan.FromSeconds(30)
 
-    Private Sub FormDineInOrders_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        InitializeModernUI()
-        ConfigureGrid()
-        _baseTitle = Label2.Text
-        BeginLoadDineInOrders()
+    ' Pagination state
+    Private _currentPage As Integer = 1
+    Private ReadOnly _pageSize As Integer = 50
+    Private _totalRecords As Integer = 0
+    Private _totalPages As Integer = 0
+
+    Private originalData As DataTable
+    Private isInitialLoad As Boolean = True
+
+    Private Async Sub FormDineInOrders_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Set initial loading state
+        Label4.Text = "..."
+        Label6.Text = "..."
+        Label7.Text = "..."
+
+        _baseTitle = LabelHeader.Text
+        _currentPage = 1
+        Await BeginLoadDineInOrders()
+        isInitialLoad = False
     End Sub
 
     Private Sub InitializeModernUI()
@@ -23,39 +37,38 @@ Public Class FormDineInOrders
         Me.DoubleBuffered = True
         Me.SetStyle(ControlStyles.OptimizedDoubleBuffer Or ControlStyles.AllPaintingInWmPaint, True)
 
-        ' Modern DataGridView styling
+        ' modern DataGridView styling
         With DataGridView1
             .BorderStyle = BorderStyle.None
             .CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal
             .BackgroundColor = Color.White
-            .GridColor = Color.FromArgb(240, 240, 240)
-            .RowTemplate.Height = 45
+            .GridColor = Color.FromArgb(241, 245, 249)
+            .RowTemplate.Height = 50
             .EnableHeadersVisualStyles = False
             .AllowUserToResizeRows = False
 
-            ' Modern header style
-            .ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(52, 73, 94)
-            .ColumnHeadersDefaultCellStyle.ForeColor = Color.White
-            .ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+            ' modern header style
+            .ColumnHeadersDefaultCellStyle.BackColor = Color.White
+            .ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(71, 85, 105)
+            .ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI Semibold", 10)
             .ColumnHeadersDefaultCellStyle.Padding = New Padding(5)
             .ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
             .ColumnHeadersHeight = 50
 
-            ' Modern row style
-            .DefaultCellStyle.Font = New Font("Segoe UI", 9.5F)
-            .DefaultCellStyle.SelectionBackColor = Color.FromArgb(52, 152, 219)
-            .DefaultCellStyle.SelectionForeColor = Color.White
+            ' modern row style
+            .DefaultCellStyle.Font = New Font("Segoe UI", 10)
+            .DefaultCellStyle.SelectionBackColor = Color.FromArgb(248, 250, 252)
+            .DefaultCellStyle.SelectionForeColor = Color.FromArgb(99, 102, 241)
             .DefaultCellStyle.BackColor = Color.White
-            .DefaultCellStyle.ForeColor = Color.FromArgb(44, 62, 80)
+            .DefaultCellStyle.ForeColor = Color.FromArgb(30, 41, 59)
             .DefaultCellStyle.Padding = New Padding(5, 8, 5, 8)
 
-            ' Alternating row colors for better readability
-            .AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 249, 250)
-            .AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(41, 128, 185)
+            ' Alternating row colors removed for premium clean look
+            .AlternatingRowsDefaultCellStyle.BackColor = Color.White
         End With
 
         ' Style the export button
-        StyleButton(Export)
+        StyleButton(Button1)
 
         ' Style the label
         Label2.Font = New Font("Segoe UI", 14, FontStyle.Bold)
@@ -73,82 +86,190 @@ Public Class FormDineInOrders
         btn.FlatAppearance.MouseDownBackColor = Color.FromArgb(34, 153, 84)
     End Sub
 
-    Private Async Sub BeginLoadDineInOrders()
+    Private Async Function BeginLoadDineInOrders() As Task
         If _isLoading Then Return
-
-        ' Use cached data if available and fresh
-        If _dataCache IsNot Nothing AndAlso (DateTime.Now - _lastRefresh) < _cacheTimeout Then
-            DataGridView1.DataSource = _dataCache
-            ConfigureGrid()
-            ' FIXED: Apply colors when using cached data too
-            ApplyStatusColors()
-            Return
-        End If
 
         _isLoading = True
         SetLoadingState(True)
 
         Try
-            Dim table As DataTable = Await Task.Run(Function() FetchDineInOrdersTable())
+            Dim searchText As String = TextBoxSearch.Text.Trim()
+            If searchText = "Search orders..." Then searchText = ""
+
+            ' Get total count with filter
+            _totalRecords = Await Task.Run(Function() FetchTotalDineInCount(searchText))
+            _totalPages = Math.Ceiling(_totalRecords / _pageSize)
+            If _totalPages = 0 Then _totalPages = 1
+            If _currentPage > _totalPages Then _currentPage = _totalPages
+
+            Dim offset As Integer = (_currentPage - 1) * _pageSize
+            Dim table As DataTable = Await Task.Run(Function() FetchDineInOrdersTable(searchText, offset, _pageSize))
 
             If Me.IsDisposed OrElse Not Me.IsHandleCreated Then Return
 
-            ' Cache the data
             _dataCache = table
             _lastRefresh = DateTime.Now
 
             DataGridView1.DataSource = table
             ConfigureGrid()
-
-            ' FIXED: Force refresh and apply colors after binding is complete
-            DataGridView1.Refresh()
-            Application.DoEvents()
             ApplyStatusColors()
-
-            If DataGridView1.Rows.Count > 0 Then
-                DataGridView1.FirstDisplayedScrollingRowIndex = 0
-            End If
+            ' UpdatePaginationUI() ' This function is not yet defined, will be added later
+            UpdateSummaryTiles(table) ' We'll update summary based on current page or we might need another query for total stats.
+            ' For now, keeping it simple with current page stats or total if needed.
         Catch ex As Exception
             If Not Me.IsDisposed Then
-                MessageBox.Show("Error loading dine-in orders: " & ex.Message, "Database Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Error refreshing dine-in orders: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
         Finally
             If Not Me.IsDisposed Then SetLoadingState(False)
             _isLoading = False
         End Try
-    End Sub
+    End Function
 
-    Private Function FetchDineInOrdersTable() As DataTable
-        ' OPTIMIZED QUERY - Removed index hints for compatibility
-        Dim query As String =
-            "SELECT " &
-            "  o.OrderID, " &
-            "  (SELECT GROUP_CONCAT(CONCAT(oi2.Quantity, 'x ', oi2.ProductName) SEPARATOR ', ') " &
-            "   FROM order_items oi2 " &
-            "   WHERE oi2.OrderID = o.OrderID " &
-            "   LIMIT 10) AS ItemsOrdered, " &
-            "  o.TotalAmount, " &
-            "  o.OrderStatus AS Status, " &
-            "  DATE_FORMAT(CONCAT(o.OrderDate, ' ', o.OrderTime), '%Y-%m-%d %H:%i') AS OrderDateTime " &
-            "FROM orders o " &
-            "WHERE o.OrderType = 'Dine-in' " &
-            "ORDER BY o.OrderID DESC " &
-            "LIMIT 300;"
+    Private Function FetchTotalDineInCount(searchText As String) As Integer
+        ' Get period filter from Reports form
+        Dim periodFilter As String = ""
+        Select Case Reports.SelectedPeriod
+            Case "Daily"
+                periodFilter = " AND DATE(OrderDate) = CURDATE() "
+            Case "Weekly"
+                periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+            Case "Monthly"
+                periodFilter = " AND MONTH(OrderDate) = MONTH(CURDATE()) AND YEAR(OrderDate) = YEAR(CURDATE()) "
+            Case "Yearly"
+                periodFilter = " AND YEAR(OrderDate) = YEAR(CURDATE()) "
+        End Select
 
+        Dim query As String = "SELECT COUNT(*) FROM orders WHERE OrderType = 'Dine-in' " & periodFilter & " AND (OrderID LIKE @search OR OrderStatus LIKE @search)"
         Using conn As New MySqlConnection(connectionString)
             conn.Open()
             Using cmd As New MySqlCommand(query, conn)
-                cmd.CommandTimeout = 20
-                Using adapter As New MySqlDataAdapter(cmd)
-                    adapter.SelectCommand.CommandType = CommandType.Text
-                    Dim table As New DataTable()
-                    adapter.Fill(table)
-                    Return table
-                End Using
+                cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
+                Return Convert.ToInt32(cmd.ExecuteScalar())
             End Using
         End Using
     End Function
+
+    Private Function FetchDineInOrdersTable(searchText As String, offset As Integer, limit As Integer) As DataTable
+        ' Get period filter from Reports form
+        Dim periodFilter As String = ""
+        Select Case Reports.SelectedPeriod
+            Case "Daily"
+                periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
+            Case "Weekly"
+                periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+            Case "Monthly"
+                periodFilter = " AND MONTH(o.OrderDate) = MONTH(CURDATE()) AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
+            Case "Yearly"
+                periodFilter = " AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
+        End Select
+
+        ' Build query with LIMIT, OFFSET and search
+        Dim query As String =
+            "SELECT " &
+            "o.OrderID, " &
+            "CONCAT('#', o.OrderID) AS OrderNumber, " &
+            "(SELECT GROUP_CONCAT(CONCAT(oi2.Quantity, 'x ', oi2.ProductName) SEPARATOR ', ') " &
+            "   FROM order_items oi2 " &
+            "   WHERE oi2.OrderID = o.OrderID " &
+            "   LIMIT 10) AS ItemsOrdered, " &
+            "o.TotalAmount, " &
+            "o.OrderStatus AS Status, " &
+            "DATE_FORMAT(CONCAT(o.OrderDate, ' ', o.OrderTime), '%Y-%m-%d %H:%i') AS OrderDateTime " &
+            "FROM orders o " &
+            "WHERE o.OrderType = 'Dine-in' " & periodFilter & " AND (o.OrderID LIKE @search OR o.OrderStatus LIKE @search) " &
+            "ORDER BY o.OrderDate DESC, o.OrderTime DESC " &
+            "LIMIT @limit OFFSET @offset"
+
+        Dim dt As New DataTable()
+        Using conn As New MySqlConnection(connectionString)
+            conn.Open()
+            Using cmd As New MySqlCommand(query, conn)
+                cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
+                cmd.Parameters.AddWithValue("@limit", limit)
+                cmd.Parameters.AddWithValue("@offset", offset)
+                Using adapter As New MySqlDataAdapter(cmd)
+                    adapter.Fill(dt)
+                End Using
+            End Using
+        End Using
+        Return dt
+    End Function
+
+    Private Sub UpdateSummaryTiles(dt As DataTable)
+        Try
+            Dim totalOrders As Integer = dt.Rows.Count
+            Dim totalRevenue As Decimal = 0
+            Dim avgOrderValue As Decimal = 0
+
+            For Each row As DataRow In dt.Rows
+                If Not IsDBNull(row("TotalAmount")) Then
+                    totalRevenue += Convert.ToDecimal(row("TotalAmount"))
+                End If
+            Next
+
+            If totalOrders > 0 Then
+                avgOrderValue = totalRevenue / totalOrders
+            End If
+
+            ' Safe UI updates
+            Label4.Text = totalOrders.ToString("N0")
+            Label6.Text = "₱" & totalRevenue.ToString("N2")
+            Label7.Text = "₱" & avgOrderValue.ToString("N2")
+
+        Catch ex As Exception
+            ' Silent fail for stats
+        End Try
+    End Sub
+
+    ' =============================
+    ' SEARCH FUNCTIONALITY
+    ' =============================
+    Private Sub TextBoxSearch_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearch.TextChanged
+        If isInitialLoad OrElse originalData Is Nothing Then Return
+
+        Dim filter = TextBoxSearch.Text.Trim()
+        If filter = "Search orders..." OrElse String.IsNullOrEmpty(filter) Then
+            DataGridView1.DataSource = originalData
+        Else
+            Try
+                Dim dv As New DataView(originalData)
+                dv.RowFilter = String.Format("OrderID = {0} OR Status LIKE '%{1}%'", If(IsNumeric(filter), filter, -1), filter)
+                DataGridView1.DataSource = dv
+            Catch
+                ' Fallback
+            End Try
+        End If
+
+        Try
+            Dim dataSource = DataGridView1.DataSource
+            If TypeOf dataSource Is DataView Then
+                UpdateSummaryTiles(CType(dataSource, DataView).ToTable())
+            ElseIf TypeOf dataSource Is DataTable Then
+                UpdateSummaryTiles(CType(dataSource, DataTable))
+            End If
+        Catch
+        End Try
+        ApplyStatusColors()
+    End Sub
+
+    Private Sub TextBoxSearch_Enter(sender As Object, e As EventArgs) Handles TextBoxSearch.Enter
+        If TextBoxSearch.Text = "Search orders..." Then
+            TextBoxSearch.Text = ""
+            TextBoxSearch.ForeColor = Color.FromArgb(15, 23, 42)
+            SearchContainer.BorderColor = Color.FromArgb(99, 102, 241)
+        End If
+    End Sub
+
+    Private Sub TextBoxSearch_Leave(sender As Object, e As EventArgs) Handles TextBoxSearch.Leave
+        If String.IsNullOrWhiteSpace(TextBoxSearch.Text) Then
+            TextBoxSearch.Text = "Search orders..."
+            TextBoxSearch.ForeColor = Color.FromArgb(148, 163, 184)
+            SearchContainer.BorderColor = Color.FromArgb(226, 232, 240)
+        End If
+    End Sub
+
+
 
     ' FIXED: Improved status color application
     Private Sub ApplyStatusColors()
@@ -165,14 +286,11 @@ Public Class FormDineInOrders
                     ' Apply status-specific colors
                     Select Case status
                         Case "completed", "paid"
-                            row.Cells("Status").Style.ForeColor = Color.FromArgb(39, 174, 96)
-                            row.Cells("Status").Style.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                            row.Cells("Status").Style.ForeColor = Color.FromArgb(16, 185, 129)
                         Case "pending", "preparing"
-                            row.Cells("Status").Style.ForeColor = Color.FromArgb(241, 196, 15)
-                            row.Cells("Status").Style.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                            row.Cells("Status").Style.ForeColor = Color.FromArgb(245, 158, 11)
                         Case "cancelled", "canceled"
-                            row.Cells("Status").Style.ForeColor = Color.FromArgb(231, 76, 60)
-                            row.Cells("Status").Style.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                            row.Cells("Status").Style.ForeColor = Color.FromArgb(239, 68, 68)
                     End Select
                 End If
             Next
@@ -210,15 +328,17 @@ Public Class FormDineInOrders
 
     Private Sub SetLoadingState(isLoading As Boolean)
         Try
+            Me.UseWaitCursor = isLoading
             DataGridView1.Enabled = Not isLoading
-            Export.Enabled = Not isLoading
+            Button1.Enabled = Not isLoading
+            If btnPrev IsNot Nothing Then btnPrev.Enabled = Not isLoading AndAlso _currentPage > 1
+            If btnNext IsNot Nothing Then btnNext.Enabled = Not isLoading AndAlso _currentPage < _totalPages
+            LabelHeader.Text = If(isLoading, _baseTitle & " (Updating...)", _baseTitle)
 
             If isLoading Then
-                Label2.Text = _baseTitle & " ⏳"
-                Export.Text = "   Loading..."
+                Button1.Text = "   Loading..."
             Else
-                Label2.Text = _baseTitle
-                Export.Text = "   Export"
+                Button1.Text = "   Export"
             End If
         Catch
         End Try
@@ -281,7 +401,14 @@ Public Class FormDineInOrders
         End If
     End Sub
 
-    Private Sub Export_Click(sender As Object, e As EventArgs) Handles Export.Click
+    Private Sub btnPrev_Click(sender As Object, e As EventArgs) Handles btnPrev.Click
+        If _currentPage > 1 Then
+            _currentPage -= 1
+            BeginLoadDineInOrders()
+        End If
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         ExportToCSV()
     End Sub
 
@@ -299,8 +426,8 @@ Public Class FormDineInOrders
             }
 
             If saveDialog.ShowDialog() = DialogResult.OK Then
-                Export.Enabled = False
-                Export.Text = "   Exporting..."
+                Button1.Enabled = False
+                Button1.Text = "   Exporting..."
 
                 Using writer As New IO.StreamWriter(saveDialog.FileName, False, System.Text.Encoding.UTF8)
                     ' Write headers
@@ -337,8 +464,8 @@ Public Class FormDineInOrders
         Catch ex As Exception
             MessageBox.Show("Export failed: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
-            Export.Enabled = True
-            Export.Text = "   Export"
+            Button1.Enabled = True
+            Button1.Text = "   Export"
         End Try
     End Sub
 
