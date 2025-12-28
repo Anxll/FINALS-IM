@@ -14,38 +14,70 @@ Public Class FormPayroll
             Using conn As New MySqlConnection(modDB.strConnection)
                 conn.Open()
 
-                ' Get total payroll (Paid records only)
-                ' Calculate NetPay dynamically to be safe: (Basic + Overtime + Bonuses - Deductions)
-                Dim cmdTotalPayroll As New MySqlCommand("SELECT IFNULL(SUM(BasicSalary + Overtime + Bonuses - Deductions), 0) FROM payroll WHERE Status = 'Paid'", conn)
-                Dim totalPayroll As Object = cmdTotalPayroll.ExecuteScalar()
-                If totalPayroll IsNot Nothing AndAlso Not IsDBNull(totalPayroll) Then
-                    Label4.Text = "₱" & Convert.ToDecimal(totalPayroll).ToString("N2")
-                Else
-                    Label4.Text = "₱0.00"
+                ' --- 1. TOTAL PAYROLL & TRENDS ---
+                ' Current Month Total
+                Dim queryCurrentMonth As String = "SELECT IFNULL(SUM(BasicSalary + Overtime + Bonuses - Deductions), 0) FROM payroll " &
+                                                 "WHERE Status = 'Paid' AND MONTH(PayPeriodStart) = MONTH(CURRENT_DATE()) AND YEAR(PayPeriodStart) = YEAR(CURRENT_DATE())"
+                Dim cmdCurrentMonth As New MySqlCommand(queryCurrentMonth, conn)
+                Dim currentPayroll As Decimal = Convert.ToDecimal(cmdCurrentMonth.ExecuteScalar())
+
+                ' Previous Month Total
+                Dim queryPrevMonth As String = "SELECT IFNULL(SUM(BasicSalary + Overtime + Bonuses - Deductions), 0) FROM payroll " &
+                                              "WHERE Status = 'Paid' AND MONTH(PayPeriodStart) = MONTH(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH)) " &
+                                              "AND YEAR(PayPeriodStart) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))"
+                Dim cmdPrevMonth As New MySqlCommand(queryPrevMonth, conn)
+                Dim prevPayroll As Decimal = Convert.ToDecimal(cmdPrevMonth.ExecuteScalar())
+
+                ' Calculate MoM Trend
+                Dim momTrend As String = "0% vs last month"
+                If prevPayroll > 0 Then
+                    Dim diff As Decimal = ((currentPayroll - prevPayroll) / prevPayroll) * 100
+                    momTrend = (If(diff >= 0, "+", "")) & diff.ToString("N1") & "% vs last month"
                 End If
 
-                ' Get total hours from actual payroll records (Paid records only)
-                Dim cmdTotalHours As New MySqlCommand("SELECT IFNULL(SUM(HoursWorked), 0) FROM payroll WHERE Status = 'Paid'", conn)
+                Label4.Text = "₱" & currentPayroll.ToString("N2")
+                Label5.Text = momTrend
+
+                ' --- 2. TOTAL HOURS ---
+                Dim cmdTotalHours As New MySqlCommand("SELECT IFNULL(SUM(HoursWorked), 0) FROM payroll WHERE Status = 'Paid' AND MONTH(PayPeriodStart) = MONTH(CURRENT_DATE())", conn)
                 Dim totalHours As Object = cmdTotalHours.ExecuteScalar()
-                If totalHours IsNot Nothing AndAlso Not IsDBNull(totalHours) Then
-                    Label6.Text = Convert.ToDecimal(totalHours).ToString("N2")
+                Label6.Text = If(totalHours IsNot Nothing AndAlso Not IsDBNull(totalHours), Convert.ToDecimal(totalHours).ToString("N1") & "h", "0h")
+                Label8.Text = "Total hours this month"
+
+                ' --- 3. ACTIVE EMPLOYEES & AVG PAY ---
+                Dim cmdActiveEmployees As New MySqlCommand("SELECT COUNT(*) FROM employee WHERE EmploymentStatus = 'Active'", conn)
+                Dim activeCount As Integer = Convert.ToInt32(cmdActiveEmployees.ExecuteScalar())
+                Label7.Text = activeCount.ToString()
+
+                If activeCount > 0 Then
+                    Dim avgPay As Decimal = currentPayroll / activeCount
+                    Label9.Text = "Avg. ₱" & avgPay.ToString("N0") & " per employee"
                 Else
-                    Label6.Text = "0"
+                    Label9.Text = "No active employees"
                 End If
 
-                ' Get active employees count (Total workforce)
-                Dim cmdActiveEmployees As New MySqlCommand("SELECT COUNT(*) FROM employee WHERE EmploymentStatus = 'Active'", conn)
-                Dim activeEmployees As Object = cmdActiveEmployees.ExecuteScalar()
-                If activeEmployees IsNot Nothing AndAlso Not IsDBNull(activeEmployees) Then
-                    Label7.Text = activeEmployees.ToString()
-                Else
-                    Label7.Text = "0"
-                End If
+                ' --- 4. ANOMALY DETECTION (Quick Check) ---
+                DetectAnomalies(conn)
 
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error loading payroll data: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error loading payroll statistics: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub DetectAnomalies(conn As MySqlConnection)
+        ' Flag records where Overtime > 50% of Basic Salary OR Deductions > 30% of Basic Salary
+        Dim query As String = "SELECT COUNT(*) FROM payroll WHERE Status = 'Paid' AND (Overtime > (BasicSalary * 0.5) OR Deductions > (BasicSalary * 0.3))"
+        Dim cmd As New MySqlCommand(query, conn)
+        Dim anomalyCount As Integer = Convert.ToInt32(cmd.ExecuteScalar())
+
+        If anomalyCount > 0 Then
+            Label10.Text = "⚠ " & anomalyCount & " Anomalies Detected (Check Records)"
+            Label10.ForeColor = Color.Crimson
+        Else
+            Label10.Text = "Payroll Summary (All systems normal)"
+            Label10.ForeColor = Color.Black
+        End If
     End Sub
 
     Private Sub LoadPayrollChart()
@@ -56,34 +88,36 @@ Public Class FormPayroll
                 ' Clear existing series
                 Chart1.Series.Clear()
 
-                ' Create new series
-                Dim series As New Series("Paid Payroll")
+                ' Create new series for Trends
+                Dim series As New Series("Monthly Payroll Cost")
                 series.ChartType = SeriesChartType.Column
                 series.Color = Color.MediumSlateBlue
+                series.IsValueShownAsLabel = True
+                series.LabelFormat = "₱#,##0"
 
-                ' Load actual paid amounts per employee
-                Dim query As String = "SELECT CONCAT(e.FirstName, ' ', e.LastName) AS FullName, " &
-                                    "SUM(p.BasicSalary + p.Overtime + p.Bonuses - p.Deductions) AS TotalPay " &
-                                    "FROM payroll p " &
-                                    "JOIN employee e ON p.EmployeeID = e.EmployeeID " &
-                                    "WHERE p.Status = 'Paid' " &
-                                    "GROUP BY p.EmployeeID, FullName " &
-                                    "ORDER BY TotalPay DESC"
+                ' Load payroll cost trends for the last 6 months
+                Dim query As String = "SELECT MonthLabel, TotalNetPay FROM (" &
+                                    "  SELECT DATE_FORMAT(PayPeriodStart, '%b %Y') as MonthLabel, " &
+                                    "  SUM(BasicSalary + Overtime + Bonuses - Deductions) as TotalNetPay, " &
+                                    "  MAX(PayPeriodStart) as MaxDate " &
+                                    "  FROM payroll " &
+                                    "  WHERE Status = 'Paid' " &
+                                    "  GROUP BY YEAR(PayPeriodStart), MONTH(PayPeriodStart), MonthLabel " &
+                                    "  ORDER BY MaxDate DESC " &
+                                    "  LIMIT 6" &
+                                    ") t ORDER BY MaxDate ASC"
 
-                Dim cmdPayrollBreakdown As New MySqlCommand(query, conn)
+                Dim cmdTrends As New MySqlCommand(query, conn)
 
-                Using reader As MySqlDataReader = cmdPayrollBreakdown.ExecuteReader()
+                Using reader As MySqlDataReader = cmdTrends.ExecuteReader()
                     While reader.Read()
-                        Dim salaryValue As Decimal = 0D
-                        If Not reader.IsDBNull(reader.GetOrdinal("TotalPay")) Then
-                            salaryValue = Convert.ToDecimal(reader("TotalPay"))
-                        End If
-                        series.Points.AddXY(reader("FullName").ToString(), salaryValue)
+                        Dim val As Decimal = Convert.ToDecimal(reader("TotalNetPay"))
+                        series.Points.AddXY(reader("MonthLabel").ToString(), val)
                     End While
                 End Using
 
                 If series.Points.Count = 0 Then
-                    series.Points.AddXY("No Paid Records", 0)
+                    series.Points.AddXY("No Data", 0)
                 End If
 
                 Chart1.Series.Add(series)
@@ -91,67 +125,79 @@ Public Class FormPayroll
                 ' Configure chart appearance
                 Chart1.ChartAreas(0).AxisX.MajorGrid.Enabled = False
                 Chart1.ChartAreas(0).AxisY.MajorGrid.LineColor = Color.LightGray
+                Chart1.ChartAreas(0).AxisY.LabelStyle.Format = "₱#,##0"
                 Chart1.Legends(0).Enabled = False
 
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error loading chart data: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error loading trend chart: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        ' Export payroll data
+        ' Export detailed payroll data for accounting/auditing
         Try
             Using conn As New MySqlConnection(modDB.strConnection)
                 conn.Open()
 
-                Dim query As String = "SELECT p.PayrollID, e.FirstName, e.LastName, e.Position, " &
+                ' Detailed query for better record keeping
+                Dim query As String = "SELECT p.PayrollID, CONCAT(e.FirstName, ' ', e.LastName) AS EmployeeName, e.Position, " &
                                     "p.PayPeriodStart, p.PayPeriodEnd, " &
                                     "p.HoursWorked, p.HourlyRate, " &
-                                    "p.BasicSalary, p.Overtime, p.Bonuses, p.Deductions, " &
+                                    "p.BasicSalary, p.Overtime AS OvertimePay, p.Bonuses, p.Deductions, " &
                                     "(p.BasicSalary + p.Overtime + p.Bonuses - p.Deductions) AS NetPay, " &
-                                    "p.Status, p.CreatedDate " &
+                                    "p.Status, p.CreatedDate as DateProcessed " &
                                     "FROM payroll p " &
                                     "JOIN employee e ON p.EmployeeID = e.EmployeeID " &
-                                    "WHERE p.Status = 'Paid' " &
                                     "ORDER BY p.CreatedDate DESC"
 
                 Dim cmdExport As New MySqlCommand(query, conn)
-
                 Dim dt As New DataTable()
                 Dim adapter As New MySqlDataAdapter(cmdExport)
                 adapter.Fill(dt)
 
                 If dt.Rows.Count = 0 Then
-                    MessageBox.Show("No paid payroll records to export.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    MessageBox.Show("No payroll records found to export.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Return
                 End If
 
                 ' Save to CSV
                 Dim saveDialog As New SaveFileDialog()
                 saveDialog.Filter = "CSV Files (*.csv)|*.csv"
-                saveDialog.FileName = "Payroll_Report_Paid_" & DateTime.Now.ToString("yyyyMMdd") & ".csv"
+                saveDialog.FileName = "Payroll_Report_" & DateTime.Now.ToString("yyyyMMdd_HHmm") & ".csv"
 
                 If saveDialog.ShowDialog() = DialogResult.OK Then
                     Dim csv As New System.Text.StringBuilder()
 
-                    ' Add header
-                    Dim headerLine As String = String.Join(",", dt.Columns.Cast(Of DataColumn)().Select(Function(column) column.ColumnName))
-                    csv.AppendLine(headerLine)
+                    ' Add header (Cleaned up names)
+                    Dim columnHeaders As String() = {"ID", "Employee", "Position", "Start Date", "End Date", "Hours", "Rate", "Basic", "Overtime", "Bonuses", "Deductions", "Net Pay", "Status", "Date Processed"}
+                    csv.AppendLine(String.Join(",", columnHeaders))
 
                     ' Add rows
                     For Each row As DataRow In dt.Rows
-                        Dim fields = row.ItemArray.Select(Function(field) String.Format("""{0}""", field.ToString().Replace("""", """""")))
-                        csv.AppendLine(String.Join(",", fields))
+                        Dim values As New List(Of String)
+                        For i As Integer = 0 To dt.Columns.Count - 1
+                            Dim val As String = row(i).ToString()
+                            ' Format currency and dates
+                            If dt.Columns(i).ColumnName.Contains("Pay") Or dt.Columns(i).ColumnName.Contains("Salary") Or dt.Columns(i).ColumnName.Contains("Bonuses") Or dt.Columns(i).ColumnName.Contains("Deductions") Then
+                                val = Convert.ToDecimal(row(i)).ToString("F2")
+                            ElseIf dt.Columns(i).DataType = GetType(DateTime) Then
+                                val = Convert.ToDateTime(row(i)).ToString("yyyy-MM-dd")
+                            End If
+                            ' Escape CSV
+                            values.Add("""" & val.Replace("""", """""") & """")
+                        Next
+                        csv.AppendLine(String.Join(",", values))
                     Next
 
                     System.IO.File.WriteAllText(saveDialog.FileName, csv.ToString())
-                    MessageBox.Show("Payroll report exported successfully!", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    MessageBox.Show("Detailed payroll report exported successfully!" & vbCrLf & "File: " & System.IO.Path.GetFileName(saveDialog.FileName),
+                                  "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 End If
 
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error exporting data: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error exporting payroll data: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 

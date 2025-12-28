@@ -1,6 +1,8 @@
 ﻿Imports MySqlConnector
 
 Public Class Inventory
+    Private isShowingAlerts As Boolean = False
+    Private WithEvents btnInventoryAlerts As Button
 
     Private Sub Inventory_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
@@ -10,17 +12,21 @@ Public Class Inventory
             ' Apply responsive layout
             ApplyResponsiveLayout()
 
-            ' Load categories dropdown
-            LoadCategories()
+            ' Initialize and position the alerts button
+            InitializeAlertsButton()
 
             ' Load data
             LoadInventorySummary()
             LoadInventoryStatistics()
 
-            ' Hide the notifications button
-            If Me.Controls.Contains(btnNotifications) Then
-                btnNotifications.Visible = False
+            ' Restore usage history button
+            If btnNotifications IsNot Nothing Then
+                btnNotifications.Text = "🔔 View Usage History"
+                btnNotifications.Visible = True
             End If
+
+            ' Update the alerts notification button count
+            UpdateNotificationBadge()
 
         Catch ex As Exception
             MessageBox.Show("Error loading form: " & ex.Message,
@@ -108,6 +114,21 @@ Public Class Inventory
 
             ' Adjust DataGrid columns
             AdjustGridColumns()
+
+            ' Position both buttons
+            If btnNotifications IsNot Nothing AndAlso btnInventoryAlerts IsNot Nothing Then
+                Dim btnWidth As Integer = 200
+                Dim btnHeight As Integer = 40
+                Dim rightMargin As Integer = Me.ClientSize.Width - 30
+
+                ' View Usage History Button
+                btnNotifications.Size = New Size(btnWidth, btnHeight)
+                btnNotifications.Location = New Point(rightMargin - btnWidth, 10)
+
+                ' Inventory Alerts Button
+                btnInventoryAlerts.Size = New Size(btnWidth, btnHeight)
+                btnInventoryAlerts.Location = New Point(rightMargin - btnWidth, 10 + btnHeight + 10)
+            End If
 
         Catch ex As Exception
             ' Silent fail during resize
@@ -233,6 +254,9 @@ Public Class Inventory
 
             ' Update total value card after grid refresh
             UpdateTotalValueCard()
+
+            ' Update notification badge
+            UpdateNotificationBadge()
 
         Catch ex As Exception
             MessageBox.Show("Error loading inventory: " & ex.Message,
@@ -654,7 +678,7 @@ Public Class Inventory
         End Try
     End Sub
 
-    ' This event handler is kept but will not be triggered since button is hidden
+    ' Restore original functionality: View Usage History
     Private Sub btnNotifications_Click(sender As Object, e As EventArgs) Handles btnNotifications.Click
         Try
             Dim usageForm As New ProductIngredientUsageHistory()
@@ -665,6 +689,96 @@ Public Class Inventory
                       "Error",
                       MessageBoxButtons.OK,
                       MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' New button handler: Toggle Inventory Alerts Filter
+    Private Sub btnInventoryAlerts_Click(sender As Object, e As EventArgs) Handles btnInventoryAlerts.Click
+        Try
+            If InventoryGrid.DataSource IsNot Nothing Then
+                Dim dt As DataTable = DirectCast(InventoryGrid.DataSource, DataTable)
+
+                If Not isShowingAlerts Then
+                    ' Filter for Low Stock or Out of Stock
+                    dt.DefaultView.RowFilter = "[Status] = 'Low Stock' OR [Status] = 'Out of Stock'"
+                    btnInventoryAlerts.Text = "🚨 Show All Items"
+                    btnInventoryAlerts.BackColor = Color.FromArgb(45, 45, 45) ' Dark neutral
+                    isShowingAlerts = True
+                Else
+                    ' Clear filter
+                    dt.DefaultView.RowFilter = ""
+                    UpdateNotificationBadge()
+                    isShowingAlerts = False
+                End If
+
+                ' Re-apply colors after filtering
+                Me.BeginInvoke(New MethodInvoker(Sub()
+                                                     ColorCodeStatusColumn()
+                                                 End Sub))
+                UpdateTotalValueCard()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Error filtering alerts: " & ex.Message,
+                      "Error",
+                      MessageBoxButtons.OK,
+                      MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub InitializeAlertsButton()
+        If btnInventoryAlerts Is Nothing Then
+            btnInventoryAlerts = New Button()
+            btnInventoryAlerts.Name = "btnInventoryAlerts"
+            btnInventoryAlerts.FlatStyle = FlatStyle.Flat
+            btnInventoryAlerts.FlatAppearance.BorderSize = 0
+            btnInventoryAlerts.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+            btnInventoryAlerts.ForeColor = Color.White
+            btnInventoryAlerts.Cursor = Cursors.Hand
+            btnInventoryAlerts.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+            Me.Controls.Add(btnInventoryAlerts)
+            btnInventoryAlerts.BringToFront()
+        End If
+    End Sub
+
+    Private Sub UpdateNotificationBadge()
+        Try
+            openConn()
+
+            ' Count items that are Low Stock or Out of Stock
+            Dim sql As String = "
+                SELECT COUNT(*) 
+                FROM (
+                    SELECT 
+                        i.IngredientID,
+                        COALESCE(SUM(ib.StockQuantity), 0) AS TotalStock,
+                        i.MinStockLevel
+                    FROM ingredients i
+                    LEFT JOIN inventory_batches ib ON i.IngredientID = ib.IngredientID AND ib.BatchStatus = 'Active'
+                    WHERE i.IsActive = 1
+                    GROUP BY i.IngredientID, i.MinStockLevel
+                    HAVING TotalStock < i.MinStockLevel
+                ) AS LowStockItems
+            "
+
+            Dim cmd As New MySqlCommand(sql, conn)
+            Dim alertCount As Integer = Convert.ToInt32(cmd.ExecuteScalar())
+
+            If btnInventoryAlerts IsNot Nothing Then
+                If alertCount > 0 Then
+                    btnInventoryAlerts.Text = $"🚨 {alertCount} Alerts"
+                    btnInventoryAlerts.BackColor = Color.FromArgb(220, 53, 69) ' Crimson/Red
+                Else
+                    btnInventoryAlerts.Text = "✅ No Alerts"
+                    btnInventoryAlerts.BackColor = Color.FromArgb(40, 167, 69) ' Green
+                End If
+                btnInventoryAlerts.Visible = True
+            End If
+
+        Catch ex As Exception
+            ' Silent fail for background badge update
+            Debug.WriteLine("Error updating badge: " & ex.Message)
+        Finally
+            closeConn()
         End Try
     End Sub
 
@@ -699,6 +813,7 @@ Public Class Inventory
     Public Sub RefreshInventory()
         LoadInventorySummary()
         LoadInventoryStatistics()
+        UpdateNotificationBadge()
     End Sub
 
     Private Sub Label6_Click(sender As Object, e As EventArgs) Handles Label6.Click

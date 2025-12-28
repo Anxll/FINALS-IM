@@ -22,13 +22,13 @@ Partial Class FormReservationStatus
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormReservationStatus))
         Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Dim DataPoint1 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 12.0R)
         Dim DataPoint2 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 28.0R)
         Dim DataPoint3 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 5.0R)
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormReservationStatus))
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -40,40 +40,40 @@ Partial Class FormReservationStatus
         Me.Label9 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
+        Me.RoundedPane27 = New InformationManagement.RoundedPane2()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.lblTotalReservations = New System.Windows.Forms.Label()
         Me.RoundedPane22 = New InformationManagement.RoundedPane2()
+        Me.RoundedPane26 = New InformationManagement.RoundedPane2()
+        Me.PictureBox5 = New System.Windows.Forms.PictureBox()
         Me.lblPending = New System.Windows.Forms.Label()
         Me.RoundedPane23 = New InformationManagement.RoundedPane2()
+        Me.RoundedPane28 = New InformationManagement.RoundedPane2()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.lblConfirmed = New System.Windows.Forms.Label()
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
+        Me.RoundedPane29 = New InformationManagement.RoundedPane2()
+        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.lblCancelled = New System.Windows.Forms.Label()
         Me.RoundedPane25 = New InformationManagement.RoundedPane2()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.RoundedPane26 = New InformationManagement.RoundedPane2()
-        Me.PictureBox5 = New System.Windows.Forms.PictureBox()
-        Me.RoundedPane27 = New InformationManagement.RoundedPane2()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.RoundedPane28 = New InformationManagement.RoundedPane2()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.RoundedPane29 = New InformationManagement.RoundedPane2()
-        Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.RoundedPane21.SuspendLayout()
-        Me.RoundedPane22.SuspendLayout()
-        Me.RoundedPane23.SuspendLayout()
-        Me.RoundedPane24.SuspendLayout()
-        Me.RoundedPane25.SuspendLayout()
-        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.RoundedPane26.SuspendLayout()
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane27.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.RoundedPane22.SuspendLayout()
+        Me.RoundedPane26.SuspendLayout()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.RoundedPane23.SuspendLayout()
         Me.RoundedPane28.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.RoundedPane24.SuspendLayout()
         Me.RoundedPane29.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.RoundedPane25.SuspendLayout()
+        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label2
@@ -210,6 +210,29 @@ Partial Class FormReservationStatus
         Me.RoundedPane21.Size = New System.Drawing.Size(246, 141)
         Me.RoundedPane21.TabIndex = 6
         '
+        'RoundedPane27
+        '
+        Me.RoundedPane27.BackColor = System.Drawing.Color.Transparent
+        Me.RoundedPane27.BorderColor = System.Drawing.Color.Transparent
+        Me.RoundedPane27.BorderThickness = 1
+        Me.RoundedPane27.Controls.Add(Me.PictureBox2)
+        Me.RoundedPane27.CornerRadius = 8
+        Me.RoundedPane27.FillColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(165, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.RoundedPane27.Location = New System.Drawing.Point(21, 20)
+        Me.RoundedPane27.Name = "RoundedPane27"
+        Me.RoundedPane27.Size = New System.Drawing.Size(43, 38)
+        Me.RoundedPane27.TabIndex = 12
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
+        Me.PictureBox2.Location = New System.Drawing.Point(9, 6)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox2.TabIndex = 4
+        Me.PictureBox2.TabStop = False
+        '
         'lblTotalReservations
         '
         Me.lblTotalReservations.AutoSize = True
@@ -238,6 +261,29 @@ Partial Class FormReservationStatus
         Me.RoundedPane22.Size = New System.Drawing.Size(246, 141)
         Me.RoundedPane22.TabIndex = 7
         '
+        'RoundedPane26
+        '
+        Me.RoundedPane26.BackColor = System.Drawing.Color.Transparent
+        Me.RoundedPane26.BorderColor = System.Drawing.Color.Transparent
+        Me.RoundedPane26.BorderThickness = 1
+        Me.RoundedPane26.Controls.Add(Me.PictureBox5)
+        Me.RoundedPane26.CornerRadius = 8
+        Me.RoundedPane26.FillColor = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(191, Byte), Integer), CType(CType(36, Byte), Integer))
+        Me.RoundedPane26.Location = New System.Drawing.Point(21, 20)
+        Me.RoundedPane26.Name = "RoundedPane26"
+        Me.RoundedPane26.Size = New System.Drawing.Size(43, 38)
+        Me.RoundedPane26.TabIndex = 11
+        '
+        'PictureBox5
+        '
+        Me.PictureBox5.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
+        Me.PictureBox5.Location = New System.Drawing.Point(9, 6)
+        Me.PictureBox5.Name = "PictureBox5"
+        Me.PictureBox5.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox5.TabIndex = 4
+        Me.PictureBox5.TabStop = False
+        '
         'lblPending
         '
         Me.lblPending.AutoSize = True
@@ -259,11 +305,34 @@ Partial Class FormReservationStatus
         Me.RoundedPane23.Controls.Add(Me.Label5)
         Me.RoundedPane23.Controls.Add(Me.Confirmed)
         Me.RoundedPane23.CornerRadius = 15
-        Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(34, Byte), Integer), CType(CType(197, Byte), Integer), CType(CType(94, Byte), Integer))
+        Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(77, Byte), Integer))
         Me.RoundedPane23.Location = New System.Drawing.Point(563, 64)
         Me.RoundedPane23.Name = "RoundedPane23"
         Me.RoundedPane23.Size = New System.Drawing.Size(246, 141)
         Me.RoundedPane23.TabIndex = 8
+        '
+        'RoundedPane28
+        '
+        Me.RoundedPane28.BackColor = System.Drawing.Color.Transparent
+        Me.RoundedPane28.BorderColor = System.Drawing.Color.Transparent
+        Me.RoundedPane28.BorderThickness = 1
+        Me.RoundedPane28.Controls.Add(Me.PictureBox1)
+        Me.RoundedPane28.CornerRadius = 8
+        Me.RoundedPane28.FillColor = System.Drawing.Color.FromArgb(CType(CType(74, Byte), Integer), CType(CType(222, Byte), Integer), CType(CType(128, Byte), Integer))
+        Me.RoundedPane28.Location = New System.Drawing.Point(21, 20)
+        Me.RoundedPane28.Name = "RoundedPane28"
+        Me.RoundedPane28.Size = New System.Drawing.Size(43, 38)
+        Me.RoundedPane28.TabIndex = 12
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(9, 6)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox1.TabIndex = 4
+        Me.PictureBox1.TabStop = False
         '
         'lblConfirmed
         '
@@ -291,6 +360,29 @@ Partial Class FormReservationStatus
         Me.RoundedPane24.Name = "RoundedPane24"
         Me.RoundedPane24.Size = New System.Drawing.Size(246, 141)
         Me.RoundedPane24.TabIndex = 9
+        '
+        'RoundedPane29
+        '
+        Me.RoundedPane29.BackColor = System.Drawing.Color.Transparent
+        Me.RoundedPane29.BorderColor = System.Drawing.Color.Transparent
+        Me.RoundedPane29.BorderThickness = 1
+        Me.RoundedPane29.Controls.Add(Me.PictureBox3)
+        Me.RoundedPane29.CornerRadius = 8
+        Me.RoundedPane29.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(113, Byte), Integer), CType(CType(113, Byte), Integer))
+        Me.RoundedPane29.Location = New System.Drawing.Point(21, 20)
+        Me.RoundedPane29.Name = "RoundedPane29"
+        Me.RoundedPane29.Size = New System.Drawing.Size(43, 38)
+        Me.RoundedPane29.TabIndex = 12
+        '
+        'PictureBox3
+        '
+        Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox3.Image = CType(resources.GetObject("PictureBox3.Image"), System.Drawing.Image)
+        Me.PictureBox3.Location = New System.Drawing.Point(9, 6)
+        Me.PictureBox3.Name = "PictureBox3"
+        Me.PictureBox3.Size = New System.Drawing.Size(28, 28)
+        Me.PictureBox3.TabIndex = 4
+        Me.PictureBox3.TabStop = False
         '
         'lblCancelled
         '
@@ -388,98 +480,6 @@ Partial Class FormReservationStatus
         Me.Panel1.Size = New System.Drawing.Size(1151, 749)
         Me.Panel1.TabIndex = 11
         '
-        'RoundedPane26
-        '
-        Me.RoundedPane26.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane26.BorderColor = System.Drawing.Color.Transparent
-        Me.RoundedPane26.BorderThickness = 1
-        Me.RoundedPane26.Controls.Add(Me.PictureBox5)
-        Me.RoundedPane26.CornerRadius = 8
-        Me.RoundedPane26.FillColor = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(191, Byte), Integer), CType(CType(36, Byte), Integer))
-        Me.RoundedPane26.Location = New System.Drawing.Point(21, 20)
-        Me.RoundedPane26.Name = "RoundedPane26"
-        Me.RoundedPane26.Size = New System.Drawing.Size(43, 38)
-        Me.RoundedPane26.TabIndex = 11
-        '
-        'PictureBox5
-        '
-        Me.PictureBox5.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox5.Image = CType(resources.GetObject("PictureBox5.Image"), System.Drawing.Image)
-        Me.PictureBox5.Location = New System.Drawing.Point(9, 6)
-        Me.PictureBox5.Name = "PictureBox5"
-        Me.PictureBox5.Size = New System.Drawing.Size(28, 28)
-        Me.PictureBox5.TabIndex = 4
-        Me.PictureBox5.TabStop = False
-        '
-        'RoundedPane27
-        '
-        Me.RoundedPane27.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane27.BorderColor = System.Drawing.Color.Transparent
-        Me.RoundedPane27.BorderThickness = 1
-        Me.RoundedPane27.Controls.Add(Me.PictureBox2)
-        Me.RoundedPane27.CornerRadius = 8
-        Me.RoundedPane27.FillColor = System.Drawing.Color.FromArgb(CType(CType(96, Byte), Integer), CType(CType(165, Byte), Integer), CType(CType(250, Byte), Integer))
-        Me.RoundedPane27.Location = New System.Drawing.Point(21, 20)
-        Me.RoundedPane27.Name = "RoundedPane27"
-        Me.RoundedPane27.Size = New System.Drawing.Size(43, 38)
-        Me.RoundedPane27.TabIndex = 12
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
-        Me.PictureBox2.Location = New System.Drawing.Point(9, 6)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(28, 28)
-        Me.PictureBox2.TabIndex = 4
-        Me.PictureBox2.TabStop = False
-        '
-        'RoundedPane28
-        '
-        Me.RoundedPane28.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane28.BorderColor = System.Drawing.Color.Transparent
-        Me.RoundedPane28.BorderThickness = 1
-        Me.RoundedPane28.Controls.Add(Me.PictureBox1)
-        Me.RoundedPane28.CornerRadius = 8
-        Me.RoundedPane28.FillColor = System.Drawing.Color.FromArgb(CType(CType(74, Byte), Integer), CType(CType(222, Byte), Integer), CType(CType(128, Byte), Integer))
-        Me.RoundedPane28.Location = New System.Drawing.Point(21, 20)
-        Me.RoundedPane28.Name = "RoundedPane28"
-        Me.RoundedPane28.Size = New System.Drawing.Size(43, 38)
-        Me.RoundedPane28.TabIndex = 12
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(9, 6)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(28, 28)
-        Me.PictureBox1.TabIndex = 4
-        Me.PictureBox1.TabStop = False
-        '
-        'RoundedPane29
-        '
-        Me.RoundedPane29.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane29.BorderColor = System.Drawing.Color.Transparent
-        Me.RoundedPane29.BorderThickness = 1
-        Me.RoundedPane29.Controls.Add(Me.PictureBox3)
-        Me.RoundedPane29.CornerRadius = 8
-        Me.RoundedPane29.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(113, Byte), Integer), CType(CType(113, Byte), Integer))
-        Me.RoundedPane29.Location = New System.Drawing.Point(21, 20)
-        Me.RoundedPane29.Name = "RoundedPane29"
-        Me.RoundedPane29.Size = New System.Drawing.Size(43, 38)
-        Me.RoundedPane29.TabIndex = 12
-        '
-        'PictureBox3
-        '
-        Me.PictureBox3.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox3.Image = CType(resources.GetObject("PictureBox3.Image"), System.Drawing.Image)
-        Me.PictureBox3.Location = New System.Drawing.Point(9, 6)
-        Me.PictureBox3.Name = "PictureBox3"
-        Me.PictureBox3.Size = New System.Drawing.Size(28, 28)
-        Me.PictureBox3.TabIndex = 4
-        Me.PictureBox3.TabStop = False
-        '
         'FormReservationStatus
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -500,23 +500,23 @@ Partial Class FormReservationStatus
         Me.Text = "FormReservationStatus"
         Me.RoundedPane21.ResumeLayout(False)
         Me.RoundedPane21.PerformLayout()
+        Me.RoundedPane27.ResumeLayout(False)
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane22.ResumeLayout(False)
         Me.RoundedPane22.PerformLayout()
+        Me.RoundedPane26.ResumeLayout(False)
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane23.ResumeLayout(False)
         Me.RoundedPane23.PerformLayout()
+        Me.RoundedPane28.ResumeLayout(False)
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane24.ResumeLayout(False)
         Me.RoundedPane24.PerformLayout()
+        Me.RoundedPane29.ResumeLayout(False)
+        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane25.ResumeLayout(False)
         Me.RoundedPane25.PerformLayout()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.RoundedPane26.ResumeLayout(False)
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.RoundedPane27.ResumeLayout(False)
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.RoundedPane28.ResumeLayout(False)
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.RoundedPane29.ResumeLayout(False)
-        CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

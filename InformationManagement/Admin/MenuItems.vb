@@ -803,18 +803,31 @@ Public Class MenuItems
         End If
 
         ' Update total items count AFTER data binding is complete
-        ' Use a slight delay to ensure rows are fully rendered
         If lblTotalItems IsNot Nothing Then
-            Dim rowCount As Integer = 0
-            If DataGridMenu.DataSource IsNot Nothing Then
-                Dim dt As DataTable = TryCast(DataGridMenu.DataSource, DataTable)
-                If dt IsNot Nothing Then
-                    rowCount = dt.Rows.Count
-                Else
-                    rowCount = DataGridMenu.Rows.Count
+            Try
+                Dim rowCount As Integer = 0
+                If DataGridMenu.DataSource IsNot Nothing Then
+                    Dim dt As DataTable = TryCast(DataGridMenu.DataSource, DataTable)
+                    If dt IsNot Nothing Then
+                        ' Use the actual data source to get distinct IDs
+                        ' True means distinct
+                        rowCount = dt.DefaultView.ToTable(True, "ProductID").Rows.Count
+                    Else
+                        ' Fallback for other data sources
+                        Dim distinctIds As New HashSet(Of String)()
+                        For Each row As DataGridViewRow In DataGridMenu.Rows
+                            If Not row.IsNewRow AndAlso row.Cells("ProductID").Value IsNot Nothing Then
+                                distinctIds.Add(row.Cells("ProductID").Value.ToString())
+                            End If
+                        Next
+                        rowCount = distinctIds.Count
+                    End If
                 End If
-            End If
-            lblTotalItems.Text = $"Total Items: {rowCount}"
+                lblTotalItems.Text = "Total Items: " & rowCount.ToString()
+            Catch ex As Exception
+                ' Final fallback to ensure the label is not empty
+                lblTotalItems.Text = "Total Items: " & DataGridMenu.Rows.Count.ToString()
+            End Try
         End If
     End Sub
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Edit.Click
