@@ -262,32 +262,38 @@ Public Class Reservations
             closeConn()
 
             ' Build main query with pagination - OPTIMIZED with payment info
+            ' Build main query with pagination - OPTIMIZED with payment info
             Dim query As String =
-    "SELECT 
-        r.ReservationID,
-        r.CustomerID,
-        COALESCE(r.FullName, CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, ''))) AS CustomerName,
-        COALESCE(r.ContactNumber, c.ContactNumber) AS ContactNumber,
-        r.ReservationType,
-        r.EventType,
-        r.EventDate,
-        r.EventTime,
-        r.NumberOfGuests,
-        r.ProductSelection,
-        r.SpecialRequests,
-        r.ReservationStatus,
-        r.ReservationDate,
-        r.DeliveryAddress,
-        r.DeliveryOption,
-        r.UpdatedDate,
-        COALESCE(p.PaymentMethod, '') AS PaymentMethod,
-        COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
-        COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
-        COALESCE(p.ReceiptFileName, '') AS ReceiptFileName
-     FROM reservations r
-     LEFT JOIN customers c ON r.CustomerID = c.CustomerID
-     LEFT JOIN payments p ON r.ReservationID = p.ReservationID"
-
+                "SELECT 
+                    r.ReservationID,
+                    r.CustomerID,
+                    COALESCE(r.FullName, CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, ''))) AS CustomerName,
+                    COALESCE(r.ContactNumber, c.ContactNumber) AS ContactNumber,
+                    r.ReservationType,
+                    r.EventType,
+                    r.EventDate,
+                    r.EventTime,
+                    r.NumberOfGuests,
+                    r.ProductSelection,
+                    r.SpecialRequests,
+                    r.ReservationStatus,
+                    r.ReservationDate,
+                    r.DeliveryAddress,
+                    r.DeliveryOption,
+                    r.UpdatedDate,
+                    COALESCE(p.PaymentMethod, '') AS PaymentMethod,
+                    COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
+                    COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
+                    COALESCE(p.ReceiptFileName, '') AS ReceiptFileName,
+                    COALESCE(
+                        (SELECT SUM(ri.TotalPrice) 
+                         FROM reservation_items ri 
+                         WHERE ri.ReservationID = r.ReservationID), 
+                        0.00
+                    ) AS TotalAmount
+                 FROM reservations r
+                 LEFT JOIN customers c ON r.CustomerID = c.CustomerID
+                 LEFT JOIN payments p ON r.ReservationID = p.ReservationID"
             If condition <> "" Then
                 query &= " WHERE " & condition
             End If
@@ -443,32 +449,54 @@ Public Class Reservations
                     .Columns("PaymentMethod").DisplayIndex = 11
                 End If
 
+                ' Payment Status
                 If .Columns.Contains("PaymentStatus") Then
                     .Columns("PaymentStatus").HeaderText = "Payment Status"
                     .Columns("PaymentStatus").Width = 120
-                    .Columns("PaymentStatus").DisplayIndex = 12
+                    .Columns("PaymentStatus").DisplayIndex = 11
                 End If
 
+
+                ' Total Amount - WITH PROPER PADDING
+                If .Columns.Contains("TotalAmount") Then
+                    .Columns("TotalAmount").HeaderText = "Total Amount"
+                    .Columns("TotalAmount").Width = 130  ' Increased width
+                    .Columns("TotalAmount").DefaultCellStyle.Format = "₱#,##0.00"
+                    .Columns("TotalAmount").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                    .Columns("TotalAmount").DefaultCellStyle.Padding = New Padding(5, 0, 10, 0)  ' Add padding
+                    .Columns("TotalAmount").DefaultCellStyle.WrapMode = DataGridViewTriState.False
+                    .Columns("TotalAmount").DisplayIndex = 12
+                End If
+
+                ' Reservation Status - MOVED AFTER TotalAmount
+                If .Columns.Contains("ReservationStatus") Then
+                    .Columns("ReservationStatus").HeaderText = "Status"
+                    .Columns("ReservationStatus").Width = 90
+                    .Columns("ReservationStatus").DisplayIndex = 13
+                End If
+
+                ' Special Requests
                 If .Columns.Contains("SpecialRequests") Then
                     .Columns("SpecialRequests").HeaderText = "Special Requests"
                     .Columns("SpecialRequests").Width = 150
-                    .Columns("SpecialRequests").DisplayIndex = 13
+                    .Columns("SpecialRequests").DisplayIndex = 14
                 End If
 
+                ' Reservation Date
                 If .Columns.Contains("ReservationDate") Then
                     .Columns("ReservationDate").HeaderText = "Reserved On"
                     .Columns("ReservationDate").Width = 100
                     .Columns("ReservationDate").DefaultCellStyle.Format = "MM/dd/yyyy"
-                    .Columns("ReservationDate").DisplayIndex = 14
+                    .Columns("ReservationDate").DisplayIndex = 15
                 End If
 
+                ' Updated Date
                 If .Columns.Contains("UpdatedDate") Then
                     .Columns("UpdatedDate").HeaderText = "Last Updated"
                     .Columns("UpdatedDate").Width = 100
                     .Columns("UpdatedDate").DefaultCellStyle.Format = "MM/dd/yyyy"
-                    .Columns("UpdatedDate").DisplayIndex = 15
+                    .Columns("UpdatedDate").DisplayIndex = 16
                 End If
-
                 .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
                 .ScrollBars = ScrollBars.Both
 
@@ -818,38 +846,45 @@ Public Class Reservations
             closeConn()
 
             ' Build main search query
+            ' Build main search query
             Dim query As String =
-        "SELECT 
-            r.ReservationID,
-            r.CustomerID,
-            COALESCE(r.FullName, CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, ''))) AS CustomerName,
-            COALESCE(r.ContactNumber, c.ContactNumber) AS ContactNumber,
-            r.ReservationType,
-            r.EventType,
-            r.EventDate,
-            r.EventTime,
-            r.NumberOfGuests,
-            r.ProductSelection,
-            r.SpecialRequests,
-            r.ReservationStatus,
-            r.ReservationDate,
-            r.DeliveryAddress,
-            r.DeliveryOption,
-            r.UpdatedDate,
-            COALESCE(p.PaymentMethod, '') AS PaymentMethod,
-            COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
-            COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
-            COALESCE(p.ReceiptFileName, '') AS ReceiptFileName
-         FROM reservations r
-         LEFT JOIN customers c ON r.CustomerID = c.CustomerID
-         LEFT JOIN payments p ON r.ReservationID = p.ReservationID
-         WHERE CAST(r.ReservationID AS CHAR) LIKE @keyword 
-         OR r.FullName LIKE @keyword 
-         OR c.FirstName LIKE @keyword 
-         OR c.LastName LIKE @keyword 
-         OR r.EventType LIKE @keyword 
-         OR r.ReservationStatus LIKE @keyword
-         ORDER BY r.ReservationID DESC"
+                "SELECT 
+                    r.ReservationID,
+                    r.CustomerID,
+                    COALESCE(r.FullName, CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, ''))) AS CustomerName,
+                    COALESCE(r.ContactNumber, c.ContactNumber) AS ContactNumber,
+                    r.ReservationType,
+                    r.EventType,
+                    r.EventDate,
+                    r.EventTime,
+                    r.NumberOfGuests,
+                    r.ProductSelection,
+                    r.SpecialRequests,
+                    r.ReservationStatus,
+                    r.ReservationDate,
+                    r.DeliveryAddress,
+                    r.DeliveryOption,
+                    r.UpdatedDate,
+                    COALESCE(p.PaymentMethod, '') AS PaymentMethod,
+                    COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
+                    COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
+                    COALESCE(p.ReceiptFileName, '') AS ReceiptFileName,
+                    COALESCE(
+                        (SELECT SUM(ri.TotalPrice) 
+                         FROM reservation_items ri 
+                         WHERE ri.ReservationID = r.ReservationID), 
+                        0.00
+                    ) AS TotalAmount
+                 FROM reservations r
+                 LEFT JOIN customers c ON r.CustomerID = c.CustomerID
+                 LEFT JOIN payments p ON r.ReservationID = p.ReservationID
+                 WHERE CAST(r.ReservationID AS CHAR) LIKE @keyword 
+                 OR r.FullName LIKE @keyword 
+                 OR c.FirstName LIKE @keyword 
+                 OR c.LastName LIKE @keyword 
+                 OR r.EventType LIKE @keyword 
+                 OR r.ReservationStatus LIKE @keyword
+                 ORDER BY r.ReservationID DESC"
 
             ' Add pagination
             Dim offset As Integer = (CurrentPage - 1) * RecordsPerPage
