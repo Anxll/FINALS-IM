@@ -37,8 +37,6 @@ Partial Class FormReservationStatus
         Me.Confirmed = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Cancelled = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
         Me.RoundedPane27 = New InformationManagement.RoundedPane2()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
@@ -171,29 +169,6 @@ Partial Class FormReservationStatus
         Me.Cancelled.Size = New System.Drawing.Size(65, 17)
         Me.Cancelled.TabIndex = 0
         Me.Cancelled.Text = "Cancelled"
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
-        Me.Label9.ForeColor = System.Drawing.SystemColors.GrayText
-        Me.Label9.Location = New System.Drawing.Point(874, 19)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(49, 15)
-        Me.Label9.TabIndex = 4
-        Me.Label9.Text = "Period :"
-        '
-        'ComboBox1
-        '
-        Me.ComboBox1.DisplayMember = "Daily"
-        Me.ComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Daily", "Weekly", "Monthly", "Yearly"})
-        Me.ComboBox1.Location = New System.Drawing.Point(955, 18)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(121, 21)
-        Me.ComboBox1.TabIndex = 5
         '
         'RoundedPane21
         '
@@ -496,8 +471,6 @@ Partial Class FormReservationStatus
         Me.Controls.Add(Me.RoundedPane23)
         Me.Controls.Add(Me.RoundedPane22)
         Me.Controls.Add(Me.RoundedPane21)
-        Me.Controls.Add(Me.ComboBox1)
-        Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.Panel1)
         Me.DoubleBuffered = True
         Me.Name = "FormReservationStatus"
@@ -522,7 +495,6 @@ Partial Class FormReservationStatus
         Me.RoundedPane25.PerformLayout()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents Label2 As Label
@@ -533,8 +505,6 @@ Partial Class FormReservationStatus
     Friend WithEvents Confirmed As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents Cancelled As Label
-    Friend WithEvents Label9 As Label
-    Friend WithEvents ComboBox1 As ComboBox
     Friend WithEvents RoundedPane21 As RoundedPane2
     Friend WithEvents RoundedPane22 As RoundedPane2
     Friend WithEvents RoundedPane23 As RoundedPane2

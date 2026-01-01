@@ -406,6 +406,7 @@ Partial Class FormDineInOrders
         '
         'FormDineInOrders
         '
+        Me.BackColor = System.Drawing.Color.GhostWhite
         Me.ClientSize = New System.Drawing.Size(1186, 749)
         Me.Controls.Add(Me.LabelSubHeader)
         Me.Controls.Add(Me.LabelHeader)
@@ -413,6 +414,7 @@ Partial Class FormDineInOrders
         Me.Controls.Add(Me.RoundedPane23)
         Me.Controls.Add(Me.RoundedPane22)
         Me.Controls.Add(Me.RoundedPane21)
+        Me.DoubleBuffered = True
         Me.Name = "FormDineInOrders"
         Me.Text = "Dine-In Management"
         Me.RoundedPane21.ResumeLayout(False)

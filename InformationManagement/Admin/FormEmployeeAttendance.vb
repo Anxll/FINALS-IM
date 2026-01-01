@@ -312,7 +312,7 @@ Public Class FormEmployeeAttendance
             Label6.Text = stats("Absences").ToString("N0")
             Label7.Text = stats("OnLeave").ToString("N0")
 
-            LabelHeader.Text = String.Format("Attendance Report (Total: {0})", totalCount.ToString("N0"))
+            LabelHeader.Text = String.Format("Attendance Report - {0} (Total: {1})", Reports.SelectedPeriod, totalCount.ToString("N0"))
         Catch ex As Exception
             ' Silent fail
         End Try
