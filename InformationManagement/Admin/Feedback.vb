@@ -283,7 +283,7 @@ Public Class Feedback
             End If
 
             If MessageBox.Show("Are you sure you want to approve this feedback?", "Confirm Approval", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                UpdateFeedbackStatus(feedbackId, "Approved")
+                UpdateFeedbackStatus(feedbackId, "Approved", currentStatus)
             End If
 
         ElseIf columnName = "Reject" Then
@@ -293,13 +293,13 @@ Public Class Feedback
             End If
 
             If MessageBox.Show("Are you sure you want to reject this feedback?", "Confirm Rejection", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                UpdateFeedbackStatus(feedbackId, "Rejected")
+                UpdateFeedbackStatus(feedbackId, "Rejected", currentStatus)
             End If
         End If
     End Sub
 
     ' Update Feedback Status (Approve/Reject)
-    Private Sub UpdateFeedbackStatus(feedbackId As Integer, status As String)
+    Private Sub UpdateFeedbackStatus(feedbackId As Integer, status As String, oldStatus As String)
         Try
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -321,6 +321,19 @@ Public Class Feedback
 
             If result > 0 Then
                 MessageBox.Show($"Feedback {status} successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                ' Log Activity
+                ActivityLogger.LogUserActivity(
+                    action:=status,
+                    actionCategory:="System",
+                    description:=$"Feedback {status} (ID: {feedbackId})",
+                    sourceSystem:="Admin Panel",
+                    referenceID:=feedbackId.ToString(),
+                    referenceTable:="customer_feedback",
+                    oldValue:=oldStatus,
+                    newValue:=status
+                )
+
                 LoadFeedback(currentFilter)
             Else
                 MessageBox.Show("Failed to update feedback status.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -359,6 +372,19 @@ Public Class Feedback
 
             If result > 0 Then
                 MessageBox.Show("Feedback deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                ' Log Activity
+                ActivityLogger.LogUserActivity(
+                    action:="Delete",
+                    actionCategory:="System",
+                    description:=$"Deleted Feedback ID: {feedbackId}",
+                    sourceSystem:="Admin Panel",
+                    referenceID:=feedbackId.ToString(),
+                    referenceTable:="customer_feedback",
+                    oldValue:="Existing",
+                    newValue:="Deleted"
+                )
+
                 LoadFeedback(currentFilter)
             Else
                 MessageBox.Show("Failed to delete feedback.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)

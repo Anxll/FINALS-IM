@@ -751,6 +751,7 @@ Public Class Orders
     ' ============================================================
 
     Private Sub UpdateOrderStatus(orderID As Integer, newStatus As String)
+        Dim oldStatus As String = ""
         Try
             Using conn As New MySqlConnection("Server=127.0.0.1;User=root;Password=;Database=tabeya_system")
                 conn.Open()
@@ -758,6 +759,13 @@ Public Class Orders
                 ' Start transaction for data integrity
                 Using transaction = conn.BeginTransaction()
                     Try
+                        ' Fetch OLD status first
+                        Dim getOldStatusQuery As String = "SELECT OrderStatus FROM orders WHERE OrderID = @id"
+                        Using cmdOld As New MySqlCommand(getOldStatusQuery, conn, transaction)
+                            cmdOld.Parameters.AddWithValue("@id", orderID)
+                            oldStatus = Convert.ToString(cmdOld.ExecuteScalar())
+                        End Using
+
                         ' Update order status
                         Dim orderQuery As String = "UPDATE orders SET OrderStatus = @status, UpdatedDate = NOW() WHERE OrderID = @orderID"
                         Using cmd As New MySqlCommand(orderQuery, conn, transaction)
@@ -845,6 +853,56 @@ Public Class Orders
             End If
 
             MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            ' ==========================================================================================
+            ' POST-TRANSACTION LOGGING
+            ' ==========================================================================================
+            
+            ' 1. Log generic status change
+            ActivityLogger.LogUserActivity(
+                "Order Status Updated", 
+                "Order", 
+                $"Updated Order #{orderID} status from '{oldStatus}' to '{newStatus}'", 
+                "Admin Panel"
+            )
+
+            ' 2. Log Inventory Deductions (Specific to "Completed" status)
+            ' We do the actual logging here AFTER the transaction is committed to ensure we don't block the main flow
+            ' and to allow ActivityLogger to use its own connection freely.
+            If newStatus = "Completed" Then
+                Try
+                    Using connLog As New MySqlConnection("Server=127.0.0.1;User=root;Password=;Database=tabeya_system")
+                        connLog.Open()
+                        ' Fetch the specific movements for this order to detail the log
+                        Dim logQuery As String = "SELECT i.IngredientName, iml.QuantityChanged, iml.UnitType " &
+                                                "FROM inventory_movement_log iml " &
+                                                "JOIN ingredients i ON iml.IngredientID = i.IngredientID " &
+                                                "WHERE iml.OrderID = @orderID AND iml.ChangeType = 'DEDUCT' " &
+                                                "ORDER BY iml.MovementID DESC"
+
+                        Using cmdLog As New MySqlCommand(logQuery, connLog)
+                            cmdLog.Parameters.AddWithValue("@orderID", orderID)
+                            Using reader As MySqlDataReader = cmdLog.ExecuteReader()
+                                While reader.Read()
+                                    Dim ingName As String = reader.GetString(0)
+                                    Dim qty As Decimal = Math.Abs(reader.GetDecimal(1))
+                                    Dim unit As String = reader.GetString(2)
+
+                                    ActivityLogger.LogUserActivity(
+                                        $"Order #{orderID} Completed",
+                                        "Inventory",
+                                        $"Deducted {qty:N2} {unit} of {ingName}",
+                                        "Admin Panel"
+                                    )
+                                End While
+                            End Using
+                        End Using
+                    End Using
+                Catch ex As Exception
+                    ' Silent fail for logging to not annoy user if main action worked
+                    Console.WriteLine("Logging error: " & ex.Message)
+                End Try
+            End If
         Catch ex As Exception
             MessageBox.Show("Error updating status: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

@@ -1,8 +1,6 @@
-﻿
-Imports MySqlConnector   ' ✔ Correct library for your modDB module
+﻿Imports MySqlConnector   ' ✔ Correct library for your modDB module
 
 Public Class Adminlogin
-
     Private Sub Label2_Click(sender As Object, e As EventArgs) Handles Label2.Click
         ' Optional
     End Sub
@@ -20,7 +18,6 @@ Public Class Adminlogin
         ' Initialize database tables
         CheckAndCreateTables()
     End Sub
-
 
     ' 🔐 ADMIN LOGIN BUTTON
     Private Sub adminlog_Click(sender As Object, e As EventArgs) Handles adminlog.Click
@@ -50,7 +47,6 @@ Public Class Adminlogin
 
         Try
             openConn()
-
             cmd = New MySqlCommand(query, conn)
             cmd.Parameters.AddWithValue("@user", user)
             cmd.Parameters.AddWithValue("@pass", encryptedPass)
@@ -67,14 +63,41 @@ Public Class Adminlogin
                 reader.Close()
                 conn.Close()
 
+                ' ✅ OLD LOGGING SYSTEM (Keep this if you want)
                 Logs("Admin logged in", "Login")
 
+                ' ✅✅ NEW ACTIVITY LOGGING SYSTEM
+                ActivityLogger.LogUserActivity(
+                    "User Login",
+                    "Login",
+                    $"{CurrentLoggedUser.name} successfully logged into the Admin Panel",
+                    "Admin Panel"
+                )
+
+                ' Open dashboard
                 Dim dashboard As New AdminDashboard()
                 dashboard.StartPosition = FormStartPosition.CenterScreen
                 dashboard.WindowState = FormWindowState.Maximized
                 dashboard.Show()
                 Me.Hide()
+
             Else
+                ' ❌ LOG FAILED LOGIN ATTEMPT
+                ActivityLogger.LogActivity(
+                    "Admin",                         ' UserType (this is admin login form)
+                    Nothing,                         ' UserID (no valid user)
+                    user,                           ' Username attempted
+                    "Failed Login Attempt",         ' Action
+                    "Login",                        ' ActionCategory
+                    $"Failed admin login attempt for username: {user}", ' Description
+                    "Admin Panel",                  ' SourceSystem
+                    Nothing,                        ' ReferenceID
+                    Nothing,                        ' ReferenceTable
+                    Nothing,                        ' OldValue
+                    Nothing,                        ' NewValue
+                    "Failed"                        ' Status
+                )
+
                 MessageBox.Show("Invalid username or password.",
                                 "Login Failed",
                                 MessageBoxButtons.OK,
@@ -82,12 +105,23 @@ Public Class Adminlogin
             End If
 
         Catch ex As Exception
+            ' ❌ LOG EXCEPTION/ERROR
+            ActivityLogger.LogActivity(
+                "Admin",                            ' UserType (admin login form)
+                Nothing,
+                user,
+                "Login Error",
+                "Login",
+                $"Admin login error occurred: {ex.Message}",
+                "Admin Panel",
+                Nothing, Nothing, Nothing, Nothing,
+                "Failed"
+            )
+
             MessageBox.Show(ex.Message)
         End Try
-
     End Sub
 
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs)
-
     End Sub
 End Class

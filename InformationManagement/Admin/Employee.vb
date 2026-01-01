@@ -275,6 +275,18 @@ Public Class Employee
             closeConn()
 
             MessageBox.Show("Employee deleted successfully.")
+
+            ' Log Activity
+            ActivityLogger.LogUserActivity(
+                action:="Delete",
+                actionCategory:="User Management",
+                description:=$"Deleted Employee ID: {empID}",
+                sourceSystem:="Admin Panel",
+                referenceID:=empID.ToString(),
+                referenceTable:="employee",
+                oldValue:="Active",
+                newValue:="Deleted"
+            )
             LoadEmployees(resetPage:=True)
 
         Catch ex As Exception

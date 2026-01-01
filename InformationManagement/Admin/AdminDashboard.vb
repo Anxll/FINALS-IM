@@ -249,4 +249,21 @@ Public Class AdminDashboard
     Private Sub AdminDashboard_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
         Application.Exit()
     End Sub
+
+    Private Sub ActivityLogs_Click(sender As Object, e As EventArgs) Handles ActivityLogs.Click
+        HighlightButton(ActivityLogs)
+
+        ' Create an instance of ActivityLogs form
+        Dim activityLogsForm As New ActivityLogsForm()
+
+        With activityLogsForm
+            .TopLevel = False
+            .FormBorderStyle = FormBorderStyle.None
+            .Dock = DockStyle.Fill
+            Panel1.Controls.Clear()
+            Panel1.Controls.Add(activityLogsForm)
+            .BringToFront()
+            .Show()
+        End With
+    End Sub
 End Class

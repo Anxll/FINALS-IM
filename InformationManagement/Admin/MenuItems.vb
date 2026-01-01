@@ -633,6 +633,14 @@ Public Class MenuItems
                 cmd.Parameters.AddWithValue("@id", productId)
                 cmd.ExecuteNonQuery()
 
+                ' Log Activity
+                ActivityLogger.LogUserActivity(
+                    "Product Deleted", 
+                    "Product", 
+                    $"Deleted Product: {productName} (ID: {productId})", 
+                    "Admin Panel"
+                )
+
                 MessageBox.Show("✓ Product deleted successfully!" & vbCrLf & vbCrLf &
                               "Product: " & productName,
                               "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -728,6 +736,14 @@ Public Class MenuItems
             cmdUpdate.ExecuteNonQuery()
 
             MessageBox.Show($"✓ Availability changed to: {newStatus}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            ' Log Activity
+            ActivityLogger.LogUserActivity(
+                "Product Availability Updated", 
+                "Product", 
+                $"Updated availability for Product ID {productId} to '{newStatus}'", 
+                "Admin Panel"
+            )
 
             ' Force full refresh
             DataGridMenu.DataSource = Nothing

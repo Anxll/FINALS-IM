@@ -79,6 +79,16 @@ Public Class AddEmployee
 
             MessageBox.Show("Employee Added Successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
+            ' Log Activity
+            ActivityLogger.LogUserActivity(
+                action:="Add",
+                actionCategory:="User Management",
+                description:=$"Added New Employee: {FirstName.Text} {LastName.Text}",
+                sourceSystem:="Admin Panel",
+                referenceTable:="employee",
+                newValue:=$"Name: {FirstName.Text} {LastName.Text}, Position: {cmbPosition.Text}"
+            )
+
             ' Refresh employee list if open
             If Application.OpenForms().OfType(Of Employee).Any() Then
                 Dim empForm As Employee = Application.OpenForms().OfType(Of Employee).First()

@@ -171,6 +171,19 @@ Public Class Customer
                 End Sub)
 
                 MessageBox.Show("Customer profile has been archived and removed from active list.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                ' Log Activity
+                ActivityLogger.LogUserActivity(
+                    action:="Delete",
+                    actionCategory:="User Management",
+                    description:=$"Deleted/Archived Customer Profile: {name} (ID: {customerId})",
+                    sourceSystem:="Admin Panel",
+                    referenceID:=customerId.ToString(),
+                    referenceTable:="customers",
+                    oldValue:="Active",
+                    newValue:="Archived"
+                )
+
                 Await RefreshCustomersAsync()
 
             Catch ex As Exception

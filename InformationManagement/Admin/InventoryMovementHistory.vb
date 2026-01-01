@@ -669,6 +669,10 @@ Public Class InventoryMovementHistory
                               "Filtered Movement Cost: ₱" & filteredCost.ToString("#,##0.00") & vbCrLf &
                               "Overall Total Cost: ₱" & overallCost.ToString("#,##0.00"),
                               "Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                ' Log Activity
+                Dim ingredientLog As String = If(_ingredientID > 0, $"for Ingredient ID {_ingredientID}", "for All Ingredients")
+                ActivityLogger.LogUserActivity("History Exported", "Inventory", $"Exported inventory movement history {ingredientLog} to CSV.", "Admin Panel")
             End If
 
         Catch ex As Exception
@@ -723,6 +727,10 @@ Public Class InventoryMovementHistory
                 "Clear History Complete",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information)
+
+            ' Log Activity
+            Dim targetLog As String = If(_ingredientID > 0, $"Ingredient ID {_ingredientID}", "All Ingredients")
+            ActivityLogger.LogUserActivity("History Cleared", "Inventory", $"Cleared inventory movement history for {targetLog} (Records: {rowsDeleted})", "Admin Panel")
 
             LoadMovementHistory()
             LoadMovementStatistics()

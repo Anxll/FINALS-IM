@@ -283,6 +283,10 @@ Public Class AddNewBatch
                 "Success",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information)
+
+                ' Log Activity
+                ActivityLogger.LogUserActivity("New Batch Added", "Inventory", $"Added Batch {batchNumber} to Ingredient ID {_ingredientID} (Qty: {quantity})", "Admin Panel")
+
                 Me.DialogResult = DialogResult.OK
                 Me.Close()
             Catch ex As Exception

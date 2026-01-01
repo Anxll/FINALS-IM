@@ -306,6 +306,14 @@ Public Class FormAddNewmenuItem
                           "Product ID: " & insertedId,
                           "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
+            ' Log Activity
+            ActivityLogger.LogUserActivity(
+                "Added New Menu Item", 
+                "Product", 
+                $"Added new menu item: {txtProductName.Text.Trim()} (ID: {insertedId})", 
+                "Admin Panel"
+            )
+
             ' Clear form for next entry
             ClearForm()
 

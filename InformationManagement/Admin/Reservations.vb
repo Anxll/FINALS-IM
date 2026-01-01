@@ -152,6 +152,7 @@ Public Class Reservations
     ' UPDATE RESERVATION STATUS WITH AUTO PAYMENT UPDATE
     ' ==========================================
     Private Sub UpdateReservationStatus(reservationID As Integer, newStatus As String)
+        Dim oldStatus As String = ""
         Try
             openConn()
 
@@ -165,6 +166,13 @@ Public Class Reservations
                     cmd.Parameters.AddWithValue("@status", newStatus)
                     cmd.Parameters.AddWithValue("@updated", DateTime.Now)
                     cmd.Parameters.AddWithValue("@id", reservationID)
+
+                    ' Fetch OLD status first
+                    Dim getOldStatusQuery As String = "SELECT ReservationStatus FROM reservations WHERE ReservationID = @id"
+                    Using cmdOld As New MySqlCommand(getOldStatusQuery, conn, transaction)
+                        cmdOld.Parameters.AddWithValue("@id", reservationID)
+                        oldStatus = Convert.ToString(cmdOld.ExecuteScalar())
+                    End Using
 
                     Dim rowsAffected As Integer = cmd.ExecuteNonQuery()
 
@@ -229,6 +237,53 @@ Public Class Reservations
                     message &= vbCrLf & "Payment status automatically set to 'Refunded'."
                 End If
                 MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+                ' ==========================================================================================
+                ' POST-TRANSACTION LOGGING
+                ' ==========================================================================================
+                
+                ' 1. Log generic status change
+                ActivityLogger.LogUserActivity(
+                    "Reservation Status Updated", 
+                    "Reservation", 
+                    $"Updated Reservation #{reservationID} status from '{oldStatus}' to '{newStatus}'", 
+                    "Admin Panel"
+                )
+
+                ' 2. Log Inventory Deductions (Specific to "Completed" status)
+                If newStatus = "Completed" Then
+                    Try
+                        ' Use a separate connection for logging lookup to avoid transaction conflict if any
+                        Using connLog As New MySqlConnection("Server=127.0.0.1;User=root;Password=;Database=tabeya_system")
+                            connLog.Open()
+                            Dim logQuery As String = "SELECT i.IngredientName, iml.QuantityChanged, iml.UnitType " &
+                                                    "FROM inventory_movement_log iml " &
+                                                    "JOIN ingredients i ON iml.IngredientID = i.IngredientID " &
+                                                    "WHERE iml.ReservationID = @resID AND iml.ChangeType = 'DEDUCT' " &
+                                                    "ORDER BY iml.MovementID DESC"
+
+                            Using cmdLog As New MySqlCommand(logQuery, connLog)
+                                cmdLog.Parameters.AddWithValue("@resID", reservationID)
+                                Using reader As MySqlDataReader = cmdLog.ExecuteReader()
+                                    While reader.Read()
+                                        Dim ingName As String = reader.GetString(0)
+                                        Dim qty As Decimal = Math.Abs(reader.GetDecimal(1))
+                                        Dim unit As String = reader.GetString(2)
+
+                                        ActivityLogger.LogUserActivity(
+                                            $"Reservation #{reservationID} Completed",
+                                            "Inventory",
+                                            $"Deducted {qty:N2} {unit} of {ingName}",
+                                            "Admin Panel"
+                                        )
+                                    End While
+                                End Using
+                            End Using
+                        End Using
+                    Catch ex As Exception
+                        Console.WriteLine("Logging error: " & ex.Message)
+                    End Try
+                End If
 
             Catch ex As Exception
                 transaction.Rollback()

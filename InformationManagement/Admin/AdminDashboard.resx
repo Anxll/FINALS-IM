@@ -118,10 +118,20 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="ActivityLogs.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADOSURBVDhPtdM/
+        S4JRFMdxcSpoFMKpaGqxzam1IBx6CzW1Se9BEITeh0NrS202tfQe2hQdbGoTPiFc5T6X589d/MF3Oefc
+        LxcOp4VHrLCu4Q9vOGqlwQJnaT0OhljiA8dp87dQKEkQjDDGJ07iZo7gNvz0GxtM42ajYBuc4iLIvuJG
+        lmAXXB5OgGdMKrjLEQzwVEEvR/CC1xL60Uyt4Ao3Jez33iSYhl2nzNDOEXTCrlO60Uy1ICdlgjnOC1M1
+        wT3e48JDuLT0hKv4wfXu/T8cwb1FKUANjQAAAABJRU5ErkJggg==
+</value>
+  </data>
   <data name="Feedback.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vQAADr0BR/uQrQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADkSURBVDhPvdMx
+        vAAADrwBlbxySQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAADkSURBVDhPvdMx
         SkNBFIXhYGMKESxEXIcggq2QLMBGtLG1ENQlaGElglUWEESSysZGxFKwUrC0sbASwRV88nBGJpdkTOUP
         t3nn3B9mmNdq/SdYwA3aMauCGezgzg/X2CwLx3jD54TZwn1azgzzcicE42gka+HbchYchGASq3jECZ5L
         wVEoNpfUC9PHOfYwwEp5/ii4xGmYi9DZrwk+8JrmK2SZquAQG2nOQpapCqZhRLAb0ynYLgXzeImNCk+Y

@@ -183,7 +183,34 @@ Module modDB
                 )"
             Dim cmdPayroll As New MySqlCommand(sqlPayroll, conn)
             cmdPayroll.ExecuteNonQuery()
+            ' Add this inside CheckAndCreateTables() method, after the payroll table creation
 
+            ' 3. Create activity_logs table
+            Dim sqlActivityLogs As String = "
+                CREATE TABLE IF NOT EXISTS activity_logs (
+                    LogID INT PRIMARY KEY AUTO_INCREMENT,
+                    UserType ENUM('Admin','Staff','Customer') NOT NULL COMMENT 'Type of user performing action',
+                    UserID INT NULL COMMENT 'ID of user',
+                    Username VARCHAR(100) NULL COMMENT 'Username or name of user',
+                    Action VARCHAR(255) NOT NULL COMMENT 'Action performed',
+                    ActionCategory ENUM('Login','Logout','Order','Reservation','Payment','Inventory','Product','User Management','Report','System') NOT NULL COMMENT 'Category of action',
+                    Description TEXT NULL COMMENT 'Detailed description',
+                    SourceSystem ENUM('POS','Website','Admin Panel') NOT NULL COMMENT 'System where action occurred',
+                    ReferenceID VARCHAR(50) NULL COMMENT 'Reference ID',
+                    ReferenceTable VARCHAR(100) NULL COMMENT 'Table name affected',
+                    OldValue TEXT NULL COMMENT 'Previous value',
+                    NewValue TEXT NULL COMMENT 'New value',
+                    Status ENUM('Success','Failed','Warning') DEFAULT 'Success',
+                    SessionID VARCHAR(100) NULL,
+                    Timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    INDEX idx_user_type (UserType),
+                    INDEX idx_action_category (ActionCategory),
+                    INDEX idx_timestamp (Timestamp),
+                    INDEX idx_user_id (UserID),
+                    INDEX idx_source_system (SourceSystem)
+                )"
+            Dim cmdActivityLogs As New MySqlCommand(sqlActivityLogs, conn)
+            cmdActivityLogs.ExecuteNonQuery()
         Catch ex As Exception
             MsgBox("Error initializing database tables: " & ex.Message, MsgBoxStyle.Critical)
         Finally

@@ -98,6 +98,18 @@ Public Class EditEmployee
 
             MessageBox.Show("Employee updated successfully!", "Success")
 
+            ' Log Activity
+            ActivityLogger.LogUserActivity(
+                action:="Edit",
+                actionCategory:="User Management",
+                description:=$"Updated Employee Profile: {FirstName.Text} {LastName.Text} (ID: {EmployeeIDValue})",
+                sourceSystem:="Admin Panel",
+                referenceID:=EmployeeIDValue.ToString(),
+                referenceTable:="employee",
+                oldValue:="Existing Profile",
+                newValue:="Updated Profile"
+            )
+
             If Application.OpenForms().OfType(Of Employee).Any Then
                 Dim empForm As Employee = Application.OpenForms().OfType(Of Employee).First()
                 empForm.LoadEmployees()

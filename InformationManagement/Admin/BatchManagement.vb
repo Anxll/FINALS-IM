@@ -236,6 +236,10 @@ Public Class BatchManagement
             cmd.ExecuteNonQuery()
 
             MessageBox.Show("Batch discarded successfully." & vbCrLf & "Discarded quantity: " & stock.ToString("N2"), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            
+            ' Log Activity
+            ActivityLogger.LogUserActivity("Batch Discarded", "Inventory", $"Discarded Batch #{id} - Reason: {reason}", "Admin Panel")
+
             LoadBatchData()
 
         Catch ex As Exception

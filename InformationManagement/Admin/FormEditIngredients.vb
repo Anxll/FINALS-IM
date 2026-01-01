@@ -508,6 +508,14 @@ Public Class FormEditIngredients
 
             MessageBox.Show("✓ Ingredient added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
+            ' Log Activity
+            ActivityLogger.LogUserActivity(
+                "Ingredient Added to Product", 
+                "Product", 
+                $"Added {selectedIngredient.Name} ({quantity} {cmbUnitExist.Text}) to {currentProductName}", 
+                "Admin Panel"
+            )
+
             cmbIngredients.SelectedIndex = -1
             txtQuantityExist.Clear()
             cmbUnitExist.Text = ""
@@ -613,6 +621,14 @@ Public Class FormEditIngredients
 
             MessageBox.Show("✓ Ingredient created and added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
+            ' Log Activity
+            ActivityLogger.LogUserActivity(
+                "New Ingredient Created & Added", 
+                "Product", 
+                $"Created {txtNewName.Text.Trim()} and added to {currentProductName}", 
+                "Admin Panel"
+            )
+
             txtNewName.Clear()
             txtQuantityNew.Clear()
             cmbUnitNew.Text = ""
@@ -666,6 +682,15 @@ Public Class FormEditIngredients
 
             If rowsAffected = 1 Then
                 MessageBox.Show($"✓ Removed '{ingredientName}'!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                
+                ' Log Activity
+                ActivityLogger.LogUserActivity(
+                    "Ingredient Removed from Product", 
+                    "Product", 
+                    $"Removed {ingredientName} from {currentProductName}", 
+                    "Admin Panel"
+                )
+                
                 LoadCurrentIngredients()
             Else
                 MessageBox.Show("Could not delete ingredient.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -703,6 +728,14 @@ Public Class FormEditIngredients
             Next
 
             MessageBox.Show("✓ Changes saved!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            ' Log Activity
+            ActivityLogger.LogUserActivity(
+                "Product Ingredients Updated", 
+                "Product", 
+                $"Updated ingredient quantities for {currentProductName}", 
+                "Admin Panel"
+            )
 
             Me.DialogResult = DialogResult.OK
             Me.Close()

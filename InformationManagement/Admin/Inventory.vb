@@ -585,10 +585,11 @@ Public Class Inventory
 
                 transaction.Commit()
 
-                MessageBox.Show("Item deleted (archived) successfully.",
-                                "Delete Item",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information)
+                ' Log the deletion activity
+                ActivityLogger.LogUserActivity("Inventory Item Deleted", "Inventory", $"Moved {ingredientName} (ID: {ingredientID}) to Archive", "Admin Panel")
+
+                MessageBox.Show($"{ingredientName} has been moved to archive.", "Success",
+                              MessageBoxButtons.OK, MessageBoxIcon.Information)
 
                 LoadInventorySummary()
                 LoadInventoryStatistics()

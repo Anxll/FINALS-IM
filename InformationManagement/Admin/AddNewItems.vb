@@ -556,6 +556,9 @@ Public Class AddNewItems
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information)
 
+            ' Log Activity
+            ActivityLogger.LogUserActivity("Inventory Item Updated", "Inventory", $"Updated ingredient: {txtFullName.Text.Trim()} (ID: {_ingredientId})", "Admin Panel")
+
             Me.DialogResult = DialogResult.OK
             Me.Close()
 

@@ -24,6 +24,7 @@ Partial Class AdminDashboard
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AdminDashboard))
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.ActivityLogs = New System.Windows.Forms.Button()
         Me.Feedback = New System.Windows.Forms.Button()
         Me.Customer = New System.Windows.Forms.Button()
         Me.Employee = New System.Windows.Forms.Button()
@@ -49,6 +50,7 @@ Partial Class AdminDashboard
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.ActivityLogs)
         Me.SidePanel.Controls.Add(Me.Feedback)
         Me.SidePanel.Controls.Add(Me.Customer)
         Me.SidePanel.Controls.Add(Me.Employee)
@@ -67,6 +69,22 @@ Partial Class AdminDashboard
         Me.SidePanel.Name = "SidePanel"
         Me.SidePanel.Size = New System.Drawing.Size(261, 713)
         Me.SidePanel.TabIndex = 0
+        '
+        'ActivityLogs
+        '
+        Me.ActivityLogs.FlatAppearance.BorderSize = 0
+        Me.ActivityLogs.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ActivityLogs.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ActivityLogs.ForeColor = System.Drawing.Color.White
+        Me.ActivityLogs.Image = CType(resources.GetObject("ActivityLogs.Image"), System.Drawing.Image)
+        Me.ActivityLogs.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.ActivityLogs.Location = New System.Drawing.Point(20, 542)
+        Me.ActivityLogs.Name = "ActivityLogs"
+        Me.ActivityLogs.Size = New System.Drawing.Size(190, 28)
+        Me.ActivityLogs.TabIndex = 8
+        Me.ActivityLogs.Text = "Activity Logs"
+        Me.ActivityLogs.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.ActivityLogs.UseVisualStyleBackColor = True
         '
         'Feedback
         '
@@ -333,4 +351,5 @@ Partial Class AdminDashboard
     Friend WithEvents Customer As Button
     Friend WithEvents Feedback As Button
     Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents ActivityLogs As Button
 End Class
