@@ -33,7 +33,7 @@ Partial Class FormPayroll
         Dim DataPoint5 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 2380000.0R)
         Dim DataPoint6 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 2450000.0R)
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnExportPdf = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.RoundedPane23 = New InformationManagement.RoundedPane2()
@@ -72,7 +72,7 @@ Partial Class FormPayroll
         Me.RoundedPane24.AutoScroll = True
         Me.RoundedPane24.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane24.BorderThickness = 1
-        Me.RoundedPane24.Controls.Add(Me.Button1)
+        Me.RoundedPane24.Controls.Add(Me.btnExportPdf)
         Me.RoundedPane24.Controls.Add(Me.Label10)
         Me.RoundedPane24.Controls.Add(Me.Chart1)
         Me.RoundedPane24.CornerRadius = 15
@@ -82,18 +82,23 @@ Partial Class FormPayroll
         Me.RoundedPane24.Size = New System.Drawing.Size(1045, 393)
         Me.RoundedPane24.TabIndex = 7
         '
-        'Button1
+        'btnExportPdf
         '
-        Me.Button1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(903, 20)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(104, 30)
-        Me.Button1.TabIndex = 10
-        Me.Button1.Text = "   Export"
-        Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnExportPdf.BackColor = System.Drawing.Color.FromArgb(CType(CType(99, Byte), Integer), CType(CType(102, Byte), Integer), CType(CType(241, Byte), Integer))
+        Me.btnExportPdf.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnExportPdf.FlatAppearance.BorderSize = 0
+        Me.btnExportPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnExportPdf.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
+        Me.btnExportPdf.ForeColor = System.Drawing.Color.White
+        Me.btnExportPdf.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
+        Me.btnExportPdf.Location = New System.Drawing.Point(903, 20)
+        Me.btnExportPdf.Name = "btnExportPdf"
+        Me.btnExportPdf.Size = New System.Drawing.Size(104, 30)
+        Me.btnExportPdf.TabIndex = 10
+        Me.btnExportPdf.Text = "   Export PDF"
+        Me.btnExportPdf.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnExportPdf.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnExportPdf.UseVisualStyleBackColor = False
         '
         'Label10
         '
@@ -406,7 +411,7 @@ Partial Class FormPayroll
     Friend WithEvents Chart1 As DataVisualization.Charting.Chart
     Friend WithEvents RoundedPane24 As RoundedPane2
     Friend WithEvents Label10 As Label
-    Friend WithEvents Button1 As Button
+    Friend WithEvents btnExportPdf As Button
     Friend WithEvents RoundedPane26 As RoundedPane2
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents RoundedPane25 As RoundedPane2

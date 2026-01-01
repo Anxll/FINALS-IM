@@ -585,96 +585,15 @@ Public Class InventoryMovementHistory
         ' Auto-search after typing stops (can implement debouncing if needed)
     End Sub
 
-    ' Export functionality
-    Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
-        Try
-            If dgvMovements.Rows.Count = 0 Then
-                MessageBox.Show("No data to export.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Return
-            End If
-
-            Dim sfd As New SaveFileDialog()
-            sfd.Filter = "CSV Files (*.csv)|*.csv"
-            sfd.FileName = "InventoryMovements_" & Date.Now.ToString("yyyyMMdd_HHmmss") & ".csv"
-
-            If sfd.ShowDialog() = DialogResult.OK Then
-                Dim csv As New System.Text.StringBuilder()
-
-                ' Headers
-                Dim headers As New List(Of String)
-                For Each col As DataGridViewColumn In dgvMovements.Columns
-                    If col.Visible Then
-                        headers.Add(col.HeaderText)
-                    End If
-                Next
-                csv.AppendLine(String.Join(",", headers))
-
-                ' Data
-                For Each row As DataGridViewRow In dgvMovements.Rows
-                    If Not row.IsNewRow Then
-                        Dim values As New List(Of String)
-                        For Each col As DataGridViewColumn In dgvMovements.Columns
-                            If col.Visible Then
-                                Dim value As String = If(row.Cells(col.Index).Value IsNot Nothing,
-                                                        row.Cells(col.Index).Value.ToString().Replace(",", ";"),
-                                                        "")
-                                values.Add("""" & value & """")
-                            End If
-                        Next
-                        csv.AppendLine(String.Join(",", values))
-                    End If
-                Next
-
-                ' Add costs at the bottom
-                openConn()
-
-                ' Filtered Movement Cost
-                Dim cmdFiltered As New MySqlCommand("
-                    SELECT COALESCE(SUM(ABS(iml.QuantityChanged) * ib.CostPerUnit), 0)
-                    FROM inventory_movement_log iml
-                    INNER JOIN inventory_batches ib ON iml.BatchID = ib.BatchID
-                    WHERE DATE(iml.MovementDate) BETWEEN @startDate AND @endDate
-                ", conn)
-                cmdFiltered.Parameters.AddWithValue("@startDate", dtpStartDate.Value.Date)
-                cmdFiltered.Parameters.AddWithValue("@endDate", dtpEndDate.Value.Date)
-
-                If _ingredientID > 0 Then
-                    cmdFiltered.CommandText &= " AND iml.IngredientID = @ingredientID"
-                    cmdFiltered.Parameters.AddWithValue("@ingredientID", _ingredientID)
-                End If
-
-                Dim filteredCost As Decimal = Convert.ToDecimal(cmdFiltered.ExecuteScalar())
-
-                ' Overall Total Cost from active batches
-                Dim cmdOverall As New MySqlCommand("
-                    SELECT COALESCE(SUM(StockQuantity * CostPerUnit), 0)
-                    FROM inventory_batches
-                    WHERE BatchStatus = 'Active'
-                ", conn)
-
-                If _ingredientID > 0 Then
-                    cmdOverall.CommandText &= " AND IngredientID = @ingredientID"
-                    cmdOverall.Parameters.AddWithValue("@ingredientID", _ingredientID)
-                End If
-
-                Dim overallCost As Decimal = Convert.ToDecimal(cmdOverall.ExecuteScalar())
-                closeConn()
-
-                csv.AppendLine("")
-                csv.AppendLine("FILTERED MOVEMENT COST,₱" & filteredCost.ToString("#,##0.00"))
-                csv.AppendLine("OVERALL TOTAL COST (Active Batches),₱" & overallCost.ToString("#,##0.00"))
-
-                System.IO.File.WriteAllText(sfd.FileName, csv.ToString())
-                MessageBox.Show("Export successful!" & vbCrLf &
-                              "Filtered Movement Cost: ₱" & filteredCost.ToString("#,##0.00") & vbCrLf &
-                              "Overall Total Cost: ₱" & overallCost.ToString("#,##0.00"),
-                              "Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("Error exporting data: " & ex.Message, "Export Error",
-                          MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+    ' =======================================================================
+    ' EXPORT PDF
+    ' =======================================================================
+    Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click
+        If Reports.Instance IsNot Nothing Then
+            Reports.Instance.ExportCurrentReport()
+        Else
+            MessageBox.Show("Please open the Reports screen to export.", "PDF Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
     End Sub
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click

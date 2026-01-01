@@ -46,8 +46,9 @@ Partial Class FormSales
         Dim DataPoint16 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 1150000.0R)
         Dim DataPoint17 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 950000.0R)
         Dim DataPoint18 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 1300000.0R)
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnExportPdf = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.RoundedPane23 = New InformationManagement.RoundedPane2()
@@ -55,36 +56,47 @@ Partial Class FormSales
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
+        Me.RoundedPane22 = New InformationManagement.RoundedPane2()
+        Me.RoundedPane25 = New InformationManagement.RoundedPane2()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
         Me.RoundedPane221 = New InformationManagement.RoundedPane2()
         Me.PictureBox11 = New System.Windows.Forms.PictureBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.lblTotalRevenue = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.RoundedPane22 = New InformationManagement.RoundedPane2()
-        Me.RoundedPane25 = New InformationManagement.RoundedPane2()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.RoundedPane24.SuspendLayout()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane23.SuspendLayout()
         Me.RoundedPane218.SuspendLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.RoundedPane21.SuspendLayout()
-        Me.RoundedPane221.SuspendLayout()
-        CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane22.SuspendLayout()
         Me.RoundedPane25.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.RoundedPane21.SuspendLayout()
+        Me.RoundedPane221.SuspendLayout()
+        CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
+        '
+        'Panel1
+        '
+        Me.Panel1.AutoScroll = True
+        Me.Panel1.AutoSize = True
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(1488, 715)
+        Me.Panel1.TabIndex = 11
         '
         'RoundedPane24
         '
         Me.RoundedPane24.BackColor = System.Drawing.Color.Transparent
         Me.RoundedPane24.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane24.BorderThickness = 1
-        Me.RoundedPane24.Controls.Add(Me.Button1)
+        Me.RoundedPane24.Controls.Add(Me.btnExportPdf)
         Me.RoundedPane24.Controls.Add(Me.Label1)
         Me.RoundedPane24.Controls.Add(Me.Chart1)
         Me.RoundedPane24.CornerRadius = 15
@@ -96,19 +108,23 @@ Partial Class FormSales
         Me.RoundedPane24.Size = New System.Drawing.Size(1393, 476)
         Me.RoundedPane24.TabIndex = 10
         '
-        'Button1
+        'btnExportPdf
         '
-        Me.Button1.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(1219, 20)
-        Me.Button1.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(139, 37)
-        Me.Button1.TabIndex = 11
-        Me.Button1.Text = "   Export"
-        Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnExportPdf.BackColor = System.Drawing.Color.FromArgb(CType(CType(99, Byte), Integer), CType(CType(102, Byte), Integer), CType(CType(241, Byte), Integer))
+        Me.btnExportPdf.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnExportPdf.FlatAppearance.BorderSize = 0
+        Me.btnExportPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnExportPdf.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
+        Me.btnExportPdf.ForeColor = System.Drawing.Color.White
+        Me.btnExportPdf.Image = CType(resources.GetObject("btnExportPdf.Image"), System.Drawing.Image)
+        Me.btnExportPdf.Location = New System.Drawing.Point(1036, 23)
+        Me.btnExportPdf.Name = "btnExportPdf"
+        Me.btnExportPdf.Size = New System.Drawing.Size(135, 45)
+        Me.btnExportPdf.TabIndex = 10
+        Me.btnExportPdf.Text = "   Export PDF"
+        Me.btnExportPdf.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnExportPdf.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnExportPdf.UseVisualStyleBackColor = False
         '
         'Label1
         '
@@ -251,6 +267,75 @@ Partial Class FormSales
         Me.Label14.TabIndex = 3
         Me.Label14.Text = "5,650,000.00"
         '
+        'RoundedPane22
+        '
+        Me.RoundedPane22.BorderColor = System.Drawing.Color.LightGray
+        Me.RoundedPane22.BorderThickness = 1
+        Me.RoundedPane22.Controls.Add(Me.RoundedPane25)
+        Me.RoundedPane22.Controls.Add(Me.Label10)
+        Me.RoundedPane22.Controls.Add(Me.Label11)
+        Me.RoundedPane22.CornerRadius = 15
+        Me.RoundedPane22.FillColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(68, Byte), Integer), CType(CType(68, Byte), Integer))
+        Me.RoundedPane22.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.RoundedPane22.Location = New System.Drawing.Point(520, 33)
+        Me.RoundedPane22.Margin = New System.Windows.Forms.Padding(4)
+        Me.RoundedPane22.Name = "RoundedPane22"
+        Me.RoundedPane22.Size = New System.Drawing.Size(447, 170)
+        Me.RoundedPane22.TabIndex = 7
+        '
+        'RoundedPane25
+        '
+        Me.RoundedPane25.BackColor = System.Drawing.Color.Transparent
+        Me.RoundedPane25.BorderColor = System.Drawing.Color.Transparent
+        Me.RoundedPane25.BorderThickness = 1
+        Me.RoundedPane25.Controls.Add(Me.PictureBox1)
+        Me.RoundedPane25.CornerRadius = 8
+        Me.RoundedPane25.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(113, Byte), Integer), CType(CType(113, Byte), Integer))
+        Me.RoundedPane25.Location = New System.Drawing.Point(37, 30)
+        Me.RoundedPane25.Margin = New System.Windows.Forms.Padding(4)
+        Me.RoundedPane25.Name = "RoundedPane25"
+        Me.RoundedPane25.Size = New System.Drawing.Size(57, 47)
+        Me.RoundedPane25.TabIndex = 8
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(7, 7)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(49, 34)
+        Me.PictureBox1.TabIndex = 4
+        Me.PictureBox1.TabStop = False
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.BackColor = System.Drawing.Color.Transparent
+        Me.Label10.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.ForeColor = System.Drawing.Color.White
+        Me.Label10.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Label10.Location = New System.Drawing.Point(115, 46)
+        Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(121, 23)
+        Me.Label10.TabIndex = 0
+        Me.Label10.Text = "Total Expenses"
+        Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.BackColor = System.Drawing.Color.Transparent
+        Me.Label11.Font = New System.Drawing.Font("Segoe UI", 12.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.ForeColor = System.Drawing.Color.White
+        Me.Label11.Location = New System.Drawing.Point(32, 103)
+        Me.Label11.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(161, 30)
+        Me.Label11.TabIndex = 3
+        Me.Label11.Text = "10,750,000.00"
+        '
         'RoundedPane21
         '
         Me.RoundedPane21.BorderColor = System.Drawing.Color.LightGray
@@ -320,87 +405,6 @@ Partial Class FormSales
         Me.lblTotalRevenue.TabIndex = 3
         Me.lblTotalRevenue.Text = "16,400,00.00"
         '
-        'Panel1
-        '
-        Me.Panel1.AutoScroll = True
-        Me.Panel1.AutoSize = True
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1488, 715)
-        Me.Panel1.TabIndex = 11
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.BackColor = System.Drawing.Color.Transparent
-        Me.Label11.Font = New System.Drawing.Font("Segoe UI", 12.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.ForeColor = System.Drawing.Color.White
-        Me.Label11.Location = New System.Drawing.Point(32, 103)
-        Me.Label11.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(161, 30)
-        Me.Label11.TabIndex = 3
-        Me.Label11.Text = "10,750,000.00"
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.BackColor = System.Drawing.Color.Transparent
-        Me.Label10.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.ForeColor = System.Drawing.Color.White
-        Me.Label10.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Label10.Location = New System.Drawing.Point(115, 46)
-        Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(121, 23)
-        Me.Label10.TabIndex = 0
-        Me.Label10.Text = "Total Expenses"
-        Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'RoundedPane22
-        '
-        Me.RoundedPane22.BorderColor = System.Drawing.Color.LightGray
-        Me.RoundedPane22.BorderThickness = 1
-        Me.RoundedPane22.Controls.Add(Me.RoundedPane25)
-        Me.RoundedPane22.Controls.Add(Me.Label10)
-        Me.RoundedPane22.Controls.Add(Me.Label11)
-        Me.RoundedPane22.CornerRadius = 15
-        Me.RoundedPane22.FillColor = System.Drawing.Color.FromArgb(CType(CType(239, Byte), Integer), CType(CType(68, Byte), Integer), CType(CType(68, Byte), Integer))
-        Me.RoundedPane22.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.RoundedPane22.Location = New System.Drawing.Point(520, 33)
-        Me.RoundedPane22.Margin = New System.Windows.Forms.Padding(4)
-        Me.RoundedPane22.Name = "RoundedPane22"
-        Me.RoundedPane22.Size = New System.Drawing.Size(447, 170)
-        Me.RoundedPane22.TabIndex = 7
-        '
-        'RoundedPane25
-        '
-        Me.RoundedPane25.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane25.BorderColor = System.Drawing.Color.Transparent
-        Me.RoundedPane25.BorderThickness = 1
-        Me.RoundedPane25.Controls.Add(Me.PictureBox1)
-        Me.RoundedPane25.CornerRadius = 8
-        Me.RoundedPane25.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(113, Byte), Integer), CType(CType(113, Byte), Integer))
-        Me.RoundedPane25.Location = New System.Drawing.Point(37, 30)
-        Me.RoundedPane25.Margin = New System.Windows.Forms.Padding(4)
-        Me.RoundedPane25.Name = "RoundedPane25"
-        Me.RoundedPane25.Size = New System.Drawing.Size(57, 47)
-        Me.RoundedPane25.TabIndex = 8
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(7, 7)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(49, 34)
-        Me.PictureBox1.TabIndex = 4
-        Me.PictureBox1.TabStop = False
-        '
         'FormSales
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -425,14 +429,14 @@ Partial Class FormSales
         Me.RoundedPane23.PerformLayout()
         Me.RoundedPane218.ResumeLayout(False)
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.RoundedPane21.ResumeLayout(False)
-        Me.RoundedPane21.PerformLayout()
-        Me.RoundedPane221.ResumeLayout(False)
-        CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane22.ResumeLayout(False)
         Me.RoundedPane22.PerformLayout()
         Me.RoundedPane25.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.RoundedPane21.ResumeLayout(False)
+        Me.RoundedPane21.PerformLayout()
+        Me.RoundedPane221.ResumeLayout(False)
+        CType(Me.PictureBox11, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -446,7 +450,7 @@ Partial Class FormSales
     Friend WithEvents Chart1 As DataVisualization.Charting.Chart
     Friend WithEvents RoundedPane24 As RoundedPane2
     Friend WithEvents Label1 As Label
-    Friend WithEvents Button1 As Button
+    Friend WithEvents btnExportPdf As Button
     Friend WithEvents Panel1 As Panel
     Friend WithEvents Label11 As Label
     Friend WithEvents Label10 As Label

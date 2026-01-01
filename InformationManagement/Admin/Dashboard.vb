@@ -147,13 +147,13 @@ Public Class Dashboard
             Dim dateFilter As String = GetDateFilterCondition("OrderDate")
             Dim dateFilterPayment As String = GetDateFilterCondition("PaymentDate")
 
-            ' Calculate from both Orders and Reservation Payments
+            ' Calculate from both Orders and Payments (targeting reservations)
             cmd = New MySqlCommand($"
                 SELECT COALESCE(
                     (SELECT SUM(TotalAmount) FROM orders WHERE OrderStatus = 'Completed' AND {dateFilter}),
                     0
                 ) + COALESCE(
-                    (SELECT SUM(AmountPaid) FROM reservation_payments WHERE PaymentStatus IN ('Paid', 'Completed') AND {dateFilterPayment}),
+                    (SELECT SUM(AmountPaid) FROM payments WHERE ReservationID IS NOT NULL AND PaymentStatus IN ('Paid', 'Completed') AND {dateFilterPayment}),
                     0
                 ) as TotalRevenue", conn)
 
@@ -481,8 +481,9 @@ LIMIT 8;"
             ' Get Catering/Reservation revenue from completed payments with filter
             cmd = New MySqlCommand($"
         SELECT COALESCE(SUM(rp.AmountPaid), 0) as CateringRevenue
-        FROM reservation_payments rp
-        WHERE rp.PaymentStatus IN ('Completed', 'Paid')
+        FROM payments rp
+        WHERE rp.ReservationID IS NOT NULL 
+        AND rp.PaymentStatus IN ('Completed', 'Paid')
         AND {paymentDateFilter}", conn)
 
             Dim cateringRevenue As Decimal = Convert.ToDecimal(cmd.ExecuteScalar())
@@ -1405,18 +1406,9 @@ LIMIT 8;"
         ")
         End If
 
-        ' Check and add reservation_payments table
-        If TableExists("reservation_payments") Then
-            queries.Add($"
-            SELECT MONTH(PaymentDate) AS MonthNum, AmountPaid AS Amount, 'Revenue' AS Type
-            FROM reservation_payments
-            WHERE PaymentStatus IN ('Paid','Completed')
-            AND YEAR(PaymentDate) = {currentYear}
-        ")
-        End If
-
-        ' Check and add sales table
-        If TableExists("sales") Then
+        ' We now use the unified 'payments' table which is already handled above.
+        ' We primarily rely on orders and payments now, which should exist.
+        If TableExists("orders") OrElse TableExists("payments") Then
             queries.Add($"
             SELECT MONTH(sales_date) AS MonthNum, revenue AS Amount, 'Revenue' AS Type
             FROM sales

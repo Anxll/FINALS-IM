@@ -17,6 +17,13 @@ Public Class FormProductPerformance
         Public Property DetailLabel As Label
     End Class
 
+    ' =======================================================================
+    ' REFRESH DATA
+    ' =======================================================================
+    Public Sub RefreshData()
+        LoadProductPerformance()
+    End Sub
+
     Private Sub FormProductPerformance_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         viewType = DefaultView
         InitializeSummaryTiles()
@@ -223,19 +230,37 @@ Public Class FormProductPerformance
         Dim whereClauseReservations As String = ""
         Dim whereClauseOrders As String = ""
 
+        Dim selectedYear As Integer = Reports.SelectedYear
+        Dim selectedMonth As Integer = Reports.SelectedMonth
+
         Select Case periodFilter
             Case "Daily"
-                whereClauseReservations = $" AND DATE({dateColumnReservations}) = CURDATE()"
-                whereClauseOrders = $" AND DATE({dateColumnOrders}) = CURDATE()"
+                If selectedYear = DateTime.Now.Year Then
+                    whereClauseReservations = $" AND DATE({dateColumnReservations}) = CURDATE()"
+                    whereClauseOrders = $" AND DATE({dateColumnOrders}) = CURDATE()"
+                Else
+                    whereClauseReservations = $" AND DATE({dateColumnReservations}) = '{selectedYear}-12-31'"
+                    whereClauseOrders = $" AND DATE({dateColumnOrders}) = '{selectedYear}-12-31'"
+                End If
             Case "Weekly"
-                whereClauseReservations = $" AND YEARWEEK({dateColumnReservations}, 1) = YEARWEEK(CURDATE(), 1)"
-                whereClauseOrders = $" AND YEARWEEK({dateColumnOrders}, 1) = YEARWEEK(CURDATE(), 1)"
+                If selectedYear = DateTime.Now.Year Then
+                    whereClauseReservations = $" AND YEARWEEK({dateColumnReservations}, 1) = YEARWEEK(CURDATE(), 1)"
+                    whereClauseOrders = $" AND YEARWEEK({dateColumnOrders}, 1) = YEARWEEK(CURDATE(), 1)"
+                Else
+                    whereClauseReservations = $" AND YEAR({dateColumnReservations}) = {selectedYear} AND WEEK({dateColumnReservations}, 1) = 52"
+                    whereClauseOrders = $" AND YEAR({dateColumnOrders}) = {selectedYear} AND WEEK({dateColumnOrders}, 1) = 52"
+                End If
             Case "Monthly"
-                whereClauseReservations = $" AND MONTH({dateColumnReservations}) = MONTH(CURDATE()) AND YEAR({dateColumnReservations}) = YEAR(CURDATE())"
-                whereClauseOrders = $" AND MONTH({dateColumnOrders}) = MONTH(CURDATE()) AND YEAR({dateColumnOrders}) = YEAR(CURDATE())"
+                If selectedMonth = 0 Then
+                    whereClauseReservations = $" AND YEAR({dateColumnReservations}) = {selectedYear}"
+                    whereClauseOrders = $" AND YEAR({dateColumnOrders}) = {selectedYear}"
+                Else
+                    whereClauseReservations = $" AND YEAR({dateColumnReservations}) = {selectedYear} AND MONTH({dateColumnReservations}) = {selectedMonth}"
+                    whereClauseOrders = $" AND YEAR({dateColumnOrders}) = {selectedYear} AND MONTH({dateColumnOrders}) = {selectedMonth}"
+                End If
             Case "Yearly"
-                whereClauseReservations = $" AND YEAR({dateColumnReservations}) = YEAR(CURDATE())"
-                whereClauseOrders = $" AND YEAR({dateColumnOrders}) = YEAR(CURDATE())"
+                whereClauseReservations = $" AND YEAR({dateColumnReservations}) = {selectedYear}"
+                whereClauseOrders = $" AND YEAR({dateColumnOrders}) = {selectedYear}"
         End Select
 
         Dim groupByColumn As String = If(viewType = "Category", "p.Category", "p.ProductName")
@@ -349,11 +374,17 @@ $"SELECT DisplayName,
             chartArea.AxisX.LabelStyle.Angle = If(data.Rows.Count > 8, -45, 0)
         End If
 
-        Dim periodText = $"({Reports.SelectedPeriod})"
+        Dim periodPart As String = ""
+        If Reports.SelectedPeriod = "Monthly" AndAlso Reports.SelectedMonth > 0 Then
+            periodPart = $" ({System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Reports.SelectedMonth)} {Reports.SelectedYear})"
+        Else
+            periodPart = $" ({Reports.SelectedPeriod} {Reports.SelectedYear})"
+        End If
+        
         Dim filterText = If(viewType = "Product" AndAlso selectedCategory <> "All Categories", $" - {selectedCategory}", "")
         Dim viewTypeText = If(viewType = "Category", "by Category", "by Product")
-
-        Chart1.Titles(0).Text = $"Revenue {viewTypeText} {periodText}{filterText}"
+        
+        Chart1.Titles(0).Text = $"Revenue {viewTypeText}{periodPart}{filterText}"
     End Sub
 
     Private Sub UpdateSummaryTiles(data As DataTable)
@@ -378,25 +409,15 @@ $"SELECT DisplayName,
         Next
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Try
-            Using dialog As New SaveFileDialog()
-                dialog.Title = "Export Performance Chart"
-                dialog.Filter = "PNG Image|*.png"
-                dialog.FileName = $"Performance_{viewType}_{Reports.SelectedPeriod}_{Date.Now:yyyyMMddHHmmss}.png"
-
-                If dialog.ShowDialog() = DialogResult.OK Then
-                    Dim bmp As New Bitmap(Chart1.Width, Chart1.Height)
-                    Chart1.DrawToBitmap(bmp, New Rectangle(0, 0, Chart1.Width, Chart1.Height))
-                    bmp.Save(dialog.FileName, Imaging.ImageFormat.Png)
-                    MessageBox.Show("Chart exported successfully.", "Export Complete",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information)
-                End If
-            End Using
-        Catch ex As Exception
-            MessageBox.Show($"Export failed.{Environment.NewLine}{ex.Message}",
-                            "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+    ' =======================================================================
+    ' EXPORT PDF
+    ' =======================================================================
+    Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click
+        If Reports.Instance IsNot Nothing Then
+            Reports.Instance.ExportCurrentReport()
+        Else
+            MessageBox.Show("Please open the Reports screen to export.", "PDF Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
     End Sub
 
 End Class

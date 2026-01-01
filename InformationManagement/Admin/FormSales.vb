@@ -25,6 +25,9 @@ Public Class FormSales
             ' Get the selected period from Reports form
             currentPeriod = Reports.SelectedPeriod
 
+            ' Check if current year has data, if not use the latest year with data
+            currentYear = GetLatestYearWithData()
+
             ConfigureChart()
             LoadAndDisplaySalesData()
             UpdateSummaryCards()
@@ -39,12 +42,104 @@ Public Class FormSales
     End Sub
 
     ' =======================================================================
+    ' GET LATEST YEAR WITH DATA
+    ' =======================================================================
+    Private Function GetLatestYearWithData() As Integer
+        Try
+            ' Try to open connection if not already open
+            If conn Is Nothing OrElse conn.State <> ConnectionState.Open Then
+                Try
+                    openConn()
+                Catch
+                    ' If connection fails, default to current year
+                    Return DateTime.Now.Year
+                End Try
+            End If
+
+            ' Check for most recent year in orders table
+            Dim sql = "SELECT MAX(YEAR(OrderDate)) FROM orders WHERE OrderDate IS NOT NULL"
+            Using cmd As New MySqlCommand(sql, conn)
+                Dim result = cmd.ExecuteScalar()
+                If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                    Dim latestYear = Convert.ToInt32(result)
+                    ' If latest year is valid, use it
+                    If latestYear > 2000 Then
+                        Return latestYear
+                    End If
+                End If
+            End Using
+
+            ' Also check payments if orders is empty
+            If TableExists("payments") Then
+                sql = "SELECT MAX(YEAR(PaymentDate)) FROM payments WHERE PaymentDate IS NOT NULL"
+                Using cmd As New MySqlCommand(sql, conn)
+                    Dim result = cmd.ExecuteScalar()
+                    If result IsNot Nothing AndAlso Not IsDBNull(result) Then
+                        Dim latestYear = Convert.ToInt32(result)
+                        If latestYear > 2000 Then
+                            Return latestYear
+                        End If
+                    End If
+                End Using
+            End If
+
+        Catch ex As Exception
+            ' If error occurs, just use current year
+            MessageBox.Show($"Note: Using current year. Unable to detect data year: {ex.Message}",
+                          "Information", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End Try
+
+        ' Default to current year if no data found
+        Return DateTime.Now.Year
+    End Function
+
+    ' =======================================================================
+    ' CHECK IF YEAR HAS DATA
+    ' =======================================================================
+    Private Function HasDataForYear(year As Integer) As Boolean
+        Try
+            If conn Is Nothing OrElse conn.State <> ConnectionState.Open Then
+                Return False
+            End If
+
+            ' Check orders table
+            Dim sql = "SELECT COUNT(*) FROM orders WHERE YEAR(OrderDate) = @Year"
+            Using cmd As New MySqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@Year", year)
+                If Convert.ToInt32(cmd.ExecuteScalar()) > 0 Then
+                    Return True
+                End If
+            End Using
+
+            ' Check payments if available
+            If TableExists("payments") Then
+                sql = "SELECT COUNT(*) FROM payments WHERE YEAR(PaymentDate) = @Year"
+                Using cmd As New MySqlCommand(sql, conn)
+                    cmd.Parameters.AddWithValue("@Year", year)
+                    If Convert.ToInt32(cmd.ExecuteScalar()) > 0 Then
+                        Return True
+                    End If
+                End Using
+            End If
+
+            Return False
+
+        Catch
+            Return False
+        End Try
+    End Function
+
+    ' =======================================================================
     ' UPDATE HEADER LABEL
     ' =======================================================================
     Private Sub UpdateHeaderLabel()
         Try
             If Label1 IsNot Nothing Then
-                Label1.Text = $"Financial Overview - {currentPeriod} ({currentYear})"
+                Dim monthPart As String = ""
+                If currentPeriod = "Monthly" AndAlso Reports.SelectedMonth > 0 Then
+                    monthPart = " - " & System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Reports.SelectedMonth)
+                End If
+                Label1.Text = $"Financial Overview - {currentPeriod}{monthPart} ({currentYear})"
             End If
         Catch ex As Exception
             ' Silently handle if Label1 doesn't exist
@@ -116,8 +211,6 @@ Public Class FormSales
                 End Try
             End If
 
-            ' EnsureOrderItemPriceSnapshotInfrastructure() - Removed to avoid creating tables
-
             If Not TablesExist() Then
                 MessageBox.Show("Required tables not found. Showing sample data.")
                 LoadSampleData()
@@ -152,7 +245,9 @@ Public Class FormSales
                     End While
 
                     If Not hasRows Then
-                        ' MessageBox.Show($"No sales data found for {currentPeriod} period in {currentYear}.")
+                        MessageBox.Show($"No sales data found for {currentPeriod} period in {currentYear}. Showing sample data.",
+                                      "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        LoadSampleData()
                     End If
                 End Using
             End Using
@@ -200,9 +295,9 @@ Public Class FormSales
     ' TABLE CHECKER
     ' =======================================================================
     Private Function TablesExist() As Boolean
-        ' We primarily rely on orders and reservation_payments now, which should exist.
+        ' We primarily rely on orders and payments now, which should exist.
         Return TableExists("orders") OrElse
-               TableExists("reservation_payments")
+               TableExists("payments")
     End Function
 
     Private Function TableExists(tableName As String) As Boolean
@@ -238,12 +333,12 @@ Public Class FormSales
             AND YEAR(OrderDate) = @Year
         ")
 
-        ' RESERVATION_PAYMENTS TABLE - Revenue
-        If TableExists("reservation_payments") Then
+        ' PAYMENTS TABLE - Revenue
+        If TableExists("payments") Then
             Dim resDateGrouping As String = GetDateGroupingForColumn("PaymentDate")
             q.Add($"
                 SELECT {resDateGrouping} AS PeriodGroup, AmountPaid AS Amount, 'Revenue' AS Type
-                FROM reservation_payments
+                FROM payments
                 WHERE PaymentStatus IN ('Paid','Completed')
                 AND YEAR(PaymentDate) = @Year
             ")
@@ -433,12 +528,12 @@ Public Class FormSales
                 {whereClauseOrders}
             ")
 
-            ' RESERVATION_PAYMENTS TABLE - Revenue
-            If TableExists("reservation_payments") Then
+            ' PAYMENTS TABLE - Revenue
+            If TableExists("payments") Then
                 Dim whereClause As String = GetPeriodWhereClause("PaymentDate")
                 q.Add($"
                     SELECT COALESCE(SUM(AmountPaid), 0) AS Amount
-                    FROM reservation_payments
+                    FROM payments
                     WHERE PaymentStatus IN ('Paid','Completed')
                     {whereClause}
                 ")
@@ -508,13 +603,31 @@ Public Class FormSales
     Private Function GetPeriodWhereClause(dateColumn As String) As String
         Select Case currentPeriod
             Case "Daily"
-                Return $"AND YEAR({dateColumn}) = @Year AND DATE({dateColumn}) = CURDATE()"
+                ' If it's the current year, we can keep using CURDATE() or match a specific day.
+                ' For now, let's keep it simple: if current year, show today. If past year, show Dec 31 (end of year).
+                If currentYear = DateTime.Now.Year Then
+                    Return $"AND DATE({dateColumn}) = CURDATE()"
+                Else
+                    ' For past years, "Daily" isn't super useful as "Today", 
+                    ' but let's default to the last day of that year for consistency.
+                    Return $"AND DATE({dateColumn}) = '{currentYear}-12-31'"
+                End If
 
             Case "Weekly"
-                Return $"AND YEAR({dateColumn}) = @Year AND YEARWEEK({dateColumn}, 1) = YEARWEEK(CURDATE(), 1)"
+                If currentYear = DateTime.Now.Year Then
+                    Return $"AND YEARWEEK({dateColumn}, 1) = YEARWEEK(CURDATE(), 1)"
+                Else
+                    ' Show the last week of that year
+                    Return $"AND YEAR({dateColumn}) = @Year AND WEEK({dateColumn}, 1) = 52"
+                End If
 
             Case "Monthly"
-                Return $"AND YEAR({dateColumn}) = @Year AND MONTH({dateColumn}) = MONTH(CURDATE())"
+                ' If SelectedMonth is 0 (All Months), don't filter by month, just year
+                If Reports.SelectedMonth = 0 Then
+                    Return $"AND YEAR({dateColumn}) = @Year"
+                Else
+                    Return $"AND YEAR({dateColumn}) = @Year AND MONTH({dateColumn}) = {Reports.SelectedMonth}"
+                End If
 
             Case "Yearly"
                 Return $"AND YEAR({dateColumn}) = @Year"
@@ -536,27 +649,14 @@ Public Class FormSales
 
 
     ' =======================================================================
-    ' EXPORT CHART
+    ' EXPORT PDF
     ' =======================================================================
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Try
-            Dim dlg As New SaveFileDialog With {
-                .Filter = "PNG|*.png|JPEG|*.jpg",
-                .FileName = $"Sales_Report_{currentPeriod}_{DateTime.Now.ToString("yyyy-MM-dd")}"
-            }
-
-            If dlg.ShowDialog() = DialogResult.OK Then
-                Dim bmp As New Bitmap(Chart1.Width, Chart1.Height)
-                Chart1.DrawToBitmap(bmp, Chart1.ClientRectangle)
-                bmp.Save(dlg.FileName)
-                bmp.Dispose()
-
-                MessageBox.Show("Chart exported successfully!")
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("Export Error: " & ex.Message)
-        End Try
+    Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click
+        If Reports.Instance IsNot Nothing Then
+            Reports.Instance.ExportCurrentReport()
+        Else
+            MessageBox.Show("Please open the Reports screen to export.", "PDF Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
     End Sub
 
     ' =======================================================================
@@ -564,10 +664,14 @@ Public Class FormSales
     ' =======================================================================
     Public Sub RefreshData()
         currentPeriod = Reports.SelectedPeriod
+        currentYear = Reports.SelectedYear
+        
+        ' Update header
+        UpdateHeaderLabel()
+        
         ConfigureChart()
         LoadAndDisplaySalesData()
         UpdateSummaryCards()
-        UpdateHeaderLabel()
     End Sub
 
     ' =======================================================================

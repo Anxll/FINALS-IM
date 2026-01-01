@@ -19,6 +19,7 @@ Public Class FormDineInOrders
 
     Private originalData As DataTable
     Private isInitialLoad As Boolean = True
+    Private _lastSearchText As String = ""
 
     Private Async Sub FormDineInOrders_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Set initial loading state
@@ -68,7 +69,7 @@ Public Class FormDineInOrders
         End With
 
         ' Style the export button
-        StyleButton(Button1)
+        StyleButton(btnExportPdf)
 
         ' Style the label
         Label2.Font = New Font("Segoe UI", 14, FontStyle.Bold)
@@ -98,9 +99,10 @@ Public Class FormDineInOrders
 
             ' Get total count with filter
             _totalRecords = Await Task.Run(Function() FetchTotalDineInCount(searchText))
-            _totalPages = Math.Ceiling(_totalRecords / _pageSize)
-            If _totalPages = 0 Then _totalPages = 1
+            _totalPages = Math.Max(1, CInt(Math.Ceiling(CDbl(_totalRecords) / _pageSize)))
+            
             If _currentPage > _totalPages Then _currentPage = _totalPages
+            If _currentPage < 1 Then _currentPage = 1
 
             Dim offset As Integer = (_currentPage - 1) * _pageSize
             Dim table As DataTable = Await Task.Run(Function() FetchDineInOrdersTable(searchText, offset, _pageSize))
@@ -131,15 +133,30 @@ Public Class FormDineInOrders
     Private Function FetchTotalDineInCount(searchText As String) As Integer
         ' Get period filter from Reports form
         Dim periodFilter As String = ""
+        Dim selectedYear As Integer = Reports.SelectedYear
+        Dim selectedMonth As Integer = Reports.SelectedMonth
+
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                periodFilter = " AND DATE(OrderDate) = CURDATE() "
+                If selectedYear = DateTime.Now.Year Then
+                    periodFilter = " AND DATE(OrderDate) = CURDATE() "
+                Else
+                    periodFilter = $" AND DATE(OrderDate) = '{selectedYear}-12-31' "
+                End If
             Case "Weekly"
-                periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                If selectedYear = DateTime.Now.Year Then
+                    periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                Else
+                    periodFilter = $" AND YEAR(OrderDate) = {selectedYear} AND WEEK(OrderDate, 1) = 52 "
+                End If
             Case "Monthly"
-                periodFilter = " AND MONTH(OrderDate) = MONTH(CURDATE()) AND YEAR(OrderDate) = YEAR(CURDATE()) "
+                If selectedMonth = 0 Then
+                    periodFilter = $" AND YEAR(OrderDate) = {selectedYear} "
+                Else
+                    periodFilter = $" AND YEAR(OrderDate) = {selectedYear} AND MONTH(OrderDate) = {selectedMonth} "
+                End If
             Case "Yearly"
-                periodFilter = " AND YEAR(OrderDate) = YEAR(CURDATE()) "
+                periodFilter = $" AND YEAR(OrderDate) = {selectedYear} "
         End Select
 
         Dim query As String = "SELECT COUNT(*) FROM orders WHERE OrderType = 'Dine-in' " & periodFilter & " AND (OrderID LIKE @search OR OrderStatus LIKE @search)"
@@ -155,15 +172,30 @@ Public Class FormDineInOrders
     Private Function FetchDineInOrdersTable(searchText As String, offset As Integer, limit As Integer) As DataTable
         ' Get period filter from Reports form
         Dim periodFilter As String = ""
+        Dim selectedYear As Integer = Reports.SelectedYear
+        Dim selectedMonth As Integer = Reports.SelectedMonth
+
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
+                If selectedYear = DateTime.Now.Year Then
+                    periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
+                Else
+                    periodFilter = $" AND DATE(o.OrderDate) = '{selectedYear}-12-31' "
+                End If
             Case "Weekly"
-                periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                If selectedYear = DateTime.Now.Year Then
+                    periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                Else
+                    periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} AND WEEK(o.OrderDate, 1) = 52 "
+                End If
             Case "Monthly"
-                periodFilter = " AND MONTH(o.OrderDate) = MONTH(CURDATE()) AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
+                If selectedMonth = 0 Then
+                    periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} "
+                Else
+                    periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} AND MONTH(o.OrderDate) = {selectedMonth} "
+                End If
             Case "Yearly"
-                periodFilter = " AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
+                periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} "
         End Select
 
         ' Build query with LIMIT, OFFSET and search
@@ -180,7 +212,7 @@ Public Class FormDineInOrders
             "DATE_FORMAT(CONCAT(o.OrderDate, ' ', o.OrderTime), '%Y-%m-%d %H:%i') AS OrderDateTime " &
             "FROM orders o " &
             "WHERE o.OrderType = 'Dine-in' " & periodFilter & " AND (o.OrderID LIKE @search OR o.OrderStatus LIKE @search) " &
-            "ORDER BY o.OrderDate DESC, o.OrderTime DESC " &
+            "ORDER BY o.OrderDate DESC, o.OrderTime DESC, o.OrderID DESC " &
             "LIMIT @limit OFFSET @offset"
 
         Dim dt As New DataTable()
@@ -205,13 +237,32 @@ Public Class FormDineInOrders
 
         Try
             Await Task.Run(Sub()
-                               ' Re-use the same period filter logic
+                               ' Get period filter from Reports form
                                Dim periodFilter As String = ""
+                               Dim selectedYear As Integer = Reports.SelectedYear
+                               Dim selectedMonth As Integer = Reports.SelectedMonth
+
                                Select Case Reports.SelectedPeriod
-                                   Case "Daily" : periodFilter = " AND DATE(OrderDate) = CURDATE() "
-                                   Case "Weekly" : periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                                   Case "Monthly" : periodFilter = " AND MONTH(OrderDate) = MONTH(CURDATE()) AND YEAR(OrderDate) = YEAR(CURDATE()) "
-                                   Case "Yearly" : periodFilter = " AND YEAR(OrderDate) = YEAR(CURDATE()) "
+                                   Case "Daily"
+                                       If selectedYear = DateTime.Now.Year Then
+                                           periodFilter = " AND DATE(OrderDate) = CURDATE() "
+                                       Else
+                                           periodFilter = $" AND DATE(OrderDate) = '{selectedYear}-12-31' "
+                                       End If
+                                   Case "Weekly"
+                                       If selectedYear = DateTime.Now.Year Then
+                                           periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                                       Else
+                                           periodFilter = $" AND YEAR(OrderDate) = {selectedYear} AND WEEK(OrderDate, 1) = 52 "
+                                       End If
+                                   Case "Monthly"
+                                       If selectedMonth = 0 Then
+                                           periodFilter = $" AND YEAR(OrderDate) = {selectedYear} "
+                                       Else
+                                           periodFilter = $" AND YEAR(OrderDate) = {selectedYear} AND MONTH(OrderDate) = {selectedMonth} "
+                                       End If
+                                   Case "Yearly"
+                                       periodFilter = $" AND YEAR(OrderDate) = {selectedYear} "
                                End Select
 
                                Using conn As New MySqlConnection(connectionString)
@@ -271,32 +322,18 @@ Public Class FormDineInOrders
     ' =============================
     ' SEARCH FUNCTIONALITY
     ' =============================
-    Private Sub TextBoxSearch_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearch.TextChanged
-        If isInitialLoad OrElse originalData Is Nothing Then Return
-
-        Dim filter = TextBoxSearch.Text.Trim()
-        If filter = "Search orders..." OrElse String.IsNullOrEmpty(filter) Then
-            DataGridView1.DataSource = originalData
-        Else
-            Try
-                Dim dv As New DataView(originalData)
-                dv.RowFilter = String.Format("OrderID = {0} OR Status LIKE '%{1}%'", If(IsNumeric(filter), filter, -1), filter)
-                DataGridView1.DataSource = dv
-            Catch
-                ' Fallback
-            End Try
-        End If
-
-        Try
-            Dim dataSource = DataGridView1.DataSource
-            If TypeOf dataSource Is DataView Then
-                UpdateSummaryTiles(CType(dataSource, DataView).ToTable())
-            ElseIf TypeOf dataSource Is DataTable Then
-                UpdateSummaryTiles(CType(dataSource, DataTable))
-            End If
-        Catch
-        End Try
-        ApplyStatusColors()
+    Private Async Sub TextBoxSearch_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearch.TextChanged
+        If isInitialLoad Then Return
+        
+        Dim currentSearch = TextBoxSearch.Text.Trim()
+        If currentSearch = "Search orders..." Then currentSearch = ""
+        
+        ' Only refresh if the actual search criteria changed
+        If currentSearch = _lastSearchText Then Return
+        
+        _lastSearchText = currentSearch
+        _currentPage = 1
+        Await BeginLoadDineInOrders()
     End Sub
 
     Private Sub TextBoxSearch_Enter(sender As Object, e As EventArgs) Handles TextBoxSearch.Enter
@@ -375,16 +412,15 @@ Public Class FormDineInOrders
     Private Sub SetLoadingState(isLoading As Boolean)
         Try
             Me.UseWaitCursor = isLoading
-            DataGridView1.Enabled = Not isLoading
-            Button1.Enabled = Not isLoading
+            btnExportPdf.Enabled = Not isLoading
             If btnPrev IsNot Nothing Then btnPrev.Enabled = Not isLoading AndAlso _currentPage > 1
             If btnNext IsNot Nothing Then btnNext.Enabled = Not isLoading AndAlso _currentPage < _totalPages
             LabelHeader.Text = If(isLoading, _baseTitle & " (Updating...)", _baseTitle)
 
             If isLoading Then
-                Button1.Text = "   Loading..."
+                btnExportPdf.Text = "   Loading..."
             Else
-                Button1.Text = "   Export"
+                btnExportPdf.Text = "   Export PDF"
             End If
         Catch
         End Try
@@ -461,83 +497,24 @@ Public Class FormDineInOrders
         End If
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        ExportToCSV()
-    End Sub
-
-    Private Sub ExportToCSV()
-        If DataGridView1.Rows.Count = 0 Then
-            MessageBox.Show("No data to export.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Return
+    Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click
+        If Reports.Instance IsNot Nothing Then
+            Reports.Instance.ExportCurrentReport()
+        Else
+            MessageBox.Show("Please open the Reports screen to export.", "PDF Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-
-        Try
-            Dim saveDialog As New SaveFileDialog With {
-                .Filter = "CSV Files (*.csv)|*.csv",
-                .FileName = String.Format("DineIn_Orders_{0:yyyyMMdd_HHmmss}.csv", DateTime.Now),
-                .Title = "Export Dine-In Orders Report"
-            }
-
-            If saveDialog.ShowDialog() = DialogResult.OK Then
-                Button1.Enabled = False
-                Button1.Text = "   Exporting..."
-
-                Using writer As New IO.StreamWriter(saveDialog.FileName, False, System.Text.Encoding.UTF8)
-                    ' Write headers
-                    Dim headers As New List(Of String)
-                    For Each column As DataGridViewColumn In DataGridView1.Columns
-                        If column.Visible Then
-                            headers.Add(EscapeCSV(column.HeaderText))
-                        End If
-                    Next
-                    writer.WriteLine(String.Join(",", headers))
-
-                    ' Write data rows (optimized)
-                    For Each row As DataGridViewRow In DataGridView1.Rows
-                        If Not row.IsNewRow Then
-                            Dim values As New List(Of String)
-                            For Each column As DataGridViewColumn In DataGridView1.Columns
-                                If column.Visible Then
-                                    Dim cellValue As String = GetCellValueAsString(row.Cells(column.Index))
-                                    values.Add(EscapeCSV(cellValue))
-                                End If
-                            Next
-                            writer.WriteLine(String.Join(",", values))
-                        End If
-                    Next
-                End Using
-
-                MessageBox.Show("Export completed successfully!" & vbCrLf &
-                              DataGridView1.Rows.Count & " orders exported.",
-                              "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-                Process.Start("explorer.exe", String.Format("/select,""{0}""", saveDialog.FileName))
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("Export failed: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
-            Button1.Enabled = True
-            Button1.Text = "   Export"
-        End Try
     End Sub
-
-    Private Function GetCellValueAsString(cell As DataGridViewCell) As String
-        If cell.Value Is Nothing Then Return ""
-        Dim value As String = cell.Value.ToString()
-        Return value.Replace("₱", "").Trim()
-    End Function
-
-    Private Function EscapeCSV(value As String) As String
-        If String.IsNullOrEmpty(value) Then Return ""
-        If value.Contains(",") OrElse value.Contains("""") OrElse value.Contains(vbCrLf) Then
-            Return """" & value.Replace("""", """""") & """"
-        End If
-        Return value
-    End Function
 
     Protected Overrides Sub OnFormClosing(e As FormClosingEventArgs)
         _dataCache?.Dispose()
         MyBase.OnFormClosing(e)
     End Sub
+    ' =======================================================================
+    ' REFRESH DATA
+    ' =======================================================================
+    Public Async Sub RefreshData()
+        _currentPage = 1
+        Await BeginLoadDineInOrders()
+    End Sub
+
 End Class

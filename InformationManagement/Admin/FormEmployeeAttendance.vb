@@ -8,6 +8,7 @@ Public Class FormEmployeeAttendance
     Private isInitialLoad As Boolean = True
     Private _isLoading As Boolean = False
     Private _searchDebounceTimer As Timer
+    Private _lastSearchText As String = ""
 
     ' Pagination state
     Private _currentPage As Integer = 1
@@ -375,6 +376,12 @@ Public Class FormEmployeeAttendance
     Private Sub TextBoxSearch_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearch.TextChanged
         If isInitialLoad Then Return
 
+        Dim currentSearch = GetSearchText()
+        ' Only restart timer if the actual search criteria changed
+        If currentSearch = _lastSearchText Then Return
+        
+        _lastSearchText = currentSearch
+        
         ' Stop any existing timer and restart
         _searchDebounceTimer.Stop()
         _searchDebounceTimer.Start()
@@ -389,7 +396,7 @@ Public Class FormEmployeeAttendance
         Try
             Me.UseWaitCursor = isLoading
             DataGridView1.Enabled = Not isLoading
-            Button1.Enabled = Not isLoading
+            btnExportPdf.Enabled = Not isLoading
             TextBoxSearch.Enabled = Not isLoading
             If btnPrev IsNot Nothing Then btnPrev.Enabled = Not isLoading AndAlso _currentPage > 1
             If btnNext IsNot Nothing Then btnNext.Enabled = Not isLoading AndAlso _currentPage < _totalPages
@@ -446,7 +453,7 @@ Public Class FormEmployeeAttendance
             btnHelp.FlatStyle = FlatStyle.Flat
             btnHelp.FlatAppearance.BorderSize = 0
             btnHelp.Size = New Size(150, 45)
-            btnHelp.Location = New Point(Button1.Left - 160, Button1.Top)
+            btnHelp.Location = New Point(btnExportPdf.Left - 160, btnExportPdf.Top)
             btnHelp.Cursor = Cursors.Hand
             btnHelp.Anchor = AnchorStyles.Top Or AnchorStyles.Right
 
@@ -497,151 +504,16 @@ Public Class FormEmployeeAttendance
     '====================================
     ' EXPORT BUTTON
     '====================================
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        ExportToCSV()
-    End Sub
-
     '====================================
-    ' EXPORT TO CSV - FIXED VERSION
+    ' EXPORT PDF
     '====================================
-    Private Async Sub ExportToCSV()
-        If DataGridView1.Rows.Count = 0 Then
-            MessageBox.Show("No data available to export.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Return
+    Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click
+        If Reports.Instance IsNot Nothing Then
+            Reports.Instance.ExportCurrentReport()
+        Else
+            MessageBox.Show("Please open the Reports screen to export.", "PDF Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-
-        Try
-            Dim saveDialog As New SaveFileDialog With {
-                .Filter = "CSV Files (*.csv)|*.csv",
-                .FileName = String.Format("Employee_Attendance_{0:yyyyMMdd_HHmmss}.csv", DateTime.Now),
-                .Title = "Export Attendance Report"
-            }
-
-            If saveDialog.ShowDialog() = DialogResult.OK Then
-                SetLoadingState(True)
-
-                Dim searchText As String = GetSearchText()
-
-                ' Fetch ALL filtered data from DB for export
-                Dim fullData As DataTable = Await Task.Run(Function() LoadAllAttendanceData(searchText))
-
-                If fullData IsNot Nothing AndAlso fullData.Rows.Count > 0 Then
-                    Using writer As New IO.StreamWriter(saveDialog.FileName, False, System.Text.Encoding.UTF8)
-                        ' Write headers - only for VISIBLE columns
-                        Dim headers As New List(Of String)
-                        For Each column As DataGridViewColumn In DataGridView1.Columns
-                            If column.Visible Then
-                                headers.Add(EscapeCSV(column.HeaderText))
-                            End If
-                        Next
-                        writer.WriteLine(String.Join(",", headers))
-
-                        ' Write data rows
-                        For Each dataRow As DataRow In fullData.Rows
-                            Dim values As New List(Of String)
-                            For Each column As DataGridViewColumn In DataGridView1.Columns
-                                If column.Visible Then
-                                    Dim cellValue As String = ""
-                                    If dataRow.Table.Columns.Contains(column.DataPropertyName) Then
-                                        Dim val As Object = dataRow(column.DataPropertyName)
-                                        cellValue = If(val Is Nothing OrElse IsDBNull(val), "", val.ToString())
-                                    End If
-                                    values.Add(EscapeCSV(cellValue))
-                                End If
-                            Next
-                            writer.WriteLine(String.Join(",", values))
-                        Next
-                    End Using
-
-                    SetLoadingState(False)
-                    MessageBox.Show($"Successfully exported {fullData.Rows.Count} records!", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    Process.Start("explorer.exe", String.Format("/select,""{0}""", saveDialog.FileName))
-                Else
-                    SetLoadingState(False)
-                    MessageBox.Show("No data found to export.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                End If
-            End If
-
-        Catch ex As Exception
-            SetLoadingState(False)
-            MessageBox.Show("Failed to export CSV: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
     End Sub
-
-    '====================================
-    ' LOAD ALL DATA FOR EXPORT (NO PAGINATION)
-    '====================================
-    Private Function LoadAllAttendanceData(searchText As String) As DataTable
-        Dim table As New DataTable()
-        Try
-            openConn()
-            Dim query As String = "
-                SELECT 
-                    e.EmployeeID,
-                    CONCAT(e.FirstName, ' ', e.LastName) AS EmployeeName,
-                    e.Position,
-                    CASE 
-                        WHEN e.EmploymentStatus = 'Active' THEN 40
-                        WHEN e.EmploymentStatus = 'On Leave' THEN 32
-                        ELSE 0
-                    END AS RegularHours,
-                    CASE 
-                        WHEN e.Position IN ('Chef', 'Cook') THEN 12
-                        WHEN e.Position IN ('Server', 'Waitress') THEN 5
-                        WHEN e.Position = 'Cashier' THEN 3
-                        ELSE 0
-                    END AS OvertimeHours,
-                    CASE 
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Chef' THEN 0
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Cook' THEN 0
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Waitress' THEN 1
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Cashier' THEN 2
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Server' THEN 1
-                        WHEN e.EmploymentStatus = 'On Leave' THEN 3
-                        ELSE 0
-                    END AS Absences,
-                    CASE 
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position IN ('Chef', 'Cook') THEN 'Perfect'
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position IN ('Waitress', 'Server') THEN 'Good'
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position = 'Cashier' THEN 'Fair'
-                        WHEN e.EmploymentStatus = 'On Leave' THEN 'On Leave'
-                        ELSE 'Inactive'
-                    END AS Status
-                FROM 
-                    employee e
-                WHERE 
-                    e.EmploymentStatus IN ('Active', 'On Leave') "
-
-            If Not String.IsNullOrEmpty(searchText) Then
-                query &= " AND (e.FirstName LIKE @search OR e.LastName LIKE @search OR e.Position LIKE @search) "
-            End If
-
-            query &= " ORDER BY e.FirstName, e.LastName"
-
-            Using cmd As New MySqlCommand(query, conn)
-                cmd.CommandTimeout = 120
-                If Not String.IsNullOrEmpty(searchText) Then
-                    cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
-                End If
-                Using adapter As New MySqlDataAdapter(cmd)
-                    adapter.Fill(table)
-                End Using
-            End Using
-        Catch ex As Exception
-            Throw ex
-        Finally
-            closeConn()
-        End Try
-        Return table
-    End Function
-
-    Private Function EscapeCSV(value As String) As String
-        If String.IsNullOrEmpty(value) Then Return ""
-        If value.Contains(",") OrElse value.Contains("""") OrElse value.Contains(vbCrLf) OrElse value.Contains(vbLf) Then
-            Return """" & value.Replace("""", """""") & """"
-        End If
-        Return value
-    End Function
 
     '====================================
     ' REFRESH DATA (PUBLIC METHOD)

@@ -7,7 +7,8 @@ Public Class FormTakeOutOrders
     Private originalData As DataTable
     Private isInitialLoad As Boolean = True
     Private _isLoading As Boolean = False
-    
+    Private _lastSearchText As String = ""
+
     ' Pagination state
     Private _currentPage As Integer = 1
     Private ReadOnly _pageSize As Integer = 50
@@ -19,55 +20,98 @@ Public Class FormTakeOutOrders
         Label4.Text = "..."
         Label6.Text = "..."
         Label7.Text = "..."
-        
+
+        ' Initialize pagination controls
+        InitializePaginationControls()
+
         Await RefreshOrdersAsync()
         isInitialLoad = False
     End Sub
 
-    Private Async Function RefreshOrdersAsync(Optional resetPage As Boolean = False) As Task
-        If _isLoading Then Return
-        _isLoading = True
-        SetLoadingState(True)
+    Private Sub InitializePaginationControls()
+        ' Make sure pagination controls exist and are enabled
+        If btnPrev IsNot Nothing Then
+            btnPrev.Enabled = False
+        End If
+        If btnNext IsNot Nothing Then
+            btnNext.Enabled = False
+        End If
+        If lblPageStatus IsNot Nothing Then
+            lblPageStatus.Text = "Loading..."
+        End If
+    End Sub
 
-        If resetPage Then _currentPage = 1
+    Private Async Function RefreshOrdersAsync(Optional resetPage As Boolean = False) As Task
+        ' Prevent concurrent refresh operations
+        If _isLoading Then Return
+
+        _isLoading = True
 
         Try
+            ' Update UI to show loading state
+            If Me.InvokeRequired Then
+                Me.Invoke(Sub() SetLoadingState(True))
+            Else
+                SetLoadingState(True)
+            End If
+
+            If resetPage Then _currentPage = 1
+
             Dim searchText As String = TextBoxSearch.Text.Trim()
             If searchText = "Search orders..." Then searchText = ""
 
-            ' Get total count
+            ' Get total count first
             _totalRecords = Await Task.Run(Function() FetchTotalTakeOutCount(searchText))
-            _totalPages = Math.Ceiling(_totalRecords / _pageSize)
-            If _totalPages = 0 Then _totalPages = 1
-            If _currentPage > _totalPages Then _currentPage = _totalPages
+            _totalPages = Math.Max(1, CInt(Math.Ceiling(CDbl(_totalRecords) / _pageSize)))
 
-            Dim offset As Integer = (_currentPage - 1) * _pageSize
+            ' Validate current page
+            If _currentPage > _totalPages Then _currentPage = _totalPages
+            If _currentPage < 1 Then _currentPage = 1
+
+            ' Calculate offset
+            Dim offset As Integer = Math.Max(0, (_currentPage - 1) * _pageSize)
+
+            ' Load data
             Dim dt As DataTable = Await Task.Run(Function() LoadOrdersDataFromDB(searchText, offset, _pageSize))
-            
             originalData = dt
-            
+
+            ' Check if form is still valid
             If Me.IsDisposed OrElse Not Me.IsHandleCreated Then Return
 
             ' Update UI on UI thread
-            Me.Invoke(Sub()
-                          DataGridView1.DataSource = dt
-                          ' UpdateTotalSummaryAsync(searchText) ' Called below
-                          FormatGrid()
-                          UpdatePaginationUI()
-                          Label10.Text = "Recent Take-Out Orders"
-                      End Sub)
+            If Me.InvokeRequired Then
+                Me.Invoke(Sub()
+                              DataGridView1.DataSource = dt
+                              FormatGrid()
+                              UpdatePaginationUI()
+                              Label10.Text = "Recent Take-Out Orders"
+                          End Sub)
+            Else
+                DataGridView1.DataSource = dt
+                FormatGrid()
+                UpdatePaginationUI()
+                Label10.Text = "Recent Take-Out Orders"
+            End If
 
             ' Update summary with total stats (non-paginated)
             Await UpdateTotalSummaryAsync(searchText)
-                      
+
         Catch ex As Exception
             If Not Me.IsDisposed Then
                 MessageBox.Show("Error refreshing orders: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
         Finally
+            ' Always reset loading state
             If Not Me.IsDisposed Then
-                SetLoadingState(False)
-                _isLoading = False
+                If Me.InvokeRequired Then
+                    Me.Invoke(Sub()
+                                  SetLoadingState(False)
+                                  _isLoading = False
+                              End Sub)
+                Else
+                    SetLoadingState(False)
+                    _isLoading = False
+                End If
             End If
         End Try
     End Function
@@ -75,39 +119,75 @@ Public Class FormTakeOutOrders
     Private Function FetchTotalTakeOutCount(searchText As String) As Integer
         ' Get period filter from Reports form
         Dim periodFilter As String = ""
+        Dim sYear As Integer = Reports.SelectedYear
+        Dim sMonth As Integer = Reports.SelectedMonth
+
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                periodFilter = " AND DATE(OrderTime) = CURDATE() "
+                If sYear = DateTime.Now.Year Then
+                    periodFilter = " AND o.OrderDate = CURDATE() "
+                Else
+                    periodFilter = $" AND o.OrderDate = '{sYear}-12-31' "
+                End If
             Case "Weekly"
-                periodFilter = " AND YEARWEEK(OrderTime, 1) = YEARWEEK(CURDATE(), 1) "
+                If sYear = DateTime.Now.Year Then
+                    periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                Else
+                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND WEEK(o.OrderDate, 1) = 52 "
+                End If
             Case "Monthly"
-                periodFilter = " AND MONTH(OrderTime) = MONTH(CURDATE()) AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                If sMonth = 0 Then
+                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
+                Else
+                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND MONTH(o.OrderDate) = {sMonth} "
+                End If
             Case "Yearly"
-                periodFilter = " AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
         End Select
 
-        Dim query As String = "SELECT COUNT(*) FROM orders WHERE OrderType = 'Takeout' " & periodFilter & " AND (OrderID LIKE @search OR OrderStatus LIKE @search)"
-        Using conn As New MySqlConnection(connectionString)
-            conn.Open()
-            Using cmd As New MySqlCommand(query, conn)
-                cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
-                Return Convert.ToInt32(cmd.ExecuteScalar())
+        Dim query As String = "SELECT COUNT(*) FROM orders o WHERE o.OrderType = 'Takeout' " & periodFilter & " AND (o.OrderID LIKE @search OR o.OrderStatus LIKE @search)"
+
+        Try
+            Using conn As New MySqlConnection(connectionString)
+                conn.Open()
+                Using cmd As New MySqlCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
+                    Return Convert.ToInt32(cmd.ExecuteScalar())
+                End Using
             End Using
-        End Using
+        Catch ex As Exception
+            ' Return 0 if there's an error
+            Return 0
+        End Try
     End Function
 
     Private Function LoadOrdersDataFromDB(searchText As String, offset As Integer, limit As Integer) As DataTable
         ' Get period filter from Reports form
         Dim periodFilter As String = ""
+        Dim sYear As Integer = Reports.SelectedYear
+        Dim sMonth As Integer = Reports.SelectedMonth
+
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                periodFilter = " AND DATE(OrderTime) = CURDATE() "
+                If sYear = DateTime.Now.Year Then
+                    periodFilter = " AND o.OrderDate = CURDATE() "
+                Else
+                    periodFilter = $" AND o.OrderDate = '{sYear}-12-31' "
+                End If
             Case "Weekly"
-                periodFilter = " AND YEARWEEK(OrderTime, 1) = YEARWEEK(CURDATE(), 1) "
+                If sYear = DateTime.Now.Year Then
+                    periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                Else
+                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND WEEK(o.OrderDate, 1) = 52 "
+                End If
             Case "Monthly"
-                periodFilter = " AND MONTH(OrderTime) = MONTH(CURDATE()) AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                If sMonth = 0 Then
+                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
+                Else
+                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND MONTH(o.OrderDate) = {sMonth} "
+                End If
             Case "Yearly"
-                periodFilter = " AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
         End Select
 
         Dim dt As New DataTable()
@@ -121,12 +201,12 @@ Public Class FormTakeOutOrders
                     "ItemsOrderedCount AS Items, " &
                     "TotalAmount AS Amount, " &
                     "OrderStatus AS Status, " &
-                    "DATE_FORMAT(OrderTime, '%Y-%m-%d %H:%i') AS Time " &
-                    "FROM orders " &
-                    "WHERE OrderType = 'Takeout' " & periodFilter & " AND (OrderID LIKE @search OR OrderStatus LIKE @search) " &
-                    "ORDER BY OrderTime DESC " &
+                    "DATE_FORMAT(CONCAT(OrderDate, ' ', OrderTime), '%Y-%m-%d %H:%i') AS Time " &
+                    "FROM orders o " &
+                    "WHERE o.OrderType = 'Takeout' " & periodFilter & " AND (o.OrderID LIKE @search OR o.OrderStatus LIKE @search) " &
+                    "ORDER BY o.OrderDate DESC, o.OrderTime DESC, o.OrderID DESC " &
                     "LIMIT @limit OFFSET @offset"
-                
+
                 Using cmd As New MySqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
                     cmd.Parameters.AddWithValue("@limit", limit)
@@ -149,18 +229,37 @@ Public Class FormTakeOutOrders
 
         Try
             Await Task.Run(Sub()
-                               ' Re-use the same period filter logic
+                               ' Get period filter from Reports form
                                Dim periodFilter As String = ""
+                               Dim sYear As Integer = Reports.SelectedYear
+                               Dim sMonth As Integer = Reports.SelectedMonth
+
                                Select Case Reports.SelectedPeriod
-                                   Case "Daily" : periodFilter = " AND DATE(OrderTime) = CURDATE() "
-                                   Case "Weekly" : periodFilter = " AND YEARWEEK(OrderTime, 1) = YEARWEEK(CURDATE(), 1) "
-                                   Case "Monthly" : periodFilter = " AND MONTH(OrderTime) = MONTH(CURDATE()) AND YEAR(OrderTime) = YEAR(CURDATE()) "
-                                   Case "Yearly" : periodFilter = " AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                                   Case "Daily"
+                                       If sYear = DateTime.Now.Year Then
+                                           periodFilter = " AND o.OrderDate = CURDATE() "
+                                       Else
+                                           periodFilter = $" AND o.OrderDate = '{sYear}-12-31' "
+                                       End If
+                                   Case "Weekly"
+                                       If sYear = DateTime.Now.Year Then
+                                           periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                                       Else
+                                           periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND WEEK(o.OrderDate, 1) = 52 "
+                                       End If
+                                   Case "Monthly"
+                                       If sMonth = 0 Then
+                                           periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
+                                       Else
+                                           periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND MONTH(o.OrderDate) = {sMonth} "
+                                       End If
+                                   Case "Yearly"
+                                       periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
                                End Select
 
                                Using conn As New MySqlConnection(connectionString)
                                    conn.Open()
-                                   Dim sql = "SELECT COUNT(*), COALESCE(SUM(TotalAmount), 0) FROM orders WHERE OrderType = 'Takeout' " & periodFilter & " AND (OrderID LIKE @search OR OrderStatus LIKE @search)"
+                                   Dim sql = "SELECT COUNT(*), COALESCE(SUM(TotalAmount), 0) FROM orders o WHERE o.OrderType = 'Takeout' " & periodFilter & " AND (o.OrderID LIKE @search OR o.OrderStatus LIKE @search)"
                                    Using cmd As New MySqlCommand(sql, conn)
                                        cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
                                        Using reader = cmd.ExecuteReader()
@@ -176,15 +275,29 @@ Public Class FormTakeOutOrders
             If totalCount > 0 Then avgValue = totalRevenue / totalCount
 
             ' Update UI labels
-            Me.Invoke(Sub()
-                          Label4.Text = totalCount.ToString("N0")
-                          Label6.Text = "₱" & totalRevenue.ToString("N2")
-                          Label7.Text = "₱" & avgValue.ToString("N2")
-                      End Sub)
+            If Me.InvokeRequired Then
+                Me.Invoke(Sub()
+                              Label4.Text = totalCount.ToString("N0")
+                              Label6.Text = "₱" & totalRevenue.ToString("N2")
+                              Label7.Text = "₱" & avgValue.ToString("N2")
+                          End Sub)
+            Else
+                Label4.Text = totalCount.ToString("N0")
+                Label6.Text = "₱" & totalRevenue.ToString("N2")
+                Label7.Text = "₱" & avgValue.ToString("N2")
+            End If
         Catch
             ' Silent fail
         End Try
     End Function
+
+    ' =============================
+    ' REFRESH DATA
+    ' =============================
+    Public Async Sub RefreshData()
+        _currentPage = 1
+        Await RefreshOrdersAsync()
+    End Sub
 
     Private Sub UpdateSummaryTiles(dt As DataTable)
         Try
@@ -206,7 +319,7 @@ Public Class FormTakeOutOrders
             Label4.Text = totalOrders.ToString("N0")
             Label6.Text = "₱" & totalRevenue.ToString("N2")
             Label7.Text = "₱" & avgOrderValue.ToString("N2")
-            
+
         Catch ex As Exception
             ' Silent fail for stats
         End Try
@@ -217,6 +330,15 @@ Public Class FormTakeOutOrders
     ' =============================
     Private Async Sub TextBoxSearch_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearch.TextChanged
         If isInitialLoad Then Return
+        
+        Dim currentSearch = TextBoxSearch.Text.Trim()
+        If currentSearch = "Search orders..." Then currentSearch = ""
+        
+        ' Only refresh if the actual search criteria changed
+        ' This prevents resets when placeholder text is toggled on Focus/Leave
+        If currentSearch = _lastSearchText Then Return
+        
+        _lastSearchText = currentSearch
         Await RefreshOrdersAsync(True) ' Reset to page 1 on search
     End Sub
 
@@ -224,22 +346,45 @@ Public Class FormTakeOutOrders
         Try
             Me.UseWaitCursor = isLoading
             DataGridView1.Enabled = Not isLoading
-            Button1.Enabled = Not isLoading
-            If btnPrev IsNot Nothing Then btnPrev.Enabled = Not isLoading AndAlso _currentPage > 1
-            If btnNext IsNot Nothing Then btnNext.Enabled = Not isLoading AndAlso _currentPage < _totalPages
-        Catch
+            btnExportPdf.Enabled = Not isLoading
+
+            ' Update pagination buttons based on loading state AND current page position
+            If btnPrev IsNot Nothing Then
+                btnPrev.Enabled = (Not isLoading) AndAlso (_currentPage > 1)
+            End If
+
+            If btnNext IsNot Nothing Then
+                btnNext.Enabled = (Not isLoading) AndAlso (_currentPage < _totalPages)
+            End If
+        Catch ex As Exception
+            ' Ignore errors in setting loading state
         End Try
     End Sub
 
     Private Sub UpdatePaginationUI()
-        If lblPageStatus IsNot Nothing Then
-            lblPageStatus.Text = $"Page {_currentPage} of {_totalPages} (Total Records: {_totalRecords:N0})"
-        End If
-        If btnPrev IsNot Nothing Then btnPrev.Enabled = (_currentPage > 1)
-        If btnNext IsNot Nothing Then btnNext.Enabled = (_currentPage < _totalPages)
+        Try
+            ' Update page status label
+            If lblPageStatus IsNot Nothing Then
+                lblPageStatus.Text = $"Page {_currentPage} of {_totalPages} (Total Records: {_totalRecords:N0})"
+            End If
+
+            ' Update button states
+            If btnPrev IsNot Nothing Then
+                btnPrev.Enabled = (_currentPage > 1) AndAlso (Not _isLoading)
+            End If
+
+            If btnNext IsNot Nothing Then
+                btnNext.Enabled = (_currentPage < _totalPages) AndAlso (Not _isLoading)
+            End If
+        Catch ex As Exception
+            ' Ignore errors in updating pagination UI
+        End Try
     End Sub
 
     Private Async Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        ' Prevent multiple clicks while loading
+        If _isLoading Then Return
+
         If _currentPage < _totalPages Then
             _currentPage += 1
             Await RefreshOrdersAsync()
@@ -247,6 +392,9 @@ Public Class FormTakeOutOrders
     End Sub
 
     Private Async Sub btnPrev_Click(sender As Object, e As EventArgs) Handles btnPrev.Click
+        ' Prevent multiple clicks while loading
+        If _isLoading Then Return
+
         If _currentPage > 1 Then
             _currentPage -= 1
             Await RefreshOrdersAsync()
@@ -269,7 +417,6 @@ Public Class FormTakeOutOrders
         End If
     End Sub
 
-
     ' =============================
     ' FORMAT GRID
     ' =============================
@@ -287,21 +434,21 @@ Public Class FormTakeOutOrders
             .RowTemplate.Height = 50
             .ColumnHeadersHeight = 50
             .EnableHeadersVisualStyles = False
-            
+
             ' Header Styling
             .ColumnHeadersDefaultCellStyle.BackColor = Color.White
             .ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(71, 85, 105)
             .ColumnHeadersDefaultCellStyle.Font = New Font("Segoe UI Semibold", 10)
             .ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White
-            
+
             ' Cell Styling
             .DefaultCellStyle.Font = New Font("Segoe UI", 10)
             .DefaultCellStyle.ForeColor = Color.FromArgb(30, 41, 59)
             .DefaultCellStyle.SelectionBackColor = Color.FromArgb(248, 250, 252)
             .DefaultCellStyle.SelectionForeColor = Color.FromArgb(99, 102, 241)
-        
+
             If .Columns.Contains("OrderID") Then .Columns("OrderID").Visible = False
-            
+
             If .Columns.Contains("OrderNumber") Then
                 With .Columns("OrderNumber")
                     .HeaderText = "Order #"
@@ -359,63 +506,12 @@ Public Class FormTakeOutOrders
         e.ThrowException = False
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        ExportToCSV()
+    Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click
+        If Reports.Instance IsNot Nothing Then
+            Reports.Instance.ExportCurrentReport()
+        Else
+            MessageBox.Show("Please open the Reports screen to export.", "PDF Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
     End Sub
-
-    Private Sub ExportToCSV()
-        Try
-            Dim saveDialog As New SaveFileDialog With {
-                .Filter = "CSV Files (*.csv)|*.csv",
-                .FileName = String.Format("Takeout_Orders_{0:yyyyMMdd_HHmmss}.csv", DateTime.Now),
-                .Title = "Export Takeout Orders Report"
-            }
-
-            If saveDialog.ShowDialog() = DialogResult.OK Then
-                Using writer As New IO.StreamWriter(saveDialog.FileName)
-                    ' Write headers
-                    Dim headers As New List(Of String)
-                    For Each column As DataGridViewColumn In DataGridView1.Columns
-                        If column.Visible Then
-                            headers.Add(column.HeaderText)
-                        End If
-                    Next
-                    writer.WriteLine(String.Join(",", headers))
-
-                    ' Write data rows
-                    For Each row As DataGridViewRow In DataGridView1.Rows
-                        If Not row.IsNewRow Then
-                            Dim values As New List(Of String)
-                            For Each column As DataGridViewColumn In DataGridView1.Columns
-                                If column.Visible Then
-                                    Dim cellVal As Object = row.Cells(column.Index).Value
-                                    Dim cellValue As String = If(cellVal IsNot Nothing, cellVal.ToString(), "")
-
-                                    ' Remove currency symbols and format properly
-                                    cellValue = cellValue.Replace("₱", "").Trim()
-
-                                    ' Escape commas and quotes
-                                    If cellValue.Contains(",") OrElse cellValue.Contains("""") Then
-                                        cellValue = """" & cellValue.Replace("""", """""") & """"
-                                    End If
-                                    values.Add(cellValue)
-                                End If
-                            Next
-                            writer.WriteLine(String.Join(",", values))
-                        End If
-                    Next
-                End Using
-
-                MessageBox.Show("Takeout orders report exported successfully!", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-                ' Open file location
-                Process.Start("explorer.exe", String.Format("/select,""{0}""", saveDialog.FileName))
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("Failed to export CSV: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
 
 End Class
