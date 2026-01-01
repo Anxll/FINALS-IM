@@ -5,7 +5,6 @@ Public Class FormReservationStatus
 
     Private currentYear As Integer = DateTime.Now.Year
     Private currentMonth As Integer = DateTime.Now.Month
-    Private filterPeriod As String = "Monthly" ' Daily, Weekly, Monthly, Yearly
     Private reservationData As New Dictionary(Of String, Integer)
 
     ' =======================================================================
@@ -19,8 +18,7 @@ Public Class FormReservationStatus
             RoundedPane23.BringToFront()
             RoundedPane24.BringToFront()
             RoundedPane25.BringToFront()
-            ComboBox1.BringToFront()
-            Label9.BringToFront()
+
 
             InitializeForm()
             ConfigureChart()
@@ -35,17 +33,8 @@ Public Class FormReservationStatus
     ' =======================================================================
     Private Sub InitializeForm()
         Try
-            ' Set default period based on global selection
-            If ComboBox1.Items.Count > 0 Then
-                Select Case Reports.SelectedPeriod
-                    Case "Daily" : ComboBox1.SelectedIndex = 0
-                    Case "Weekly" : ComboBox1.SelectedIndex = 1
-                    Case "Monthly" : ComboBox1.SelectedIndex = 2
-                    Case "Yearly" : ComboBox1.SelectedIndex = 3
-                    Case Else : ComboBox1.SelectedIndex = 2 ' Monthly default
-                End Select
-                filterPeriod = Reports.SelectedPeriod
-            End If
+            ' Sync with global report period
+            ' (No local ComboBox - controlled by Reports.vb)
 
             ' Configure chart colors
             Chart1.BackColor = Color.White
@@ -178,26 +167,23 @@ Public Class FormReservationStatus
     ' GET DATE FILTER BASED ON SELECTED PERIOD
     ' =======================================================================
     Private Function GetDateFilter() As String
-        Dim filter As String = ""
+        ' Use global period filter and EventDate column (consistent with catering reports)
+        Dim periodFilter As String = Reports.SelectedPeriod
 
-        Select Case filterPeriod
+        Select Case periodFilter
             Case "Daily"
-                filter = $"DATE(ReservationDate) = CURDATE()"
-
+                Return "DATE(EventDate) = CURDATE()"
             Case "Weekly"
-                filter = $"YEARWEEK(ReservationDate, 1) = YEARWEEK(CURDATE(), 1)"
-
+                Return "YEARWEEK(EventDate, 1) = YEARWEEK(CURDATE(), 1)"
             Case "Monthly"
-                filter = $"MONTH(ReservationDate) = {currentMonth} AND YEAR(ReservationDate) = {currentYear}"
-
+                Return "MONTH(EventDate) = MONTH(CURDATE()) AND YEAR(EventDate) = YEAR(CURDATE())"
             Case "Yearly"
-                filter = $"YEAR(ReservationDate) = {currentYear}"
-
+                Return "YEAR(EventDate) = YEAR(CURDATE())"
+            Case "All Time"
+                Return "1=1"
             Case Else
-                filter = $"YEAR(ReservationDate) = {currentYear}"
+                Return "1=1"
         End Select
-
-        Return filter
     End Function
 
     ' =======================================================================
@@ -207,14 +193,20 @@ Public Class FormReservationStatus
         Try
             Dim total As Integer = reservationData.Values.Sum()
             Dim pending As Integer = reservationData("Pending")
-            Dim confirmed As Integer = reservationData("Confirmed")
+            ' Include Served status in confirmed count for business overview
+            Dim confirmed As Integer = reservationData("Confirmed") + If(reservationData.ContainsKey("Served"), reservationData("Served"), 0)
             Dim cancelled As Integer = reservationData("Cancelled")
 
-            ' Update labels
-            lblTotalReservations.Text = total.ToString()
-            lblPending.Text = pending.ToString()
-            lblConfirmed.Text = confirmed.ToString()
-            lblCancelled.Text = cancelled.ToString()
+            ' Update labels with formatted numbers
+            lblTotalReservations.Text = total.ToString("N0")
+            lblPending.Text = pending.ToString("N0")
+            lblConfirmed.Text = confirmed.ToString("N0")
+            lblCancelled.Text = cancelled.ToString("N0")
+
+            ' Update header to show current period
+            If Label1 IsNot Nothing Then
+                Label1.Text = $"Reservation Summary - {Reports.SelectedPeriod}"
+            End If
 
             ' Calculate and show percentages
             If total > 0 Then
@@ -240,8 +232,10 @@ Public Class FormReservationStatus
             Chart1.Series("ReservationStatus").Points.Clear()
 
             Dim pending As Integer = reservationData("Pending")
-            Dim confirmed As Integer = reservationData("Confirmed")
+            Dim confirmedBase As Integer = reservationData("Confirmed")
+            Dim served As Integer = If(reservationData.ContainsKey("Served"), reservationData("Served"), 0)
             Dim cancelled As Integer = reservationData("Cancelled")
+
 
             ' Only add points if there's data
             If pending > 0 Then
@@ -254,14 +248,24 @@ Public Class FormReservationStatus
                 Chart1.Series("ReservationStatus").Points.Add(point1)
             End If
 
-            If confirmed > 0 Then
-                Dim point2 As New DataPoint(0, confirmed)
+            If confirmedBase > 0 Then
+                Dim point2 As New DataPoint(0, confirmedBase)
                 point2.AxisLabel = "Confirmed"
-                point2.Label = $"Confirmed ({confirmed})"
-                point2.LegendText = $"Confirmed ({confirmed})"
+                point2.Label = $"Confirmed ({confirmedBase})"
+                point2.LegendText = $"Confirmed ({confirmedBase})"
                 point2.Color = Color.FromArgb(34, 197, 94) ' Green
                 point2.LabelForeColor = Color.White
                 Chart1.Series("ReservationStatus").Points.Add(point2)
+            End If
+
+            If served > 0 Then
+                Dim point4 As New DataPoint(0, served)
+                point4.AxisLabel = "Served"
+                point4.Label = $"Served ({served})"
+                point4.LegendText = $"Served ({served})"
+                point4.Color = Color.FromArgb(59, 130, 246) ' Blue
+                point4.LabelForeColor = Color.White
+                Chart1.Series("ReservationStatus").Points.Add(point4)
             End If
 
             If cancelled > 0 Then
@@ -275,7 +279,7 @@ Public Class FormReservationStatus
             End If
 
             ' Show message if no data
-            If pending = 0 AndAlso confirmed = 0 AndAlso cancelled = 0 Then
+            If pending = 0 AndAlso confirmedBase = 0 AndAlso served = 0 AndAlso cancelled = 0 Then
                 Dim emptyPoint As New DataPoint(0, 1)
                 emptyPoint.AxisLabel = "No Data"
                 emptyPoint.Label = "No Reservations"
@@ -291,12 +295,7 @@ Public Class FormReservationStatus
     ' =======================================================================
     ' PERIOD SELECTION CHANGED
     ' =======================================================================
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        If ComboBox1.SelectedItem IsNot Nothing Then
-            filterPeriod = ComboBox1.SelectedItem.ToString()
-            LoadReservationData()
-        End If
-    End Sub
+
 
     ' =======================================================================
     ' EXPORT CHART TO IMAGE
@@ -306,7 +305,7 @@ Public Class FormReservationStatus
             Dim saveDialog As New SaveFileDialog With {
                 .Filter = "PNG Image|*.png|JPEG Image|*.jpg",
                 .Title = "Export Chart",
-                .FileName = $"Reservation_Status_{filterPeriod}_{DateTime.Now:yyyy-MM-dd}"
+                .FileName = $"Reservation_Status_{Reports.SelectedPeriod}_{DateTime.Now:yyyy-MM-dd}"
             }
 
             If saveDialog.ShowDialog() = DialogResult.OK Then
@@ -411,13 +410,13 @@ Public Class FormReservationStatus
         Dim stats = GetDetailedStatistics()
 
         report.AppendLine("═══════════════════════════════════════════════════════")
-        report.AppendLine($"       RESERVATION STATUS REPORT - {filterPeriod}")
+        report.AppendLine($"       RESERVATION STATUS REPORT - {Reports.SelectedPeriod}")
         report.AppendLine("═══════════════════════════════════════════════════════")
         report.AppendLine()
 
         ' Summary
         report.AppendLine("SUMMARY:")
-        report.AppendLine($"  Period:            {filterPeriod}")
+        report.AppendLine($"  Period:            {Reports.SelectedPeriod}")
         report.AppendLine($"  Total Reservations: {stats("Total")}")
         report.AppendLine($"  Conversion Rate:    {stats("ConversionRate"):N2}%")
         report.AppendLine($"  Cancellation Rate:  {stats("CancellationRate"):N2}%")

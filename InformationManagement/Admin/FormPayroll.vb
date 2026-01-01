@@ -5,6 +5,10 @@ Public Class FormPayroll
     ' Database connection string
 
     Private Sub FormPayroll_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        RefreshData()
+    End Sub
+
+    Public Sub RefreshData()
         LoadPayrollData()
         LoadPayrollChart()
     End Sub
@@ -14,35 +18,46 @@ Public Class FormPayroll
             Using conn As New MySqlConnection(modDB.strConnection)
                 conn.Open()
 
-                ' --- 1. TOTAL PAYROLL & TRENDS ---
-                ' Current Month Total
-                Dim queryCurrentMonth As String = "SELECT IFNULL(SUM(BasicSalary + Overtime + Bonuses - Deductions), 0) FROM payroll " &
-                                                 "WHERE Status = 'Paid' AND MONTH(PayPeriodStart) = MONTH(CURRENT_DATE()) AND YEAR(PayPeriodStart) = YEAR(CURRENT_DATE())"
-                Dim cmdCurrentMonth As New MySqlCommand(queryCurrentMonth, conn)
-                Dim currentPayroll As Decimal = Convert.ToDecimal(cmdCurrentMonth.ExecuteScalar())
+                ' Get period filter from Reports form
+                Dim periodFilter As String = ""
+                Dim periodLabel As String = ""
+                
+                Select Case Reports.SelectedPeriod
+                    Case "Daily"
+                        periodFilter = " AND DATE(PayPeriodStart) = CURDATE() "
+                        periodLabel = "today"
+                    Case "Weekly"
+                        periodFilter = " AND YEARWEEK(PayPeriodStart, 1) = YEARWEEK(CURDATE(), 1) "
+                        periodLabel = "this week"
+                    Case "Monthly"
+                        periodFilter = " AND MONTH(PayPeriodStart) = MONTH(CURDATE()) AND YEAR(PayPeriodStart) = YEAR(CURDATE()) "
+                        periodLabel = "this month"
+                    Case "Yearly"
+                        periodFilter = " AND YEAR(PayPeriodStart) = YEAR(CURDATE()) "
+                        periodLabel = "this year"
+                    Case Else
+                        periodFilter = "" ' All time
+                        periodLabel = "all time"
+                End Select
 
-                ' Previous Month Total
-                Dim queryPrevMonth As String = "SELECT IFNULL(SUM(BasicSalary + Overtime + Bonuses - Deductions), 0) FROM payroll " &
-                                              "WHERE Status = 'Paid' AND MONTH(PayPeriodStart) = MONTH(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH)) " &
-                                              "AND YEAR(PayPeriodStart) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))"
-                Dim cmdPrevMonth As New MySqlCommand(queryPrevMonth, conn)
-                Dim prevPayroll As Decimal = Convert.ToDecimal(cmdPrevMonth.ExecuteScalar())
+                ' --- 1. TOTAL PAYROLL ---
+                Dim queryTotal As String = "SELECT IFNULL(SUM(BasicSalary + Overtime + Bonuses - Deductions), 0) FROM payroll " &
+                                          "WHERE Status = 'Paid' " & periodFilter
+                Dim cmdTotal As New MySqlCommand(queryTotal, conn)
+                Dim currentPayroll As Decimal = Convert.ToDecimal(cmdTotal.ExecuteScalar())
 
-                ' Calculate MoM Trend
-                Dim momTrend As String = "0% vs last month"
-                If prevPayroll > 0 Then
-                    Dim diff As Decimal = ((currentPayroll - prevPayroll) / prevPayroll) * 100
-                    momTrend = (If(diff >= 0, "+", "")) & diff.ToString("N1") & "% vs last month"
-                End If
-
+                ' Previous Period Trend logic (Optional, keeping current logic for MoM if monthly, or simplified)
+                Dim trendText As String = "Summary for " & periodLabel
+                
                 Label4.Text = "₱" & currentPayroll.ToString("N2")
-                Label5.Text = momTrend
+                Label5.Text = trendText
 
                 ' --- 2. TOTAL HOURS ---
-                Dim cmdTotalHours As New MySqlCommand("SELECT IFNULL(SUM(HoursWorked), 0) FROM payroll WHERE Status = 'Paid' AND MONTH(PayPeriodStart) = MONTH(CURRENT_DATE())", conn)
+                Dim queryHours As String = "SELECT IFNULL(SUM(HoursWorked), 0) FROM payroll WHERE Status = 'Paid' " & periodFilter
+                Dim cmdTotalHours As New MySqlCommand(queryHours, conn)
                 Dim totalHours As Object = cmdTotalHours.ExecuteScalar()
                 Label6.Text = If(totalHours IsNot Nothing AndAlso Not IsDBNull(totalHours), Convert.ToDecimal(totalHours).ToString("N1") & "h", "0h")
-                Label8.Text = "Total hours this month"
+                Label8.Text = "Total hours " & periodLabel
 
                 ' --- 3. ACTIVE EMPLOYEES & AVG PAY ---
                 Dim cmdActiveEmployees As New MySqlCommand("SELECT COUNT(*) FROM employee WHERE EmploymentStatus = 'Active'", conn)
@@ -56,8 +71,8 @@ Public Class FormPayroll
                     Label9.Text = "No active employees"
                 End If
 
-                ' --- 4. ANOMALY DETECTION (Quick Check) ---
-                DetectAnomalies(conn)
+                ' --- 4. ANOMALY DETECTION ---
+                DetectAnomalies(conn, periodFilter)
 
             End Using
         Catch ex As Exception
@@ -65,9 +80,9 @@ Public Class FormPayroll
         End Try
     End Sub
 
-    Private Sub DetectAnomalies(conn As MySqlConnection)
+    Private Sub DetectAnomalies(conn As MySqlConnection, periodFilter As String)
         ' Flag records where Overtime > 50% of Basic Salary OR Deductions > 30% of Basic Salary
-        Dim query As String = "SELECT COUNT(*) FROM payroll WHERE Status = 'Paid' AND (Overtime > (BasicSalary * 0.5) OR Deductions > (BasicSalary * 0.3))"
+        Dim query As String = "SELECT COUNT(*) FROM payroll WHERE Status = 'Paid' AND (Overtime > (BasicSalary * 0.5) OR Deductions > (BasicSalary * 0.3))" & periodFilter
         Dim cmd As New MySqlCommand(query, conn)
         Dim anomalyCount As Integer = Convert.ToInt32(cmd.ExecuteScalar())
 
@@ -89,23 +104,40 @@ Public Class FormPayroll
                 Chart1.Series.Clear()
 
                 ' Create new series for Trends
-                Dim series As New Series("Monthly Payroll Cost")
+                Dim series As New Series("Payroll Cost")
                 series.ChartType = SeriesChartType.Column
                 series.Color = Color.MediumSlateBlue
                 series.IsValueShownAsLabel = True
                 series.LabelFormat = "₱#,##0"
 
-                ' Load payroll cost trends for the last 6 months
-                Dim query As String = "SELECT MonthLabel, TotalNetPay FROM (" &
-                                    "  SELECT DATE_FORMAT(PayPeriodStart, '%b %Y') as MonthLabel, " &
-                                    "  SUM(BasicSalary + Overtime + Bonuses - Deductions) as TotalNetPay, " &
-                                    "  MAX(PayPeriodStart) as MaxDate " &
-                                    "  FROM payroll " &
-                                    "  WHERE Status = 'Paid' " &
-                                    "  GROUP BY YEAR(PayPeriodStart), MONTH(PayPeriodStart), MonthLabel " &
-                                    "  ORDER BY MaxDate DESC " &
-                                    "  LIMIT 6" &
-                                    ") t ORDER BY MaxDate ASC"
+                ' Adjust query based on period
+                Dim query As String = ""
+                Select Case Reports.SelectedPeriod
+                    Case "Daily"
+                        ' Show last 7 days including today
+                        query = "SELECT DATE_FORMAT(PayPeriodStart, '%m/%d') as MonthLabel, " &
+                                "SUM(BasicSalary + Overtime + Bonuses - Deductions) as TotalNetPay " &
+                                "FROM payroll WHERE Status = 'Paid' AND PayPeriodStart >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " &
+                                "GROUP BY PayPeriodStart ORDER BY PayPeriodStart ASC"
+                    Case "Weekly"
+                        ' Show last 4 weeks
+                        query = "SELECT CONCAT('Wk ', WEEK(PayPeriodStart)) as MonthLabel, " &
+                                "SUM(BasicSalary + Overtime + Bonuses - Deductions) as TotalNetPay " &
+                                "FROM payroll WHERE Status = 'Paid' AND PayPeriodStart >= DATE_SUB(CURDATE(), INTERVAL 4 WEEK) " &
+                                "GROUP BY YEAR(PayPeriodStart), WEEK(PayPeriodStart) ORDER BY MIN(PayPeriodStart) ASC"
+                    Case Else
+                        ' Monthly/Yearly/All Time - Show last 6 months
+                        query = "SELECT MonthLabel, TotalNetPay FROM (" &
+                                "  SELECT DATE_FORMAT(PayPeriodStart, '%b %Y') as MonthLabel, " &
+                                "  SUM(BasicSalary + Overtime + Bonuses - Deductions) as TotalNetPay, " &
+                                "  MAX(PayPeriodStart) as MaxDate " &
+                                "  FROM payroll " &
+                                "  WHERE Status = 'Paid' " &
+                                "  GROUP BY YEAR(PayPeriodStart), MONTH(PayPeriodStart), MonthLabel " &
+                                "  ORDER BY MaxDate DESC " &
+                                "  LIMIT 6" &
+                                ") t ORDER BY MaxDate ASC"
+                End Select
 
                 Dim cmdTrends As New MySqlCommand(query, conn)
 
@@ -130,7 +162,7 @@ Public Class FormPayroll
 
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error loading trend chart: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ' Silently fail chart loading or log it
         End Try
     End Sub
 

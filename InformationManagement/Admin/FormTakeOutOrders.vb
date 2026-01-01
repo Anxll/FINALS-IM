@@ -24,6 +24,11 @@ Public Class FormTakeOutOrders
         isInitialLoad = False
     End Sub
 
+    Public Async Sub RefreshData()
+        _currentPage = 1
+        Await RefreshOrdersAsync()
+    End Sub
+
     Private Async Function RefreshOrdersAsync(Optional resetPage As Boolean = False) As Task
         If _isLoading Then Return
         _isLoading = True
@@ -51,7 +56,6 @@ Public Class FormTakeOutOrders
             ' Update UI on UI thread
             Me.Invoke(Sub()
                           DataGridView1.DataSource = dt
-                          ' UpdateTotalSummaryAsync(searchText) ' Called below
                           FormatGrid()
                           UpdatePaginationUI()
                           Label10.Text = "Recent Take-Out Orders"
@@ -77,13 +81,15 @@ Public Class FormTakeOutOrders
         Dim periodFilter As String = ""
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                periodFilter = " AND DATE(OrderTime) = CURDATE() "
+                periodFilter = " AND DATE(OrderDate) = CURDATE() "
             Case "Weekly"
-                periodFilter = " AND YEARWEEK(OrderTime, 1) = YEARWEEK(CURDATE(), 1) "
+                periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
             Case "Monthly"
-                periodFilter = " AND MONTH(OrderTime) = MONTH(CURDATE()) AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                periodFilter = " AND MONTH(OrderDate) = MONTH(CURDATE()) AND YEAR(OrderDate) = YEAR(CURDATE()) "
             Case "Yearly"
-                periodFilter = " AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                periodFilter = " AND YEAR(OrderDate) = YEAR(CURDATE()) "
+            Case Else
+                periodFilter = "" ' All Time
         End Select
 
         Dim query As String = "SELECT COUNT(*) FROM orders WHERE OrderType = 'Takeout' " & periodFilter & " AND (OrderID LIKE @search OR OrderStatus LIKE @search)"
@@ -101,30 +107,34 @@ Public Class FormTakeOutOrders
         Dim periodFilter As String = ""
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                periodFilter = " AND DATE(OrderTime) = CURDATE() "
+                periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
             Case "Weekly"
-                periodFilter = " AND YEARWEEK(OrderTime, 1) = YEARWEEK(CURDATE(), 1) "
+                periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
             Case "Monthly"
-                periodFilter = " AND MONTH(OrderTime) = MONTH(CURDATE()) AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                periodFilter = " AND MONTH(o.OrderDate) = MONTH(CURDATE()) AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
             Case "Yearly"
-                periodFilter = " AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                periodFilter = " AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
+            Case Else
+                periodFilter = "" ' All Time
         End Select
 
         Dim dt As New DataTable()
         Try
             Using conn As New MySqlConnection(connectionString)
                 conn.Open()
+                ' Note: Some schemas use ItemsOrderedCount, others use subqueries. 
+                ' Standardizing to o.OrderDate and o.OrderTime
                 Dim query As String =
                     "SELECT " &
-                    "OrderID, " &
-                    "CONCAT('#', OrderID) AS OrderNumber, " &
-                    "ItemsOrderedCount AS Items, " &
-                    "TotalAmount AS Amount, " &
-                    "OrderStatus AS Status, " &
-                    "DATE_FORMAT(OrderTime, '%Y-%m-%d %H:%i') AS Time " &
-                    "FROM orders " &
-                    "WHERE OrderType = 'Takeout' " & periodFilter & " AND (OrderID LIKE @search OR OrderStatus LIKE @search) " &
-                    "ORDER BY OrderTime DESC " &
+                    "o.OrderID, " &
+                    "CONCAT('#', o.OrderID) AS OrderNumber, " &
+                    "COALESCE(o.ItemsOrderedCount, (SELECT SUM(Quantity) FROM order_items WHERE OrderID = o.OrderID)) AS Items, " &
+                    "o.TotalAmount AS Amount, " &
+                    "o.OrderStatus AS Status, " &
+                    "DATE_FORMAT(CONCAT(o.OrderDate, ' ', o.OrderTime), '%Y-%m-%d %H:%i') AS Time " &
+                    "FROM orders o " &
+                    "WHERE o.OrderType = 'Takeout' " & periodFilter & " AND (o.OrderID LIKE @search OR o.OrderStatus LIKE @search) " &
+                    "ORDER BY o.OrderDate DESC, o.OrderTime DESC " &
                     "LIMIT @limit OFFSET @offset"
                 
                 Using cmd As New MySqlCommand(query, conn)
@@ -152,10 +162,11 @@ Public Class FormTakeOutOrders
                                ' Re-use the same period filter logic
                                Dim periodFilter As String = ""
                                Select Case Reports.SelectedPeriod
-                                   Case "Daily" : periodFilter = " AND DATE(OrderTime) = CURDATE() "
-                                   Case "Weekly" : periodFilter = " AND YEARWEEK(OrderTime, 1) = YEARWEEK(CURDATE(), 1) "
-                                   Case "Monthly" : periodFilter = " AND MONTH(OrderTime) = MONTH(CURDATE()) AND YEAR(OrderTime) = YEAR(CURDATE()) "
-                                   Case "Yearly" : periodFilter = " AND YEAR(OrderTime) = YEAR(CURDATE()) "
+                                   Case "Daily" : periodFilter = " AND DATE(OrderDate) = CURDATE() "
+                                   Case "Weekly" : periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                                   Case "Monthly" : periodFilter = " AND MONTH(OrderDate) = MONTH(CURDATE()) AND YEAR(OrderDate) = YEAR(CURDATE()) "
+                                   Case "Yearly" : periodFilter = " AND YEAR(OrderDate) = YEAR(CURDATE()) "
+                                   Case Else : periodFilter = "" ' All Time
                                End Select
 
                                Using conn As New MySqlConnection(connectionString)
@@ -416,6 +427,5 @@ Public Class FormTakeOutOrders
             MessageBox.Show("Failed to export CSV: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
 
 End Class

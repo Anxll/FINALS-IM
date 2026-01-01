@@ -32,6 +32,11 @@ Public Class FormDineInOrders
         isInitialLoad = False
     End Sub
 
+    Public Async Sub RefreshData()
+        _currentPage = 1
+        Await BeginLoadDineInOrders()
+    End Sub
+
     Private Sub InitializeModernUI()
         ' Enhanced form appearance
         Me.DoubleBuffered = True
@@ -140,6 +145,8 @@ Public Class FormDineInOrders
                 periodFilter = " AND MONTH(OrderDate) = MONTH(CURDATE()) AND YEAR(OrderDate) = YEAR(CURDATE()) "
             Case "Yearly"
                 periodFilter = " AND YEAR(OrderDate) = YEAR(CURDATE()) "
+            Case Else
+                periodFilter = "" ' All Time
         End Select
 
         Dim query As String = "SELECT COUNT(*) FROM orders WHERE OrderType = 'Dine-in' " & periodFilter & " AND (OrderID LIKE @search OR OrderStatus LIKE @search)"
@@ -164,6 +171,8 @@ Public Class FormDineInOrders
                 periodFilter = " AND MONTH(o.OrderDate) = MONTH(CURDATE()) AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
             Case "Yearly"
                 periodFilter = " AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
+            Case Else
+                periodFilter = "" ' All Time
         End Select
 
         ' Build query with LIMIT, OFFSET and search
@@ -212,6 +221,7 @@ Public Class FormDineInOrders
                                    Case "Weekly" : periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
                                    Case "Monthly" : periodFilter = " AND MONTH(OrderDate) = MONTH(CURDATE()) AND YEAR(OrderDate) = YEAR(CURDATE()) "
                                    Case "Yearly" : periodFilter = " AND YEAR(OrderDate) = YEAR(CURDATE()) "
+                                   Case Else : periodFilter = "" ' All Time
                                End Select
 
                                Using conn As New MySqlConnection(connectionString)

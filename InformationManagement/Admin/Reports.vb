@@ -3,7 +3,7 @@
 Public Class Reports
 
     ' === SHARED PROPERTY FOR PERIOD SELECTION ===
-    Public Shared Property SelectedPeriod As String = "Daily"
+    Public Shared Property SelectedPeriod As String = "All Time"
 
     ' === Load Form into Panel1 ===
     Private Sub LoadFormIntoPanel(childForm As Form)
@@ -39,8 +39,8 @@ Public Class Reports
 
         ' === INITIALIZE COMBOBOX ===
         reportPeriod.Items.Clear()
-        reportPeriod.Items.AddRange(New String() {"Daily", "Weekly", "Monthly", "Yearly"})
-        reportPeriod.SelectedIndex = 0 ' Default to "Daily"
+        reportPeriod.Items.AddRange(New String() {"All Time", "Daily", "Weekly", "Monthly", "Yearly"})
+        reportPeriod.SelectedIndex = 0 ' Default to "All Time"
         reportPeriod.DropDownStyle = ComboBoxStyle.DropDownList
 
         ' === FLOWLAYOUTPANEL SETTINGS ===

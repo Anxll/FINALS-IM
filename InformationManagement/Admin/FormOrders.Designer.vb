@@ -475,9 +475,9 @@ Partial Class FormOrders
         Me.LabelHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
         Me.LabelHeader.Location = New System.Drawing.Point(30, 25)
         Me.LabelHeader.Name = "LabelHeader"
-        Me.LabelHeader.Size = New System.Drawing.Size(278, 41)
+        Me.LabelHeader.Size = New System.Drawing.Size(228, 41)
         Me.LabelHeader.TabIndex = 13
-        Me.LabelHeader.Text = "Financial Summary"
+        Me.LabelHeader.Text = "Order Analytics"
         '
         'LabelSubHeader
         '
@@ -486,9 +486,9 @@ Partial Class FormOrders
         Me.LabelSubHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
         Me.LabelSubHeader.Location = New System.Drawing.Point(32, 68)
         Me.LabelSubHeader.Name = "LabelSubHeader"
-        Me.LabelSubHeader.Size = New System.Drawing.Size(473, 19)
+        Me.LabelSubHeader.Size = New System.Drawing.Size(420, 19)
         Me.LabelSubHeader.TabIndex = 14
-        Me.LabelSubHeader.Text = "Overview of total revenue, expenses, and profitability for the selected period"
+        Me.LabelSubHeader.Text = "Analyze order patterns, revenue metrics, and category performance"
         '
         'FormOrders
         '

@@ -44,7 +44,11 @@ Public Class FormSales
     Private Sub UpdateHeaderLabel()
         Try
             If Label1 IsNot Nothing Then
-                Label1.Text = $"Financial Overview - {currentPeriod} ({currentYear})"
+                If currentPeriod = "All Time" Then
+                    Label1.Text = "Financial Overview - All Time"
+                Else
+                    Label1.Text = $"Financial Overview - {currentPeriod} ({currentYear})"
+                End If
             End If
         Catch ex As Exception
             ' Silently handle if Label1 doesn't exist
@@ -228,6 +232,9 @@ Public Class FormSales
     ' =======================================================================
     Private Function BuildSalesQuery() As String
         Dim q As New List(Of String)
+        Dim yearFilterOrders As String = If(currentPeriod = "All Time", "", "AND YEAR(OrderDate) = @Year")
+        Dim yearFilterRes As String = If(currentPeriod = "All Time", "", "AND YEAR(PaymentDate) = @Year")
+        Dim yearFilterInv As String = If(currentPeriod = "All Time", "", "AND YEAR(PurchaseDate) = @Year")
 
         ' ORDERS TABLE - Revenue (Matches Dashboard Logic)
         Dim orderDateGrouping As String = GetDateGroupingForColumn("OrderDate")
@@ -235,7 +242,7 @@ Public Class FormSales
             SELECT {orderDateGrouping} AS PeriodGroup, TotalAmount AS Amount, 'Revenue' AS Type
             FROM orders
             WHERE OrderStatus = 'Completed'
-            AND YEAR(OrderDate) = @Year
+            {yearFilterOrders}
         ")
 
         ' RESERVATION_PAYMENTS TABLE - Revenue
@@ -245,7 +252,7 @@ Public Class FormSales
                 SELECT {resDateGrouping} AS PeriodGroup, AmountPaid AS Amount, 'Revenue' AS Type
                 FROM reservation_payments
                 WHERE PaymentStatus IN ('Paid','Completed')
-                AND YEAR(PaymentDate) = @Year
+                {yearFilterRes}
             ")
         End If
 
@@ -257,7 +264,7 @@ Public Class FormSales
                 SELECT {purchaseDateGrouping} AS PeriodGroup, TotalCost AS Amount, 'Expenses' AS Type
                 FROM inventory_batches
                 WHERE BatchStatus = 'Active'
-                AND YEAR(PurchaseDate) = @Year
+                {yearFilterInv}
             ")
         End If
 
@@ -291,6 +298,9 @@ Public Class FormSales
 
             Case "Yearly"
                 Return $"YEAR({columnName})"
+
+            Case "All Time"
+                Return $"DATE_FORMAT({columnName}, '%Y-%m')"
 
             Case Else
                 Return $"DATE({columnName})"
@@ -518,6 +528,9 @@ Public Class FormSales
 
             Case "Yearly"
                 Return $"AND YEAR({dateColumn}) = @Year"
+
+            Case "All Time"
+                Return "" ' No year or date restriction
 
             Case Else
                 Return $"AND YEAR({dateColumn}) = @Year"

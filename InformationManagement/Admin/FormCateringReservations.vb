@@ -17,6 +17,10 @@ Public Class FormCateringReservations
         Await RefreshAnalyticsAsync()
     End Sub
 
+    Public Async Sub RefreshData()
+        Await RefreshAnalyticsAsync()
+    End Sub
+
     Private Async Function RefreshAnalyticsAsync() As Task
         Try
             ' Run database queries concurrently
@@ -47,6 +51,7 @@ Public Class FormCateringReservations
                                        Case "Weekly" : periodFilter = " WHERE YEARWEEK(EventDate, 1) = YEARWEEK(CURDATE(), 1) "
                                        Case "Monthly" : periodFilter = " WHERE MONTH(EventDate) = MONTH(CURDATE()) AND YEAR(EventDate) = YEAR(CURDATE()) "
                                        Case "Yearly" : periodFilter = " WHERE YEAR(EventDate) = YEAR(CURDATE()) "
+                                       Case Else : periodFilter = "" ' All Time
                                    End Select
 
                                    ' Get Total Reservations count
@@ -59,13 +64,12 @@ Public Class FormCateringReservations
                                    totalEvents = Convert.ToInt32(cmdTotalEvents.ExecuteScalar())
 
                                    ' Calculate Average Event Value
-                                   ' We need to join with reservations to apply the period filter
                                    Dim cmdAvgValue As New MySqlCommand("
                         SELECT COALESCE(AVG(TotalPaid), 0)
                         FROM (
                             SELECT r.ReservationID, SUM(p.AmountPaid) AS TotalPaid
                             FROM reservations r
-                            INNER JOIN reservation_payments p ON r.ReservationID = p.ReservationID
+                            LEFT JOIN reservation_payments p ON r.ReservationID = p.ReservationID
                             " & periodFilter & "
                             GROUP BY r.ReservationID
                         ) AS totals
@@ -175,6 +179,22 @@ Public Class FormCateringReservations
                                 GROUP BY YEAR(r.EventDate)
                                 ORDER BY Period DESC 
                                 LIMIT @limit OFFSET @offset"
+                                       Case Else ' All Time - Default to Monthly display
+                                           query = "
+                                SELECT 
+                                    DATE_FORMAT(r.EventDate, '%Y-%m') AS Period, 
+                                    COUNT(*) AS ReservationCount, 
+                                    SUM(r.NumberOfGuests) AS TotalGuests, 
+                                    COALESCE(SUM(p.TotalPaid), 0) AS TotalAmount
+                                FROM reservations r
+                                LEFT JOIN (
+                                    SELECT ReservationID, SUM(AmountPaid) AS TotalPaid
+                                    FROM reservation_payments
+                                    GROUP BY ReservationID
+                                ) AS p ON p.ReservationID = r.ReservationID
+                                GROUP BY YEAR(r.EventDate), MONTH(r.EventDate)
+                                ORDER BY Period DESC 
+                                LIMIT @limit OFFSET @offset"
                                    End Select
 
                                    Using cmd As New MySqlCommand(query, conn)
@@ -213,6 +233,7 @@ Public Class FormCateringReservations
             Case "Weekly" : groupClause = "GROUP BY YEARWEEK(EventDate, 1)"
             Case "Monthly" : groupClause = "GROUP BY YEAR(EventDate), MONTH(EventDate)"
             Case "Yearly" : groupClause = "GROUP BY YEAR(EventDate)"
+            Case Else : groupClause = "GROUP BY YEAR(EventDate), MONTH(EventDate)"
         End Select
 
         ' We need to count the groups (periods)
@@ -300,7 +321,4 @@ Public Class FormCateringReservations
         End Try
     End Sub
 
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-
-    End Sub
 End Class
