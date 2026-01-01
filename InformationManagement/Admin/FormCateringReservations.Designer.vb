@@ -147,7 +147,6 @@ Partial Class FormCateringReservations
         Me.LabelSubHeader.Text = "Detailed overview of reservation patterns and event performance"
         '
         'Export
-        '
         Me.Export.BackColor = System.Drawing.Color.White
         Me.Export.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.Export.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold)

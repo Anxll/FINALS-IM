@@ -59,7 +59,7 @@ Partial Class Reports
         Me.Panel1.Cursor = System.Windows.Forms.Cursors.Default
         Me.Panel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(-5, 204)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(1807, 969)
         Me.Panel1.TabIndex = 3
@@ -83,10 +83,10 @@ Partial Class Reports
         Me.FlowLayoutPanel1.Controls.Add(Me.btnProductsPerformance)
         Me.FlowLayoutPanel1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(16, 98)
-        Me.FlowLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.FlowLayoutPanel1.Margin = New System.Windows.Forms.Padding(4)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(13, 6, 13, 6)
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(3178, 62)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(3157, 62)
         Me.FlowLayoutPanel1.TabIndex = 4
         Me.FlowLayoutPanel1.WrapContents = False
         '
@@ -292,7 +292,7 @@ Partial Class Reports
         Me.reportPeriod.ItemHeight = 14
         Me.reportPeriod.Items.AddRange(New Object() {"Daily", "Weekly", "Montly", "Yearly"})
         Me.reportPeriod.Location = New System.Drawing.Point(1424, 28)
-        Me.reportPeriod.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.reportPeriod.Margin = New System.Windows.Forms.Padding(4)
         Me.reportPeriod.Name = "reportPeriod"
         Me.reportPeriod.Size = New System.Drawing.Size(160, 20)
         Me.reportPeriod.TabIndex = 6
@@ -313,7 +313,7 @@ Partial Class Reports
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.DoubleBuffered = True
         Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.MinimizeBox = False
         Me.Name = "Reports"
         Me.Text = "Reports"
