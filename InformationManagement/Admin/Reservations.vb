@@ -11,6 +11,8 @@ Public Class Reservations
     Private RecordsPerPage As Integer = 20  ' Changed from 50 to 20 for faster loading
     Private TotalRecords As Integer = 0
     Private CurrentCondition As String = ""
+    Private CurrentSourceFilter As String = ""  ' Tracks: All, Walk-in, Online
+    Private CurrentStatusFilter As String = ""  ' Tracks: All, Pending, Confirmed, Completed, Cancelled
 
     ' Configuration for proof of payment
     Private Const WEB_BASE_URL As String = "http://localhost/TrialWeb/TrialWorkIM/Tabeya/"
@@ -759,12 +761,47 @@ Public Class Reservations
     End Sub
 
     ' ==========================================
-    ' VIEW ALL
+    ' HELPER METHOD - BUILD COMBINED FILTER
+    ' ==========================================
+    Private Function BuildCombinedFilter() As String
+        Dim filters As New List(Of String)
+
+        If CurrentStatusFilter <> "" Then
+            filters.Add(CurrentStatusFilter)
+        End If
+
+        If CurrentSourceFilter <> "" Then
+            filters.Add(CurrentSourceFilter)
+        End If
+
+        If filters.Count = 0 Then
+            Return ""
+        ElseIf filters.Count = 1 Then
+            Return filters(0)
+        Else
+            Return String.Join(" AND ", filters.Select(Function(f) $"({f})"))
+        End If
+    End Function
+
+    ' ==========================================
+    ' HELPER METHOD - UPDATE FILTER LABEL
+    ' ==========================================
+    Private Sub UpdateFilterLabel()
+        Dim statusText As String = If(CurrentStatusFilter = "", "All", CurrentStatusFilter.Replace("r.ReservationStatus = '", "").Replace("'", ""))
+        Dim sourceText As String = If(CurrentSourceFilter = "", "All Sources",
+                                      If(CurrentSourceFilter.Contains("Walk-in"), "Walk-in (POS)", "Online (Website)"))
+
+        lblFilter.Text = $"Showing: {statusText} | {sourceText}"
+    End Sub
+
+    ' ==========================================
+    ' VIEW ALL STATUS
     ' ==========================================
     Private Sub btnViewAll_Click(sender As Object, e As EventArgs) Handles btnViewAll.Click
         CurrentPage = 1
-        LoadReservations()
-        lblFilter.Text = "Showing: All Reservations"
+        CurrentStatusFilter = ""
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
     End Sub
 
     ' ==========================================
@@ -772,8 +809,9 @@ Public Class Reservations
     ' ==========================================
     Private Sub btnViewPending_Click(sender As Object, e As EventArgs) Handles btnViewPending.Click
         CurrentPage = 1
-        LoadReservations("r.ReservationStatus = 'Pending'")
-        lblFilter.Text = "Showing: Pending"
+        CurrentStatusFilter = "r.ReservationStatus = 'Pending'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
     End Sub
 
     ' ==========================================
@@ -781,8 +819,19 @@ Public Class Reservations
     ' ==========================================
     Private Sub btnViewConfirmed_Click(sender As Object, e As EventArgs) Handles btnViewConfirmed.Click
         CurrentPage = 1
-        LoadReservations("r.ReservationStatus = 'Confirmed'")
-        lblFilter.Text = "Showing: Confirmed"
+        CurrentStatusFilter = "r.ReservationStatus = 'Confirmed'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
+    End Sub
+
+    ' ==========================================
+    ' VIEW COMPLETED
+    ' ==========================================
+    Private Sub btnViewCompleted_Click(sender As Object, e As EventArgs) Handles btnViewCompleted.Click
+        CurrentPage = 1
+        CurrentStatusFilter = "r.ReservationStatus = 'Completed'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
     End Sub
 
     ' ==========================================
@@ -790,8 +839,39 @@ Public Class Reservations
     ' ==========================================
     Private Sub btnViewCancelled_Click(sender As Object, e As EventArgs) Handles btnViewCancelled.Click
         CurrentPage = 1
-        LoadReservations("r.ReservationStatus = 'Cancelled'")
-        lblFilter.Text = "Showing: Cancelled"
+        CurrentStatusFilter = "r.ReservationStatus = 'Cancelled'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
+    End Sub
+
+    ' ==========================================
+    ' SOURCE FILTER - ALL
+    ' ==========================================
+    Private Sub btnFilterAll_Click(sender As Object, e As EventArgs) Handles btnFilterAll.Click
+        CurrentPage = 1
+        CurrentSourceFilter = ""
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
+    End Sub
+
+    ' ==========================================
+    ' SOURCE FILTER - POS (Walk-in)
+    ' ==========================================
+    Private Sub btnFilterPOS_Click(sender As Object, e As EventArgs) Handles btnFilterPOS.Click
+        CurrentPage = 1
+        CurrentSourceFilter = "r.ReservationType = 'Walk-in'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
+    End Sub
+
+    ' ==========================================
+    ' SOURCE FILTER - WEBSITE (Online)
+    ' ==========================================
+    Private Sub btnFilterWebsite_Click(sender As Object, e As EventArgs) Handles btnFilterWebsite.Click
+        CurrentPage = 1
+        CurrentSourceFilter = "r.ReservationType = 'Online'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
     End Sub
 
     ' ==========================================
@@ -1060,5 +1140,9 @@ Public Class Reservations
         Catch ex As Exception
             MessageBox.Show("Error opening calendar: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub lblTotalReservations_Click(sender As Object, e As EventArgs) Handles lblTotalReservations.Click
+
     End Sub
 End Class

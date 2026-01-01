@@ -744,8 +744,8 @@ Public Class Inventory
         Try
             openConn()
 
-            ' Count items that are Low Stock or Out of Stock
-            Dim sql As String = "
+            ' 1. Inventory Alerts (Low Stock)
+            Dim sqlAlerts As String = "
                 SELECT COUNT(*) 
                 FROM (
                     SELECT 
@@ -759,9 +759,8 @@ Public Class Inventory
                     HAVING TotalStock < i.MinStockLevel
                 ) AS LowStockItems
             "
-
-            Dim cmd As New MySqlCommand(sql, conn)
-            Dim alertCount As Integer = Convert.ToInt32(cmd.ExecuteScalar())
+            Dim cmdAlerts As New MySqlCommand(sqlAlerts, conn)
+            Dim alertCount As Integer = Convert.ToInt32(cmdAlerts.ExecuteScalar())
 
             If btnInventoryAlerts IsNot Nothing Then
                 If alertCount > 0 Then
@@ -774,9 +773,37 @@ Public Class Inventory
                 btnInventoryAlerts.Visible = True
             End If
 
+            ' 2. Usage History Notifications (Recent Deductions)
+            ' Count "Rows" (Distinct Orders/Reservations) not raw log entries
+            Dim sqlUsage As String = "
+                SELECT COUNT(DISTINCT 
+                    CASE 
+                        WHEN OrderID IS NOT NULL THEN CONCAT('ORDER-', OrderID)
+                        WHEN ReservationID IS NOT NULL THEN CONCAT('RES-', ReservationID)
+                        ELSE 'MANUAL'
+                    END
+                ) 
+                FROM inventory_movement_log 
+                WHERE ChangeType = 'DEDUCT' 
+                AND MovementDate >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+            "
+            Dim cmdUsage As New MySqlCommand(sqlUsage, conn)
+            Dim usageCount As Integer = Convert.ToInt32(cmdUsage.ExecuteScalar())
+
+            If btnNotifications IsNot Nothing Then
+                If usageCount > 0 Then
+                    btnNotifications.Text = $"🔔 View Usage History ({usageCount})"
+                    btnNotifications.BackColor = Color.FromArgb(111, 66, 193) ' Keep original purple
+                Else
+                    btnNotifications.Text = "🔔 View Usage History"
+                    btnNotifications.BackColor = Color.FromArgb(111, 66, 193)
+                End If
+                btnNotifications.Visible = True
+            End If
+
         Catch ex As Exception
             ' Silent fail for background badge update
-            Debug.WriteLine("Error updating badge: " & ex.Message)
+            Debug.WriteLine("Error updating badges: " & ex.Message)
         Finally
             closeConn()
         End Try
