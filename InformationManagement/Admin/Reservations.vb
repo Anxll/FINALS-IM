@@ -274,7 +274,7 @@ Public Class Reservations
                     r.EventDate,
                     r.EventTime,
                     r.NumberOfGuests,
-                    r.ProductSelection,
+                    GROUP_CONCAT(CONCAT(ri.ProductName, ' (', ri.Quantity, ')') SEPARATOR ', ') AS ProductSelection,
                     r.SpecialRequests,
                     r.ReservationStatus,
                     r.ReservationDate,
@@ -285,19 +285,16 @@ Public Class Reservations
                     COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
                     COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
                     COALESCE(p.ReceiptFileName, '') AS ReceiptFileName,
-                    COALESCE(
-                        (SELECT SUM(ri.TotalPrice) 
-                         FROM reservation_items ri 
-                         WHERE ri.ReservationID = r.ReservationID), 
-                        0.00
-                    ) AS TotalAmount
+                    COALESCE(SUM(ri.TotalPrice), 0.00) AS TotalAmount
                  FROM reservations r
                  LEFT JOIN customers c ON r.CustomerID = c.CustomerID
-                 LEFT JOIN payments p ON r.ReservationID = p.ReservationID"
+                 LEFT JOIN payments p ON r.ReservationID = p.ReservationID
+                 LEFT JOIN reservation_items ri ON r.ReservationID = ri.ReservationID"
             If condition <> "" Then
                 query &= " WHERE " & condition
             End If
 
+            query &= " GROUP BY r.ReservationID, r.CustomerID, c.FirstName, c.LastName, r.ContactNumber, c.ContactNumber, r.ReservationType, r.EventType, r.EventDate, r.EventTime, r.NumberOfGuests, r.SpecialRequests, r.ReservationStatus, r.ReservationDate, r.DeliveryAddress, r.DeliveryOption, r.UpdatedDate, p.PaymentMethod, p.PaymentStatus, p.ProofOfPayment, p.ReceiptFileName"
             query &= " ORDER BY r.ReservationID DESC"
 
             ' Add pagination
@@ -858,7 +855,7 @@ Public Class Reservations
                     r.EventDate,
                     r.EventTime,
                     r.NumberOfGuests,
-                    r.ProductSelection,
+                    GROUP_CONCAT(CONCAT(ri.ProductName, ' (', ri.Quantity, ')') SEPARATOR ', ') AS ProductSelection,
                     r.SpecialRequests,
                     r.ReservationStatus,
                     r.ReservationDate,
@@ -869,21 +866,18 @@ Public Class Reservations
                     COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
                     COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
                     COALESCE(p.ReceiptFileName, '') AS ReceiptFileName,
-                    COALESCE(
-                        (SELECT SUM(ri.TotalPrice) 
-                         FROM reservation_items ri 
-                         WHERE ri.ReservationID = r.ReservationID), 
-                        0.00
-                    ) AS TotalAmount
+                    COALESCE(SUM(ri.TotalPrice), 0.00) AS TotalAmount
                  FROM reservations r
                  LEFT JOIN customers c ON r.CustomerID = c.CustomerID
                  LEFT JOIN payments p ON r.ReservationID = p.ReservationID
+                 LEFT JOIN reservation_items ri ON r.ReservationID = ri.ReservationID
                  WHERE CAST(r.ReservationID AS CHAR) LIKE @keyword 
                  OR r.FullName LIKE @keyword 
                  OR c.FirstName LIKE @keyword 
                  OR c.LastName LIKE @keyword 
                  OR r.EventType LIKE @keyword 
                  OR r.ReservationStatus LIKE @keyword
+                 GROUP BY r.ReservationID, r.CustomerID, c.FirstName, c.LastName, r.ContactNumber, c.ContactNumber, r.ReservationType, r.EventType, r.EventDate, r.EventTime, r.NumberOfGuests, r.SpecialRequests, r.ReservationStatus, r.ReservationDate, r.DeliveryAddress, r.DeliveryOption, r.UpdatedDate, p.PaymentMethod, p.PaymentStatus, p.ProofOfPayment, p.ReceiptFileName
                  ORDER BY r.ReservationID DESC"
 
             ' Add pagination
