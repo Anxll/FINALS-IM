@@ -145,8 +145,7 @@ Partial Class AdminDashboard
         Me.btnReports.ForeColor = System.Drawing.Color.White
         Me.btnReports.Image = CType(resources.GetObject("btnReports.Image"), System.Drawing.Image)
         Me.btnReports.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnReports.Location = New System.Drawing.Point(27, 625)
-        Me.btnReports.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnReports.Location = New System.Drawing.Point(22, 595)
         Me.btnReports.Name = "btnReports"
         Me.btnReports.Size = New System.Drawing.Size(253, 34)
         Me.btnReports.TabIndex = 7
@@ -295,16 +294,6 @@ Partial Class AdminDashboard
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(348, 73)
         Me.Panel2.TabIndex = 0
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(81, 4)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(171, 64)
-        Me.PictureBox1.TabIndex = 0
-        Me.PictureBox1.TabStop = False
         '
         'Panel1
         '

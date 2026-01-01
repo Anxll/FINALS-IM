@@ -11,6 +11,8 @@ Public Class Reservations
     Private RecordsPerPage As Integer = 20  ' Changed from 50 to 20 for faster loading
     Private TotalRecords As Integer = 0
     Private CurrentCondition As String = ""
+    Private CurrentSourceFilter As String = ""  ' Tracks: All, Walk-in, Online
+    Private CurrentStatusFilter As String = ""  ' Tracks: All, Pending, Confirmed, Completed, Cancelled
 
     ' Configuration for proof of payment
     Private Const WEB_BASE_URL As String = "http://localhost/TrialWeb/TrialWorkIM/Tabeya/"
@@ -262,36 +264,39 @@ Public Class Reservations
             closeConn()
 
             ' Build main query with pagination - OPTIMIZED with payment info
+            ' Build main query with pagination - OPTIMIZED with payment info
             Dim query As String =
-    "SELECT 
-        r.ReservationID,
-        r.CustomerID,
-        COALESCE(r.FullName, CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, ''))) AS CustomerName,
-        COALESCE(r.ContactNumber, c.ContactNumber) AS ContactNumber,
-        r.ReservationType,
-        r.EventType,
-        r.EventDate,
-        r.EventTime,
-        r.NumberOfGuests,
-        r.ProductSelection,
-        r.SpecialRequests,
-        r.ReservationStatus,
-        r.ReservationDate,
-        r.DeliveryAddress,
-        r.DeliveryOption,
-        r.UpdatedDate,
-        COALESCE(p.PaymentMethod, '') AS PaymentMethod,
-        COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
-        COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
-        COALESCE(p.ReceiptFileName, '') AS ReceiptFileName
-     FROM reservations r
-     LEFT JOIN customers c ON r.CustomerID = c.CustomerID
-     LEFT JOIN payments p ON r.ReservationID = p.ReservationID"
-
+                "SELECT 
+                    r.ReservationID,
+                    r.CustomerID,
+                    COALESCE(r.FullName, CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, ''))) AS CustomerName,
+                    COALESCE(r.ContactNumber, c.ContactNumber) AS ContactNumber,
+                    r.ReservationType,
+                    r.EventType,
+                    r.EventDate,
+                    r.EventTime,
+                    r.NumberOfGuests,
+                    GROUP_CONCAT(CONCAT(ri.ProductName, ' (', ri.Quantity, ')') SEPARATOR ', ') AS ProductSelection,
+                    r.SpecialRequests,
+                    r.ReservationStatus,
+                    r.ReservationDate,
+                    r.DeliveryAddress,
+                    r.DeliveryOption,
+                    r.UpdatedDate,
+                    COALESCE(p.PaymentMethod, '') AS PaymentMethod,
+                    COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
+                    COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
+                    COALESCE(p.ReceiptFileName, '') AS ReceiptFileName,
+                    COALESCE(SUM(ri.TotalPrice), 0.00) AS TotalAmount
+                 FROM reservations r
+                 LEFT JOIN customers c ON r.CustomerID = c.CustomerID
+                 LEFT JOIN payments p ON r.ReservationID = p.ReservationID
+                 LEFT JOIN reservation_items ri ON r.ReservationID = ri.ReservationID"
             If condition <> "" Then
                 query &= " WHERE " & condition
             End If
 
+            query &= " GROUP BY r.ReservationID, r.CustomerID, c.FirstName, c.LastName, r.ContactNumber, c.ContactNumber, r.ReservationType, r.EventType, r.EventDate, r.EventTime, r.NumberOfGuests, r.SpecialRequests, r.ReservationStatus, r.ReservationDate, r.DeliveryAddress, r.DeliveryOption, r.UpdatedDate, p.PaymentMethod, p.PaymentStatus, p.ProofOfPayment, p.ReceiptFileName"
             query &= " ORDER BY r.ReservationID DESC"
 
             ' Add pagination
@@ -443,32 +448,54 @@ Public Class Reservations
                     .Columns("PaymentMethod").DisplayIndex = 11
                 End If
 
+                ' Payment Status
                 If .Columns.Contains("PaymentStatus") Then
                     .Columns("PaymentStatus").HeaderText = "Payment Status"
                     .Columns("PaymentStatus").Width = 120
-                    .Columns("PaymentStatus").DisplayIndex = 12
+                    .Columns("PaymentStatus").DisplayIndex = 11
                 End If
 
+
+                ' Total Amount - WITH PROPER PADDING
+                If .Columns.Contains("TotalAmount") Then
+                    .Columns("TotalAmount").HeaderText = "Total Amount"
+                    .Columns("TotalAmount").Width = 130  ' Increased width
+                    .Columns("TotalAmount").DefaultCellStyle.Format = "₱#,##0.00"
+                    .Columns("TotalAmount").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight
+                    .Columns("TotalAmount").DefaultCellStyle.Padding = New Padding(5, 0, 10, 0)  ' Add padding
+                    .Columns("TotalAmount").DefaultCellStyle.WrapMode = DataGridViewTriState.False
+                    .Columns("TotalAmount").DisplayIndex = 12
+                End If
+
+                ' Reservation Status - MOVED AFTER TotalAmount
+                If .Columns.Contains("ReservationStatus") Then
+                    .Columns("ReservationStatus").HeaderText = "Status"
+                    .Columns("ReservationStatus").Width = 90
+                    .Columns("ReservationStatus").DisplayIndex = 13
+                End If
+
+                ' Special Requests
                 If .Columns.Contains("SpecialRequests") Then
                     .Columns("SpecialRequests").HeaderText = "Special Requests"
                     .Columns("SpecialRequests").Width = 150
-                    .Columns("SpecialRequests").DisplayIndex = 13
+                    .Columns("SpecialRequests").DisplayIndex = 14
                 End If
 
+                ' Reservation Date
                 If .Columns.Contains("ReservationDate") Then
                     .Columns("ReservationDate").HeaderText = "Reserved On"
                     .Columns("ReservationDate").Width = 100
                     .Columns("ReservationDate").DefaultCellStyle.Format = "MM/dd/yyyy"
-                    .Columns("ReservationDate").DisplayIndex = 14
+                    .Columns("ReservationDate").DisplayIndex = 15
                 End If
 
+                ' Updated Date
                 If .Columns.Contains("UpdatedDate") Then
                     .Columns("UpdatedDate").HeaderText = "Last Updated"
                     .Columns("UpdatedDate").Width = 100
                     .Columns("UpdatedDate").DefaultCellStyle.Format = "MM/dd/yyyy"
-                    .Columns("UpdatedDate").DisplayIndex = 15
+                    .Columns("UpdatedDate").DisplayIndex = 16
                 End If
-
                 .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None
                 .ScrollBars = ScrollBars.Both
 
@@ -734,12 +761,47 @@ Public Class Reservations
     End Sub
 
     ' ==========================================
-    ' VIEW ALL
+    ' HELPER METHOD - BUILD COMBINED FILTER
+    ' ==========================================
+    Private Function BuildCombinedFilter() As String
+        Dim filters As New List(Of String)
+
+        If CurrentStatusFilter <> "" Then
+            filters.Add(CurrentStatusFilter)
+        End If
+
+        If CurrentSourceFilter <> "" Then
+            filters.Add(CurrentSourceFilter)
+        End If
+
+        If filters.Count = 0 Then
+            Return ""
+        ElseIf filters.Count = 1 Then
+            Return filters(0)
+        Else
+            Return String.Join(" AND ", filters.Select(Function(f) $"({f})"))
+        End If
+    End Function
+
+    ' ==========================================
+    ' HELPER METHOD - UPDATE FILTER LABEL
+    ' ==========================================
+    Private Sub UpdateFilterLabel()
+        Dim statusText As String = If(CurrentStatusFilter = "", "All", CurrentStatusFilter.Replace("r.ReservationStatus = '", "").Replace("'", ""))
+        Dim sourceText As String = If(CurrentSourceFilter = "", "All Sources",
+                                      If(CurrentSourceFilter.Contains("Walk-in"), "Walk-in (POS)", "Online (Website)"))
+
+        lblFilter.Text = $"Showing: {statusText} | {sourceText}"
+    End Sub
+
+    ' ==========================================
+    ' VIEW ALL STATUS
     ' ==========================================
     Private Sub btnViewAll_Click(sender As Object, e As EventArgs) Handles btnViewAll.Click
         CurrentPage = 1
-        LoadReservations()
-        lblFilter.Text = "Showing: All Reservations"
+        CurrentStatusFilter = ""
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
     End Sub
 
     ' ==========================================
@@ -747,8 +809,9 @@ Public Class Reservations
     ' ==========================================
     Private Sub btnViewPending_Click(sender As Object, e As EventArgs) Handles btnViewPending.Click
         CurrentPage = 1
-        LoadReservations("r.ReservationStatus = 'Pending'")
-        lblFilter.Text = "Showing: Pending"
+        CurrentStatusFilter = "r.ReservationStatus = 'Pending'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
     End Sub
 
     ' ==========================================
@@ -756,8 +819,19 @@ Public Class Reservations
     ' ==========================================
     Private Sub btnViewConfirmed_Click(sender As Object, e As EventArgs) Handles btnViewConfirmed.Click
         CurrentPage = 1
-        LoadReservations("r.ReservationStatus = 'Confirmed'")
-        lblFilter.Text = "Showing: Confirmed"
+        CurrentStatusFilter = "r.ReservationStatus = 'Confirmed'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
+    End Sub
+
+    ' ==========================================
+    ' VIEW COMPLETED
+    ' ==========================================
+    Private Sub btnViewCompleted_Click(sender As Object, e As EventArgs) Handles btnViewCompleted.Click
+        CurrentPage = 1
+        CurrentStatusFilter = "r.ReservationStatus = 'Completed'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
     End Sub
 
     ' ==========================================
@@ -765,8 +839,39 @@ Public Class Reservations
     ' ==========================================
     Private Sub btnViewCancelled_Click(sender As Object, e As EventArgs) Handles btnViewCancelled.Click
         CurrentPage = 1
-        LoadReservations("r.ReservationStatus = 'Cancelled'")
-        lblFilter.Text = "Showing: Cancelled"
+        CurrentStatusFilter = "r.ReservationStatus = 'Cancelled'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
+    End Sub
+
+    ' ==========================================
+    ' SOURCE FILTER - ALL
+    ' ==========================================
+    Private Sub btnFilterAll_Click(sender As Object, e As EventArgs) Handles btnFilterAll.Click
+        CurrentPage = 1
+        CurrentSourceFilter = ""
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
+    End Sub
+
+    ' ==========================================
+    ' SOURCE FILTER - POS (Walk-in)
+    ' ==========================================
+    Private Sub btnFilterPOS_Click(sender As Object, e As EventArgs) Handles btnFilterPOS.Click
+        CurrentPage = 1
+        CurrentSourceFilter = "r.ReservationType = 'Walk-in'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
+    End Sub
+
+    ' ==========================================
+    ' SOURCE FILTER - WEBSITE (Online)
+    ' ==========================================
+    Private Sub btnFilterWebsite_Click(sender As Object, e As EventArgs) Handles btnFilterWebsite.Click
+        CurrentPage = 1
+        CurrentSourceFilter = "r.ReservationType = 'Online'"
+        LoadReservations(BuildCombinedFilter())
+        UpdateFilterLabel()
     End Sub
 
     ' ==========================================
@@ -818,38 +923,42 @@ Public Class Reservations
             closeConn()
 
             ' Build main search query
+            ' Build main search query
             Dim query As String =
-        "SELECT 
-            r.ReservationID,
-            r.CustomerID,
-            COALESCE(r.FullName, CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, ''))) AS CustomerName,
-            COALESCE(r.ContactNumber, c.ContactNumber) AS ContactNumber,
-            r.ReservationType,
-            r.EventType,
-            r.EventDate,
-            r.EventTime,
-            r.NumberOfGuests,
-            r.ProductSelection,
-            r.SpecialRequests,
-            r.ReservationStatus,
-            r.ReservationDate,
-            r.DeliveryAddress,
-            r.DeliveryOption,
-            r.UpdatedDate,
-            COALESCE(p.PaymentMethod, '') AS PaymentMethod,
-            COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
-            COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
-            COALESCE(p.ReceiptFileName, '') AS ReceiptFileName
-         FROM reservations r
-         LEFT JOIN customers c ON r.CustomerID = c.CustomerID
-         LEFT JOIN payments p ON r.ReservationID = p.ReservationID
-         WHERE CAST(r.ReservationID AS CHAR) LIKE @keyword 
-         OR r.FullName LIKE @keyword 
-         OR c.FirstName LIKE @keyword 
-         OR c.LastName LIKE @keyword 
-         OR r.EventType LIKE @keyword 
-         OR r.ReservationStatus LIKE @keyword
-         ORDER BY r.ReservationID DESC"
+                "SELECT 
+                    r.ReservationID,
+                    r.CustomerID,
+                    COALESCE(r.FullName, CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.LastName, ''))) AS CustomerName,
+                    COALESCE(r.ContactNumber, c.ContactNumber) AS ContactNumber,
+                    r.ReservationType,
+                    r.EventType,
+                    r.EventDate,
+                    r.EventTime,
+                    r.NumberOfGuests,
+                    GROUP_CONCAT(CONCAT(ri.ProductName, ' (', ri.Quantity, ')') SEPARATOR ', ') AS ProductSelection,
+                    r.SpecialRequests,
+                    r.ReservationStatus,
+                    r.ReservationDate,
+                    r.DeliveryAddress,
+                    r.DeliveryOption,
+                    r.UpdatedDate,
+                    COALESCE(p.PaymentMethod, '') AS PaymentMethod,
+                    COALESCE(p.PaymentStatus, 'Pending') AS PaymentStatus,
+                    COALESCE(p.ProofOfPayment, '') AS ProofOfPayment,
+                    COALESCE(p.ReceiptFileName, '') AS ReceiptFileName,
+                    COALESCE(SUM(ri.TotalPrice), 0.00) AS TotalAmount
+                 FROM reservations r
+                 LEFT JOIN customers c ON r.CustomerID = c.CustomerID
+                 LEFT JOIN payments p ON r.ReservationID = p.ReservationID
+                 LEFT JOIN reservation_items ri ON r.ReservationID = ri.ReservationID
+                 WHERE CAST(r.ReservationID AS CHAR) LIKE @keyword 
+                 OR r.FullName LIKE @keyword 
+                 OR c.FirstName LIKE @keyword 
+                 OR c.LastName LIKE @keyword 
+                 OR r.EventType LIKE @keyword 
+                 OR r.ReservationStatus LIKE @keyword
+                 GROUP BY r.ReservationID, r.CustomerID, c.FirstName, c.LastName, r.ContactNumber, c.ContactNumber, r.ReservationType, r.EventType, r.EventDate, r.EventTime, r.NumberOfGuests, r.SpecialRequests, r.ReservationStatus, r.ReservationDate, r.DeliveryAddress, r.DeliveryOption, r.UpdatedDate, p.PaymentMethod, p.PaymentStatus, p.ProofOfPayment, p.ReceiptFileName
+                 ORDER BY r.ReservationID DESC"
 
             ' Add pagination
             Dim offset As Integer = (CurrentPage - 1) * RecordsPerPage
@@ -1031,5 +1140,9 @@ Public Class Reservations
         Catch ex As Exception
             MessageBox.Show("Error opening calendar: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub lblTotalReservations_Click(sender As Object, e As EventArgs) Handles lblTotalReservations.Click
+
     End Sub
 End Class

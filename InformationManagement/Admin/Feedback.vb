@@ -8,11 +8,20 @@ Public Class Feedback
     Private adapter As MySqlDataAdapter
     Private dt As DataTable
 
+    ' Pagination variables
+    Private currentPage As Integer = 1
+    Private recordsPerPage As Integer = 20
+    Private totalRecords As Integer = 0
+    Private totalPages As Integer = 0
+    Private currentFilter As String = ""
+    Private currentSearchTerm As String = ""
+
     ' Form Load Event
     Private Sub Feedback_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitializeConnection()
         LoadFeedback()
         SetupDataGridView()
+        UpdatePaginationControls()
     End Sub
 
     ' Initialize Database Connection
@@ -54,9 +63,79 @@ Public Class Feedback
         End With
     End Sub
 
-    ' Load All Feedback from Database
+    ' Get Total Record Count
+    Private Function GetTotalRecords() As Integer
+        Dim count As Integer = 0
+        Try
+            If conn.State = ConnectionState.Open Then
+                conn.Close()
+            End If
+
+            conn.Open()
+
+            Dim query As String = "SELECT COUNT(*) FROM customer_feedback cf 
+                                  INNER JOIN customers c ON cf.CustomerID = c.CustomerID"
+
+            ' Apply filters
+            Dim whereClause As String = ""
+            If currentFilter <> "" Then
+                whereClause = " WHERE cf.Status = @status"
+            End If
+
+            If currentSearchTerm <> "" Then
+                If whereClause = "" Then
+                    whereClause = " WHERE "
+                Else
+                    whereClause &= " AND "
+                End If
+                whereClause &= "(CONCAT(c.FirstName, ' ', c.LastName) LIKE @search
+                               OR cf.ReviewMessage LIKE @search
+                               OR cf.Status LIKE @search
+                               OR cf.FeedbackType LIKE @search)"
+            End If
+
+            query &= whereClause
+
+            Dim cmd As New MySqlCommand(query, conn)
+
+            If currentFilter <> "" Then
+                cmd.Parameters.AddWithValue("@status", currentFilter)
+            End If
+
+            If currentSearchTerm <> "" Then
+                cmd.Parameters.AddWithValue("@search", "%" & currentSearchTerm & "%")
+            End If
+
+            count = Convert.ToInt32(cmd.ExecuteScalar())
+
+        Catch ex As Exception
+            MessageBox.Show("Error getting record count: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            If conn.State = ConnectionState.Open Then
+                conn.Close()
+            End If
+        End Try
+
+        Return count
+    End Function
+
+    ' Load Feedback with Pagination
     Private Sub LoadFeedback(Optional status As String = "")
         Try
+            currentFilter = status
+
+            ' Get total records
+            totalRecords = GetTotalRecords()
+            totalPages = Math.Ceiling(totalRecords / recordsPerPage)
+
+            ' Ensure current page is valid
+            If currentPage > totalPages And totalPages > 0 Then
+                currentPage = totalPages
+            End If
+            If currentPage < 1 Then
+                currentPage = 1
+            End If
+
             ' Ensure connection is closed before opening
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -72,30 +151,51 @@ Public Class Feedback
                 cf.OrderID,
                 cf.ReservationID,
                 cf.OverallRating,
-                cf.FoodTasteRating,
-                cf.PortionSizeRating,
-                cf.ServiceRating,
-                cf.AmbienceRating,
-                cf.CleanlinessRating,
+                cf.FoodTasteComment,
+                cf.PortionSizeComment,
+                cf.ServiceComment,
+                cf.AmbienceComment,
+                cf.CleanlinessComment,
                 cf.ReviewMessage,
-                cf.IsAnonymous,
                 cf.Status,
                 cf.CreatedDate,
                 cf.ApprovedDate
                 FROM customer_feedback cf
                 INNER JOIN customers c ON cf.CustomerID = c.CustomerID"
 
+            Dim whereClause As String = ""
             If status <> "" Then
-                query &= " WHERE cf.Status = @status"
+                whereClause = " WHERE cf.Status = @status"
             End If
 
+            If currentSearchTerm <> "" Then
+                If whereClause = "" Then
+                    whereClause = " WHERE "
+                Else
+                    whereClause &= " AND "
+                End If
+                whereClause &= "(CONCAT(c.FirstName, ' ', c.LastName) LIKE @search
+                               OR cf.ReviewMessage LIKE @search
+                               OR cf.Status LIKE @search
+                               OR cf.FeedbackType LIKE @search)"
+            End If
+
+            query &= whereClause
             query &= " ORDER BY cf.CreatedDate DESC"
+            query &= " LIMIT @limit OFFSET @offset"
 
             adapter = New MySqlDataAdapter(query, conn)
 
             If status <> "" Then
                 adapter.SelectCommand.Parameters.AddWithValue("@status", status)
             End If
+
+            If currentSearchTerm <> "" Then
+                adapter.SelectCommand.Parameters.AddWithValue("@search", "%" & currentSearchTerm & "%")
+            End If
+
+            adapter.SelectCommand.Parameters.AddWithValue("@limit", recordsPerPage)
+            adapter.SelectCommand.Parameters.AddWithValue("@offset", (currentPage - 1) * recordsPerPage)
 
             dt = New DataTable()
             adapter.Fill(dt)
@@ -106,7 +206,7 @@ Public Class Feedback
             FormatColumns()
 
             ' Update status label
-            lblTotalReviews.Text = "Total Feedback: " & dt.Rows.Count
+            UpdatePaginationControls()
 
         Catch ex As Exception
             MessageBox.Show("Error loading feedback: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -131,13 +231,12 @@ Public Class Feedback
             If .Columns.Contains("CustomerName") Then .Columns("CustomerName").HeaderText = "Customer Name"
             If .Columns.Contains("FeedbackType") Then .Columns("FeedbackType").HeaderText = "Type"
             If .Columns.Contains("OverallRating") Then .Columns("OverallRating").HeaderText = "Overall Rating"
-            If .Columns.Contains("FoodTasteRating") Then .Columns("FoodTasteRating").HeaderText = "Food"
-            If .Columns.Contains("PortionSizeRating") Then .Columns("PortionSizeRating").HeaderText = "Portion"
-            If .Columns.Contains("ServiceRating") Then .Columns("ServiceRating").HeaderText = "Service"
-            If .Columns.Contains("AmbienceRating") Then .Columns("AmbienceRating").HeaderText = "Ambience"
-            If .Columns.Contains("CleanlinessRating") Then .Columns("CleanlinessRating").HeaderText = "Cleanliness"
+            If .Columns.Contains("FoodTasteComment") Then .Columns("FoodTasteComment").HeaderText = "Food Comment"
+            If .Columns.Contains("PortionSizeComment") Then .Columns("PortionSizeComment").HeaderText = "Portion Comment"
+            If .Columns.Contains("ServiceComment") Then .Columns("ServiceComment").HeaderText = "Service Comment"
+            If .Columns.Contains("AmbienceComment") Then .Columns("AmbienceComment").HeaderText = "Ambience Comment"
+            If .Columns.Contains("CleanlinessComment") Then .Columns("CleanlinessComment").HeaderText = "Cleanliness Comment"
             If .Columns.Contains("ReviewMessage") Then .Columns("ReviewMessage").HeaderText = "Review Message"
-            If .Columns.Contains("IsAnonymous") Then .Columns("IsAnonymous").HeaderText = "Anonymous"
             If .Columns.Contains("Status") Then .Columns("Status").HeaderText = "Status"
             If .Columns.Contains("CreatedDate") Then .Columns("CreatedDate").HeaderText = "Date Created"
             If .Columns.Contains("ApprovedDate") Then .Columns("ApprovedDate").HeaderText = "Date Approved"
@@ -153,6 +252,20 @@ Public Class Feedback
             .ReadOnly = True
 
         End With
+    End Sub
+
+    ' Update Pagination Controls
+    Private Sub UpdatePaginationControls()
+        lblPageInfo.Text = $"Page {currentPage} of {totalPages} (Total: {totalRecords} records)"
+        lblTotalReviews.Text = $"Total Feedback: {totalRecords}"
+
+        ' Enable/Disable navigation buttons
+        btnFirstPage.Enabled = (currentPage > 1)
+        btnPrevPage.Enabled = (currentPage > 1)
+        btnNextPage.Enabled = (currentPage < totalPages)
+        btnLastPage.Enabled = (currentPage < totalPages)
+
+        txtPageNumber.Text = currentPage.ToString()
     End Sub
 
     ' DataGridView Cell Click Event (for action buttons)
@@ -188,7 +301,6 @@ Public Class Feedback
     ' Update Feedback Status (Approve/Reject)
     Private Sub UpdateFeedbackStatus(feedbackId As Integer, status As String)
         Try
-            ' Ensure connection is closed before opening
             If conn.State = ConnectionState.Open Then
                 conn.Close()
             End If
@@ -209,7 +321,7 @@ Public Class Feedback
 
             If result > 0 Then
                 MessageBox.Show($"Feedback {status} successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                LoadFeedback() ' Refresh the grid
+                LoadFeedback(currentFilter)
             Else
                 MessageBox.Show("Failed to update feedback status.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
@@ -233,7 +345,6 @@ Public Class Feedback
                 Return
             End If
 
-            ' Ensure connection is closed before opening
             If conn.State = ConnectionState.Open Then
                 conn.Close()
             End If
@@ -248,7 +359,7 @@ Public Class Feedback
 
             If result > 0 Then
                 MessageBox.Show("Feedback deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                LoadFeedback()
+                LoadFeedback(currentFilter)
             Else
                 MessageBox.Show("Failed to delete feedback.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
@@ -265,7 +376,6 @@ Public Class Feedback
     ' View Feedback Details
     Private Sub ViewFeedbackDetails(feedbackId As Integer)
         Try
-            ' Ensure connection is closed before opening
             If conn.State = ConnectionState.Open Then
                 conn.Close()
             End If
@@ -290,16 +400,11 @@ Public Class Feedback
                                        $"Feedback ID: {reader("FeedbackID")}" & vbCrLf &
                                        $"Customer: {reader("CustomerName")}" & vbCrLf &
                                        $"Email: {reader("Email")}" & vbCrLf &
-                                       $"Type: {reader("FeedbackType")}" & vbCrLf &
-                                       $"Anonymous: {If(Convert.ToBoolean(reader("IsAnonymous")), "Yes", "No")}" & vbCrLf & vbCrLf &
-                                       $"Overall Rating: {reader("OverallRating")}/5" & vbCrLf &
-                                       $"Food Taste: {If(IsDBNull(reader("FoodTasteRating")), "N/A", reader("FoodTasteRating").ToString())}" & vbCrLf &
-                                       $"Portion Size: {If(IsDBNull(reader("PortionSizeRating")), "N/A", reader("PortionSizeRating").ToString())}" & vbCrLf &
-                                       $"Service: {If(IsDBNull(reader("ServiceRating")), "N/A", reader("ServiceRating").ToString())}" & vbCrLf &
-                                       $"Ambience: {If(IsDBNull(reader("AmbienceRating")), "N/A", reader("AmbienceRating").ToString())}" & vbCrLf &
-                                       $"Cleanliness: {If(IsDBNull(reader("CleanlinessRating")), "N/A", reader("CleanlinessRating").ToString())}" & vbCrLf & vbCrLf &
+                                       $"Type: {reader("FeedbackType")}" & vbCrLf & vbCrLf &
+                                       $"Overall Rating: {reader("OverallRating")}/5" & vbCrLf & vbCrLf &
+                                       $"Review Message:" & vbCrLf &
+                                       $"{If(IsDBNull(reader("ReviewMessage")), "None", reader("ReviewMessage").ToString())}" & vbCrLf & vbCrLf &
                                        $"Comments:" & vbCrLf &
-                                       $"Review Message: {If(IsDBNull(reader("ReviewMessage")), "None", reader("ReviewMessage").ToString())}" & vbCrLf &
                                        $"Food: {If(IsDBNull(reader("FoodTasteComment")), "None", reader("FoodTasteComment").ToString())}" & vbCrLf &
                                        $"Portion: {If(IsDBNull(reader("PortionSizeComment")), "None", reader("PortionSizeComment").ToString())}" & vbCrLf &
                                        $"Service: {If(IsDBNull(reader("ServiceComment")), "None", reader("ServiceComment").ToString())}" & vbCrLf &
@@ -325,78 +430,81 @@ Public Class Feedback
 
     ' Search Feedback
     Private Sub SearchFeedback(searchTerm As String)
-        Try
-            ' Ensure connection is closed before opening
-            If conn.State = ConnectionState.Open Then
-                conn.Close()
+        currentSearchTerm = searchTerm
+        currentPage = 1
+        LoadFeedback(currentFilter)
+    End Sub
+
+    ' Pagination Button Event Handlers
+    Private Sub btnFirstPage_Click(sender As Object, e As EventArgs) Handles btnFirstPage.Click
+        currentPage = 1
+        LoadFeedback(currentFilter)
+    End Sub
+
+    Private Sub btnPrevPage_Click(sender As Object, e As EventArgs) Handles btnPrevPage.Click
+        If currentPage > 1 Then
+            currentPage -= 1
+            LoadFeedback(currentFilter)
+        End If
+    End Sub
+
+    Private Sub btnNextPage_Click(sender As Object, e As EventArgs) Handles btnNextPage.Click
+        If currentPage < totalPages Then
+            currentPage += 1
+            LoadFeedback(currentFilter)
+        End If
+    End Sub
+
+    Private Sub btnLastPage_Click(sender As Object, e As EventArgs) Handles btnLastPage.Click
+        currentPage = totalPages
+        LoadFeedback(currentFilter)
+    End Sub
+
+    Private Sub txtPageNumber_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtPageNumber.KeyPress
+        If e.KeyChar = Chr(13) Then ' Enter key
+            Dim pageNum As Integer
+            If Integer.TryParse(txtPageNumber.Text, pageNum) Then
+                If pageNum >= 1 And pageNum <= totalPages Then
+                    currentPage = pageNum
+                    LoadFeedback(currentFilter)
+                Else
+                    MessageBox.Show($"Please enter a page number between 1 and {totalPages}", "Invalid Page", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    txtPageNumber.Text = currentPage.ToString()
+                End If
+            Else
+                MessageBox.Show("Please enter a valid number", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                txtPageNumber.Text = currentPage.ToString()
             End If
-
-            conn.Open()
-
-            Dim query As String = "SELECT 
-                cf.FeedbackID,
-                cf.CustomerID,
-                CONCAT(c.FirstName, ' ', c.LastName) AS CustomerName,
-                cf.FeedbackType,
-                cf.OrderID,
-                cf.ReservationID,
-                cf.OverallRating,
-                cf.FoodTasteRating,
-                cf.PortionSizeRating,
-                cf.ServiceRating,
-                cf.AmbienceRating,
-                cf.CleanlinessRating,
-                cf.ReviewMessage,
-                cf.IsAnonymous,
-                cf.Status,
-                cf.CreatedDate,
-                cf.ApprovedDate
-                FROM customer_feedback cf
-                INNER JOIN customers c ON cf.CustomerID = c.CustomerID
-                WHERE CONCAT(c.FirstName, ' ', c.LastName) LIKE @search
-                OR cf.ReviewMessage LIKE @search
-                OR cf.Status LIKE @search
-                OR cf.FeedbackType LIKE @search
-                ORDER BY cf.CreatedDate DESC"
-
-            adapter = New MySqlDataAdapter(query, conn)
-            adapter.SelectCommand.Parameters.AddWithValue("@search", "%" & searchTerm & "%")
-
-            dt = New DataTable()
-            adapter.Fill(dt)
-
-            DataGridView1.DataSource = dt
-            FormatColumns()
-
-            lblTotalReviews.Text = $"Found: {dt.Rows.Count} feedback"
-
-        Catch ex As Exception
-            MessageBox.Show("Error searching: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Finally
-            If conn.State = ConnectionState.Open Then
-                conn.Close()
-            End If
-        End Try
+            e.Handled = True
+        ElseIf Not Char.IsDigit(e.KeyChar) And Not Char.IsControl(e.KeyChar) Then
+            e.Handled = True
+        End If
     End Sub
 
     ' Button Event Handlers
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
-        LoadFeedback()
+        currentPage = 1
+        LoadFeedback(currentFilter)
     End Sub
 
     Private Sub btnViewPending_Click(sender As Object, e As EventArgs) Handles btnViewPending.Click
+        currentPage = 1
         LoadFeedback("Pending")
     End Sub
 
     Private Sub btnViewApproved_Click(sender As Object, e As EventArgs) Handles btnViewApproved.Click
+        currentPage = 1
         LoadFeedback("Approved")
     End Sub
 
     Private Sub btnViewRejected_Click(sender As Object, e As EventArgs) Handles btnViewRejected.Click
+        currentPage = 1
         LoadFeedback("Rejected")
     End Sub
 
     Private Sub btnViewAll_Click(sender As Object, e As EventArgs) Handles btnViewAll.Click
+        currentPage = 1
+        currentFilter = ""
         LoadFeedback()
     End Sub
 
@@ -404,7 +512,9 @@ Public Class Feedback
         If txtSearch.Text.Trim() <> "" Then
             SearchFeedback(txtSearch.Text.Trim())
         Else
-            LoadFeedback()
+            currentSearchTerm = ""
+            currentPage = 1
+            LoadFeedback(currentFilter)
         End If
     End Sub
 
@@ -426,7 +536,7 @@ Public Class Feedback
         End If
     End Sub
 
-    ' Export to CSV (Optional)
+    ' Export to CSV
     Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
         Try
             Dim saveFileDialog As New SaveFileDialog()

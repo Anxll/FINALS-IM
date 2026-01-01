@@ -10,6 +10,8 @@ Public Class Orders
     Private RecordsPerPage As Integer = 20
     Private TotalRecords As Integer = 0
     Private CurrentCondition As String = ""
+    Private CurrentSourceFilter As String = ""  ' Tracks: All, Walk-in, Online
+    Private CurrentStatusFilter As String = ""  ' Tracks: All, Pending, Confirmed, Completed, Cancelled
 
     ' Performance optimization
     Private searchDebounceTimer As Timer
@@ -17,8 +19,9 @@ Public Class Orders
     Private Const WEB_BASE_URL As String = "http://localhost/TrialWeb/TrialWorkIM/Tabeya/"
     Private Sub Orders_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitializeSearchDebounce()
+        InitializeSearchDebounce()
         LoadOrdersAsync()
-        lblFilter.Text = "Showing: All Orders"
+        UpdateFilterLabel()
 
         With DataGridView2
             .SelectionMode = DataGridViewSelectionMode.FullRowSelect
@@ -1019,38 +1022,7 @@ Public Class Orders
     End Sub
 
 
-    ' ============================================================
-    ' FILTER BUTTONS
-    ' ============================================================
-    Private Sub btnViewAll_Click(sender As Object, e As EventArgs) Handles btnViewAll.Click
-        CurrentPage = 1
-        LoadOrdersAsync()
-        lblFilter.Text = "Showing: All Orders"
-    End Sub
 
-    Private Sub btnViewPending_Click(sender As Object, e As EventArgs) Handles btnViewPending.Click
-        CurrentPage = 1
-        LoadOrdersAsync("o.OrderStatus = 'Pending'")
-        lblFilter.Text = "Showing: Pending Orders"
-    End Sub
-
-    Private Sub btnViewConfirmed_Click(sender As Object, e As EventArgs) Handles btnViewConfirmed.Click
-        CurrentPage = 1
-        LoadOrdersAsync("o.OrderStatus = 'Confirmed'")
-        lblFilter.Text = "Showing: Confirmed Orders"
-    End Sub
-
-    Private Sub btnViewCompleted_Click(sender As Object, e As EventArgs) Handles btnViewCompleted.Click
-        CurrentPage = 1
-        LoadOrdersAsync("o.OrderStatus = 'Completed'")
-        lblFilter.Text = "Showing: Completed Orders"
-    End Sub
-
-    Private Sub btnViewCancelled_Click(sender As Object, e As EventArgs) Handles btnViewCancelled.Click
-        CurrentPage = 1
-        LoadOrdersAsync("o.OrderStatus = 'Cancelled'")
-        lblFilter.Text = "Showing: Cancelled Orders"
-    End Sub
 
     ' ============================================================
     ' SEARCH WITH DEBOUNCE (Optimized for performance)
@@ -1264,5 +1236,107 @@ Public Class Orders
         Catch ex As Exception
             MessageBox.Show("Error opening calendar: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    ' ============================================================
+    ' FILTER HELPER METHODS
+    ' ============================================================
+    Private Function BuildCombinedFilter() As String
+        Dim filters As New List(Of String)
+
+        If CurrentStatusFilter <> "" Then
+            filters.Add(CurrentStatusFilter)
+        End If
+
+        If CurrentSourceFilter <> "" Then
+            filters.Add(CurrentSourceFilter)
+        End If
+
+        If filters.Count = 0 Then
+            Return ""
+        ElseIf filters.Count = 1 Then
+            Return filters(0)
+        Else
+            Return String.Join(" AND ", filters.Select(Function(f) $"({f})"))
+        End If
+    End Function
+
+    Private Sub UpdateFilterLabel()
+        Dim statusText As String = If(CurrentStatusFilter = "", "All", CurrentStatusFilter.Replace("o.OrderStatus = '", "").Replace("'", ""))
+        
+        Dim sourceText As String = "All Sources"
+        If CurrentSourceFilter.Contains("Dine-in") Then
+            sourceText = "POS (Dine-in/Takeout)"
+        ElseIf CurrentSourceFilter.Contains("Online") Then
+            sourceText = "Website (Online)"
+        End If
+
+        If lblFilter IsNot Nothing Then
+            lblFilter.Text = $"Showing: {statusText} | {sourceText}"
+        End If
+    End Sub
+
+    ' ============================================================
+    ' FILTER BUTTON EVENT HANDLERS
+    ' ============================================================
+
+    ' --- STATUS FILTERS ---
+    Private Sub btnViewPending_Click(sender As Object, e As EventArgs) Handles btnViewPending.Click
+        CurrentStatusFilter = "o.OrderStatus = 'Pending'"
+        CurrentPage = 1
+        UpdateFilterLabel()
+        LoadOrdersAsync(BuildCombinedFilter())
+    End Sub
+
+    Private Sub btnViewConfirmed_Click(sender As Object, e As EventArgs) Handles btnViewConfirmed.Click
+        CurrentStatusFilter = "o.OrderStatus = 'Confirmed'"
+        CurrentPage = 1
+        UpdateFilterLabel()
+        LoadOrdersAsync(BuildCombinedFilter())
+    End Sub
+
+    Private Sub btnViewCompleted_Click(sender As Object, e As EventArgs) Handles btnViewCompleted.Click
+        CurrentStatusFilter = "o.OrderStatus = 'Completed'"
+        CurrentPage = 1
+        UpdateFilterLabel()
+        LoadOrdersAsync(BuildCombinedFilter())
+    End Sub
+
+    Private Sub btnViewCancelled_Click(sender As Object, e As EventArgs) Handles btnViewCancelled.Click
+        CurrentStatusFilter = "o.OrderStatus = 'Cancelled'"
+        CurrentPage = 1
+        UpdateFilterLabel()
+        LoadOrdersAsync(BuildCombinedFilter())
+    End Sub
+
+    Private Sub btnViewAll_Click(sender As Object, e As EventArgs) Handles btnViewAll.Click
+        CurrentStatusFilter = ""
+        CurrentPage = 1
+        UpdateFilterLabel()
+        LoadOrdersAsync(BuildCombinedFilter())
+    End Sub
+
+    ' --- SOURCE FILTERS ---
+    Private Sub btnFilterPOS_Click(sender As Object, e As EventArgs) Handles btnFilterPOS.Click
+        ' Filter for POS orders (Dine-in or Takeout)
+        CurrentSourceFilter = "(o.OrderType IN ('Dine-in', 'Takeout'))"
+        CurrentPage = 1
+        UpdateFilterLabel()
+        LoadOrdersAsync(BuildCombinedFilter())
+    End Sub
+
+    Private Sub btnFilterWebsite_Click(sender As Object, e As EventArgs) Handles btnFilterWebsite.Click
+        ' Filter for Online orders
+        CurrentSourceFilter = "(o.OrderType = 'Online')"
+        CurrentPage = 1
+        UpdateFilterLabel()
+        LoadOrdersAsync(BuildCombinedFilter())
+    End Sub
+
+    Private Sub btnFilterAll_Click(sender As Object, e As EventArgs) Handles btnFilterAll.Click
+        CurrentSourceFilter = ""
+        CurrentPage = 1
+        UpdateFilterLabel()
+        LoadOrdersAsync(BuildCombinedFilter())
     End Sub
 End Class
