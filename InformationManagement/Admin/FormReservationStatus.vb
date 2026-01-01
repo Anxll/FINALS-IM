@@ -13,15 +13,6 @@ Public Class FormReservationStatus
     ' =======================================================================
     Private Sub FormReservationStatus_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
-            ' Bring all controls to front
-            RoundedPane21.BringToFront()
-            RoundedPane22.BringToFront()
-            RoundedPane23.BringToFront()
-            RoundedPane24.BringToFront()
-            RoundedPane25.BringToFront()
-            ComboBox1.BringToFront()
-            Label9.BringToFront()
-
             InitializeForm()
             ConfigureChart()
             LoadReservationData()
@@ -35,17 +26,7 @@ Public Class FormReservationStatus
     ' =======================================================================
     Private Sub InitializeForm()
         Try
-            ' Set default period based on global selection
-            If ComboBox1.Items.Count > 0 Then
-                Select Case Reports.SelectedPeriod
-                    Case "Daily" : ComboBox1.SelectedIndex = 0
-                    Case "Weekly" : ComboBox1.SelectedIndex = 1
-                    Case "Monthly" : ComboBox1.SelectedIndex = 2
-                    Case "Yearly" : ComboBox1.SelectedIndex = 3
-                    Case Else : ComboBox1.SelectedIndex = 2 ' Monthly default
-                End Select
-                filterPeriod = Reports.SelectedPeriod
-            End If
+            filterPeriod = Reports.SelectedPeriod
 
             ' Configure chart colors
             Chart1.BackColor = Color.White
@@ -303,15 +284,6 @@ Public Class FormReservationStatus
         End Try
     End Sub
 
-    ' =======================================================================
-    ' PERIOD SELECTION CHANGED
-    ' =======================================================================
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        If ComboBox1.SelectedItem IsNot Nothing Then
-            filterPeriod = ComboBox1.SelectedItem.ToString()
-            LoadReservationData()
-        End If
-    End Sub
 
     ' =======================================================================
     ' EXPORT PDF
@@ -459,23 +431,12 @@ Public Class FormReservationStatus
     End Function
 
     ' =======================================================================
-    ' REFRESH DATA
+    ' REFRESH DATA (Called by Reports form)
     ' =======================================================================
     Public Sub RefreshData()
         filterPeriod = Reports.SelectedPeriod
         currentYear = Reports.SelectedYear
         currentMonth = Reports.SelectedMonth
-        
-        ' Update combo box to reflect global filter
-        If ComboBox1.Items.Count > 0 Then
-            Select Case filterPeriod
-                Case "Daily" : ComboBox1.SelectedIndex = 0
-                Case "Weekly" : ComboBox1.SelectedIndex = 1
-                Case "Monthly" : ComboBox1.SelectedIndex = 2
-                Case "Yearly" : ComboBox1.SelectedIndex = 3
-            End Select
-        End If
-
         LoadReservationData()
     End Sub
 
