@@ -33,7 +33,7 @@ Partial Class FormCustomerHistory
         Me.lblPageStatus = New System.Windows.Forms.Label()
         Me.SearchContainer = New InformationManagement.RoundedPane2()
         Me.txtSearch = New System.Windows.Forms.TextBox()
-        Me.Export = New System.Windows.Forms.Button()
+        Me.btnExportPdf = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.dateid = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -79,7 +79,7 @@ Partial Class FormCustomerHistory
         Me.RoundedPane21.BorderThickness = 1
         Me.RoundedPane21.Controls.Add(Me.PaginationContainer)
         Me.RoundedPane21.Controls.Add(Me.SearchContainer)
-        Me.RoundedPane21.Controls.Add(Me.Export)
+        Me.RoundedPane21.Controls.Add(Me.btnExportPdf)
         Me.RoundedPane21.Controls.Add(Me.Label1)
         Me.RoundedPane21.Controls.Add(Me.DataGridView1)
         Me.RoundedPane21.CornerRadius = 15
@@ -164,25 +164,25 @@ Partial Class FormCustomerHistory
         Me.txtSearch.TabIndex = 0
         Me.txtSearch.Text = ""
         '
-        'Export
+        'btnExportPdf
         '
-        Me.Export.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Export.BackColor = System.Drawing.Color.FromArgb(34, 197, 94)
-        Me.Export.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Export.FlatAppearance.BorderSize = 0
-        Me.Export.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Export.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.Export.ForeColor = System.Drawing.Color.White
-        Me.Export.Image = CType(resources.GetObject("Export.Image"), System.Drawing.Image)
-        Me.Export.Location = New System.Drawing.Point(1347, 22)
-        Me.Export.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.Export.Name = "Export"
-        Me.Export.Size = New System.Drawing.Size(139, 40)
-        Me.Export.TabIndex = 9
-        Me.Export.Text = "   Export"
-        Me.Export.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Export.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.Export.UseVisualStyleBackColor = False
+        Me.btnExportPdf.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnExportPdf.BackColor = System.Drawing.Color.FromArgb(CType(CType(99, Byte), Integer), CType(CType(102, Byte), Integer), CType(CType(241, Byte), Integer))
+        Me.btnExportPdf.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnExportPdf.FlatAppearance.BorderSize = 0
+        Me.btnExportPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnExportPdf.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
+        Me.btnExportPdf.ForeColor = System.Drawing.Color.White
+        Me.btnExportPdf.Image = CType(resources.GetObject("Export.Image"), System.Drawing.Image)
+        Me.btnExportPdf.Location = New System.Drawing.Point(1347, 22)
+        Me.btnExportPdf.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnExportPdf.Name = "btnExportPdf"
+        Me.btnExportPdf.Size = New System.Drawing.Size(139, 40)
+        Me.btnExportPdf.TabIndex = 10
+        Me.btnExportPdf.Text = "   Export PDF"
+        Me.btnExportPdf.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnExportPdf.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnExportPdf.UseVisualStyleBackColor = False
         '
         'Label1
         '
@@ -302,7 +302,7 @@ Partial Class FormCustomerHistory
     Friend WithEvents RoundedPane21 As RoundedPane2
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents Label1 As Label
-    Friend WithEvents Export As Button
+    Friend WithEvents btnExportPdf As Button
     Friend WithEvents PaginationContainer As Panel
     Friend WithEvents btnNext As Button
     Friend WithEvents btnPrev As Button

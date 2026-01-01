@@ -37,8 +37,6 @@ Partial Class FormReservationStatus
         Me.Confirmed = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Cancelled = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.RoundedPane21 = New InformationManagement.RoundedPane2()
         Me.RoundedPane27 = New InformationManagement.RoundedPane2()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
@@ -56,7 +54,7 @@ Partial Class FormReservationStatus
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.lblCancelled = New System.Windows.Forms.Label()
         Me.RoundedPane25 = New InformationManagement.RoundedPane2()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnExportPdf = New System.Windows.Forms.Button()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
@@ -171,29 +169,6 @@ Partial Class FormReservationStatus
         Me.Cancelled.Size = New System.Drawing.Size(65, 17)
         Me.Cancelled.TabIndex = 0
         Me.Cancelled.Text = "Cancelled"
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
-        Me.Label9.ForeColor = System.Drawing.SystemColors.GrayText
-        Me.Label9.Location = New System.Drawing.Point(874, 19)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(49, 15)
-        Me.Label9.TabIndex = 4
-        Me.Label9.Text = "Period :"
-        '
-        'ComboBox1
-        '
-        Me.ComboBox1.DisplayMember = "Daily"
-        Me.ComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Daily", "Weekly", "Monthly", "Yearly"})
-        Me.ComboBox1.Location = New System.Drawing.Point(955, 18)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(121, 21)
-        Me.ComboBox1.TabIndex = 5
         '
         'RoundedPane21
         '
@@ -402,7 +377,7 @@ Partial Class FormReservationStatus
         Me.RoundedPane25.BackColor = System.Drawing.Color.White
         Me.RoundedPane25.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane25.BorderThickness = 1
-        Me.RoundedPane25.Controls.Add(Me.Button1)
+        Me.RoundedPane25.Controls.Add(Me.btnExportPdf)
         Me.RoundedPane25.Controls.Add(Me.Chart1)
         Me.RoundedPane25.Controls.Add(Me.Label4)
         Me.RoundedPane25.CornerRadius = 15
@@ -413,19 +388,23 @@ Partial Class FormReservationStatus
         Me.RoundedPane25.Size = New System.Drawing.Size(1045, 337)
         Me.RoundedPane25.TabIndex = 10
         '
-        'Button1
+        'btnExportPdf
         '
-        Me.Button1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
-        Me.Button1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(918, 14)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(104, 30)
-        Me.Button1.TabIndex = 9
-        Me.Button1.Text = "   Export"
-        Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnExportPdf.BackColor = System.Drawing.Color.FromArgb(CType(CType(99, Byte), Integer), CType(CType(102, Byte), Integer), CType(CType(241, Byte), Integer))
+        Me.btnExportPdf.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnExportPdf.FlatAppearance.BorderSize = 0
+        Me.btnExportPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnExportPdf.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
+        Me.btnExportPdf.ForeColor = System.Drawing.Color.White
+        Me.btnExportPdf.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
+        Me.btnExportPdf.Location = New System.Drawing.Point(918, 14)
+        Me.btnExportPdf.Name = "btnExportPdf"
+        Me.btnExportPdf.Size = New System.Drawing.Size(104, 30)
+        Me.btnExportPdf.TabIndex = 9
+        Me.btnExportPdf.Text = "   Export PDF"
+        Me.btnExportPdf.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnExportPdf.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnExportPdf.UseVisualStyleBackColor = False
         '
         'Chart1
         '
@@ -492,8 +471,6 @@ Partial Class FormReservationStatus
         Me.Controls.Add(Me.RoundedPane23)
         Me.Controls.Add(Me.RoundedPane22)
         Me.Controls.Add(Me.RoundedPane21)
-        Me.Controls.Add(Me.ComboBox1)
-        Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.Panel1)
         Me.DoubleBuffered = True
         Me.Name = "FormReservationStatus"
@@ -518,7 +495,6 @@ Partial Class FormReservationStatus
         Me.RoundedPane25.PerformLayout()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents Label2 As Label
@@ -529,8 +505,6 @@ Partial Class FormReservationStatus
     Friend WithEvents Confirmed As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents Cancelled As Label
-    Friend WithEvents Label9 As Label
-    Friend WithEvents ComboBox1 As ComboBox
     Friend WithEvents RoundedPane21 As RoundedPane2
     Friend WithEvents RoundedPane22 As RoundedPane2
     Friend WithEvents RoundedPane23 As RoundedPane2
@@ -542,7 +516,7 @@ Partial Class FormReservationStatus
     Friend WithEvents RoundedPane25 As RoundedPane2
     Friend WithEvents Chart1 As DataVisualization.Charting.Chart
     Friend WithEvents Label4 As Label
-    Friend WithEvents Button1 As Button
+    Friend WithEvents btnExportPdf As Button
     Friend WithEvents Panel1 As Panel
     Friend WithEvents RoundedPane27 As RoundedPane2
     Friend WithEvents PictureBox2 As PictureBox

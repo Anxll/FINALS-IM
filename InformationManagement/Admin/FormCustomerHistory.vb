@@ -57,15 +57,30 @@ Public Class FormCustomerHistory
     Private Function FetchTotalHistoryCount(searchText As String) As Integer
         ' Get period filter from Reports form
         Dim periodFilter As String = ""
+        Dim sYear As Integer = Reports.SelectedYear
+        Dim sMonth As Integer = Reports.SelectedMonth
+
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                periodFilter = " AND DATE(OrderDate) = CURDATE() "
+                If sYear = DateTime.Now.Year Then
+                    periodFilter = " AND DATE(OrderDate) = CURDATE() "
+                Else
+                    periodFilter = $" AND DATE(OrderDate) = '{sYear}-12-31' "
+                End If
             Case "Weekly"
-                periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                If sYear = DateTime.Now.Year Then
+                    periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                Else
+                    periodFilter = $" AND YEAR(OrderDate) = {sYear} AND WEEK(OrderDate, 1) = 52 "
+                End If
             Case "Monthly"
-                periodFilter = " AND MONTH(OrderDate) = MONTH(CURDATE()) AND YEAR(OrderDate) = YEAR(CURDATE()) "
+                If sMonth = 0 Then
+                    periodFilter = $" AND YEAR(OrderDate) = {sYear} "
+                Else
+                    periodFilter = $" AND YEAR(OrderDate) = {sYear} AND MONTH(OrderDate) = {sMonth} "
+                End If
             Case "Yearly"
-                periodFilter = " AND YEAR(OrderDate) = YEAR(CURDATE()) "
+                periodFilter = $" AND YEAR(OrderDate) = {sYear} "
         End Select
 
         Dim query As String = "SELECT COUNT(*) FROM orders WHERE (OrderID LIKE @search OR OrderType LIKE @search OR OrderStatus LIKE @search)" & periodFilter
@@ -81,15 +96,30 @@ Public Class FormCustomerHistory
     Private Function FetchCustomerHistoryTable(searchText As String, offset As Integer, limit As Integer) As DataTable
         ' Get period filter from Reports form
         Dim periodFilter As String = ""
+        Dim sYear As Integer = Reports.SelectedYear
+        Dim sMonth As Integer = Reports.SelectedMonth
+
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
+                If sYear = DateTime.Now.Year Then
+                    periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
+                Else
+                    periodFilter = $" AND DATE(o.OrderDate) = '{sYear}-12-31' "
+                End If
             Case "Weekly"
-                periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                If sYear = DateTime.Now.Year Then
+                    periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                Else
+                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND WEEK(o.OrderDate, 1) = 52 "
+                End If
             Case "Monthly"
-                periodFilter = " AND MONTH(o.OrderDate) = MONTH(CURDATE()) AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
+                If sMonth = 0 Then
+                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
+                Else
+                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND MONTH(o.OrderDate) = {sMonth} "
+                End If
             Case "Yearly"
-                periodFilter = " AND YEAR(o.OrderDate) = YEAR(CURDATE()) "
+                periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
         End Select
 
         ' Optimized query targeting only necessary columns and using paging with search
@@ -146,7 +176,7 @@ Public Class FormCustomerHistory
         Try
             Me.UseWaitCursor = isLoading
             DataGridView1.Enabled = Not isLoading
-            Export.Enabled = Not isLoading
+            btnExportPdf.Enabled = Not isLoading
             If btnPrev IsNot Nothing Then btnPrev.Enabled = Not isLoading AndAlso _currentPage > 1
             If btnNext IsNot Nothing Then btnNext.Enabled = Not isLoading AndAlso _currentPage < _totalPages
 
@@ -191,58 +221,22 @@ Public Class FormCustomerHistory
         SearchContainer.BorderColor = Color.FromArgb(226, 232, 240)
     End Sub
 
-    Private Sub Export_Click(sender As Object, e As EventArgs) Handles Export.Click
-        ExportToCSV()
+    ' =======================================================================
+    ' EXPORT PDF
+    ' =======================================================================
+    Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click
+        If Reports.Instance IsNot Nothing Then
+            Reports.Instance.ExportCurrentReport()
+        Else
+            MessageBox.Show("Please open the Reports screen to export.", "PDF Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+    End Sub
+    ' =======================================================================
+    ' REFRESH DATA
+    ' =======================================================================
+    Public Sub RefreshData()
+        _currentPage = 1
+        BeginLoadCustomerHistory()
     End Sub
 
-    Private Sub ExportToCSV()
-        Try
-            Dim saveDialog As New SaveFileDialog With {
-                .Filter = "CSV Files (*.csv)|*.csv",
-                .FileName = String.Format("Customer_History_{0:yyyyMMdd_HHmmss}.csv", DateTime.Now),
-                .Title = "Export Customer History Report"
-            }
-
-            If saveDialog.ShowDialog() = DialogResult.OK Then
-                Using writer As New IO.StreamWriter(saveDialog.FileName)
-                    ' Write headers
-                    Dim headers As New List(Of String)
-                    For Each column As DataGridViewColumn In DataGridView1.Columns
-                        If column.Visible Then
-                            headers.Add(column.HeaderText)
-                        End If
-                    Next
-                    writer.WriteLine(String.Join(",", headers))
-
-                    ' Write data rows
-                    For Each row As DataGridViewRow In DataGridView1.Rows
-                        If Not row.IsNewRow Then
-                            Dim values As New List(Of String)
-                            For Each column As DataGridViewColumn In DataGridView1.Columns
-                                If column.Visible Then
-                                    Dim cellVal As Object = row.Cells(column.Index).Value
-                                    Dim cellValue As String = If(cellVal IsNot Nothing, cellVal.ToString(), "")
-
-                                    ' Escape commas and quotes
-                                    If cellValue.Contains(",") OrElse cellValue.Contains("""") Then
-                                        cellValue = """" & cellValue.Replace("""", """""") & """"
-                                    End If
-                                    values.Add(cellValue)
-                                End If
-                            Next
-                            writer.WriteLine(String.Join(",", values))
-                        End If
-                    Next
-                End Using
-
-                MessageBox.Show("Customer history report exported successfully!", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
-
-                ' Open file location
-                Process.Start("explorer.exe", String.Format("/select,""{0}""", saveDialog.FileName))
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("Failed to export CSV: " & ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
 End Class

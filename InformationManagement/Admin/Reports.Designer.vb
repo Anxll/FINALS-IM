@@ -37,6 +37,10 @@ Partial Class Reports
         Me.btnProductsPerformance = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.reportPeriod = New System.Windows.Forms.ComboBox()
+        Me.lblYear = New System.Windows.Forms.Label()
+        Me.cmbYear = New System.Windows.Forms.ComboBox()
+        Me.lblMonth = New System.Windows.Forms.Label()
+        Me.cmbMonth = New System.Windows.Forms.ComboBox()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -54,14 +58,16 @@ Partial Class Reports
         '
         'Panel1
         '
+        Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.AutoScroll = True
-        Me.Panel1.AutoSize = True
         Me.Panel1.Cursor = System.Windows.Forms.Cursors.Default
         Me.Panel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel1.Location = New System.Drawing.Point(-5, 204)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Panel1.Location = New System.Drawing.Point(0, 168)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1807, 969)
+        Me.Panel1.Size = New System.Drawing.Size(1869, 582)
         Me.Panel1.TabIndex = 3
         '
         'FlowLayoutPanel1
@@ -83,10 +89,10 @@ Partial Class Reports
         Me.FlowLayoutPanel1.Controls.Add(Me.btnProductsPerformance)
         Me.FlowLayoutPanel1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(16, 98)
-        Me.FlowLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.FlowLayoutPanel1.Margin = New System.Windows.Forms.Padding(4)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(13, 6, 13, 6)
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(3178, 62)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(3157, 62)
         Me.FlowLayoutPanel1.TabIndex = 4
         Me.FlowLayoutPanel1.WrapContents = False
         '
@@ -272,18 +278,20 @@ Partial Class Reports
         '
         'Label2
         '
+        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(254, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.Label2.Location = New System.Drawing.Point(1304, 28)
+        Me.Label2.Location = New System.Drawing.Point(1208, 48)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(67, 20)
+        Me.Label2.Size = New System.Drawing.Size(62, 20)
         Me.Label2.TabIndex = 5
-        Me.Label2.Text = "Period :"
+        Me.Label2.Text = "Period:"
         '
         'reportPeriod
         '
+        Me.reportPeriod.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.reportPeriod.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
         Me.reportPeriod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.reportPeriod.DropDownWidth = 106
@@ -291,11 +299,57 @@ Partial Class Reports
         Me.reportPeriod.FormattingEnabled = True
         Me.reportPeriod.ItemHeight = 14
         Me.reportPeriod.Items.AddRange(New Object() {"Daily", "Weekly", "Montly", "Yearly"})
-        Me.reportPeriod.Location = New System.Drawing.Point(1424, 28)
-        Me.reportPeriod.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.reportPeriod.Location = New System.Drawing.Point(1328, 48)
+        Me.reportPeriod.Margin = New System.Windows.Forms.Padding(4)
         Me.reportPeriod.Name = "reportPeriod"
         Me.reportPeriod.Size = New System.Drawing.Size(160, 20)
         Me.reportPeriod.TabIndex = 6
+        '
+        'lblYear
+        '
+        Me.lblYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblYear.AutoSize = True
+        Me.lblYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
+        Me.lblYear.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.lblYear.Location = New System.Drawing.Point(784, 48)
+        Me.lblYear.Name = "lblYear"
+        Me.lblYear.Size = New System.Drawing.Size(48, 20)
+        Me.lblYear.TabIndex = 7
+        Me.lblYear.Text = "Year:"
+        '
+        'cmbYear
+        '
+        Me.cmbYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbYear.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.cmbYear.FormattingEnabled = True
+        Me.cmbYear.Location = New System.Drawing.Point(844, 48)
+        Me.cmbYear.Name = "cmbYear"
+        Me.cmbYear.Size = New System.Drawing.Size(100, 24)
+        Me.cmbYear.TabIndex = 8
+        '
+        'lblMonth
+        '
+        Me.lblMonth.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblMonth.AutoSize = True
+        Me.lblMonth.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
+        Me.lblMonth.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.lblMonth.Location = New System.Drawing.Point(964, 48)
+        Me.lblMonth.Name = "lblMonth"
+        Me.lblMonth.Size = New System.Drawing.Size(60, 20)
+        Me.lblMonth.TabIndex = 9
+        Me.lblMonth.Text = "Month:"
+        '
+        'cmbMonth
+        '
+        Me.cmbMonth.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmbMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbMonth.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.cmbMonth.FormattingEnabled = True
+        Me.cmbMonth.Location = New System.Drawing.Point(1044, 48)
+        Me.cmbMonth.Name = "cmbMonth"
+        Me.cmbMonth.Size = New System.Drawing.Size(120, 24)
+        Me.cmbMonth.TabIndex = 10
         '
         'Reports
         '
@@ -304,7 +358,11 @@ Partial Class Reports
         Me.AutoScroll = True
         Me.AutoSize = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1827, 750)
+        Me.ClientSize = New System.Drawing.Size(1869, 750)
+        Me.Controls.Add(Me.cmbMonth)
+        Me.Controls.Add(Me.lblMonth)
+        Me.Controls.Add(Me.cmbYear)
+        Me.Controls.Add(Me.lblYear)
         Me.Controls.Add(Me.reportPeriod)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.FlowLayoutPanel1)
@@ -313,7 +371,7 @@ Partial Class Reports
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.DoubleBuffered = True
         Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.MinimizeBox = False
         Me.Name = "Reports"
         Me.Text = "Reports"
@@ -338,4 +396,9 @@ Partial Class Reports
     Friend WithEvents btnProductsPerformance As Button
     Friend WithEvents Label2 As Label
     Friend WithEvents reportPeriod As ComboBox
+    Friend WithEvents lblYear As Label
+    Friend WithEvents cmbYear As ComboBox
+    Friend WithEvents lblMonth As Label
+    Friend WithEvents cmbMonth As ComboBox
+
 End Class

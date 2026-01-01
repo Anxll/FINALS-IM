@@ -17,6 +17,7 @@ Partial Class InventoryMovementHistory
 
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(InventoryMovementHistory))
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -61,7 +62,7 @@ Partial Class InventoryMovementHistory
         Me.pnlActions = New System.Windows.Forms.Panel()
         Me.lblOverallTotalCost = New System.Windows.Forms.Label()
         Me.btnclear = New System.Windows.Forms.Button()
-        Me.btnExport = New System.Windows.Forms.Button()
+        Me.btnExportPdf = New System.Windows.Forms.Button()
         Me.btnRefresh = New System.Windows.Forms.Button()
         Me.btnClose = New System.Windows.Forms.Button()
         Me.pnlMain.SuspendLayout()
@@ -535,7 +536,7 @@ Partial Class InventoryMovementHistory
         Me.pnlActions.BackColor = System.Drawing.Color.White
         Me.pnlActions.Controls.Add(Me.lblOverallTotalCost)
         Me.pnlActions.Controls.Add(Me.btnclear)
-        Me.pnlActions.Controls.Add(Me.btnExport)
+        Me.pnlActions.Controls.Add(Me.btnExportPdf)
         Me.pnlActions.Controls.Add(Me.btnRefresh)
         Me.pnlActions.Controls.Add(Me.btnClose)
         Me.pnlActions.Dock = System.Windows.Forms.DockStyle.Bottom
@@ -572,20 +573,23 @@ Partial Class InventoryMovementHistory
         Me.btnclear.Text = "CLear History"
         Me.btnclear.UseVisualStyleBackColor = False
         '
-        'btnExport
+        'btnExportPdf
         '
-        Me.btnExport.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(167, Byte), Integer), CType(CType(69, Byte), Integer))
-        Me.btnExport.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnExport.FlatAppearance.BorderSize = 0
-        Me.btnExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnExport.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnExport.ForeColor = System.Drawing.Color.White
-        Me.btnExport.Location = New System.Drawing.Point(20, 15)
-        Me.btnExport.Name = "btnExport"
-        Me.btnExport.Size = New System.Drawing.Size(140, 40)
-        Me.btnExport.TabIndex = 0
-        Me.btnExport.Text = "📊 Export CSV"
-        Me.btnExport.UseVisualStyleBackColor = False
+        Me.btnExportPdf.BackColor = System.Drawing.Color.FromArgb(CType(CType(99, Byte), Integer), CType(CType(102, Byte), Integer), CType(CType(241, Byte), Integer))
+        Me.btnExportPdf.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnExportPdf.FlatAppearance.BorderSize = 0
+        Me.btnExportPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnExportPdf.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
+        Me.btnExportPdf.ForeColor = System.Drawing.Color.White
+        Me.btnExportPdf.Image = CType(resources.GetObject("btnExport.Image"), System.Drawing.Image)
+        Me.btnExportPdf.Location = New System.Drawing.Point(20, 15)
+        Me.btnExportPdf.Name = "btnExportPdf"
+        Me.btnExportPdf.Size = New System.Drawing.Size(140, 40)
+        Me.btnExportPdf.TabIndex = 0
+        Me.btnExportPdf.Text = "   Export PDF"
+        Me.btnExportPdf.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnExportPdf.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnExportPdf.UseVisualStyleBackColor = False
         '
         'btnRefresh
         '
@@ -704,7 +708,7 @@ Partial Class InventoryMovementHistory
     Friend WithEvents dgvMovements As DataGridView
 
     Friend WithEvents pnlActions As Panel
-    Friend WithEvents btnExport As Button
+    Friend WithEvents btnExportPdf As Button
     Friend WithEvents btnClose As Button
     Friend WithEvents btnRefresh As Button
     Friend WithEvents btnclear As Button

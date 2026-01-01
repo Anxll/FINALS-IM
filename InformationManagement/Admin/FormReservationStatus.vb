@@ -13,15 +13,6 @@ Public Class FormReservationStatus
     ' =======================================================================
     Private Sub FormReservationStatus_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
-            ' Bring all controls to front
-            RoundedPane21.BringToFront()
-            RoundedPane22.BringToFront()
-            RoundedPane23.BringToFront()
-            RoundedPane24.BringToFront()
-            RoundedPane25.BringToFront()
-            ComboBox1.BringToFront()
-            Label9.BringToFront()
-
             InitializeForm()
             ConfigureChart()
             LoadReservationData()
@@ -35,17 +26,7 @@ Public Class FormReservationStatus
     ' =======================================================================
     Private Sub InitializeForm()
         Try
-            ' Set default period based on global selection
-            If ComboBox1.Items.Count > 0 Then
-                Select Case Reports.SelectedPeriod
-                    Case "Daily" : ComboBox1.SelectedIndex = 0
-                    Case "Weekly" : ComboBox1.SelectedIndex = 1
-                    Case "Monthly" : ComboBox1.SelectedIndex = 2
-                    Case "Yearly" : ComboBox1.SelectedIndex = 3
-                    Case Else : ComboBox1.SelectedIndex = 2 ' Monthly default
-                End Select
-                filterPeriod = Reports.SelectedPeriod
-            End If
+            filterPeriod = Reports.SelectedPeriod
 
             ' Configure chart colors
             Chart1.BackColor = Color.White
@@ -180,21 +161,36 @@ Public Class FormReservationStatus
     Private Function GetDateFilter() As String
         Dim filter As String = ""
 
+        Dim selectedYear As Integer = Reports.SelectedYear
+        Dim selectedMonth As Integer = Reports.SelectedMonth
+
         Select Case filterPeriod
             Case "Daily"
-                filter = $"DATE(ReservationDate) = CURDATE()"
+                If selectedYear = DateTime.Now.Year Then
+                    filter = $"DATE(ReservationDate) = CURDATE()"
+                Else
+                    filter = $"DATE(ReservationDate) = '{selectedYear}-12-31'"
+                End If
 
             Case "Weekly"
-                filter = $"YEARWEEK(ReservationDate, 1) = YEARWEEK(CURDATE(), 1)"
+                If selectedYear = DateTime.Now.Year Then
+                    filter = $"YEARWEEK(ReservationDate, 1) = YEARWEEK(CURDATE(), 1)"
+                Else
+                    filter = $"YEAR(ReservationDate) = {selectedYear} AND WEEK(ReservationDate, 1) = 52"
+                End If
 
             Case "Monthly"
-                filter = $"MONTH(ReservationDate) = {currentMonth} AND YEAR(ReservationDate) = {currentYear}"
+                If selectedMonth = 0 Then
+                    filter = $"YEAR(ReservationDate) = {selectedYear}"
+                Else
+                    filter = $"YEAR(ReservationDate) = {selectedYear} AND MONTH(ReservationDate) = {selectedMonth}"
+                End If
 
             Case "Yearly"
-                filter = $"YEAR(ReservationDate) = {currentYear}"
+                filter = $"YEAR(ReservationDate) = {selectedYear}"
 
             Case Else
-                filter = $"YEAR(ReservationDate) = {currentYear}"
+                filter = $"YEAR(ReservationDate) = {selectedYear}"
         End Select
 
         Return filter
@@ -288,40 +284,16 @@ Public Class FormReservationStatus
         End Try
     End Sub
 
+
     ' =======================================================================
-    ' PERIOD SELECTION CHANGED
+    ' EXPORT PDF
     ' =======================================================================
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
-        If ComboBox1.SelectedItem IsNot Nothing Then
-            filterPeriod = ComboBox1.SelectedItem.ToString()
-            LoadReservationData()
+    Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click
+        If Reports.Instance IsNot Nothing Then
+            Reports.Instance.ExportCurrentReport()
+        Else
+            MessageBox.Show("Please open the Reports screen to export.", "PDF Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-    End Sub
-
-    ' =======================================================================
-    ' EXPORT CHART TO IMAGE
-    ' =======================================================================
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Try
-            Dim saveDialog As New SaveFileDialog With {
-                .Filter = "PNG Image|*.png|JPEG Image|*.jpg",
-                .Title = "Export Chart",
-                .FileName = $"Reservation_Status_{filterPeriod}_{DateTime.Now:yyyy-MM-dd}"
-            }
-
-            If saveDialog.ShowDialog() = DialogResult.OK Then
-                ' Create bitmap of chart
-                Dim bmp As New Bitmap(Chart1.Width, Chart1.Height)
-                Chart1.DrawToBitmap(bmp, New Rectangle(0, 0, Chart1.Width, Chart1.Height))
-                bmp.Save(saveDialog.FileName)
-                bmp.Dispose()
-
-                MessageBox.Show("Chart exported successfully!", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show($"Export Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
     End Sub
 
     ' =======================================================================
@@ -459,9 +431,12 @@ Public Class FormReservationStatus
     End Function
 
     ' =======================================================================
-    ' REFRESH DATA
+    ' REFRESH DATA (Called by Reports form)
     ' =======================================================================
     Public Sub RefreshData()
+        filterPeriod = Reports.SelectedPeriod
+        currentYear = Reports.SelectedYear
+        currentMonth = Reports.SelectedMonth
         LoadReservationData()
     End Sub
 

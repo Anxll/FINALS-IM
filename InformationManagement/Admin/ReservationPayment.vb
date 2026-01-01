@@ -37,7 +37,7 @@ Public Class ReservationPayment
 
             Dim query As String =
         "SELECT 
-            rp.ReservationPaymentID,
+            rp.PaymentID,
             rp.ReservationID,
             r.CustomerID,
             c.FirstName,
@@ -56,12 +56,12 @@ Public Class ReservationPayment
             rp.ReceiptFileName,
             rp.TransactionID,
             rp.UpdatedDate
-        FROM reservation_payments rp
+        FROM payments rp
         INNER JOIN reservations r ON rp.ReservationID = r.ReservationID
         INNER JOIN customers c ON r.CustomerID = c.CustomerID"
 
             ' Build count query for pagination
-            Dim countQuery As String = "SELECT COUNT(*) FROM reservation_payments rp " &
+            Dim countQuery As String = "SELECT COUNT(*) FROM payments rp " &
                                    "INNER JOIN reservations r ON rp.ReservationID = r.ReservationID " &
                                    "INNER JOIN customers c ON r.CustomerID = c.CustomerID"
 
@@ -82,8 +82,8 @@ Public Class ReservationPayment
 
             ' Add pagination
             Dim offset As Integer = (CurrentPage - 1) * RecordsPerPage
-            ' FIXED: Sort by PaymentDate first, then ReservationPaymentID to ensure newest is always on top
-            query &= " ORDER BY rp.PaymentDate DESC, rp.ReservationPaymentID DESC"
+            ' FIXED: Sort by PaymentDate first, then PaymentID to ensure newest is always on top
+            query &= " ORDER BY rp.PaymentDate DESC, rp.PaymentID DESC"
             query &= $" LIMIT {RecordsPerPage} OFFSET {offset}"
 
             LoadToDGV(query, Reservation, "")
@@ -151,7 +151,7 @@ Public Class ReservationPayment
 
             ' Hide ID and file columns
             Dim hideCols() As String = {
-                "ReservationPaymentID",
+                "PaymentID",
                 "ReservationID",
                 "CustomerID",
                 "ProofOfPayment",
@@ -445,7 +445,7 @@ Public Class ReservationPayment
                 LoadReservationPayments()
             Else
                 LoadReservationPayments(
-                    $"rp.ReservationPaymentID LIKE '%{keyword}%' 
+                    $"rp.PaymentID LIKE '%{keyword}%' 
                       OR rp.ReservationID LIKE '%{keyword}%' 
                       OR rp.PaymentStatus LIKE '%{keyword}%'
                       OR c.FirstName LIKE '%{keyword}%'
@@ -579,10 +579,10 @@ Public Class ReservationPayment
                     Return
                 End If
 
-                Dim updateQuery As String = $"UPDATE reservation_payments 
+                Dim updateQuery As String = $"UPDATE payments 
                                              SET PaymentStatus = '{newStatus}', 
                                                  UpdatedDate = NOW() 
-                                             WHERE ReservationPaymentID = '{paymentID}'"
+                                             WHERE PaymentID = '{paymentID}'"
 
                 modDB.readQuery(updateQuery)
 
@@ -625,8 +625,8 @@ Public Class ReservationPayment
                 MessageBoxIcon.Warning)
 
             If result = DialogResult.Yes Then
-                Dim deleteQuery As String = $"DELETE FROM reservation_payments 
-                                             WHERE ReservationPaymentID = '{paymentID}'"
+                Dim deleteQuery As String = $"DELETE FROM payments 
+                                             WHERE PaymentID = '{paymentID}'"
 
                 modDB.readQuery(deleteQuery)
 

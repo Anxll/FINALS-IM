@@ -40,7 +40,7 @@ Partial Class FormDineInOrders
         Me.lblPageStatus = New System.Windows.Forms.Label()
         Me.SearchContainer = New InformationManagement.RoundedPane2()
         Me.TextBoxSearch = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnExportPdf = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.LabelHeader = New System.Windows.Forms.Label()
@@ -249,7 +249,7 @@ Partial Class FormDineInOrders
         Me.RoundedPane24.BorderThickness = 1
         Me.RoundedPane24.Controls.Add(Me.PaginationContainer)
         Me.RoundedPane24.Controls.Add(Me.SearchContainer)
-        Me.RoundedPane24.Controls.Add(Me.Button1)
+        Me.RoundedPane24.Controls.Add(Me.btnExportPdf)
         Me.RoundedPane24.Controls.Add(Me.Label10)
         Me.RoundedPane24.Controls.Add(Me.DataGridView1)
         Me.RoundedPane24.CornerRadius = 15
@@ -333,23 +333,23 @@ Partial Class FormDineInOrders
         Me.TextBoxSearch.TabIndex = 0
         Me.TextBoxSearch.Text = "Search orders..."
         '
-        'Button1
+        'btnExportPdf
         '
-        Me.Button1.BackColor = System.Drawing.Color.FromArgb(CType(CType(46, Byte), Integer), CType(CType(204, Byte), Integer), CType(CType(113, Byte), Integer))
-        Me.Button1.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.Button1.FlatAppearance.BorderSize = 0
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.Button1.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
-        Me.Button1.ForeColor = System.Drawing.Color.White
-        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.Button1.Location = New System.Drawing.Point(977, 20)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(135, 45)
-        Me.Button1.TabIndex = 10
-        Me.Button1.Text = "   Export"
-        Me.Button1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.Button1.UseVisualStyleBackColor = False
+        Me.btnExportPdf.BackColor = System.Drawing.Color.FromArgb(CType(CType(99, Byte), Integer), CType(CType(102, Byte), Integer), CType(CType(241, Byte), Integer))
+        Me.btnExportPdf.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnExportPdf.FlatAppearance.BorderSize = 0
+        Me.btnExportPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnExportPdf.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
+        Me.btnExportPdf.ForeColor = System.Drawing.Color.White
+        Me.btnExportPdf.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
+        Me.btnExportPdf.Location = New System.Drawing.Point(1036, 23)
+        Me.btnExportPdf.Name = "btnExportPdf"
+        Me.btnExportPdf.Size = New System.Drawing.Size(135, 45)
+        Me.btnExportPdf.TabIndex = 10
+        Me.btnExportPdf.Text = "   Export PDF"
+        Me.btnExportPdf.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnExportPdf.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnExportPdf.UseVisualStyleBackColor = False
         '
         'Label10
         '
@@ -406,6 +406,7 @@ Partial Class FormDineInOrders
         '
         'FormDineInOrders
         '
+        Me.BackColor = System.Drawing.Color.GhostWhite
         Me.ClientSize = New System.Drawing.Size(1186, 749)
         Me.Controls.Add(Me.LabelSubHeader)
         Me.Controls.Add(Me.LabelHeader)
@@ -413,6 +414,7 @@ Partial Class FormDineInOrders
         Me.Controls.Add(Me.RoundedPane23)
         Me.Controls.Add(Me.RoundedPane22)
         Me.Controls.Add(Me.RoundedPane21)
+        Me.DoubleBuffered = True
         Me.Name = "FormDineInOrders"
         Me.Text = "Dine-In Management"
         Me.RoundedPane21.ResumeLayout(False)
@@ -456,7 +458,7 @@ Partial Class FormDineInOrders
     Friend WithEvents RoundedPane24 As InformationManagement.RoundedPane2
     Friend WithEvents SearchContainer As InformationManagement.RoundedPane2
     Friend WithEvents TextBoxSearch As System.Windows.Forms.TextBox
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents btnExportPdf As System.Windows.Forms.Button
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
     Friend WithEvents PaginationContainer As System.Windows.Forms.Panel

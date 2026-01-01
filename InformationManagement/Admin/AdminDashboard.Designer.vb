@@ -66,8 +66,9 @@ Partial Class AdminDashboard
         Me.SidePanel.Controls.Add(Me.Panel2)
         Me.SidePanel.Dock = System.Windows.Forms.DockStyle.Left
         Me.SidePanel.Location = New System.Drawing.Point(0, 0)
+        Me.SidePanel.Margin = New System.Windows.Forms.Padding(4)
         Me.SidePanel.Name = "SidePanel"
-        Me.SidePanel.Size = New System.Drawing.Size(261, 713)
+        Me.SidePanel.Size = New System.Drawing.Size(348, 878)
         Me.SidePanel.TabIndex = 0
         '
         'ActivityLogs
@@ -94,9 +95,10 @@ Partial Class AdminDashboard
         Me.Feedback.ForeColor = System.Drawing.Color.White
         Me.Feedback.Image = CType(resources.GetObject("Feedback.Image"), System.Drawing.Image)
         Me.Feedback.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Feedback.Location = New System.Drawing.Point(20, 474)
+        Me.Feedback.Location = New System.Drawing.Point(27, 583)
+        Me.Feedback.Margin = New System.Windows.Forms.Padding(4)
         Me.Feedback.Name = "Feedback"
-        Me.Feedback.Size = New System.Drawing.Size(190, 28)
+        Me.Feedback.Size = New System.Drawing.Size(253, 34)
         Me.Feedback.TabIndex = 12
         Me.Feedback.Text = "     Feedback"
         Me.Feedback.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -110,9 +112,10 @@ Partial Class AdminDashboard
         Me.Customer.ForeColor = System.Drawing.Color.White
         Me.Customer.Image = CType(resources.GetObject("Customer.Image"), System.Drawing.Image)
         Me.Customer.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Customer.Location = New System.Drawing.Point(20, 434)
+        Me.Customer.Location = New System.Drawing.Point(27, 534)
+        Me.Customer.Margin = New System.Windows.Forms.Padding(4)
         Me.Customer.Name = "Customer"
-        Me.Customer.Size = New System.Drawing.Size(190, 28)
+        Me.Customer.Size = New System.Drawing.Size(253, 34)
         Me.Customer.TabIndex = 11
         Me.Customer.Text = "     Customer"
         Me.Customer.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -126,9 +129,10 @@ Partial Class AdminDashboard
         Me.Employee.ForeColor = System.Drawing.Color.White
         Me.Employee.Image = CType(resources.GetObject("Employee.Image"), System.Drawing.Image)
         Me.Employee.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Employee.Location = New System.Drawing.Point(20, 392)
+        Me.Employee.Location = New System.Drawing.Point(27, 482)
+        Me.Employee.Margin = New System.Windows.Forms.Padding(4)
         Me.Employee.Name = "Employee"
-        Me.Employee.Size = New System.Drawing.Size(190, 28)
+        Me.Employee.Size = New System.Drawing.Size(253, 34)
         Me.Employee.TabIndex = 10
         Me.Employee.Text = "     Employee"
         Me.Employee.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -142,9 +146,10 @@ Partial Class AdminDashboard
         Me.Inventory.ForeColor = System.Drawing.Color.White
         Me.Inventory.Image = CType(resources.GetObject("Inventory.Image"), System.Drawing.Image)
         Me.Inventory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Inventory.Location = New System.Drawing.Point(20, 349)
+        Me.Inventory.Location = New System.Drawing.Point(27, 430)
+        Me.Inventory.Margin = New System.Windows.Forms.Padding(4)
         Me.Inventory.Name = "Inventory"
-        Me.Inventory.Size = New System.Drawing.Size(190, 28)
+        Me.Inventory.Size = New System.Drawing.Size(253, 34)
         Me.Inventory.TabIndex = 9
         Me.Inventory.Text = "     Inventory"
         Me.Inventory.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -158,9 +163,9 @@ Partial Class AdminDashboard
         Me.btnReports.ForeColor = System.Drawing.Color.White
         Me.btnReports.Image = CType(resources.GetObject("btnReports.Image"), System.Drawing.Image)
         Me.btnReports.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnReports.Location = New System.Drawing.Point(20, 508)
+        Me.btnReports.Location = New System.Drawing.Point(26, 624)
         Me.btnReports.Name = "btnReports"
-        Me.btnReports.Size = New System.Drawing.Size(190, 28)
+        Me.btnReports.Size = New System.Drawing.Size(253, 34)
         Me.btnReports.TabIndex = 7
         Me.btnReports.Text = "     Reports"
         Me.btnReports.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -174,9 +179,10 @@ Partial Class AdminDashboard
         Me.btnPayroll.ForeColor = System.Drawing.Color.White
         Me.btnPayroll.Image = CType(resources.GetObject("btnPayroll.Image"), System.Drawing.Image)
         Me.btnPayroll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnPayroll.Location = New System.Drawing.Point(20, 304)
+        Me.btnPayroll.Location = New System.Drawing.Point(27, 374)
+        Me.btnPayroll.Margin = New System.Windows.Forms.Padding(4)
         Me.btnPayroll.Name = "btnPayroll"
-        Me.btnPayroll.Size = New System.Drawing.Size(190, 28)
+        Me.btnPayroll.Size = New System.Drawing.Size(253, 34)
         Me.btnPayroll.TabIndex = 6
         Me.btnPayroll.Text = "     Payroll"
         Me.btnPayroll.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -190,9 +196,10 @@ Partial Class AdminDashboard
         Me.btnOrders.ForeColor = System.Drawing.Color.White
         Me.btnOrders.Image = CType(resources.GetObject("btnOrders.Image"), System.Drawing.Image)
         Me.btnOrders.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnOrders.Location = New System.Drawing.Point(20, 259)
+        Me.btnOrders.Location = New System.Drawing.Point(27, 319)
+        Me.btnOrders.Margin = New System.Windows.Forms.Padding(4)
         Me.btnOrders.Name = "btnOrders"
-        Me.btnOrders.Size = New System.Drawing.Size(190, 28)
+        Me.btnOrders.Size = New System.Drawing.Size(253, 34)
         Me.btnOrders.TabIndex = 5
         Me.btnOrders.Text = "     Orders"
         Me.btnOrders.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -206,9 +213,10 @@ Partial Class AdminDashboard
         Me.btnReservations.ForeColor = System.Drawing.Color.White
         Me.btnReservations.Image = CType(resources.GetObject("btnReservations.Image"), System.Drawing.Image)
         Me.btnReservations.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnReservations.Location = New System.Drawing.Point(20, 215)
+        Me.btnReservations.Location = New System.Drawing.Point(27, 265)
+        Me.btnReservations.Margin = New System.Windows.Forms.Padding(4)
         Me.btnReservations.Name = "btnReservations"
-        Me.btnReservations.Size = New System.Drawing.Size(190, 28)
+        Me.btnReservations.Size = New System.Drawing.Size(253, 34)
         Me.btnReservations.TabIndex = 4
         Me.btnReservations.Text = "     Reservations"
         Me.btnReservations.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -222,9 +230,10 @@ Partial Class AdminDashboard
         Me.btnMenuItems.ForeColor = System.Drawing.Color.White
         Me.btnMenuItems.Image = CType(resources.GetObject("btnMenuItems.Image"), System.Drawing.Image)
         Me.btnMenuItems.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnMenuItems.Location = New System.Drawing.Point(20, 173)
+        Me.btnMenuItems.Location = New System.Drawing.Point(27, 213)
+        Me.btnMenuItems.Margin = New System.Windows.Forms.Padding(4)
         Me.btnMenuItems.Name = "btnMenuItems"
-        Me.btnMenuItems.Size = New System.Drawing.Size(190, 28)
+        Me.btnMenuItems.Size = New System.Drawing.Size(253, 34)
         Me.btnMenuItems.TabIndex = 3
         Me.btnMenuItems.Text = "     Menu Items"
         Me.btnMenuItems.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -238,9 +247,10 @@ Partial Class AdminDashboard
         Me.btnUserAccounts.ForeColor = System.Drawing.Color.White
         Me.btnUserAccounts.Image = CType(resources.GetObject("btnUserAccounts.Image"), System.Drawing.Image)
         Me.btnUserAccounts.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnUserAccounts.Location = New System.Drawing.Point(20, 132)
+        Me.btnUserAccounts.Location = New System.Drawing.Point(27, 162)
+        Me.btnUserAccounts.Margin = New System.Windows.Forms.Padding(4)
         Me.btnUserAccounts.Name = "btnUserAccounts"
-        Me.btnUserAccounts.Size = New System.Drawing.Size(190, 28)
+        Me.btnUserAccounts.Size = New System.Drawing.Size(253, 34)
         Me.btnUserAccounts.TabIndex = 2
         Me.btnUserAccounts.Text = "     User Accounts"
         Me.btnUserAccounts.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -254,9 +264,10 @@ Partial Class AdminDashboard
         Me.btnDashboard.ForeColor = System.Drawing.Color.White
         Me.btnDashboard.Image = Global.InformationManagement.My.Resources.Resources.dashboard__1_
         Me.btnDashboard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnDashboard.Location = New System.Drawing.Point(20, 92)
+        Me.btnDashboard.Location = New System.Drawing.Point(27, 113)
+        Me.btnDashboard.Margin = New System.Windows.Forms.Padding(4)
         Me.btnDashboard.Name = "btnDashboard"
-        Me.btnDashboard.Size = New System.Drawing.Size(190, 28)
+        Me.btnDashboard.Size = New System.Drawing.Size(253, 34)
         Me.btnDashboard.TabIndex = 0
         Me.btnDashboard.Text = "     Dashboard"
         Me.btnDashboard.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -267,9 +278,10 @@ Partial Class AdminDashboard
         Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel3.Controls.Add(Me.btnLogout)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel3.Location = New System.Drawing.Point(0, 670)
+        Me.Panel3.Location = New System.Drawing.Point(0, 826)
+        Me.Panel3.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(261, 43)
+        Me.Panel3.Size = New System.Drawing.Size(348, 52)
         Me.Panel3.TabIndex = 1
         '
         'btnLogout
@@ -280,9 +292,10 @@ Partial Class AdminDashboard
         Me.btnLogout.ForeColor = System.Drawing.Color.White
         Me.btnLogout.Image = CType(resources.GetObject("btnLogout.Image"), System.Drawing.Image)
         Me.btnLogout.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnLogout.Location = New System.Drawing.Point(19, 7)
+        Me.btnLogout.Location = New System.Drawing.Point(25, 9)
+        Me.btnLogout.Margin = New System.Windows.Forms.Padding(4)
         Me.btnLogout.Name = "btnLogout"
-        Me.btnLogout.Size = New System.Drawing.Size(190, 28)
+        Me.btnLogout.Size = New System.Drawing.Size(253, 34)
         Me.btnLogout.TabIndex = 8
         Me.btnLogout.Text = "     Logout"
         Me.btnLogout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -295,16 +308,16 @@ Partial Class AdminDashboard
         Me.Panel2.Controls.Add(Me.PictureBox1)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
+        Me.Panel2.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(261, 60)
+        Me.Panel2.Size = New System.Drawing.Size(348, 73)
         Me.Panel2.TabIndex = 0
         '
         'PictureBox1
         '
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(61, 3)
+        Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(128, 52)
+        Me.PictureBox1.Size = New System.Drawing.Size(100, 50)
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
         '
@@ -312,19 +325,21 @@ Partial Class AdminDashboard
         '
         Me.Panel1.BackColor = System.Drawing.Color.WhiteSmoke
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(261, 0)
+        Me.Panel1.Location = New System.Drawing.Point(348, 0)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(539, 713)
+        Me.Panel1.Size = New System.Drawing.Size(719, 878)
         Me.Panel1.TabIndex = 1
         '
         'AdminDashboard
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 713)
+        Me.ClientSize = New System.Drawing.Size(1067, 878)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.SidePanel)
         Me.DoubleBuffered = True
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "AdminDashboard"
         Me.SidePanel.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
