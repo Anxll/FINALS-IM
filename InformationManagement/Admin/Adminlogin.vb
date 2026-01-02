@@ -58,6 +58,7 @@ Public Class Adminlogin
                 CurrentLoggedUser.id = reader("id")
                 CurrentLoggedUser.name = reader("name").ToString()
                 CurrentLoggedUser.username = reader("username").ToString()
+                CurrentLoggedUser.password = reader("password").ToString()
                 CurrentLoggedUser.type = reader("type")
 
                 reader.Close()

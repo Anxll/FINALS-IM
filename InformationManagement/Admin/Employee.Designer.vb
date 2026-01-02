@@ -29,21 +29,23 @@ Partial Class Employee
         Me.btnDelete = New System.Windows.Forms.Button()
         Me.EditEmployee = New System.Windows.Forms.Button()
         Me.btnRefresh = New System.Windows.Forms.Button()
+        Me.btnUpdateStatus = New System.Windows.Forms.Button()
         Me.AddEmployee = New System.Windows.Forms.Button()
         Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.lblSearch = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.btnViewAll = New System.Windows.Forms.Button()
         Me.btnViewInactive = New System.Windows.Forms.Button()
+        Me.btnViewOnLeave = New System.Windows.Forms.Button()
         Me.btnViewActive = New System.Windows.Forms.Button()
         Me.lblFilter = New System.Windows.Forms.Label()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.lblTotalEmployees = New System.Windows.Forms.Label()
         Me.PaginationContainer = New System.Windows.Forms.Panel()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnPrev = New System.Windows.Forms.Button()
         Me.lblPageStatus = New System.Windows.Forms.Label()
+        Me.lblTotalEmployees = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -51,52 +53,6 @@ Partial Class Employee
         Me.Panel4.SuspendLayout()
         Me.PaginationContainer.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'PaginationContainer
-        '
-        Me.PaginationContainer.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PaginationContainer.Controls.Add(Me.btnNext)
-        Me.PaginationContainer.Controls.Add(Me.btnPrev)
-        Me.PaginationContainer.Controls.Add(Me.lblPageStatus)
-        Me.PaginationContainer.Location = New System.Drawing.Point(750, 2)
-        Me.PaginationContainer.Name = "PaginationContainer"
-        Me.PaginationContainer.Size = New System.Drawing.Size(320, 35)
-        Me.PaginationContainer.TabIndex = 1
-        '
-        'btnNext
-        '
-        Me.btnNext.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnNext.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnNext.Location = New System.Drawing.Point(235, 2)
-        Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(80, 28)
-        Me.btnNext.TabIndex = 2
-        Me.btnNext.Text = "Next →"
-        Me.btnNext.UseVisualStyleBackColor = True
-        '
-        'btnPrev
-        '
-        Me.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnPrev.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnPrev.Location = New System.Drawing.Point(150, 2)
-        Me.btnPrev.Name = "btnPrev"
-        Me.btnPrev.Size = New System.Drawing.Size(80, 28)
-        Me.btnPrev.TabIndex = 1
-        Me.btnPrev.Text = "← Prev"
-        Me.btnPrev.UseVisualStyleBackColor = True
-        '
-        'lblPageStatus
-        '
-        Me.lblPageStatus.AutoSize = True
-        Me.lblPageStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.lblPageStatus.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139)
-        Me.lblPageStatus.Location = New System.Drawing.Point(10, 8)
-        Me.lblPageStatus.Name = "lblPageStatus"
-        Me.lblPageStatus.Size = New System.Drawing.Size(66, 15)
-        Me.lblPageStatus.TabIndex = 0
-        Me.lblPageStatus.Text = "Page 1 of 1"
         '
         'Panel1
         '
@@ -127,6 +83,7 @@ Partial Class Employee
         Me.Panel2.Controls.Add(Me.btnDelete)
         Me.Panel2.Controls.Add(Me.EditEmployee)
         Me.Panel2.Controls.Add(Me.btnRefresh)
+        Me.Panel2.Controls.Add(Me.btnUpdateStatus)
         Me.Panel2.Controls.Add(Me.AddEmployee)
         Me.Panel2.Controls.Add(Me.txtSearch)
         Me.Panel2.Controls.Add(Me.lblSearch)
@@ -186,6 +143,22 @@ Partial Class Employee
         Me.btnRefresh.Text = "Refresh"
         Me.btnRefresh.UseVisualStyleBackColor = False
         '
+        'btnUpdateStatus
+        '
+        Me.btnUpdateStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnUpdateStatus.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(158, Byte), Integer), CType(CType(11, Byte), Integer))
+        Me.btnUpdateStatus.FlatAppearance.BorderSize = 0
+        Me.btnUpdateStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnUpdateStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnUpdateStatus.ForeColor = System.Drawing.Color.White
+        Me.btnUpdateStatus.Location = New System.Drawing.Point(523, 13)
+        Me.btnUpdateStatus.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnUpdateStatus.Name = "btnUpdateStatus"
+        Me.btnUpdateStatus.Size = New System.Drawing.Size(120, 30)
+        Me.btnUpdateStatus.TabIndex = 7
+        Me.btnUpdateStatus.Text = "Update Status"
+        Me.btnUpdateStatus.UseVisualStyleBackColor = False
+        '
         'AddEmployee
         '
         Me.AddEmployee.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -229,6 +202,7 @@ Partial Class Employee
         Me.Panel3.BackColor = System.Drawing.Color.White
         Me.Panel3.Controls.Add(Me.btnViewAll)
         Me.Panel3.Controls.Add(Me.btnViewInactive)
+        Me.Panel3.Controls.Add(Me.btnViewOnLeave)
         Me.Panel3.Controls.Add(Me.btnViewActive)
         Me.Panel3.Controls.Add(Me.lblFilter)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
@@ -246,7 +220,7 @@ Partial Class Employee
         Me.btnViewAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewAll.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnViewAll.ForeColor = System.Drawing.Color.White
-        Me.btnViewAll.Location = New System.Drawing.Point(377, 9)
+        Me.btnViewAll.Location = New System.Drawing.Point(514, 9)
         Me.btnViewAll.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewAll.Name = "btnViewAll"
         Me.btnViewAll.Size = New System.Drawing.Size(100, 30)
@@ -261,13 +235,28 @@ Partial Class Employee
         Me.btnViewInactive.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewInactive.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnViewInactive.ForeColor = System.Drawing.Color.White
-        Me.btnViewInactive.Location = New System.Drawing.Point(270, 9)
+        Me.btnViewInactive.Location = New System.Drawing.Point(410, 9)
         Me.btnViewInactive.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewInactive.Name = "btnViewInactive"
         Me.btnViewInactive.Size = New System.Drawing.Size(100, 30)
         Me.btnViewInactive.TabIndex = 2
-        Me.btnViewInactive.Text = "Inactive"
+        Me.btnViewInactive.Text = "Resigned"
         Me.btnViewInactive.UseVisualStyleBackColor = False
+        '
+        'btnViewOnLeave
+        '
+        Me.btnViewOnLeave.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(158, Byte), Integer), CType(CType(11, Byte), Integer))
+        Me.btnViewOnLeave.FlatAppearance.BorderSize = 0
+        Me.btnViewOnLeave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnViewOnLeave.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnViewOnLeave.ForeColor = System.Drawing.Color.White
+        Me.btnViewOnLeave.Location = New System.Drawing.Point(306, 9)
+        Me.btnViewOnLeave.Margin = New System.Windows.Forms.Padding(2)
+        Me.btnViewOnLeave.Name = "btnViewOnLeave"
+        Me.btnViewOnLeave.Size = New System.Drawing.Size(100, 30)
+        Me.btnViewOnLeave.TabIndex = 4
+        Me.btnViewOnLeave.Text = "On Leave"
+        Me.btnViewOnLeave.UseVisualStyleBackColor = False
         '
         'btnViewActive
         '
@@ -276,7 +265,7 @@ Partial Class Employee
         Me.btnViewActive.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewActive.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
         Me.btnViewActive.ForeColor = System.Drawing.Color.White
-        Me.btnViewActive.Location = New System.Drawing.Point(163, 9)
+        Me.btnViewActive.Location = New System.Drawing.Point(202, 9)
         Me.btnViewActive.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewActive.Name = "btnViewActive"
         Me.btnViewActive.Size = New System.Drawing.Size(100, 30)
@@ -325,7 +314,7 @@ Partial Class Employee
         Me.DataGridView1.RowHeadersWidth = 51
         Me.DataGridView1.RowTemplate.Height = 35
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1080, 356)
+        Me.DataGridView1.Size = New System.Drawing.Size(1080, 342)
         Me.DataGridView1.TabIndex = 3
         '
         'Panel4
@@ -339,6 +328,52 @@ Partial Class Employee
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(1080, 40)
         Me.Panel4.TabIndex = 4
+        '
+        'PaginationContainer
+        '
+        Me.PaginationContainer.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PaginationContainer.Controls.Add(Me.btnNext)
+        Me.PaginationContainer.Controls.Add(Me.btnPrev)
+        Me.PaginationContainer.Controls.Add(Me.lblPageStatus)
+        Me.PaginationContainer.Location = New System.Drawing.Point(750, 2)
+        Me.PaginationContainer.Name = "PaginationContainer"
+        Me.PaginationContainer.Size = New System.Drawing.Size(320, 35)
+        Me.PaginationContainer.TabIndex = 1
+        '
+        'btnNext
+        '
+        Me.btnNext.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNext.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnNext.Location = New System.Drawing.Point(235, 2)
+        Me.btnNext.Name = "btnNext"
+        Me.btnNext.Size = New System.Drawing.Size(80, 28)
+        Me.btnNext.TabIndex = 2
+        Me.btnNext.Text = "Next →"
+        Me.btnNext.UseVisualStyleBackColor = True
+        '
+        'btnPrev
+        '
+        Me.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPrev.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnPrev.Location = New System.Drawing.Point(150, 2)
+        Me.btnPrev.Name = "btnPrev"
+        Me.btnPrev.Size = New System.Drawing.Size(80, 28)
+        Me.btnPrev.TabIndex = 1
+        Me.btnPrev.Text = "← Prev"
+        Me.btnPrev.UseVisualStyleBackColor = True
+        '
+        'lblPageStatus
+        '
+        Me.lblPageStatus.AutoSize = True
+        Me.lblPageStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblPageStatus.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
+        Me.lblPageStatus.Location = New System.Drawing.Point(10, 8)
+        Me.lblPageStatus.Name = "lblPageStatus"
+        Me.lblPageStatus.Size = New System.Drawing.Size(65, 15)
+        Me.lblPageStatus.TabIndex = 0
+        Me.lblPageStatus.Text = "Page 1 of 1"
         '
         'lblTotalEmployees
         '
@@ -377,6 +412,8 @@ Partial Class Employee
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel4.ResumeLayout(False)
         Me.Panel4.PerformLayout()
+        Me.PaginationContainer.ResumeLayout(False)
+        Me.PaginationContainer.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -390,9 +427,11 @@ Partial Class Employee
     Friend WithEvents btnRefresh As Button
     Friend WithEvents EditEmployee As Button
     Friend WithEvents btnDelete As Button
+    Friend WithEvents btnUpdateStatus As Button
     Friend WithEvents Panel3 As Panel
     Friend WithEvents lblFilter As Label
     Friend WithEvents btnViewActive As Button
+    Friend WithEvents btnViewOnLeave As Button
     Friend WithEvents btnViewInactive As Button
     Friend WithEvents btnViewAll As Button
     Friend WithEvents DataGridView1 As DataGridView

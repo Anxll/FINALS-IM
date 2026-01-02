@@ -414,6 +414,12 @@
     <Compile Include="Admin\RoundedButton.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Admin\Setting.Designer.vb">
+      <DependentUpon>Setting.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Setting.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Admin\UsersAccounts.Designer.vb">
       <DependentUpon>UsersAccounts.vb</DependentUpon>
     </Compile>

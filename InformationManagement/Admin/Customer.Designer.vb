@@ -41,7 +41,13 @@ Partial Class Customer
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
         Me.SearchContainer = New InformationManagement.RoundedPane2()
         Me.txtSearch = New System.Windows.Forms.TextBox()
+        Me.btnUpdateStatus = New System.Windows.Forms.Button()
         Me.btnDelete = New System.Windows.Forms.Button()
+        Me.lblFilter = New System.Windows.Forms.Label()
+        Me.btnViewAll = New System.Windows.Forms.Button()
+        Me.btnViewInactive = New System.Windows.Forms.Button()
+        Me.btnViewSuspended = New System.Windows.Forms.Button()
+        Me.btnViewActive = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.LabelHeader = New System.Windows.Forms.Label()
@@ -251,7 +257,13 @@ Partial Class Customer
         Me.RoundedPane24.BorderColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(249, Byte), Integer))
         Me.RoundedPane24.BorderThickness = 1
         Me.RoundedPane24.Controls.Add(Me.SearchContainer)
+        Me.RoundedPane24.Controls.Add(Me.btnUpdateStatus)
         Me.RoundedPane24.Controls.Add(Me.btnDelete)
+        Me.RoundedPane24.Controls.Add(Me.lblFilter)
+        Me.RoundedPane24.Controls.Add(Me.btnViewAll)
+        Me.RoundedPane24.Controls.Add(Me.btnViewInactive)
+        Me.RoundedPane24.Controls.Add(Me.btnViewSuspended)
+        Me.RoundedPane24.Controls.Add(Me.btnViewActive)
         Me.RoundedPane24.Controls.Add(Me.Label10)
         Me.RoundedPane24.Controls.Add(Me.DataGridView1)
         Me.RoundedPane24.CornerRadius = 15
@@ -270,7 +282,7 @@ Partial Class Customer
         Me.SearchContainer.Controls.Add(Me.txtSearch)
         Me.SearchContainer.CornerRadius = 10
         Me.SearchContainer.FillColor = System.Drawing.Color.FromArgb(CType(CType(248, Byte), Integer), CType(CType(250, Byte), Integer), CType(CType(252, Byte), Integer))
-        Me.SearchContainer.Location = New System.Drawing.Point(580, 20)
+        Me.SearchContainer.Location = New System.Drawing.Point(735, 20)
         Me.SearchContainer.Name = "SearchContainer"
         Me.SearchContainer.Size = New System.Drawing.Size(280, 45)
         Me.SearchContainer.TabIndex = 0
@@ -287,6 +299,22 @@ Partial Class Customer
         Me.txtSearch.TabIndex = 0
         Me.txtSearch.Text = "Search customers..."
         '
+        'btnUpdateStatus
+        '
+        Me.btnUpdateStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnUpdateStatus.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(158, Byte), Integer), CType(CType(11, Byte), Integer))
+        Me.btnUpdateStatus.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnUpdateStatus.FlatAppearance.BorderSize = 0
+        Me.btnUpdateStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnUpdateStatus.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnUpdateStatus.ForeColor = System.Drawing.Color.White
+        Me.btnUpdateStatus.Location = New System.Drawing.Point(440, 20)
+        Me.btnUpdateStatus.Name = "btnUpdateStatus"
+        Me.btnUpdateStatus.Size = New System.Drawing.Size(120, 45)
+        Me.btnUpdateStatus.TabIndex = 5
+        Me.btnUpdateStatus.Text = "Update Status"
+        Me.btnUpdateStatus.UseVisualStyleBackColor = False
+        '
         'btnDelete
         '
         Me.btnDelete.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -294,14 +322,80 @@ Partial Class Customer
         Me.btnDelete.Cursor = System.Windows.Forms.Cursors.Hand
         Me.btnDelete.FlatAppearance.BorderSize = 0
         Me.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnDelete.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
+        Me.btnDelete.Font = New System.Drawing.Font("Segoe UI Semibold", 9.0!, System.Drawing.FontStyle.Bold)
         Me.btnDelete.ForeColor = System.Drawing.Color.White
-        Me.btnDelete.Location = New System.Drawing.Point(880, 20)
+        Me.btnDelete.Location = New System.Drawing.Point(570, 20)
         Me.btnDelete.Name = "btnDelete"
-        Me.btnDelete.Size = New System.Drawing.Size(135, 45)
-        Me.btnDelete.TabIndex = 1
+        Me.btnDelete.Size = New System.Drawing.Size(120, 45)
+        Me.btnDelete.TabIndex = 6
         Me.btnDelete.Text = "Delete Profile"
         Me.btnDelete.UseVisualStyleBackColor = False
+        '
+        'lblFilter
+        '
+        Me.lblFilter.AutoSize = True
+        Me.lblFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
+        Me.lblFilter.Location = New System.Drawing.Point(32, 85)
+        Me.lblFilter.Name = "lblFilter"
+        Me.lblFilter.Size = New System.Drawing.Size(91, 19)
+        Me.lblFilter.TabIndex = 64
+        Me.lblFilter.Text = "Filter Status:"
+        '
+        'btnViewAll
+        '
+        Me.btnViewAll.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.btnViewAll.FlatAppearance.BorderSize = 0
+        Me.btnViewAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnViewAll.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnViewAll.ForeColor = System.Drawing.Color.White
+        Me.btnViewAll.Location = New System.Drawing.Point(503, 80)
+        Me.btnViewAll.Name = "btnViewAll"
+        Me.btnViewAll.Size = New System.Drawing.Size(90, 30)
+        Me.btnViewAll.TabIndex = 63
+        Me.btnViewAll.Text = "All"
+        Me.btnViewAll.UseVisualStyleBackColor = False
+        '
+        'btnViewInactive
+        '
+        Me.btnViewInactive.BackColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(53, Byte), Integer), CType(CType(69, Byte), Integer))
+        Me.btnViewInactive.FlatAppearance.BorderSize = 0
+        Me.btnViewInactive.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnViewInactive.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnViewInactive.ForeColor = System.Drawing.Color.White
+        Me.btnViewInactive.Location = New System.Drawing.Point(407, 80)
+        Me.btnViewInactive.Name = "btnViewInactive"
+        Me.btnViewInactive.Size = New System.Drawing.Size(90, 30)
+        Me.btnViewInactive.TabIndex = 62
+        Me.btnViewInactive.Text = "Inactive"
+        Me.btnViewInactive.UseVisualStyleBackColor = False
+        '
+        'btnViewSuspended
+        '
+        Me.btnViewSuspended.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(158, Byte), Integer), CType(CType(11, Byte), Integer))
+        Me.btnViewSuspended.FlatAppearance.BorderSize = 0
+        Me.btnViewSuspended.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnViewSuspended.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnViewSuspended.ForeColor = System.Drawing.Color.White
+        Me.btnViewSuspended.Location = New System.Drawing.Point(311, 80)
+        Me.btnViewSuspended.Name = "btnViewSuspended"
+        Me.btnViewSuspended.Size = New System.Drawing.Size(90, 30)
+        Me.btnViewSuspended.TabIndex = 61
+        Me.btnViewSuspended.Text = "Suspended"
+        Me.btnViewSuspended.UseVisualStyleBackColor = False
+        '
+        'btnViewActive
+        '
+        Me.btnViewActive.BackColor = System.Drawing.Color.FromArgb(CType(CType(40, Byte), Integer), CType(CType(167, Byte), Integer), CType(CType(69, Byte), Integer))
+        Me.btnViewActive.FlatAppearance.BorderSize = 0
+        Me.btnViewActive.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnViewActive.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnViewActive.ForeColor = System.Drawing.Color.White
+        Me.btnViewActive.Location = New System.Drawing.Point(215, 80)
+        Me.btnViewActive.Name = "btnViewActive"
+        Me.btnViewActive.Size = New System.Drawing.Size(90, 30)
+        Me.btnViewActive.TabIndex = 60
+        Me.btnViewActive.Text = "Active"
+        Me.btnViewActive.UseVisualStyleBackColor = False
         '
         'Label10
         '
@@ -338,13 +432,13 @@ Partial Class Customer
         Me.DataGridView1.ColumnHeadersHeight = 40
         Me.DataGridView1.EnableHeadersVisualStyles = False
         Me.DataGridView1.GridColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(249, Byte), Integer))
-        Me.DataGridView1.Location = New System.Drawing.Point(24, 85)
+        Me.DataGridView1.Location = New System.Drawing.Point(24, 125)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowTemplate.Height = 50
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1000, 339)
+        Me.DataGridView1.Size = New System.Drawing.Size(1000, 299)
         Me.DataGridView1.TabIndex = 3
         '
         'LabelHeader
@@ -423,7 +517,13 @@ Partial Class Customer
     Friend WithEvents RoundedPane24 As InformationManagement.RoundedPane2
     Friend WithEvents SearchContainer As InformationManagement.RoundedPane2
     Friend WithEvents txtSearch As System.Windows.Forms.TextBox
+    Friend WithEvents btnUpdateStatus As System.Windows.Forms.Button
     Friend WithEvents btnDelete As System.Windows.Forms.Button
+    Friend WithEvents lblFilter As System.Windows.Forms.Label
+    Friend WithEvents btnViewActive As System.Windows.Forms.Button
+    Friend WithEvents btnViewSuspended As System.Windows.Forms.Button
+    Friend WithEvents btnViewInactive As System.Windows.Forms.Button
+    Friend WithEvents btnViewAll As System.Windows.Forms.Button
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
 End Class

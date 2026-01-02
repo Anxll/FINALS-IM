@@ -12,6 +12,9 @@ Public Class Employee
     Private _currentCondition As String = ""
 
     Private Sub Employee_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ' Disable Update Status button initially
+        btnUpdateStatus.Enabled = False
+        
         LoadEmployees()
 
     End Sub
@@ -238,7 +241,12 @@ Public Class Employee
 
     Private Sub btnViewInactive_Click(sender As Object, e As EventArgs) Handles btnViewInactive.Click
         LoadEmployees(condition:="EmploymentStatus = 'Resigned'", resetPage:=True)
-        lblFilter.Text = "Showing: Inactive Employees"
+        lblFilter.Text = "Showing: Resigned Employees"
+    End Sub
+
+    Private Sub btnViewOnLeave_Click(sender As Object, e As EventArgs) Handles btnViewOnLeave.Click
+        LoadEmployees(condition:="EmploymentStatus = 'On Leave'", resetPage:=True)
+        lblFilter.Text = "Showing: Employees On Leave"
     End Sub
 
     '====================================
@@ -294,5 +302,127 @@ Public Class Employee
         End Try
     End Sub
 
+    Private Sub DataGridView1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridView1.SelectionChanged
+        ' Enable/disable Update Status button based on selection
+        If DataGridView1.SelectedRows.Count > 0 Then
+            btnUpdateStatus.Enabled = True
+        Else
+            btnUpdateStatus.Enabled = False
+        End If
+    End Sub
+
+    Private Sub btnUpdateStatus_Click(sender As Object, e As EventArgs) Handles btnUpdateStatus.Click
+        ' Validate selection
+        If DataGridView1.SelectedRows.Count = 0 Then
+            MessageBox.Show("Please select an employee to update status.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Dim employeeId As Integer = DataGridView1.SelectedRows(0).Cells("EmployeeID").Value
+        Dim employeeName As String = DataGridView1.SelectedRows(0).Cells("FirstName").Value.ToString() & " " & DataGridView1.SelectedRows(0).Cells("LastName").Value.ToString()
+        Dim currentStatus As String = DataGridView1.SelectedRows(0).Cells("EmploymentStatus").Value?.ToString()
+
+        ' Show status selection dialog
+        Dim statusForm As New Form()
+        statusForm.Text = "Update Employment Status"
+        statusForm.Size = New Size(400, 250)
+        statusForm.StartPosition = FormStartPosition.CenterParent
+        statusForm.FormBorderStyle = FormBorderStyle.FixedDialog
+        statusForm.MaximizeBox = False
+        statusForm.MinimizeBox = False
+
+        Dim lblInfo As New Label()
+        lblInfo.Text = $"Employee: {employeeName}{Environment.NewLine}Current Status: {currentStatus}{Environment.NewLine}{Environment.NewLine}Select new status:"
+        lblInfo.Location = New Point(20, 20)
+        lblInfo.Size = New Size(350, 60)
+        lblInfo.Font = New Font("Segoe UI", 10)
+
+        Dim cmbStatus As New ComboBox()
+        cmbStatus.Items.AddRange(New Object() {"Active", "On Leave", "Resigned"})
+        cmbStatus.DropDownStyle = ComboBoxStyle.DropDownList
+        cmbStatus.Location = New Point(20, 90)
+        cmbStatus.Size = New Size(340, 30)
+        cmbStatus.Font = New Font("Segoe UI", 11)
+
+        ' Set current status
+        Dim index As Integer = cmbStatus.FindStringExact(currentStatus)
+        If index >= 0 Then
+            cmbStatus.SelectedIndex = index
+        Else
+            cmbStatus.SelectedIndex = 0
+        End If
+
+        Dim btnOK As New Button()
+        btnOK.Text = "Update"
+        btnOK.Location = New Point(180, 140)
+        btnOK.Size = New Size(90, 35)
+        btnOK.DialogResult = DialogResult.OK
+        btnOK.BackColor = Color.FromArgb(245, 158, 11)
+        btnOK.ForeColor = Color.White
+        btnOK.FlatStyle = FlatStyle.Flat
+
+        Dim btnCancel As New Button()
+        btnCancel.Text = "Cancel"
+        btnCancel.Location = New Point(280, 140)
+        btnCancel.Size = New Size(90, 35)
+        btnCancel.DialogResult = DialogResult.Cancel
+        btnCancel.BackColor = Color.Gray
+        btnCancel.ForeColor = Color.White
+        btnCancel.FlatStyle = FlatStyle.Flat
+
+        statusForm.Controls.AddRange(New Control() {lblInfo, cmbStatus, btnOK, btnCancel})
+        statusForm.AcceptButton = btnOK
+        statusForm.CancelButton = btnCancel
+
+        If statusForm.ShowDialog() = DialogResult.Cancel Then
+            Return
+        End If
+
+        Dim newStatus As String = cmbStatus.SelectedItem?.ToString()
+        If String.IsNullOrEmpty(newStatus) Then
+            MessageBox.Show("Please select a status.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        ' Check if status is the same
+        If currentStatus = newStatus Then
+            MessageBox.Show($"Employee is already {currentStatus}. No changes made.", "No Changes", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
+        Try
+            ' Update database
+            openConn()
+            Dim query As String = "UPDATE employee SET EmploymentStatus = @status WHERE EmployeeID = @id"
+            Using cmd As New MySqlCommand(query, conn)
+                cmd.Parameters.AddWithValue("@status", newStatus)
+                cmd.Parameters.AddWithValue("@id", employeeId)
+                cmd.ExecuteNonQuery()
+            End Using
+            closeConn()
+
+            MessageBox.Show($"Employment status updated successfully to '{newStatus}'.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            ' Log Activity
+            ActivityLogger.LogUserActivity(
+                action:="Employment Status Updated",
+                actionCategory:="User Management",
+                description:=$"Changed employment status for {employeeName} (ID: {employeeId}) from '{currentStatus}' to '{newStatus}'",
+                sourceSystem:="Admin Panel",
+                referenceID:=employeeId.ToString(),
+                referenceTable:="employee",
+                oldValue:=currentStatus,
+                newValue:=newStatus
+            )
+
+            ' Refresh the grid
+            LoadEmployees(resetPage:=False)
+
+        Catch ex As Exception
+            MessageBox.Show("Error updating employment status: " & ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            closeConn()
+        End Try
+    End Sub
 
 End Class
