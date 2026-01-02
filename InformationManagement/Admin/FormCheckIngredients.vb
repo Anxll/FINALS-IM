@@ -121,6 +121,14 @@ Public Class FormCheckIngredients
         flowPanel.BackColor = Color.FromArgb(245, 245, 245)
         flowPanel.FlowDirection = FlowDirection.LeftToRight
         mainPanel.Controls.Add(flowPanel)
+        
+        ' Ensure topPanel is processed first by layout engine (Outer Dock)
+        ' In WinForms, the control at the bottom of Z-order (last added or sent to back) is docked first.
+        topPanel.SendToBack()
+        flowPanel.BringToFront()
+        
+        ' Add extra top padding to flowPanel just in case to guarantee no overlap
+        flowPanel.Padding = New Padding(20, 20, 20, 10)
 
         ' Handle form resize
         AddHandler Me.Resize, AddressOf Form_Resize
