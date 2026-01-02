@@ -83,7 +83,7 @@ Partial Class AdminDashboard
         Me.ActivityLogs.Location = New System.Drawing.Point(20, 552)
         Me.ActivityLogs.Margin = New System.Windows.Forms.Padding(2)
         Me.ActivityLogs.Name = "ActivityLogs"
-        Me.ActivityLogs.Size = New System.Drawing.Size(142, 23)
+        Me.ActivityLogs.Size = New System.Drawing.Size(190, 28)
         Me.ActivityLogs.TabIndex = 8
         Me.ActivityLogs.Text = "     Activity Logs"
         Me.ActivityLogs.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
