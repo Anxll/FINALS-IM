@@ -586,7 +586,7 @@ Public Class InventoryMovementHistory
     End Sub
 
     ' Export functionality
-    Private Sub btnExport_Click(sender As Object, e As EventArgs) Handles btnExport.Click
+    Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click
         Try
             If dgvMovements.Rows.Count = 0 Then
                 MessageBox.Show("No data to export.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information)
