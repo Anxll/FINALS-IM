@@ -79,9 +79,9 @@ Partial Class AdminDashboard
         Me.ActivityLogs.Image = CType(resources.GetObject("ActivityLogs.Image"), System.Drawing.Image)
         Me.ActivityLogs.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ActivityLogs.Location = New System.Drawing.Point(20, 552)
-        Me.ActivityLogs.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ActivityLogs.Margin = New System.Windows.Forms.Padding(2)
         Me.ActivityLogs.Name = "ActivityLogs"
-        Me.ActivityLogs.Size = New System.Drawing.Size(142, 23)
+        Me.ActivityLogs.Size = New System.Drawing.Size(190, 28)
         Me.ActivityLogs.TabIndex = 8
         Me.ActivityLogs.Text = "     Activity Logs"
         Me.ActivityLogs.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -160,7 +160,7 @@ Partial Class AdminDashboard
         Me.btnReports.Image = CType(resources.GetObject("btnReports.Image"), System.Drawing.Image)
         Me.btnReports.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.btnReports.Location = New System.Drawing.Point(20, 511)
-        Me.btnReports.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnReports.Margin = New System.Windows.Forms.Padding(2)
         Me.btnReports.Name = "btnReports"
         Me.btnReports.Size = New System.Drawing.Size(190, 28)
         Me.btnReports.TabIndex = 7
@@ -305,7 +305,7 @@ Partial Class AdminDashboard
         '
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
         Me.PictureBox1.Location = New System.Drawing.Point(52, 19)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(127, 51)
         Me.PictureBox1.TabIndex = 0
