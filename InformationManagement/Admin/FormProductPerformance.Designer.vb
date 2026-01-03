@@ -55,6 +55,7 @@ Partial Class FormProductPerformance
         Me.Label2 = New System.Windows.Forms.Label()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.btnExportPdf = New System.Windows.Forms.Button()
+        Me.dtpFilter = New System.Windows.Forms.DateTimePicker()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.RoundedPane21.SuspendLayout()
         Me.RoundedPane28.SuspendLayout()
@@ -85,7 +86,9 @@ Partial Class FormProductPerformance
         Me.RoundedPane21.Controls.Add(Me.RoundedPane24)
         Me.RoundedPane21.Controls.Add(Me.RoundedPane22)
         Me.RoundedPane21.Controls.Add(Me.RoundedPane23)
+        Me.RoundedPane21.Controls.Add(Me.RoundedPane23)
         Me.RoundedPane21.Controls.Add(Me.btnExportPdf)
+        Me.RoundedPane21.Controls.Add(Me.dtpFilter)
         Me.RoundedPane21.Controls.Add(Me.Label1)
         Me.RoundedPane21.CornerRadius = 20
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
@@ -488,6 +491,16 @@ Partial Class FormProductPerformance
         Me.btnExportPdf.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnExportPdf.UseVisualStyleBackColor = False
         '
+        'dtpFilter
+        '
+        Me.dtpFilter.CalendarFont = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.dtpFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.dtpFilter.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpFilter.Location = New System.Drawing.Point(980, 23)
+        Me.dtpFilter.Name = "dtpFilter"
+        Me.dtpFilter.Size = New System.Drawing.Size(180, 30)
+        Me.dtpFilter.TabIndex = 15
+        '
         'Label1
         '
         Me.Label1.AutoSize = True
@@ -540,6 +553,7 @@ Partial Class FormProductPerformance
 
     Friend WithEvents RoundedPane21 As RoundedPane2
     Friend WithEvents Label1 As Label
+    Friend WithEvents dtpFilter As DateTimePicker
     Friend WithEvents btnExportPdf As Button
     Friend WithEvents RoundedPane23 As RoundedPane2
     Friend WithEvents Label3 As Label

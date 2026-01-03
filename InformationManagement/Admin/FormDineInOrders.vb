@@ -31,7 +31,31 @@ Public Class FormDineInOrders
         _currentPage = 1
         Await BeginLoadDineInOrders()
         isInitialLoad = False
+        _currentPage = 1
+        Await BeginLoadDineInOrders()
+        ConfigureDateFilter()
+        isInitialLoad = False
+        ConfigureDateFilter()
     End Sub
+
+    Private Async Sub dtpFilter_ValueChanged(sender As Object, e As EventArgs) Handles dtpFilter.ValueChanged
+        If Not isInitialLoad Then
+            _currentPage = 1
+            Await BeginLoadDineInOrders()
+        End If
+    End Sub
+
+    Private Sub ConfigureDateFilter()
+        If dtpFilter Is Nothing Then Return
+
+        Select Case Reports.SelectedPeriod
+            Case "Daily", "Weekly"
+                dtpFilter.Visible = True
+            Case Else
+                dtpFilter.Visible = False
+        End Select
+    End Sub
+
 
     Private Sub InitializeModernUI()
         ' Enhanced form appearance
@@ -139,22 +163,25 @@ Public Class FormDineInOrders
         Select Case Reports.SelectedPeriod
             Case "Daily"
                 If selectedYear = DateTime.Now.Year Then
-                    periodFilter = " AND DATE(OrderDate) = CURDATE() "
+                    periodFilter = $" AND DATE(OrderDate) = '{dtpFilter.Value:yyyy-MM-dd}' "
                 Else
-                    periodFilter = $" AND DATE(OrderDate) = '{selectedYear}-12-31' "
+                    periodFilter = $" AND DATE(OrderDate) = '{dtpFilter.Value:yyyy-MM-dd}' " ' Use picker date for historic daily too if desired, or keep as is.
+                    ' Actually, if Daily is selected, we usually want specific day regardless of year logic if we have a picker.
+                    ' But to be safe and consistent with other forms:
+                    periodFilter = $" AND DATE(OrderDate) = '{dtpFilter.Value:yyyy-MM-dd}' "
                 End If
+
             Case "Weekly"
-                If selectedYear = DateTime.Now.Year Then
-                    periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                Else
-                    periodFilter = $" AND YEAR(OrderDate) = {selectedYear} AND WEEK(OrderDate, 1) = 52 "
-                End If
-            Case "Monthly"
+                ' Fix Weekly Logic to use dtpFilter
+                periodFilter = $" AND YEARWEEK(OrderDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1) "
+
                 If selectedMonth = 0 Then
                     periodFilter = $" AND YEAR(OrderDate) = {selectedYear} "
                 Else
                     periodFilter = $" AND YEAR(OrderDate) = {selectedYear} AND MONTH(OrderDate) = {selectedMonth} "
                 End If
+
+
             Case "Yearly"
                 periodFilter = $" AND YEAR(OrderDate) = {selectedYear} "
         End Select
@@ -177,23 +204,18 @@ Public Class FormDineInOrders
 
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                If selectedYear = DateTime.Now.Year Then
-                    periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
-                Else
-                    periodFilter = $" AND DATE(o.OrderDate) = '{selectedYear}-12-31' "
-                End If
+                periodFilter = $" AND DATE(o.OrderDate) = '{dtpFilter.Value:yyyy-MM-dd}' "
+
             Case "Weekly"
-                If selectedYear = DateTime.Now.Year Then
-                    periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                Else
-                    periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} AND WEEK(o.OrderDate, 1) = 52 "
-                End If
+                periodFilter = $" AND YEARWEEK(o.OrderDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1) "
+
             Case "Monthly"
                 If selectedMonth = 0 Then
                     periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} "
                 Else
                     periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} AND MONTH(o.OrderDate) = {selectedMonth} "
                 End If
+
             Case "Yearly"
                 periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} "
         End Select
@@ -244,23 +266,18 @@ Public Class FormDineInOrders
 
                                Select Case Reports.SelectedPeriod
                                    Case "Daily"
-                                       If selectedYear = DateTime.Now.Year Then
-                                           periodFilter = " AND DATE(OrderDate) = CURDATE() "
-                                       Else
-                                           periodFilter = $" AND DATE(OrderDate) = '{selectedYear}-12-31' "
-                                       End If
+                                       periodFilter = $" AND DATE(OrderDate) = '{dtpFilter.Value:yyyy-MM-dd}' "
+
                                    Case "Weekly"
-                                       If selectedYear = DateTime.Now.Year Then
-                                           periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                                       Else
-                                           periodFilter = $" AND YEAR(OrderDate) = {selectedYear} AND WEEK(OrderDate, 1) = 52 "
-                                       End If
+                                       periodFilter = $" AND YEARWEEK(OrderDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1) "
+
                                    Case "Monthly"
                                        If selectedMonth = 0 Then
                                            periodFilter = $" AND YEAR(OrderDate) = {selectedYear} "
                                        Else
                                            periodFilter = $" AND YEAR(OrderDate) = {selectedYear} AND MONTH(OrderDate) = {selectedMonth} "
                                        End If
+
                                    Case "Yearly"
                                        periodFilter = $" AND YEAR(OrderDate) = {selectedYear} "
                                End Select
@@ -513,8 +530,10 @@ Public Class FormDineInOrders
     ' REFRESH DATA
     ' =======================================================================
     Public Async Sub RefreshData()
+        ConfigureDateFilter()
         _currentPage = 1
         Await BeginLoadDineInOrders()
     End Sub
+
 
 End Class

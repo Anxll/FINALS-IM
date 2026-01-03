@@ -48,7 +48,7 @@ Public Class UsersAccounts
             ' Stats Card
             Dim statsCardWidth As Integer = Math.Min(300, (formWidth - leftMargin - rightMargin) \ 3)
             RoundedPane22.Width = statsCardWidth
-            
+
             ' Add Button Position (Legacy or if needed)
             ' If btnAddNew IsNot Nothing Then
             '    btnAddNew.Location = New Point(formWidth - rightMargin - btnAddNew.Width, topMargin)
@@ -59,10 +59,10 @@ Public Class UsersAccounts
                 Dim buttonY As Integer = RoundedPane22.Bottom + 20 ' Place below the stats card
                 btnShowStaff.Location = New Point(leftMargin, buttonY)
                 btnShowEmployee.Location = New Point(btnShowStaff.Right + 10, buttonY)
-                
+
                 ' Position Update Status Button at Top Right (relative to where Add button was)
                 If btnUpdateStatus IsNot Nothing Then
-                     btnUpdateStatus.Location = New Point(formWidth - rightMargin - btnUpdateStatus.Width, topMargin + 10)
+                    btnUpdateStatus.Location = New Point(formWidth - rightMargin - btnUpdateStatus.Width, topMargin + 10)
                 End If
             End If
 
@@ -213,7 +213,7 @@ Public Class UsersAccounts
             If UsersAccountData.Columns.Contains("colEdit") Then UsersAccountData.Columns("colEdit").Visible = False
             If UsersAccountData.Columns.Contains("colDelete") Then UsersAccountData.Columns("colDelete").Visible = False
             If UsersAccountData.Columns.Contains("colCreateAccount") Then UsersAccountData.Columns("colCreateAccount").Visible = True
-            
+
             openConn()
             Dim query As String = "
                 SELECT 
@@ -233,13 +233,13 @@ Public Class UsersAccounts
             Dim adapter As New MySqlDataAdapter(cmd)
             allStaffData = New DataTable()
             adapter.Fill(allStaffData)
-            
+
             totalRecords = allStaffData.Rows.Count
             totalPages = If(totalRecords > 0, Math.Ceiling(totalRecords / pageSize), 1)
             lblStaffs.Text = totalRecords.ToString()
-            
+
             ApplySearchFilter()
-            
+
         Catch ex As Exception
             MessageBox.Show("Error loading employee data: " & ex.Message)
         Finally
@@ -357,14 +357,14 @@ Public Class UsersAccounts
                 Dim fullName As String = If(row("name") IsNot DBNull.Value, row("name").ToString().Trim(), "N/A")
                 Dim username As String = If(row("username") IsNot DBNull.Value, row("username").ToString().Trim(), "")
                 Dim employeeId As Integer = If(row("employee_id") IsNot DBNull.Value, Convert.ToInt32(row("employee_id")), 0)
-                
+
                 ' Get position/role
                 Dim position As String = If(row("position") IsNot DBNull.Value, row("position").ToString().Trim(), "Staff")
 
                 ' Get status
                 Dim status As String = "Active"
                 If dataSource.Columns.Contains("status") AndAlso row("status") IsNot DBNull.Value Then
-                     status = row("status").ToString()
+                    status = row("status").ToString()
                 End If
 
                 ' Format hire date
@@ -472,7 +472,7 @@ Public Class UsersAccounts
         If UsersAccountData.Columns.Contains("colEdit") AndAlso e.ColumnIndex = UsersAccountData.Columns("colEdit").Index Then
             Dim empId As Integer = 0
             Dim uName As String = ""
-            
+
             If UsersAccountData.Columns.Contains("colEmployeeID") AndAlso selectedRow.Cells("colEmployeeID").Value IsNot Nothing Then
                 empId = CInt(selectedRow.Cells("colEmployeeID").Value)
             End If
@@ -484,9 +484,9 @@ Public Class UsersAccounts
             Dim frm As New FormEdit()
             ' Pass data for editing
             ' Use LoadUserData but set UserID property directly or via overload
-            frm.UserID = userID 
+            frm.UserID = userID
             frm.LoadUserData(empId, uName, selectedRow.Cells("colRole").Value.ToString())
-            
+
             If frm.ShowDialog() = DialogResult.OK Then
                 ' MDA FIX: Clear selection to release accessibility references
                 UsersAccountData.CurrentCell = Nothing
@@ -497,20 +497,20 @@ Public Class UsersAccounts
 
         ' CREATE ACCOUNT BUTTON
         If UsersAccountData.Columns.Contains("colCreateAccount") AndAlso e.ColumnIndex = UsersAccountData.Columns("colCreateAccount").Index Then
-             ' Get data from the Employee row
-             Dim empId As Integer = CInt(selectedRow.Cells("colEmployeeID").Value)
-             Dim empName As String = selectedRow.Cells("txtName").Value.ToString()
-             Dim empRole As String = selectedRow.Cells("colRole").Value.ToString()
-             
-             Dim frm As New CreateAccount()
-             ' Pre-fill for linking
-             frm.LoadEmployeeData(empId, empName, empRole)
-             
-             If frm.ShowDialog() = DialogResult.OK Then
-                  ' MDA FIX
-                  UsersAccountData.CurrentCell = Nothing
-                  Me.BeginInvoke(Sub() LoadDataBasedOnMode())
-             End If
+            ' Get data from the Employee row
+            Dim empId As Integer = CInt(selectedRow.Cells("colEmployeeID").Value)
+            Dim empName As String = selectedRow.Cells("txtName").Value.ToString()
+            Dim empRole As String = selectedRow.Cells("colRole").Value.ToString()
+
+            Dim frm As New CreateAccount()
+            ' Pre-fill for linking
+            frm.LoadEmployeeData(empId, empName, empRole)
+
+            If frm.ShowDialog() = DialogResult.OK Then
+                ' MDA FIX
+                UsersAccountData.CurrentCell = Nothing
+                Me.BeginInvoke(Sub() LoadDataBasedOnMode())
+            End If
         End If
     End Sub
 
@@ -628,13 +628,13 @@ Public Class UsersAccounts
         btnShowStaff.Size = New Size(140, 35)
         btnShowStaff.FlatStyle = FlatStyle.Flat
         btnShowStaff.Cursor = Cursors.Hand
-        
+
         btnShowEmployee = New Button()
         btnShowEmployee.Text = "Employees List"
         btnShowEmployee.Size = New Size(140, 35)
         btnShowEmployee.FlatStyle = FlatStyle.Flat
         btnShowEmployee.Cursor = Cursors.Hand
-        
+
         btnUpdateStatus = New Button()
         btnUpdateStatus.Text = "Update Status"
         btnUpdateStatus.Size = New Size(130, 35)
@@ -643,11 +643,11 @@ Public Class UsersAccounts
         btnUpdateStatus.FlatStyle = FlatStyle.Flat
         btnUpdateStatus.Cursor = Cursors.Hand
         btnUpdateStatus.Visible = False ' Only visible in Staff mode
-        
+
         RoundButton(btnShowStaff)
         RoundButton(btnShowEmployee)
         RoundButton(btnUpdateStatus)
-        
+
         Me.Controls.Add(btnShowStaff)
         Me.Controls.Add(btnShowEmployee)
         Me.Controls.Add(btnUpdateStatus)
@@ -695,7 +695,7 @@ Public Class UsersAccounts
             Dim frm As New FormEdit()
             ' Pass 0 as ID (new user), but provide EmployeeID and details
             frm.LoadUserData(selectEmp.SelectedEmployeeID, selectEmp.SelectedEmployeeName, selectEmp.SelectedEmployeeRole)
-            
+
             If frm.ShowDialog() = DialogResult.OK Then
                 LoadStaffData() ' Reload grid
             End If
@@ -711,7 +711,7 @@ Public Class UsersAccounts
             MessageBox.Show("Please select a user to update status.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
-        
+
         Dim selectedRow As DataGridViewRow = UsersAccountData.SelectedRows(0)
         Dim userId As Integer = If(selectedRow.Tag IsNot Nothing, CInt(selectedRow.Tag), 0)
         Dim empId As Integer = If(selectedRow.Cells("colEmployeeID").Value IsNot Nothing, CInt(selectedRow.Cells("colEmployeeID").Value), 0)

@@ -1,4 +1,4 @@
-﻿Imports MySqlConnector
+Imports MySqlConnector
 Imports System.Data
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports System.Drawing.Drawing2D
@@ -7,6 +7,8 @@ Public Class FormOrders
     Private ordersData As New DataTable()
     Private currentFilter As String = "All"
     Private searchText As String = ""
+    Private isInitializing As Boolean = True
+
 
     ' =======================================================================
     ' FORM LOAD
@@ -21,6 +23,12 @@ Public Class FormOrders
             InitializeCharts()
             LoadOrdersTrendChart()
             LoadCategoriesChart()
+            
+            ConfigureDateFilter()
+            isInitializing = False
+
+        Catch ex As Exception
+
 
         Catch ex As Exception
             MessageBox.Show($"Form Load Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -43,23 +51,16 @@ Public Class FormOrders
 
             Select Case Reports.SelectedPeriod
                 Case "Daily"
-                    If selectedYear = DateTime.Now.Year Then
-                        periodFilter = " WHERE DATE(OrderDate) = CURDATE() "
-                    Else
-                        periodFilter = $" WHERE DATE(OrderDate) = '{selectedYear}-12-31' "
-                    End If
+                    periodFilter = $" WHERE DATE(OrderDate) = '{dtpFilter.Value:yyyy-MM-dd}' "
                 Case "Weekly"
-                    If selectedYear = DateTime.Now.Year Then
-                        periodFilter = " WHERE YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                    Else
-                        periodFilter = $" WHERE YEAR(OrderDate) = {selectedYear} AND WEEK(OrderDate, 1) = 52 "
-                    End If
+                    periodFilter = $" WHERE YEARWEEK(OrderDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1) "
                 Case "Monthly"
                     If selectedMonth = 0 Then
                         periodFilter = $" WHERE YEAR(OrderDate) = {selectedYear} "
                     Else
                         periodFilter = $" WHERE YEAR(OrderDate) = {selectedYear} AND MONTH(OrderDate) = {selectedMonth} "
                     End If
+
                 Case "Yearly"
                     periodFilter = $" WHERE YEAR(OrderDate) = {selectedYear} "
                 Case Else
@@ -320,26 +321,22 @@ Public Class FormOrders
 
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                If selectedYear = DateTime.Now.Year Then
-                    periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
-                Else
-                    periodFilter = $" AND DATE(o.OrderDate) = '{selectedYear}-12-31' "
-                End If
+                 periodFilter = $" AND DATE(o.OrderDate) = '{dtpFilter.Value:yyyy-MM-dd}' "
             Case "Weekly"
-                If selectedYear = DateTime.Now.Year Then
-                    periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                Else
-                    periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} AND WEEK(o.OrderDate, 1) = 52 "
-                End If
+                 periodFilter = $" AND YEARWEEK(o.OrderDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1) "
             Case "Monthly"
                 If selectedMonth = 0 Then
                     periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} "
                 Else
                     periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} AND MONTH(o.OrderDate) = {selectedMonth} "
                 End If
+
             Case "Yearly"
                 periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} "
+            Case "All Time"
+                periodFilter = ""
         End Select
+
 
         ' Simplified query - match the design from the image
         Dim sql As String = "
@@ -380,8 +377,11 @@ Public Class FormOrders
     ' =======================================================================
     Public Sub RefreshData()
         Try
+            ConfigureDateFilter()
+
             ' Reload statistics
             UpdateStatisticsFromDatabase()
+
 
 
             ' Reload grid
@@ -434,7 +434,38 @@ Public Class FormOrders
     ' =======================================================================
     Private Sub InitializeFilters()
         ' Add filter initialization if needed
+        RoundCorners(dtpFilter, 5)
     End Sub
+
+    Private Sub ConfigureDateFilter()
+        If dtpFilter Is Nothing Then Return
+
+        Dim currentPeriod As String = Reports.SelectedPeriod
+        Select Case currentPeriod
+            Case "Daily", "Weekly"
+                dtpFilter.Visible = True
+                dtpFilter.CustomFormat = "MMMM dd, yyyy"
+                dtpFilter.Format = DateTimePickerFormat.Custom
+            Case Else
+                dtpFilter.Visible = False
+        End Select
+    End Sub
+
+    Private Sub dtpFilter_ValueChanged(sender As Object, e As EventArgs) Handles dtpFilter.ValueChanged
+        If isInitializing Then Return
+        RefreshData()
+    End Sub
+
+    Private Sub RoundCorners(control As Control, radius As Integer)
+        Dim path As New System.Drawing.Drawing2D.GraphicsPath()
+        path.AddArc(0, 0, radius, radius, 180, 90)
+        path.AddArc(control.Width - radius, 0, radius, radius, 270, 90)
+        path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90)
+        path.AddArc(0, control.Height - radius, radius, radius, 90, 90)
+        path.CloseFigure()
+        control.Region = New Region(path)
+    End Sub
+
 
     ' =======================================================================
     ' INITIALIZE CHARTS

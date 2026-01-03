@@ -6,6 +6,8 @@ Public Class FormSales
     Private currentYear As Integer = DateTime.Now.Year
     Private salesData As New Dictionary(Of String, (Revenue As Decimal, Expenses As Decimal, Profit As Decimal))
     Private currentPeriod As String = "Daily"
+    Private isInitializing As Boolean = True
+
 
     ' =======================================================================
     ' FORM LOAD
@@ -16,6 +18,8 @@ Public Class FormSales
                 Panel1.Visible = False
                 Panel1.SendToBack()
             End If
+
+            RoundCorners(dtpFilter, 5)
 
             RoundedPane21.BringToFront()
             RoundedPane22.BringToFront()
@@ -28,12 +32,17 @@ Public Class FormSales
             ' Check if current year has data, if not use the latest year with data
             currentYear = GetLatestYearWithData()
 
+            ' Configure dtpFilter visibility
+            ConfigureDateFilter()
+
             ConfigureChart()
             LoadAndDisplaySalesData()
             UpdateSummaryCards()
 
             ' Update label to show current period
             UpdateHeaderLabel()
+
+            isInitializing = False
 
         Catch ex As Exception
             MessageBox.Show($"Form Load Error: {ex.Message}{vbCrLf}{ex.StackTrace}",
@@ -42,8 +51,24 @@ Public Class FormSales
     End Sub
 
     ' =======================================================================
-    ' GET LATEST YEAR WITH DATA
+    ' CONFIGURE DATE FILTER
     ' =======================================================================
+    Private Sub ConfigureDateFilter()
+        If dtpFilter Is Nothing Then Return
+
+        Select Case currentPeriod
+            Case "Daily", "Weekly"
+                dtpFilter.Visible = True
+                If currentPeriod = "Daily" Then
+                    dtpFilter.CustomFormat = "MMMM dd, yyyy"
+                Else
+                    dtpFilter.CustomFormat = "MMMM dd, yyyy" ' Can't easily format week, just show date
+                End If
+                dtpFilter.Format = DateTimePickerFormat.Custom
+            Case Else
+                dtpFilter.Visible = False
+        End Select
+    End Sub
     Private Function GetLatestYearWithData() As Integer
         Try
             ' Try to open connection if not already open
@@ -136,7 +161,7 @@ Public Class FormSales
         Try
             If Label1 IsNot Nothing Then
                 Dim monthPart As String = ""
-                If currentPeriod = "Monthly" AndAlso Reports.SelectedMonth > 0 Then
+                If currentPeriod = "Daily" AndAlso Reports.SelectedMonth > 0 Then
                     monthPart = " - " & System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Reports.SelectedMonth)
                 End If
                 Label1.Text = $"Financial Overview - {currentPeriod}{monthPart} ({currentYear})"
@@ -603,31 +628,21 @@ Public Class FormSales
     Private Function GetPeriodWhereClause(dateColumn As String) As String
         Select Case currentPeriod
             Case "Daily"
-                ' If it's the current year, we can keep using CURDATE() or match a specific day.
-                ' For now, let's keep it simple: if current year, show today. If past year, show Dec 31 (end of year).
-                If currentYear = DateTime.Now.Year Then
-                    Return $"AND DATE({dateColumn}) = CURDATE()"
-                Else
-                    ' For past years, "Daily" isn't super useful as "Today", 
-                    ' but let's default to the last day of that year for consistency.
-                    Return $"AND DATE({dateColumn}) = '{currentYear}-12-31'"
-                End If
+                ' Use dtpFilter value
+                Return $"AND DATE({dateColumn}) = '{dtpFilter.Value:yyyy-MM-dd}'"
 
             Case "Weekly"
-                If currentYear = DateTime.Now.Year Then
-                    Return $"AND YEARWEEK({dateColumn}, 1) = YEARWEEK(CURDATE(), 1)"
-                Else
-                    ' Show the last week of that year
-                    Return $"AND YEAR({dateColumn}) = @Year AND WEEK({dateColumn}, 1) = 52"
-                End If
+                ' Use dtpFilter value for the specific week
+                Return $"AND YEARWEEK({dateColumn}, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1)"
 
             Case "Monthly"
-                ' If SelectedMonth is 0 (All Months), don't filter by month, just year
-                If Reports.SelectedMonth = 0 Then
+                Dim selectedMonth As Integer = Reports.SelectedMonth
+                If selectedMonth = 0 Then
                     Return $"AND YEAR({dateColumn}) = @Year"
                 Else
-                    Return $"AND YEAR({dateColumn}) = @Year AND MONTH({dateColumn}) = {Reports.SelectedMonth}"
+                    Return $"AND YEAR({dateColumn}) = @Year AND MONTH({dateColumn}) = {selectedMonth}"
                 End If
+
 
             Case "Yearly"
                 Return $"AND YEAR({dateColumn}) = @Year"
@@ -636,6 +651,27 @@ Public Class FormSales
                 Return $"AND YEAR({dateColumn}) = @Year"
         End Select
     End Function
+
+    ' =======================================================================
+    ' FILTER CHANGE EVENT
+    ' =======================================================================
+    Private Sub dtpFilter_ValueChanged(sender As Object, e As EventArgs) Handles dtpFilter.ValueChanged
+        If isInitializing Then Return
+        LoadAndDisplaySalesData()
+        UpdateSummaryCards()
+        UpdateHeaderLabel()
+    End Sub
+
+    Private Sub RoundCorners(control As Control, radius As Integer)
+        Dim path As New System.Drawing.Drawing2D.GraphicsPath()
+        path.AddArc(0, 0, radius, radius, 180, 90)
+        path.AddArc(control.Width - radius, 0, radius, radius, 270, 90)
+        path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90)
+        path.AddArc(0, control.Height - radius, radius, radius, 90, 90)
+        path.CloseFigure()
+        control.Region = New Region(path)
+    End Sub
+
 
     ' =======================================================================
     ' ADD PERIOD PARAMETERS TO COMMAND
@@ -666,6 +702,8 @@ Public Class FormSales
         currentPeriod = Reports.SelectedPeriod
         currentYear = Reports.SelectedYear
         
+        ConfigureDateFilter()
+        
         ' Update header
         UpdateHeaderLabel()
         
@@ -673,6 +711,7 @@ Public Class FormSales
         LoadAndDisplaySalesData()
         UpdateSummaryCards()
     End Sub
+
 
     ' =======================================================================
     ' CHANGE YEAR

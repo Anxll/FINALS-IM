@@ -34,7 +34,9 @@ Partial Class FormCustomerHistory
         Me.SearchContainer = New InformationManagement.RoundedPane2()
         Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.btnExportPdf = New System.Windows.Forms.Button()
+        Me.dtpFilter = New System.Windows.Forms.DateTimePicker()
         Me.Label1 = New System.Windows.Forms.Label()
+
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.dateid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Orderid = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -79,7 +81,9 @@ Partial Class FormCustomerHistory
         Me.RoundedPane21.BorderThickness = 1
         Me.RoundedPane21.Controls.Add(Me.PaginationContainer)
         Me.RoundedPane21.Controls.Add(Me.SearchContainer)
+        Me.RoundedPane21.Controls.Add(Me.dtpFilter)
         Me.RoundedPane21.Controls.Add(Me.btnExportPdf)
+
         Me.RoundedPane21.Controls.Add(Me.Label1)
         Me.RoundedPane21.Controls.Add(Me.DataGridView1)
         Me.RoundedPane21.CornerRadius = 15
@@ -183,6 +187,17 @@ Partial Class FormCustomerHistory
         Me.btnExportPdf.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.btnExportPdf.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnExportPdf.UseVisualStyleBackColor = False
+        '
+        'dtpFilter
+        '
+        Me.dtpFilter.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dtpFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.dtpFilter.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpFilter.Location = New System.Drawing.Point(840, 27)
+        Me.dtpFilter.Name = "dtpFilter"
+        Me.dtpFilter.Size = New System.Drawing.Size(200, 30)
+        Me.dtpFilter.TabIndex = 20
+        Me.dtpFilter.Visible = False
         '
         'Label1
         '
@@ -315,4 +330,6 @@ Partial Class FormCustomerHistory
     Friend WithEvents Items As DataGridViewTextBoxColumn
     Friend WithEvents Amount As DataGridViewTextBoxColumn
     Friend WithEvents Status As DataGridViewTextBoxColumn
+    Friend WithEvents dtpFilter As DateTimePicker
 End Class
+

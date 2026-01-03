@@ -56,6 +56,7 @@ Partial Class FormEmployeeAttendance
         Me.lblPageStatus = New System.Windows.Forms.Label()
         Me.SearchContainer = New InformationManagement.RoundedPane2()
         Me.TextBoxSearch = New System.Windows.Forms.TextBox()
+        Me.dtpFilter = New System.Windows.Forms.DateTimePicker()
         Me.btnExportPdf = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
@@ -122,7 +123,7 @@ Partial Class FormEmployeeAttendance
         Me.Label5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Label5.Location = New System.Drawing.Point(75, 50)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(86, 15)
+        Me.Label5.Size = New System.Drawing.Size(107, 20)
         Me.Label5.TabIndex = 2
         Me.Label5.Text = "On Duty Today"
         '
@@ -134,7 +135,7 @@ Partial Class FormEmployeeAttendance
         Me.Label4.ForeColor = System.Drawing.Color.White
         Me.Label4.Location = New System.Drawing.Point(75, 75)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(42, 32)
+        Me.Label4.Size = New System.Drawing.Size(52, 41)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "18"
         '
@@ -146,7 +147,7 @@ Partial Class FormEmployeeAttendance
         Me.Label1.ForeColor = System.Drawing.Color.White
         Me.Label1.Location = New System.Drawing.Point(75, 25)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(60, 20)
+        Me.Label1.Size = New System.Drawing.Size(76, 25)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Present"
         '
@@ -196,7 +197,7 @@ Partial Class FormEmployeeAttendance
         Me.Label8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Label8.Location = New System.Drawing.Point(75, 50)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(87, 15)
+        Me.Label8.Size = New System.Drawing.Size(109, 20)
         Me.Label8.TabIndex = 3
         Me.Label8.Text = "Not in building"
         '
@@ -208,7 +209,7 @@ Partial Class FormEmployeeAttendance
         Me.Label6.ForeColor = System.Drawing.Color.White
         Me.Label6.Location = New System.Drawing.Point(75, 75)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(28, 32)
+        Me.Label6.Size = New System.Drawing.Size(35, 41)
         Me.Label6.TabIndex = 2
         Me.Label6.Text = "2"
         '
@@ -220,7 +221,7 @@ Partial Class FormEmployeeAttendance
         Me.Label2.ForeColor = System.Drawing.Color.White
         Me.Label2.Location = New System.Drawing.Point(75, 25)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(72, 20)
+        Me.Label2.Size = New System.Drawing.Size(92, 25)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Absences"
         '
@@ -270,7 +271,7 @@ Partial Class FormEmployeeAttendance
         Me.Label9.ForeColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Label9.Location = New System.Drawing.Point(75, 50)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(92, 15)
+        Me.Label9.Size = New System.Drawing.Size(117, 20)
         Me.Label9.TabIndex = 2
         Me.Label9.Text = "Approved Leave"
         '
@@ -282,7 +283,7 @@ Partial Class FormEmployeeAttendance
         Me.Label7.ForeColor = System.Drawing.Color.White
         Me.Label7.Location = New System.Drawing.Point(75, 75)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(28, 32)
+        Me.Label7.Size = New System.Drawing.Size(35, 41)
         Me.Label7.TabIndex = 1
         Me.Label7.Text = "4"
         '
@@ -294,7 +295,7 @@ Partial Class FormEmployeeAttendance
         Me.Label3.ForeColor = System.Drawing.Color.White
         Me.Label3.Location = New System.Drawing.Point(75, 25)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(72, 20)
+        Me.Label3.Size = New System.Drawing.Size(91, 25)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "On Leave"
         '
@@ -304,6 +305,7 @@ Partial Class FormEmployeeAttendance
         Me.RoundedPane24.BorderThickness = 1
         Me.RoundedPane24.Controls.Add(Me.PaginationContainer)
         Me.RoundedPane24.Controls.Add(Me.SearchContainer)
+        Me.RoundedPane24.Controls.Add(Me.dtpFilter)
         Me.RoundedPane24.Controls.Add(Me.btnExportPdf)
         Me.RoundedPane24.Controls.Add(Me.Label10)
         Me.RoundedPane24.Controls.Add(Me.DataGridView1)
@@ -311,7 +313,7 @@ Partial Class FormEmployeeAttendance
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
         Me.RoundedPane24.Location = New System.Drawing.Point(30, 255)
         Me.RoundedPane24.Name = "RoundedPane24"
-        Me.RoundedPane24.Size = New System.Drawing.Size(1235, 472)
+        Me.RoundedPane24.Size = New System.Drawing.Size(1334, 565)
         Me.RoundedPane24.TabIndex = 7
         '
         'PaginationContainer
@@ -321,9 +323,9 @@ Partial Class FormEmployeeAttendance
         Me.PaginationContainer.Controls.Add(Me.btnNext)
         Me.PaginationContainer.Controls.Add(Me.btnPrev)
         Me.PaginationContainer.Controls.Add(Me.lblPageStatus)
-        Me.PaginationContainer.Location = New System.Drawing.Point(24, 420)
+        Me.PaginationContainer.Location = New System.Drawing.Point(24, 513)
         Me.PaginationContainer.Name = "PaginationContainer"
-        Me.PaginationContainer.Size = New System.Drawing.Size(1190, 40)
+        Me.PaginationContainer.Size = New System.Drawing.Size(1289, 40)
         Me.PaginationContainer.TabIndex = 12
         '
         'btnNext
@@ -332,7 +334,7 @@ Partial Class FormEmployeeAttendance
         Me.btnNext.Cursor = System.Windows.Forms.Cursors.Hand
         Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnNext.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnNext.Location = New System.Drawing.Point(1100, 5)
+        Me.btnNext.Location = New System.Drawing.Point(1199, 5)
         Me.btnNext.Name = "btnNext"
         Me.btnNext.Size = New System.Drawing.Size(80, 30)
         Me.btnNext.TabIndex = 2
@@ -345,7 +347,7 @@ Partial Class FormEmployeeAttendance
         Me.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand
         Me.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnPrev.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnPrev.Location = New System.Drawing.Point(1010, 5)
+        Me.btnPrev.Location = New System.Drawing.Point(1109, 5)
         Me.btnPrev.Name = "btnPrev"
         Me.btnPrev.Size = New System.Drawing.Size(80, 30)
         Me.btnPrev.TabIndex = 1
@@ -359,7 +361,7 @@ Partial Class FormEmployeeAttendance
         Me.lblPageStatus.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
         Me.lblPageStatus.Location = New System.Drawing.Point(0, 10)
         Me.lblPageStatus.Name = "lblPageStatus"
-        Me.lblPageStatus.Size = New System.Drawing.Size(124, 15)
+        Me.lblPageStatus.Size = New System.Drawing.Size(158, 20)
         Me.lblPageStatus.TabIndex = 0
         Me.lblPageStatus.Text = "Page 1 of 1 (0 records)"
         '
@@ -384,9 +386,19 @@ Partial Class FormEmployeeAttendance
         Me.TextBoxSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(148, Byte), Integer), CType(CType(163, Byte), Integer), CType(CType(184, Byte), Integer))
         Me.TextBoxSearch.Location = New System.Drawing.Point(15, 12)
         Me.TextBoxSearch.Name = "TextBoxSearch"
-        Me.TextBoxSearch.Size = New System.Drawing.Size(250, 20)
+        Me.TextBoxSearch.Size = New System.Drawing.Size(250, 25)
         Me.TextBoxSearch.TabIndex = 0
         Me.TextBoxSearch.Text = "Search employees..."
+        '
+        'dtpFilter
+        '
+        Me.dtpFilter.CalendarFont = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.dtpFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.dtpFilter.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpFilter.Location = New System.Drawing.Point(260, 28)
+        Me.dtpFilter.Name = "dtpFilter"
+        Me.dtpFilter.Size = New System.Drawing.Size(180, 30)
+        Me.dtpFilter.TabIndex = 15
         '
         'btnExportPdf
         '
@@ -396,7 +408,7 @@ Partial Class FormEmployeeAttendance
         Me.btnExportPdf.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnExportPdf.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnExportPdf.ForeColor = System.Drawing.Color.White
-        Me.btnExportPdf.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
+        Me.btnExportPdf.Image = CType(resources.GetObject("btnExportPdf.Image"), System.Drawing.Image)
         Me.btnExportPdf.Location = New System.Drawing.Point(1036, 23)
         Me.btnExportPdf.Name = "btnExportPdf"
         Me.btnExportPdf.Size = New System.Drawing.Size(135, 45)
@@ -414,7 +426,7 @@ Partial Class FormEmployeeAttendance
         Me.Label10.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
         Me.Label10.Location = New System.Drawing.Point(32, 28)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(170, 25)
+        Me.Label10.Size = New System.Drawing.Size(202, 30)
         Me.Label10.TabIndex = 7
         Me.Label10.Text = "Attendance Details"
         '
@@ -437,7 +449,7 @@ Partial Class FormEmployeeAttendance
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowHeadersWidth = 51
-        Me.DataGridView1.Size = New System.Drawing.Size(1190, 330)
+        Me.DataGridView1.Size = New System.Drawing.Size(1289, 422)
         Me.DataGridView1.TabIndex = 10
         '
         'LabelHeader
@@ -447,7 +459,7 @@ Partial Class FormEmployeeAttendance
         Me.LabelHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(15, Byte), Integer), CType(CType(23, Byte), Integer), CType(CType(42, Byte), Integer))
         Me.LabelHeader.Location = New System.Drawing.Point(30, 25)
         Me.LabelHeader.Name = "LabelHeader"
-        Me.LabelHeader.Size = New System.Drawing.Size(419, 41)
+        Me.LabelHeader.Size = New System.Drawing.Size(513, 50)
         Me.LabelHeader.TabIndex = 8
         Me.LabelHeader.Text = "Employee Attendance Report"
         '
@@ -458,14 +470,14 @@ Partial Class FormEmployeeAttendance
         Me.LabelSubHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
         Me.LabelSubHeader.Location = New System.Drawing.Point(32, 68)
         Me.LabelSubHeader.Name = "LabelSubHeader"
-        Me.LabelSubHeader.Size = New System.Drawing.Size(348, 19)
+        Me.LabelSubHeader.Size = New System.Drawing.Size(451, 25)
         Me.LabelSubHeader.TabIndex = 9
         Me.LabelSubHeader.Text = "Monitor employee presence, absences, and leave status"
         '
         'FormEmployeeAttendance
         '
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1370, 749)
+        Me.ClientSize = New System.Drawing.Size(1398, 848)
         Me.Controls.Add(Me.LabelSubHeader)
         Me.Controls.Add(Me.LabelHeader)
         Me.Controls.Add(Me.RoundedPane24)
@@ -516,6 +528,7 @@ Partial Class FormEmployeeAttendance
     Friend WithEvents RoundedPane24 As RoundedPane2
     Friend WithEvents SearchContainer As RoundedPane2
     Friend WithEvents TextBoxSearch As TextBox
+    Friend WithEvents dtpFilter As DateTimePicker
     Friend WithEvents btnExportPdf As Button
     Friend WithEvents Label10 As Label
     Friend WithEvents DataGridView1 As DataGridView

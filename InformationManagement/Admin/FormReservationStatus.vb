@@ -7,6 +7,8 @@ Public Class FormReservationStatus
     Private currentMonth As Integer = DateTime.Now.Month
     Private filterPeriod As String = "Monthly" ' Daily, Weekly, Monthly, Yearly
     Private reservationData As New Dictionary(Of String, Integer)
+    Private isInitializing As Boolean = True
+
 
     ' =======================================================================
     ' FORM LOAD
@@ -15,7 +17,10 @@ Public Class FormReservationStatus
         Try
             InitializeForm()
             ConfigureChart()
+            ConfigureDateFilter()
             LoadReservationData()
+            isInitializing = False
+
         Catch ex As Exception
             MessageBox.Show($"Form Load Error: {ex.Message}{vbCrLf}{ex.StackTrace}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
@@ -162,35 +167,31 @@ Public Class FormReservationStatus
         Dim filter As String = ""
 
         Dim selectedYear As Integer = Reports.SelectedYear
+        If selectedYear = 0 Then selectedYear = DateTime.Now.Year
+
         Dim selectedMonth As Integer = Reports.SelectedMonth
+
 
         Select Case filterPeriod
             Case "Daily"
-                If selectedYear = DateTime.Now.Year Then
-                    filter = $"DATE(ReservationDate) = CURDATE()"
-                Else
-                    filter = $"DATE(ReservationDate) = '{selectedYear}-12-31'"
-                End If
+                filter = $"DATE(EventDate) = '{dtpFilter.Value:yyyy-MM-dd}'"
 
             Case "Weekly"
-                If selectedYear = DateTime.Now.Year Then
-                    filter = $"YEARWEEK(ReservationDate, 1) = YEARWEEK(CURDATE(), 1)"
-                Else
-                    filter = $"YEAR(ReservationDate) = {selectedYear} AND WEEK(ReservationDate, 1) = 52"
-                End If
+                filter = $"YEARWEEK(EventDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1)"
+
 
             Case "Monthly"
                 If selectedMonth = 0 Then
-                    filter = $"YEAR(ReservationDate) = {selectedYear}"
+                    filter = $"YEAR(EventDate) = {selectedYear}"
                 Else
-                    filter = $"YEAR(ReservationDate) = {selectedYear} AND MONTH(ReservationDate) = {selectedMonth}"
+                    filter = $"YEAR(EventDate) = {selectedYear} AND MONTH(EventDate) = {selectedMonth}"
                 End If
 
             Case "Yearly"
-                filter = $"YEAR(ReservationDate) = {selectedYear}"
+                filter = $"YEAR(EventDate) = {selectedYear}"
 
             Case Else
-                filter = $"YEAR(ReservationDate) = {selectedYear}"
+                filter = $"YEAR(EventDate) = {selectedYear}"
         End Select
 
         Return filter
@@ -317,10 +318,11 @@ Public Class FormReservationStatus
                     COUNT(CASE WHEN ReservationStatus = 'Confirmed' THEN 1 END) AS Confirmed,
                     COUNT(CASE WHEN ReservationStatus = 'Cancelled' THEN 1 END) AS Cancelled,
                     COUNT(CASE WHEN ReservationStatus = 'Completed' THEN 1 END) AS Completed,
-                    MIN(ReservationDate) AS FirstReservation,
-                    MAX(ReservationDate) AS LastReservation
+                    MIN(EventDate) AS FirstReservation,
+                    MAX(EventDate) AS LastReservation
                 FROM reservations
                 WHERE {dateFilter}
+
             "
 
             Using cmd As New MySqlCommand(sql, conn)
@@ -340,14 +342,15 @@ Public Class FormReservationStatus
             ' Get most popular reservation times
             Dim sqlTimes As String = $"
                 SELECT 
-                    HOUR(ReservationDate) AS ReservationHour,
+                    HOUR(EventTime) AS ReservationHour,
                     COUNT(*) AS HourCount
                 FROM reservations
                 WHERE {dateFilter}
-                GROUP BY HOUR(ReservationDate)
+                GROUP BY HOUR(EventTime)
                 ORDER BY HourCount DESC
                 LIMIT 3
             "
+
 
             Dim popularTimes As New List(Of (Hour As Integer, Count As Integer))
             Using cmd As New MySqlCommand(sqlTimes, conn)
@@ -437,8 +440,29 @@ Public Class FormReservationStatus
         filterPeriod = Reports.SelectedPeriod
         currentYear = Reports.SelectedYear
         currentMonth = Reports.SelectedMonth
+        
+        ConfigureDateFilter()
         LoadReservationData()
     End Sub
+
+    Private Sub ConfigureDateFilter()
+        If dtpFilter Is Nothing Then Return
+
+        Select Case filterPeriod
+            Case "Daily", "Weekly"
+                dtpFilter.Visible = True
+                dtpFilter.CustomFormat = "MMMM dd, yyyy"
+                dtpFilter.Format = DateTimePickerFormat.Custom
+            Case Else
+                dtpFilter.Visible = False
+        End Select
+    End Sub
+
+    Private Sub dtpFilter_ValueChanged(sender As Object, e As EventArgs) Handles dtpFilter.ValueChanged
+        If isInitializing Then Return
+        LoadReservationData()
+    End Sub
+
 
     ' =======================================================================
     ' SET CUSTOM DATE RANGE

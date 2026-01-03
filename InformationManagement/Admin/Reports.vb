@@ -15,6 +15,14 @@ Public Class Reports
     Private activeGrids As New List(Of DataGridView)
     Private activeCharts As New List(Of System.Windows.Forms.DataVisualization.Charting.Chart)
     Private reportTitle As String = ""
+    
+    ' Printing State
+    Private m_PageIndex As Integer = 0
+    Private m_GridIndex As Integer = 0
+    Private m_RowIndex As Integer = 0
+    Private m_ChartIndex As Integer = 0
+    Private m_SummaryLabels As New Dictionary(Of String, String)
+
 
     ' === Load Form into Panel1 ===
     Private Sub LoadFormIntoPanel(childForm As Form)
@@ -404,7 +412,7 @@ Public Class Reports
     End Sub
 
 
-    ' === PUBLIC METHOD FOR PDF EXPORT ===
+    ' === PUBLIC METHOD FOR PDF EXPORT / PREVIEW ===
     Public Sub ExportCurrentReport()
         If Panel1.Controls.Count = 0 Then Return
 
@@ -428,8 +436,38 @@ Public Class Reports
         ' Try to find ALL DataGridViews and Charts
         activeGrids.Clear()
         activeCharts.Clear()
+        m_SummaryLabels.Clear()
+
         FindAllControls(Of DataGridView)(currentForm, activeGrids)
         FindAllControls(Of System.Windows.Forms.DataVisualization.Charting.Chart)(currentForm, activeCharts)
+
+        ' === DATA EXTRACTION ===
+        ' Extract specific labels based on known form types to ensure headers are correct
+        If TypeOf currentForm Is FormReservationStatus Then
+            Dim f = DirectCast(currentForm, FormReservationStatus)
+            m_SummaryLabels.Add("Total Reservations", f.lblTotalReservations.Text)
+            m_SummaryLabels.Add("Pending", f.lblPending.Text)
+            m_SummaryLabels.Add("Confirmed", f.lblConfirmed.Text)
+            m_SummaryLabels.Add("Cancelled", f.lblCancelled.Text)
+        ElseIf TypeOf currentForm Is FormOrders Then
+             ' Add logic for FormOrders if needed, e.g.
+             ' Dim f = DirectCast(currentForm, FormOrders)
+             ' m_SummaryLabels.Add("Total Orders", f.Label4.Text) 
+        End If
+        
+        ' Fallback: Scrape standard labels if no specific extraction above
+        If m_SummaryLabels.Count = 0 Then
+             For i As Integer = 1 To 10
+                Dim lbl As Control = currentForm.Controls.Find("Label" & i, True).FirstOrDefault()
+                If lbl IsNot Nothing AndAlso Not String.IsNullOrEmpty(lbl.Text) AndAlso lbl.Text <> "..." Then
+                     m_SummaryLabels.Add($"Stat #{i}", lbl.Text)
+                End If
+            Next
+        End If
+
+        ' Add Header Label if exists
+        Dim lblHeader As Control = currentForm.Controls.Find("LabelHeader", True).FirstOrDefault()
+        If lblHeader IsNot Nothing Then m_SummaryLabels("HeaderExtra") = lblHeader.Text ' Use dictionary key safely
 
         If activeGrids.Count = 0 AndAlso activeCharts.Count = 0 Then
             MessageBox.Show("No exportable data (Table or Chart) found in the current report.", "Export Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -437,50 +475,30 @@ Public Class Reports
         End If
 
         Try
-            Dim sfd As New SaveFileDialog()
-            sfd.Filter = "PDF Files (*.pdf)|*.pdf"
-            sfd.FileName = $"{reportTitle.Replace(" ", "_")}_{DateTime.Now:yyyyMMdd}"
+            ' === PRINT PREVIEW DIALOG ===
+            Dim ppd As New PrintPreviewDialog()
+            ppd.Document = prnDoc
+            ppd.Width = 1000
+            ppd.Height = 800
+            ppd.StartPosition = FormStartPosition.CenterScreen ' Center the preview window
+            ppd.ShowIcon = False
+            ppd.Text = $"Report Preview - {reportTitle}"
+            
+            ' Suppress the "Printing..." status dialog
+            prnDoc.PrintController = New StandardPrintController()
 
-            If sfd.ShowDialog() = DialogResult.OK Then
-                ' Setup Print to PDF
-                Dim pdfPrinterFound As Boolean = False
-                For Each printer As String In PrinterSettings.InstalledPrinters
-                    If printer.ToUpper().Contains("PDF") Then
-                        prnDoc.PrinterSettings.PrinterName = printer
-                        pdfPrinterFound = True
-                        Exit For
-                    End If
-                Next
-
-                If Not pdfPrinterFound Then
-                    MessageBox.Show("No PDF printer found. Please install 'Microsoft Print to PDF'.", "Printer Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                    Return
-                End If
-
-                prnDoc.PrinterSettings.PrintToFile = True
-                prnDoc.PrinterSettings.PrintFileName = sfd.FileName
-
-                ' Auto Landscape for wide tables
-                If activeGrids.Count > 0 Then
-                    Dim maxCols = activeGrids.Max(Function(g) g.Columns.Count)
-                    prnDoc.DefaultPageSettings.Landscape = (maxCols > 6)
-                Else
-                    prnDoc.DefaultPageSettings.Landscape = False
-                End If
-
-                prnDoc.Print()
-
-                ' Ensure application stays steady and focused
-                Me.Activate()
-                Me.Focus()
-
-                If MessageBox.Show("Report exported successfully as PDF!" & vbCrLf & vbCrLf & "Would you like to open the file now?", "Export Successful", MessageBoxButtons.YesNo, MessageBoxIcon.Information) = DialogResult.Yes Then
-                    ' Open the file if requested
-                    Process.Start(sfd.FileName)
-                End If
+            ' Setup Page Settings
+            If activeGrids.Count > 0 Then
+                Dim maxCols = activeGrids.Max(Function(g) g.Columns.Count)
+                prnDoc.DefaultPageSettings.Landscape = (maxCols > 6)
+            Else
+                prnDoc.DefaultPageSettings.Landscape = False
             End If
+
+            ppd.ShowDialog()
+
         Catch ex As Exception
-            MessageBox.Show("Error performing PDF export: " & ex.Message & vbCrLf & vbCrLf & "Please make sure the output file is not open in another application.", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error initializing preview: " & ex.Message, "Preview Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
@@ -492,122 +510,285 @@ Public Class Reports
         Next
     End Sub
 
-    ' === PRINT PAGE HANDLER ===
+    ' === BEGIN PRINT - RESET STATE ===
+    Private Sub prnDoc_BeginPrint(sender As Object, e As PrintEventArgs) Handles prnDoc.BeginPrint
+        m_PageIndex = 0
+        m_GridIndex = 0
+        m_RowIndex = 0
+        m_ChartIndex = 0
+    End Sub
+
+    ' === PRINT PAGE HANDLER (Visual Upgrade) ===
     Private Sub prnDoc_PrintPage(sender As Object, e As PrintPageEventArgs) Handles prnDoc.PrintPage
+        m_PageIndex += 1
         Dim g As Graphics = e.Graphics
-        Dim fontHeader As New Font("Segoe UI", 20, FontStyle.Bold)
-        Dim fontSubHeader As New Font("Segoe UI", 11, FontStyle.Regular)
-        Dim fontTable As New Font("Segoe UI", 9)
-        Dim fontBold As New Font("Segoe UI", 9, FontStyle.Bold)
+        
+        ' Branding Colors
+        Dim brandColor As Color = Color.FromArgb(55, 65, 81)   ' Dark Slate
+        Dim accentColor As Color = Color.FromArgb(249, 115, 22) ' Orange #F97316
+        Dim cardBg As Color = Color.White
+        Dim headerBg As Color = Color.FromArgb(243, 244, 246)   ' Light Gray
+        
+        ' Fonts
+        Dim fontTitle As New Font("Segoe UI", 24, FontStyle.Bold)
+        Dim fontSubtitle As New Font("Segoe UI", 12, FontStyle.Regular)
+        Dim fontCardTitle As New Font("Segoe UI", 9, FontStyle.Regular)
+        Dim fontCardValue As New Font("Segoe UI", 14, FontStyle.Bold)
+        Dim fontHeader As New Font("Segoe UI", 9, FontStyle.Bold)
+        Dim fontRow As New Font("Segoe UI", 9)
+        Dim fontRowAlt As New Font("Segoe UI", 9)
+        Dim fontFooter As New Font("Segoe UI", 8, FontStyle.Italic)
 
-        Dim marginX As Integer = e.MarginBounds.Left
-        Dim marginY As Integer = e.MarginBounds.Top
-        Dim y As Integer = marginY
+        ' Brushes/Pens
+        Dim brushTitle As New SolidBrush(brandColor)
+        Dim brushDim As New SolidBrush(Color.Gray)
+        Dim penLine As New Pen(Color.LightGray, 1)
+        Dim penCardBorder As New Pen(Color.FromArgb(229, 231, 235), 1)
 
-        ' Draw Store Logo / Name placeholder
-        g.DrawString("TABEYA SYSTEM", fontBold, Brushes.DarkRed, marginX, y)
-        y += 25
+        ' Margins
+        Dim leftMargin As Integer = e.MarginBounds.Left
+        Dim topMargin As Integer = e.MarginBounds.Top
+        Dim bottomMargin As Integer = e.MarginBounds.Bottom
+        Dim rightMargin As Integer = e.MarginBounds.Right
+        Dim contentWidth As Integer = e.MarginBounds.Width
+        
+        Dim y As Integer = topMargin
 
-        ' Draw Header
-        g.DrawString(reportTitle.ToUpper(), fontHeader, Brushes.Black, marginX, y)
-        y += 45
+        ' ---------------------------------------------------------
+        ' 1. REPORT HEADER (First Page Only)
+        ' ---------------------------------------------------------
+        If m_PageIndex = 1 Then
+            ' Top Branding Bar
+            g.FillRectangle(New SolidBrush(accentColor), leftMargin, y - 20, contentWidth, 10)
+            y += 20
 
-        ' Draw Stats/Filter Info
-        g.DrawString($"Period: {SelectedPeriod}  |  Year: {SelectedYear}  |  Generated: {DateTime.Now:MMM dd, yyyy HH:mm}", fontSubHeader, Brushes.Gray, marginX, y)
-        y += 40
+            ' Title
+            g.DrawString("LABEYA SYSTEM", New Font("Segoe UI", 10, FontStyle.Bold), New SolidBrush(Color.Gray), leftMargin, y)
+            y += 25
+            g.DrawString(reportTitle, fontTitle, brushTitle, leftMargin, y)
+            y += 45
+            
+            ' Date & Period
+            Dim periodStr As String = $"{DateTime.Now:MMM dd, yyyy}  •  {SelectedPeriod}"
+            If m_SummaryLabels.ContainsKey("HeaderExtra") Then
+                periodStr &= "  •  " & m_SummaryLabels("HeaderExtra")
+                m_SummaryLabels.Remove("HeaderExtra") ' Remove so it doesn't print as a card
+            End If
+            g.DrawString(periodStr, fontSubtitle, brushDim, leftMargin, y)
+            y += 35
+            
+            ' Divider
+            g.DrawLine(penLine, leftMargin, y, rightMargin, y)
+            y += 30
+            
+            ' ---------------------------------------------------------
+            ' 2. SUMMARY CARDS (First Page Only)
+            ' ---------------------------------------------------------
+            If m_SummaryLabels.Count > 0 Then
+                Dim cardWidth As Integer = 160
+                Dim cardHeight As Integer = 70
+                Dim xCard As Integer = leftMargin
+                Dim cardsPerRow As Integer = contentWidth \ (cardWidth + 10)
+                Dim count As Integer = 0
 
-        g.DrawLine(New Pen(Color.LightGray, 1), marginX, y, e.MarginBounds.Right, y)
-        y += 30
+                For Each key In m_SummaryLabels.Keys
+                     ' Draw Card Background
+                     g.FillRectangle(Brushes.White, xCard, y, cardWidth, cardHeight)
+                     g.DrawRectangle(penCardBorder, xCard, y, cardWidth, cardHeight)
+                     
+                     ' Draw Left Accent Border
+                     g.FillRectangle(New SolidBrush(accentColor), xCard, y, 4, cardHeight)
 
-        ' Print all visible Charts
-        For Each chart In activeCharts
-            If Not chart.Visible Then Continue For
+                     ' Text
+                     g.DrawString(key, fontCardTitle, Brushes.Gray, xCard + 15, y + 10)
+                     
+                     ' Value (Truncate if too long)
+                     Dim valStr = m_SummaryLabels(key)
+                     If valStr.Length > 15 Then valStr = valStr.Substring(0, 12) & "..."
+                     g.DrawString(valStr, fontCardValue, Brushes.Black, xCard + 15, y + 30)
+
+                     ' Move X
+                     xCard += cardWidth + 15
+                     count += 1
+                     
+                     ' Wrap if needed (basic wrapping)
+                     If count >= cardsPerRow Then
+                         xCard = leftMargin
+                         y += cardHeight + 15
+                         count = 0
+                     End If
+                Next
+                
+                If count > 0 Then y += cardHeight + 40
+            End If
+            
+        Else
+            ' Header on Subsequent Pages
+            g.DrawString($"{reportTitle} - Page {m_PageIndex}", fontSubtitle, brushDim, leftMargin, y)
+            g.DrawLine(penLine, leftMargin, y + 20, rightMargin, y + 20)
+            y += 40
+        End If
+
+        ' ---------------------------------------------------------
+        ' 3. CHARTS (Flow Layout)
+        ' ---------------------------------------------------------
+        While m_ChartIndex < activeCharts.Count
+            Dim chart = activeCharts(m_ChartIndex)
+            If Not chart.Visible Then
+                m_ChartIndex += 1
+                Continue While
+            End If
+
+            ' Calculate desired size to fit width
+            Dim targetWidth As Integer = contentWidth
+            Dim targetHeight As Integer = 250 ' Fixed height for charts
+
+            ' Check for page overflow
+            If y + targetHeight > bottomMargin Then
+                e.HasMorePages = True
+                Return ' Start new page
+            End If
+
+            ' Render Chart
             Try
+                ' Create high-res bitmap
                 Using bmp As New Bitmap(chart.Width, chart.Height)
-                    chart.DrawToBitmap(bmp, New Rectangle(0, 0, chart.Width, chart.Height))
-
-                    Dim targetWidth As Integer = e.MarginBounds.Width
-                    Dim targetHeight As Integer = CInt(bmp.Height * (targetWidth / bmp.Width))
-
-                    If y + targetHeight > e.MarginBounds.Bottom Then
-                        ' Simplified: Don't overflow page
-                        targetHeight = e.MarginBounds.Bottom - y - 10
-                        targetWidth = CInt(bmp.Width * (targetHeight / bmp.Height))
-                    End If
-
-                    If targetWidth > 0 And targetHeight > 0 Then
-                        g.DrawImage(bmp, marginX, y, targetWidth, targetHeight)
-                        y += targetHeight + 40
-                    End If
+                     chart.DrawToBitmap(bmp, New Rectangle(0, 0, chart.Width, chart.Height))
+                     g.DrawImage(bmp, New Rectangle(leftMargin, y, targetWidth, targetHeight))
                 End Using
             Catch
+                 g.DrawString("[Chart Rendering Error]", fontRow, Brushes.Red, leftMargin, y)
             End Try
-        Next
+            
+            y += targetHeight + 30
+            m_ChartIndex += 1
+        End While
 
-        ' Print all visible DataGridViews
-        For Each grid In activeGrids
-            If Not grid.Visible Then Continue For
 
+        ' ---------------------------------------------------------
+        ' 4. DATAGRIDVIEWS (Zebra Striped Table)
+        ' ---------------------------------------------------------
+        While m_GridIndex < activeGrids.Count
+            Dim grid = activeGrids(m_GridIndex)
+            If Not grid.Visible OrElse grid.Columns.Count = 0 Then
+                m_GridIndex += 1
+                m_RowIndex = 0
+                Continue While
+            End If
+
+            ' --- Calculate Column Widths ---
             Dim colWidths As New List(Of Integer)
             Dim totalGridWidth As Integer = 0
-
+            Dim visibleCols As New List(Of DataGridViewColumn)
+            
             For Each col As DataGridViewColumn In grid.Columns
                 If col.Visible Then
-                    colWidths.Add(col.Width)
+                    visibleCols.Add(col)
                     totalGridWidth += col.Width
                 End If
             Next
-
-            If totalGridWidth > 0 Then
-                Dim scaleFactor As Single = e.MarginBounds.Width / totalGridWidth
-                Dim currentX As Integer = marginX
-
-                ' Header
-                Dim headerHeight As Integer = 35
-                g.FillRectangle(New SolidBrush(Color.FromArgb(240, 240, 240)), New Rectangle(marginX, y, e.MarginBounds.Width, headerHeight))
-
-                Dim colIndex As Integer = 0
-                For i As Integer = 0 To grid.Columns.Count - 1
-                    Dim col = grid.Columns(i)
-                    If col.Visible Then
-                        Dim w As Integer = CInt(colWidths(colIndex) * scaleFactor)
-                        g.DrawString(col.HeaderText, fontBold, Brushes.Black, New RectangleF(currentX + 5, y + 8, w - 5, headerHeight - 8))
-                        g.DrawRectangle(Pens.Gray, currentX, y, w, headerHeight)
-                        currentX += w
-                        colIndex += 1
-                    End If
-                Next
-                y += headerHeight
-
-                ' Rows
-                For rowIdx As Integer = 0 To grid.Rows.Count - 1
-                    Dim row = grid.Rows(rowIdx)
-                    If row.IsNewRow Then Continue For
-                    If y + 30 > e.MarginBounds.Bottom Then Exit For ' Simplified pagination
-
-                    currentX = marginX
-                    colIndex = 0
-                    For i As Integer = 0 To grid.Columns.Count - 1
-                        Dim col = grid.Columns(i)
-                        If col.Visible Then
-                            Dim w As Integer = CInt(colWidths(colIndex) * scaleFactor)
-                            Dim val = If(row.Cells(i).Value IsNot Nothing, row.Cells(i).Value.ToString(), "")
-                            g.DrawString(val, fontTable, Brushes.Black, New RectangleF(currentX + 5, y + 5, w - 10, 20))
-                            g.DrawRectangle(Pens.LightGray, currentX, y, w, 25)
-                            currentX += w
-                            colIndex += 1
-                        End If
-                    Next
-                    y += 25
-                Next
-                y += 40
+            
+            If totalGridWidth = 0 Then
+                 m_GridIndex += 1
+                 Continue While
             End If
-        Next
 
-        ' Footer
-        Dim footerY As Integer = e.PageBounds.Height - 60
-        g.DrawLine(Pens.LightGray, marginX, footerY, e.MarginBounds.Right, footerY)
-        g.DrawString("Generated by Tabeya System - Official Report", fontSubHeader, Brushes.LightGray, marginX, footerY + 10)
+            Dim scaleFactor As Single = contentWidth / totalGridWidth
+
+            ' --- Print Grid Header (If starting new grid OR new page) ---
+            ' We re-print headers on new pages for continuity
+            Dim headerHeight As Integer = 30
+            
+            ' Check if we even have space for header + 1 row
+            If y + headerHeight + 25 > bottomMargin Then
+                e.HasMorePages = True
+                Return
+            End If
+            
+            ' Draw Header Background
+            g.FillRectangle(New SolidBrush(headerBg), New Rectangle(leftMargin, y, contentWidth, headerHeight))
+            g.DrawRectangle(penLine, New Rectangle(leftMargin, y, contentWidth, headerHeight))
+
+            Dim curX As Single = leftMargin
+            For Each col In visibleCols
+                Dim colW As Single = col.Width * scaleFactor
+                Dim format As New StringFormat() With {.Alignment = StringAlignment.Near, .LineAlignment = StringAlignment.Center}
+                
+                ' Right align headers for numeric columns? Optional. keeping Left for headers usually looks better.
+                g.DrawString(col.HeaderText, fontHeader, Brushes.Black, New RectangleF(curX + 5, y, colW - 10, headerHeight), format)
+                curX += colW
+            Next
+            y += headerHeight
+
+            ' --- Print Rows ---
+            While m_RowIndex < grid.Rows.Count
+                Dim row = grid.Rows(m_RowIndex)
+                If row.IsNewRow Then
+                     m_RowIndex += 1
+                     Continue While
+                End If
+                
+                Dim rowHeight As Integer = 25
+                
+                ' Check Overflow
+                If y + rowHeight > bottomMargin Then
+                    e.HasMorePages = True
+                    Return ' Continue this grid on next page
+                End If
+
+                ' Alternating Colors
+                If m_RowIndex Mod 2 = 1 Then
+                    g.FillRectangle(New SolidBrush(Color.FromArgb(250, 250, 250)), New Rectangle(leftMargin, y, contentWidth, rowHeight))
+                End If
+                
+                curX = leftMargin
+                For Each col In visibleCols
+                    Dim colW As Single = col.Width * scaleFactor
+                    Dim val = If(row.Cells(col.Index).Value, "").ToString()
+                    
+                    ' Align text based on grid column alignment (Right for money usually)
+                    Dim format As New StringFormat() With {.LineAlignment = StringAlignment.Center}
+                    If col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight OrElse 
+                       col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight OrElse
+                       col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight Then
+                        format.Alignment = StringAlignment.Far
+                    ElseIf col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter Then
+                        format.Alignment = StringAlignment.Center
+                    Else
+                        format.Alignment = StringAlignment.Near
+                    End If
+                    
+                    g.DrawString(val, fontRow, Brushes.Black, New RectangleF(curX + 5, y, colW - 10, rowHeight), format)
+                    
+                    ' Vertical Grid Lines (Optional - keeping clean look without them for now, just outer border?)
+                    ' g.DrawLine(penLine, curX + colW, y, curX + colW, y + rowHeight)
+                    
+                    curX += colW
+                Next
+                
+                ' Row Bottom Line
+                g.DrawLine(New Pen(Color.FromArgb(240, 240, 240)), leftMargin, y + rowHeight, rightMargin, y + rowHeight)
+                
+                y += rowHeight
+                m_RowIndex += 1
+            End While
+            
+            ' Grid Finished
+            m_GridIndex += 1
+            m_RowIndex = 0
+            y += 20 ' Spacer after grid
+            
+        End While
+
+        ' ---------------------------------------------------------
+        ' 4. FOOTER (Every Page)
+        ' ---------------------------------------------------------
+        Dim footerY As Integer = e.PageBounds.Height - 40
+        g.DrawLine(penLine, leftMargin, footerY, rightMargin, footerY)
+        g.DrawString("Tabeya System Professional Report", fontFooter, Brushes.Gray, leftMargin, footerY + 5)
+        g.DrawString($"Page {m_PageIndex}", fontFooter, Brushes.Gray, rightMargin - 50, footerY + 5)
+        
+        e.HasMorePages = False
     End Sub
 
     Private Sub Reports_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize

@@ -36,8 +36,7 @@ Public Class FormEmployeeAttendance
             ' Add double-click handler for payroll link
             AddHandler DataGridView1.CellDoubleClick, AddressOf DataGridView1_CellDoubleClick
 
-            ' Create a help button programmatically
-            AddHelpButton()
+
         Catch ex As Exception
             MessageBox.Show("Initialization Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
@@ -123,7 +122,7 @@ Public Class FormEmployeeAttendance
                 .CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal
                 .GridColor = Color.FromArgb(241, 245, 249)
                 .DefaultCellStyle.SelectionBackColor = Color.FromArgb(248, 250, 252)
-                .DefaultCellStyle.SelectionForeColor = Color.FromArgb(99, 102, 241)
+                .DefaultCellStyle.SelectionForeColor = Color.Black ' Changed to Black for better readability on select
                 .DefaultCellStyle.Font = New Font("Segoe UI", 9.5F)
                 .ColumnHeadersDefaultCellStyle.BackColor = Color.White
                 .ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(71, 85, 105)
@@ -136,14 +135,23 @@ Public Class FormEmployeeAttendance
             ' Clear existing columns
             DataGridView1.Columns.Clear()
 
-            ' Add columns programmatically - EmployeeID is now VISIBLE for export to work
-            DataGridView1.Columns.Add(CreateColumn("EmployeeID", "ID", 60, False))
-            DataGridView1.Columns.Add(CreateColumn("EmployeeName", "Employee", 180))
-            DataGridView1.Columns.Add(CreateColumn("Position", "Position", 150))
-            DataGridView1.Columns.Add(CreateColumn("RegularHours", "Regular Hours", 120))
-            DataGridView1.Columns.Add(CreateColumn("OvertimeHours", "Overtime Hours", 130))
-            DataGridView1.Columns.Add(CreateColumn("Absences", "Absences", 100))
+            ' Add columns to match the design EXACTLY
+            DataGridView1.Columns.Add(CreateColumn("AttendanceDate", "Date", 120, False, "MMM dd, yyyy"))
+            DataGridView1.Columns.Add(CreateColumn("EmployeeName", "Employee", 200))
+            DataGridView1.Columns.Add(CreateColumn("Shift", "Shift", 100))
+            DataGridView1.Columns.Add(CreateColumn("TimeIn", "Time In", 100, False, "hh:mm tt"))
+            DataGridView1.Columns.Add(CreateColumn("TimeOut", "Time Out", 100, False, "hh:mm tt"))
+            DataGridView1.Columns.Add(CreateColumn("WorkHours", "Total Hours", 100))
+            DataGridView1.Columns.Add(CreateColumn("Overtime", "Overtime", 100))
             DataGridView1.Columns.Add(CreateColumn("Status", "Status", 120))
+
+            ' Hidden ID column for reference
+            DataGridView1.Columns.Add(CreateColumn("AttendanceID", "ID", 0, True))
+
+            ' Enable sorting for all columns
+            For Each col As DataGridViewColumn In DataGridView1.Columns
+                col.SortMode = DataGridViewColumnSortMode.Automatic
+            Next
 
         Catch ex As Exception
             MessageBox.Show("Error setting up grid: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -153,7 +161,7 @@ Public Class FormEmployeeAttendance
     '====================================
     ' CREATE COLUMN HELPER
     '====================================
-    Private Function CreateColumn(name As String, headerText As String, width As Integer, Optional isHidden As Boolean = False) As DataGridViewTextBoxColumn
+    Private Function CreateColumn(name As String, headerText As String, width As Integer, Optional isHidden As Boolean = False, Optional format As String = "") As DataGridViewTextBoxColumn
         Dim col As New DataGridViewTextBoxColumn With {
             .Name = name,
             .DataPropertyName = name,
@@ -164,13 +172,69 @@ Public Class FormEmployeeAttendance
                 .Alignment = DataGridViewContentAlignment.MiddleCenter
             }
         }
+        If Not String.IsNullOrEmpty(format) Then
+            col.DefaultCellStyle.Format = format
+        End If
         Return col
     End Function
 
+    Private Function GetDateFilterCondition(prefix As String) As String
+        Dim dateField As String = prefix & ".AttendanceDate"
+        Dim condition As String = ""
+
+        ' NOTE: Since there is no specific "Day" picker in the Reports module,
+        ' "Daily" and "Monthly" will both filter by the selected Month and Year.
+        ' This allows the user to see all daily logs for the selected month.
+        Select Case Reports.SelectedPeriod
+            Case "Daily"
+                ' Filter by the specific date selected in the DateTimePicker
+                If dtpFilter IsNot Nothing Then
+                    condition = $"DATE({dateField}) = '{dtpFilter.Value:yyyy-MM-dd}'"
+                Else
+                    ' Fallback if control isn't ready
+                    condition = $"DATE({dateField}) = CURDATE()"
+                End If
+
+            Case "Monthly"
+                ' Start with Year filter
+                condition = $"YEAR({dateField}) = {Reports.SelectedYear}"
+
+                ' Add Month filter if meaningful (Reports.SelectedMonth 0 might mean 'All' or Jan, checking Reports.vb logic)
+                ' In Reports.vb: 0 = "All Months"?, 1=Jan? 
+                ' Let's check Reports.vb init: 
+                ' cmbMonth.Items.Add("All Months") ' Index 0
+                ' So Index 0 is All Months. Index 1 is January? 
+                ' The loop: For i = 0 To 11 ... items.Add(monthname). 
+                ' So "All Months" is index 0. January is index 1.
+                ' Reports.SelectedMonth is simply `cmbMonth.SelectedIndex`.
+
+                If Reports.SelectedMonth > 0 Then
+                    condition &= $" AND MONTH({dateField}) = {Reports.SelectedMonth}"
+                End If
+
+            Case "Weekly"
+                ' Show week containing the selected date in date picker
+                If dtpFilter IsNot Nothing Then
+                    condition = $"YEARWEEK({dateField}, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1)"
+                Else
+                    condition = $"YEARWEEK({dateField}, 1) = YEARWEEK(CURDATE(), 1)"
+                End If
+
+            Case "Yearly"
+                condition = $"YEAR({dateField}) = {Reports.SelectedYear}"
+        End Select
+
+        Return condition
+    End Function
+
     Private Function FetchTotalAttendanceCount(searchText As String) As Integer
-        Dim query As String = "SELECT COUNT(*) FROM employee WHERE EmploymentStatus IN ('Active', 'On Leave')"
+        Dim query As String = "SELECT COUNT(*) FROM employee_attendance a JOIN employee e ON a.EmployeeID = e.EmployeeID WHERE 1=1"
+
+        Dim dateFilter = GetDateFilterCondition("a")
+        If Not String.IsNullOrEmpty(dateFilter) Then query &= " AND " & dateFilter
+
         If Not String.IsNullOrEmpty(searchText) Then
-            query &= " AND (FirstName LIKE @search OR LastName LIKE @search OR Position LIKE @search)"
+            query &= " AND (e.FirstName LIKE @search OR e.LastName LIKE @search OR a.Status LIKE @search)"
         End If
 
         Try
@@ -180,48 +244,52 @@ Public Class FormEmployeeAttendance
                 If Not String.IsNullOrEmpty(searchText) Then
                     cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
                 End If
-                Return Convert.ToInt32(cmd.ExecuteScalar())
+                Dim result = cmd.ExecuteScalar()
+                Return If(IsDBNull(result), 0, Convert.ToInt32(result))
             End Using
         Finally
             closeConn()
         End Try
     End Function
 
-    Private Function FetchAttendanceStats(searchText As String) As Dictionary(Of String, Integer)
-        Dim stats As New Dictionary(Of String, Integer) From {
-            {"OnDuty", 0},
+    Private Function FetchAttendanceStats(searchText As String) As Dictionary(Of String, Object)
+        Dim stats As New Dictionary(Of String, Object) From {
+            {"TotalPresent", 0},
             {"Absences", 0},
-            {"OnLeave", 0}
+            {"LateInstances", 0},
+            {"TotalOvertime", 0.0}
         }
 
-        Dim query As String = "
+        Dim queryCounts As String = "
             SELECT 
-                COUNT(CASE WHEN EmploymentStatus = 'Active' THEN 1 END) as OnDuty,
-                SUM(CASE 
-                    WHEN EmploymentStatus = 'Active' AND Position = 'Waitress' THEN 1
-                    WHEN EmploymentStatus = 'Active' AND Position = 'Cashier' THEN 2
-                    WHEN EmploymentStatus = 'Active' AND Position = 'Server' THEN 1
-                    ELSE 0 END) as EstimatedAbsences,
-                COUNT(CASE WHEN EmploymentStatus = 'On Leave' THEN 1 END) as OnLeave
-            FROM employee 
-            WHERE EmploymentStatus IN ('Active', 'On Leave')"
+                COUNT(CASE WHEN Status = 'Present' THEN 1 END) as TotalPresent,
+                COUNT(CASE WHEN Status IN ('Absent', 'On Leave') THEN 1 END) as Absences,
+                COUNT(CASE WHEN Status = 'Late' THEN 1 END) as LateInstances,
+                SUM(CASE WHEN WorkHours > 8 THEN WorkHours - 8 ELSE 0 END) as TotalOvertime
+            FROM employee_attendance a 
+            JOIN employee e ON a.EmployeeID = e.EmployeeID
+            WHERE 1=1"
+
+        Dim dateFilter = GetDateFilterCondition("a")
+        If Not String.IsNullOrEmpty(dateFilter) Then queryCounts &= " AND " & dateFilter
 
         If Not String.IsNullOrEmpty(searchText) Then
-            query &= " AND (FirstName LIKE @search OR LastName LIKE @search OR Position LIKE @search)"
+            queryCounts &= " AND (e.FirstName LIKE @search OR e.LastName LIKE @search)"
         End If
 
         Try
             openConn()
-            Using cmd As New MySqlCommand(query, conn)
+            Using cmd As New MySqlCommand(queryCounts, conn)
                 cmd.CommandTimeout = 60
                 If Not String.IsNullOrEmpty(searchText) Then
                     cmd.Parameters.AddWithValue("@search", "%" & searchText & "%")
                 End If
                 Using reader = cmd.ExecuteReader()
                     If reader.Read() Then
-                        stats("OnDuty") = If(IsDBNull(reader("OnDuty")), 0, Convert.ToInt32(reader("OnDuty")))
-                        stats("Absences") = If(IsDBNull(reader("EstimatedAbsences")), 0, Convert.ToInt32(reader("EstimatedAbsences")))
-                        stats("OnLeave") = If(IsDBNull(reader("OnLeave")), 0, Convert.ToInt32(reader("OnLeave")))
+                        stats("TotalPresent") = If(IsDBNull(reader("TotalPresent")), 0, Convert.ToInt32(reader("TotalPresent")))
+                        stats("Absences") = If(IsDBNull(reader("Absences")), 0, Convert.ToInt32(reader("Absences")))
+                        stats("LateInstances") = If(IsDBNull(reader("LateInstances")), 0, Convert.ToInt32(reader("LateInstances")))
+                        stats("TotalOvertime") = If(IsDBNull(reader("TotalOvertime")), 0.0, Convert.ToDouble(reader("TotalOvertime")))
                     End If
                 End Using
             End Using
@@ -234,50 +302,46 @@ Public Class FormEmployeeAttendance
     '====================================
     ' LOAD EMPLOYEE DATA (SIMULATED ATTENDANCE)
     '====================================
+    '====================================
+    ' LOAD EMPLOYEE DATA (REAL ATTENDANCE)
+    '====================================
     Private Function LoadAttendanceDataFromDB(searchText As String, offset As Integer, limit As Integer) As DataTable
         Dim table As New DataTable()
         Try
             openConn()
             Dim query As String = "
                 SELECT 
-                    e.EmployeeID,
+                    a.AttendanceID,
+                    a.AttendanceDate,
                     CONCAT(e.FirstName, ' ', e.LastName) AS EmployeeName,
-                    e.Position,
+                    a.TimeIn,
+                    a.TimeOut,
+                    a.WorkHours,
+                    a.Status,
                     CASE 
-                        WHEN e.EmploymentStatus = 'Active' THEN 40
-                        WHEN e.EmploymentStatus = 'On Leave' THEN 32
-                        ELSE 0
-                    END AS RegularHours,
+                        WHEN a.TimeIn IS NULL THEN 'Unknown'
+                        WHEN HOUR(a.TimeIn) < 12 THEN 'Morning'
+                        WHEN HOUR(a.TimeIn) >= 12 AND HOUR(a.TimeIn) < 17 THEN 'Afternoon'
+                        ELSE 'Evening'
+                    END as Shift,
                     CASE 
-                        WHEN e.Position IN ('Chef', 'Cook') THEN 12
-                        WHEN e.Position IN ('Server', 'Waitress') THEN 5
-                        WHEN e.Position = 'Cashier' THEN 3
-                        ELSE 0
-                    END AS OvertimeHours,
-                    CASE 
-                        WHEN e.EmploymentStatus = 'Active' AND e.Position IN ('Chef', 'Cook') THEN 0
-                        WHEN e.Position IN ('Waitress', 'Server') THEN 1
-                        WHEN e.Position = 'Cashier' THEN 2
-                        WHEN e.EmploymentStatus = 'On Leave' THEN 3
-                        ELSE 0
-                    END AS Absences,
-                    CASE 
-                        WHEN e.EmploymentStatus = 'On Leave' THEN 'On Leave'
-                        WHEN e.Position IN ('Chef', 'Cook') THEN 'Perfect'
-                        WHEN e.Position IN ('Waitress', 'Server') THEN 'Good'
-                        WHEN e.Position = 'Cashier' THEN 'Fair'
-                        ELSE 'Standard'
-                    END AS Status
+                        WHEN IFNULL(a.WorkHours, 0) > 8 THEN IFNULL(a.WorkHours, 0) - 8 
+                        ELSE 0 
+                    END as Overtime
                 FROM 
-                    employee e
-                WHERE 
-                    e.EmploymentStatus IN ('Active', 'On Leave') "
+                    employee_attendance a
+                JOIN 
+                    employee e ON a.EmployeeID = e.EmployeeID
+                WHERE 1=1 "
+
+            Dim dateFilter = GetDateFilterCondition("a")
+            If Not String.IsNullOrEmpty(dateFilter) Then query &= " AND " & dateFilter
 
             If Not String.IsNullOrEmpty(searchText) Then
-                query &= " AND (e.FirstName LIKE @search OR e.LastName LIKE @search OR e.Position LIKE @search) "
+                query &= " AND (e.FirstName LIKE @search OR e.LastName LIKE @search OR a.Status LIKE @search) "
             End If
 
-            query &= " ORDER BY e.FirstName, e.LastName LIMIT @limit OFFSET @offset"
+            query &= " ORDER BY a.AttendanceDate DESC, a.TimeIn DESC LIMIT @limit OFFSET @offset"
 
             Using cmd As New MySqlCommand(query, conn)
                 cmd.CommandTimeout = 60
@@ -301,18 +365,36 @@ Public Class FormEmployeeAttendance
     '====================================
     ' UPDATE SUMMARY TILES
     '====================================
-    Private Sub UpdateSummaryTiles(stats As Dictionary(Of String, Integer), totalCount As Integer)
+    Private Sub UpdateSummaryTiles(stats As Dictionary(Of String, Object), totalCount As Integer)
         If Me.InvokeRequired Then
             Me.Invoke(Sub() UpdateSummaryTiles(stats, totalCount))
             Return
         End If
 
         Try
-            Label4.Text = stats("OnDuty").ToString("N0")
-            Label6.Text = stats("Absences").ToString("N0")
-            Label7.Text = stats("OnLeave").ToString("N0")
-
-            LabelHeader.Text = String.Format("Attendance Report - {0} (Total: {1})", Reports.SelectedPeriod, totalCount.ToString("N0"))
+            ' Update with new keys from FetchAttendanceStats
+            ' Layout assumption: 
+            ' Label4 -> Total Present
+            ' Label6 -> Absences
+            ' Label7 -> Late Instances (Was OnLeave)
+            ' Need a 4th label for Overtime? The design shows 4 cards. 
+            ' Existing code only updated 3 labels. I'll check if there's a 4th label available or reuse.
+            ' Let's look at Designer file implied structure or existing usage.
+            ' Existing: Label4, Label6, Label7. 
+            ' If user only has 3 cards, I'll map: Present, Absences, Late.
+            
+            Label4.Text = Convert.ToInt32(stats("TotalPresent")).ToString("N0")
+            Label6.Text = Convert.ToInt32(stats("Absences")).ToString("N0")
+            Label7.Text = Convert.ToInt32(stats("LateInstances")).ToString("N0")
+            
+            ' If there is a label for Overtime, update it. If not, maybe create dynamic or ignore for now.
+            ' For now, I'll assume 3 cards as per existing code structure.
+            
+            Dim headerText As String = $"Attendance Tracking - {Reports.SelectedPeriod}"
+            If Reports.SelectedPeriod = "Daily" AndAlso dtpFilter IsNot Nothing Then
+                headerText &= $" ({dtpFilter.Value:MMM dd, yyyy})"
+            End If
+            LabelHeader.Text = headerText
         Catch ex As Exception
             ' Silent fail
         End Try
@@ -327,46 +409,54 @@ Public Class FormEmployeeAttendance
                 Dim statusCell As Object = row.Cells("Status").Value
                 Dim status As String = If(statusCell IsNot Nothing, statusCell.ToString(), "")
 
+                ' Style based on Status
+                Dim statusStyle As New DataGridViewCellStyle()
+                statusStyle.Font = New Font("Segoe UI Semibold", 9.0F, FontStyle.Bold)
+                
                 Select Case status
-                    Case "Perfect"
-                        row.Cells("Status").Style.ForeColor = Color.FromArgb(16, 185, 129)
-                        row.Cells("Status").Style.Font = New Font("Segoe UI Semibold", 9.0F, FontStyle.Bold)
+                    Case "Present"
+                        statusStyle.ForeColor = Color.FromArgb(16, 185, 129) ' Green
+                        statusStyle.BackColor = Color.FromArgb(209, 250, 229)
+                        
+                    Case "Late"
+                        statusStyle.ForeColor = Color.FromArgb(245, 158, 11) ' Orange
+                         statusStyle.BackColor = Color.FromArgb(254, 243, 199)
 
-                    Case "Good"
-                        row.Cells("Status").Style.ForeColor = Color.FromArgb(59, 130, 246)
-                        row.Cells("Status").Style.Font = New Font("Segoe UI Semibold", 9.0F, FontStyle.Bold)
-
-                    Case "Fair"
-                        row.Cells("Status").Style.ForeColor = Color.FromArgb(245, 158, 11)
-                        row.Cells("Status").Style.Font = New Font("Segoe UI Semibold", 9.0F, FontStyle.Bold)
+                    Case "Absent"
+                        statusStyle.ForeColor = Color.FromArgb(239, 68, 68) ' Red
+                        statusStyle.BackColor = Color.FromArgb(254, 226, 226)
 
                     Case "On Leave"
-                        row.Cells("Status").Style.ForeColor = Color.FromArgb(139, 92, 246)
-                        row.Cells("Status").Style.Font = New Font("Segoe UI Semibold", 9.0F, FontStyle.Bold)
+                        statusStyle.ForeColor = Color.FromArgb(139, 92, 246) ' Purple
+                        statusStyle.BackColor = Color.FromArgb(237, 233, 254)
 
                     Case Else
-                        row.Cells("Status").Style.ForeColor = Color.FromArgb(100, 116, 139)
+                        statusStyle.ForeColor = Color.FromArgb(100, 116, 139)
                 End Select
+                
+                row.Cells("Status").Style = statusStyle
 
-                For Each cell As DataGridViewCell In row.Cells
-                    If cell.OwningColumn.Name = "RegularHours" OrElse
-                       cell.OwningColumn.Name = "OvertimeHours" OrElse
-                       cell.OwningColumn.Name = "Absences" Then
+                ' Format Time columns - REMOVED: Now handled by DefaultCellStyle.Format in SetupDataGridView
+                ' This prevents conflicts and ensures proper sorting/rendering.
+                
+                ' Visual indicator for Overtime - SAFELY CHECK FOR NULL
+                Dim otVal As Double = 0
+                Dim otCellVal = row.Cells("Overtime").Value
 
-                        Dim value As Integer = 0
-                        Dim cellVal As Object = cell.Value
-                        If cellVal IsNot Nothing AndAlso Integer.TryParse(cellVal.ToString(), value) Then
-                            If cell.OwningColumn.Name = "Absences" AndAlso value > 0 Then
-                                cell.Style.ForeColor = Color.FromArgb(231, 76, 60)
-                                cell.Style.Font = New Font("Segoe UI", 9.0F, FontStyle.Bold)
-                            End If
-                        End If
-                    End If
-                Next
+                If otCellVal IsNot Nothing AndAlso
+                   otCellVal IsNot DBNull.Value AndAlso
+                   Double.TryParse(otCellVal.ToString(), otVal) AndAlso
+                   otVal > 0 Then
+
+                    row.Cells("Overtime").Style.ForeColor = Color.Green
+                    row.Cells("Overtime").Style.Font = New Font("Segoe UI", 9.0F, FontStyle.Bold)
+                    row.Cells("Overtime").Value = "+" & otVal.ToString("0.##")
+                End If
             Next
 
         Catch ex As Exception
-            ' Silent fail for formatting errors
+            ' Silent fail for formatting errors but log to console if debugging
+            Console.WriteLine(ex.Message)
         End Try
     End Sub
 
@@ -428,58 +518,24 @@ Public Class FormEmployeeAttendance
 
     Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs)
         If e.RowIndex >= 0 Then
-            Dim employeeName As String = DataGridView1.Rows(e.RowIndex).Cells("EmployeeName").Value.ToString()
-            Dim result = MessageBox.Show($"Would you like to view the Payroll record for {employeeName}?", "Cross-reference Payroll", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
+            ' Ensure column exists before accessing
+            If DataGridView1.Columns.Contains("EmployeeName") Then
+                Dim employeeName As String = DataGridView1.Rows(e.RowIndex).Cells("EmployeeName").Value.ToString()
+                Dim result = MessageBox.Show($"Would you like to view the Payroll record for {employeeName}?", "Cross-reference Payroll", MessageBoxButtons.YesNo, MessageBoxIcon.Information)
 
-            If result = DialogResult.Yes Then
-                Try
-                    Dim payrollForm As New FormPayroll()
-                    payrollForm.Show()
-                Catch ex As Exception
-                    MessageBox.Show("Could not open payroll form: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
+                If result = DialogResult.Yes Then
+                    Try
+                        Dim payrollForm As New FormPayroll()
+                        payrollForm.Show()
+                    Catch ex As Exception
+                        MessageBox.Show("Could not open payroll form: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
+                End If
             End If
         End If
     End Sub
 
-    Private Sub AddHelpButton()
-        Try
-            Dim btnHelp As New Button()
-            btnHelp.Text = "   Report Guide"
-            btnHelp.Image = Nothing ' Or set a help icon if available
-            btnHelp.Font = New Font("Segoe UI Semibold", 10.0F, FontStyle.Bold)
-            btnHelp.BackColor = Color.FromArgb(71, 85, 105)
-            btnHelp.ForeColor = Color.White
-            btnHelp.FlatStyle = FlatStyle.Flat
-            btnHelp.FlatAppearance.BorderSize = 0
-            btnHelp.Size = New Size(150, 45)
-            btnHelp.Location = New Point(btnExportPdf.Left - 160, btnExportPdf.Top)
-            btnHelp.Cursor = Cursors.Hand
-            btnHelp.Anchor = AnchorStyles.Top Or AnchorStyles.Right
 
-            AddHandler btnHelp.Click, Sub()
-                                          Dim guide As String = "What You'll Do in This Report:" & vbCrLf & vbCrLf &
-                    "1. Monitor Daily Attendance - Check who's present vs. on leave." & vbCrLf &
-                    "2. Track Work Hours - Verify regular and overtime hours." & vbCrLf &
-                    "3. Identify Attendance Patterns - High absences marked in RED." & vbCrLf &
-                    "4. Review Status Ratings:" & vbCrLf &
-                    "   • Perfect (Green) - Chefs/Cooks (0 absences)" & vbCrLf &
-                    "   • Good (Blue) - Waitresses/Servers" & vbCrLf &
-                    "   • Fair (Orange) - Cashiers" & vbCrLf &
-                    "   • On Leave (Purple) - Approved status" & vbCrLf &
-                    "5. Search & Filter - Use top search for name or position." & vbCrLf &
-                    "6. Export Data - Download CSV for Payroll/HR." & vbCrLf &
-                    "7. Navigate Pages - 50 employees per page." & vbCrLf &
-                    "8. Cross-reference - Double-click a row to check Payroll."
-
-                                          MessageBox.Show(guide, "Attendance Report Instructions", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                                      End Sub
-
-            RoundedPane24.Controls.Add(btnHelp)
-            btnHelp.BringToFront()
-        Catch
-        End Try
-    End Sub
 
     Private Sub TextBoxSearch_Enter(sender As Object, e As EventArgs) Handles TextBoxSearch.Enter
         If TextBoxSearch.Text = "Search employees..." Then
@@ -505,6 +561,27 @@ Public Class FormEmployeeAttendance
     ' EXPORT BUTTON
     '====================================
     '====================================
+    ' DATE FILTER CHANGED
+    '====================================
+    Private Async Sub dtpFilter_ValueChanged(sender As Object, e As EventArgs) Handles dtpFilter.ValueChanged
+        If Not isInitialLoad Then
+            Await RefreshAttendanceAsync(True)
+        End If
+    End Sub
+
+    Private Sub ConfigureDateFilter()
+        If dtpFilter Is Nothing Then Return
+
+        Select Case Reports.SelectedPeriod
+            Case "Daily", "Weekly"
+                dtpFilter.Visible = True
+            Case Else
+                dtpFilter.Visible = False
+        End Select
+    End Sub
+
+
+    '====================================
     ' EXPORT PDF
     '====================================
     Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click
@@ -519,8 +596,10 @@ Public Class FormEmployeeAttendance
     ' REFRESH DATA (PUBLIC METHOD)
     '====================================
     Public Async Sub RefreshData()
+        ConfigureDateFilter()
         Await RefreshAttendanceAsync(True)
     End Sub
+
 
 
 End Class

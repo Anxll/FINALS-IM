@@ -23,19 +23,18 @@ Partial Class FormPayroll
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormPayroll))
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim DataPoint1 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 2150000.0R)
-        Dim DataPoint2 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 2280000.0R)
-        Dim DataPoint3 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 2350000.0R)
-        Dim DataPoint4 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 2240000.0R)
-        Dim DataPoint5 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 2380000.0R)
-        Dim DataPoint6 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 2450000.0R)
+
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
         Me.btnExportPdf = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.dtpFilter = New System.Windows.Forms.DateTimePicker()
+        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.btnProcessPayout = New System.Windows.Forms.Button()
+        Me.labelHeader = New System.Windows.Forms.Label()
+        Me.btnPrev = New System.Windows.Forms.Button()
+        Me.btnNext = New System.Windows.Forms.Button()
+        Me.lblPageStatus = New System.Windows.Forms.Label()
+        Me.PaginationContainer = New System.Windows.Forms.Panel()
         Me.RoundedPane23 = New InformationManagement.RoundedPane2()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -55,7 +54,7 @@ Partial Class FormPayroll
         Me.RoundedPane26 = New InformationManagement.RoundedPane2()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.RoundedPane24.SuspendLayout()
-        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
+
         Me.RoundedPane23.SuspendLayout()
         Me.RoundedPane22.SuspendLayout()
         Me.RoundedPane21.SuspendLayout()
@@ -72,15 +71,19 @@ Partial Class FormPayroll
         Me.RoundedPane24.AutoScroll = True
         Me.RoundedPane24.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane24.BorderThickness = 1
+        Me.RoundedPane24.Controls.Add(Me.PaginationContainer)
+        Me.RoundedPane24.Controls.Add(Me.btnProcessPayout)
+        Me.RoundedPane24.Controls.Add(Me.dtpFilter)
+        Me.RoundedPane24.Controls.Add(Me.DataGridView1)
+        Me.RoundedPane24.Controls.Add(Me.labelHeader)
         Me.RoundedPane24.Controls.Add(Me.btnExportPdf)
-        Me.RoundedPane24.Controls.Add(Me.Label10)
-        Me.RoundedPane24.Controls.Add(Me.Chart1)
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
         Me.RoundedPane24.Location = New System.Drawing.Point(30, 197)
         Me.RoundedPane24.Name = "RoundedPane24"
         Me.RoundedPane24.Size = New System.Drawing.Size(1045, 393)
         Me.RoundedPane24.TabIndex = 7
+        '
         '
         'btnExportPdf
         '
@@ -91,7 +94,7 @@ Partial Class FormPayroll
         Me.btnExportPdf.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold)
         Me.btnExportPdf.ForeColor = System.Drawing.Color.White
         Me.btnExportPdf.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
-        Me.btnExportPdf.Location = New System.Drawing.Point(903, 20)
+        Me.btnExportPdf.Location = New System.Drawing.Point(920, 20)
         Me.btnExportPdf.Name = "btnExportPdf"
         Me.btnExportPdf.Size = New System.Drawing.Size(104, 30)
         Me.btnExportPdf.TabIndex = 10
@@ -112,36 +115,104 @@ Partial Class FormPayroll
         Me.Label10.TabIndex = 7
         Me.Label10.Text = "Payroll Summary"
         '
-        'Chart1
+        'btnProcessPayout
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend1)
-        Me.Chart1.Location = New System.Drawing.Point(24, 63)
-        Me.Chart1.Name = "Chart1"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Color = System.Drawing.Color.MediumSlateBlue
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        DataPoint1.AxisLabel = "Jan"
-        DataPoint2.AxisLabel = "Feb"
-        DataPoint3.AxisLabel = "Mar"
-        DataPoint4.AxisLabel = "Apr"
-        DataPoint5.AxisLabel = "May"
-        DataPoint6.AxisLabel = "Jun"
-        Series1.Points.Add(DataPoint1)
-        Series1.Points.Add(DataPoint2)
-        Series1.Points.Add(DataPoint3)
-        Series1.Points.Add(DataPoint4)
-        Series1.Points.Add(DataPoint5)
-        Series1.Points.Add(DataPoint6)
-        Series1.YValueMembers = "650000"
-        Series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Int64
-        Me.Chart1.Series.Add(Series1)
-        Me.Chart1.Size = New System.Drawing.Size(999, 300)
-        Me.Chart1.TabIndex = 6
-        Me.Chart1.Text = "Chart1"
+        Me.btnProcessPayout.BackColor = System.Drawing.Color.FromArgb(CType(CType(55, Byte), Integer), CType(CType(65, Byte), Integer), CType(CType(81, Byte), Integer))
+        Me.btnProcessPayout.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnProcessPayout.FlatAppearance.BorderSize = 0
+        Me.btnProcessPayout.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnProcessPayout.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnProcessPayout.ForeColor = System.Drawing.Color.White
+        Me.btnProcessPayout.Location = New System.Drawing.Point(785, 20)
+        Me.btnProcessPayout.Name = "btnProcessPayout"
+        Me.btnProcessPayout.Size = New System.Drawing.Size(125, 32)
+        Me.btnProcessPayout.TabIndex = 8
+        Me.btnProcessPayout.Text = "Process Payout"
+        Me.btnProcessPayout.UseVisualStyleBackColor = False
+        '
+        'dtpFilter
+        '
+        Me.dtpFilter.CalendarFont = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.dtpFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.dtpFilter.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpFilter.Location = New System.Drawing.Point(595, 20)
+        Me.dtpFilter.Name = "dtpFilter"
+        Me.dtpFilter.Size = New System.Drawing.Size(180, 30)
+        Me.dtpFilter.TabIndex = 15
+        '
+        'DataGridView1
+        '
+        Me.DataGridView1.AllowUserToAddRows = False
+        Me.DataGridView1.AllowUserToDeleteRows = False
+        Me.DataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.DataGridView1.BackgroundColor = System.Drawing.Color.White
+        Me.DataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridView1.Location = New System.Drawing.Point(35, 63)
+        Me.DataGridView1.Name = "DataGridView1"
+        Me.DataGridView1.ReadOnly = True
+        Me.DataGridView1.Size = New System.Drawing.Size(972, 300)
+        Me.DataGridView1.TabIndex = 6
+        '
+        'PaginationContainer
+        '
+        Me.PaginationContainer.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PaginationContainer.Controls.Add(Me.btnNext)
+        Me.PaginationContainer.Controls.Add(Me.btnPrev)
+        Me.PaginationContainer.Controls.Add(Me.lblPageStatus)
+        Me.PaginationContainer.Location = New System.Drawing.Point(24, 345)
+        Me.PaginationContainer.Name = "PaginationContainer"
+        Me.PaginationContainer.Size = New System.Drawing.Size(945, 40)
+        Me.PaginationContainer.TabIndex = 12
+        '
+        'btnNext
+        '
+        Me.btnNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnNext.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNext.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnNext.Location = New System.Drawing.Point(855, 5)
+        Me.btnNext.Name = "btnNext"
+        Me.btnNext.Size = New System.Drawing.Size(80, 30)
+        Me.btnNext.TabIndex = 2
+        Me.btnNext.Text = "Next →"
+        Me.btnNext.UseVisualStyleBackColor = True
+        '
+        'btnPrev
+        '
+        Me.btnPrev.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPrev.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.btnPrev.Location = New System.Drawing.Point(765, 5)
+        Me.btnPrev.Name = "btnPrev"
+        Me.btnPrev.Size = New System.Drawing.Size(80, 30)
+        Me.btnPrev.TabIndex = 1
+        Me.btnPrev.Text = "← Prev"
+        Me.btnPrev.UseVisualStyleBackColor = True
+        '
+        'lblPageStatus
+        '
+        Me.lblPageStatus.AutoSize = True
+        Me.lblPageStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.lblPageStatus.ForeColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(116, Byte), Integer), CType(CType(139, Byte), Integer))
+        Me.lblPageStatus.Location = New System.Drawing.Point(0, 10)
+        Me.lblPageStatus.Name = "lblPageStatus"
+        Me.lblPageStatus.Size = New System.Drawing.Size(158, 20)
+        Me.lblPageStatus.TabIndex = 0
+        Me.lblPageStatus.Text = "Page 1 of 1"
+        '
+        'labelHeader
+        '
+        Me.labelHeader.AutoSize = True
+        Me.labelHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular)
+        Me.labelHeader.ForeColor = System.Drawing.Color.DimGray
+        Me.labelHeader.Location = New System.Drawing.Point(31, 25)
+        Me.labelHeader.Name = "labelHeader"
+        Me.labelHeader.Size = New System.Drawing.Size(155, 21)
+        Me.labelHeader.TabIndex = 9
+        Me.labelHeader.Text = "Payroll Computation"
         '
         'RoundedPane23
         '
@@ -380,7 +451,7 @@ Partial Class FormPayroll
         Me.Text = "FormPayroll"
         Me.RoundedPane24.ResumeLayout(False)
         Me.RoundedPane24.PerformLayout()
-        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
+
         Me.RoundedPane23.ResumeLayout(False)
         Me.RoundedPane23.PerformLayout()
         Me.RoundedPane22.ResumeLayout(False)
@@ -408,10 +479,18 @@ Partial Class FormPayroll
     Friend WithEvents Label4 As Label
     Friend WithEvents Label9 As Label
     Friend WithEvents Label8 As Label
-    Friend WithEvents Chart1 As DataVisualization.Charting.Chart
+
     Friend WithEvents RoundedPane24 As RoundedPane2
     Friend WithEvents Label10 As Label
     Friend WithEvents btnExportPdf As Button
+    Friend WithEvents dtpFilter As DateTimePicker
+    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents btnProcessPayout As Button
+    Friend WithEvents labelHeader As Label
+    Friend WithEvents btnPrev As Button
+    Friend WithEvents btnNext As Button
+    Friend WithEvents lblPageStatus As Label
+    Friend WithEvents PaginationContainer As Panel
     Friend WithEvents RoundedPane26 As RoundedPane2
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents RoundedPane25 As RoundedPane2

@@ -40,6 +40,10 @@ Public Class FormProductPerformance
     End Sub
 
     Private Sub InitializeSummaryTiles()
+        If dtpFilter IsNot Nothing Then
+             AddHandler dtpFilter.ValueChanged, AddressOf DtpFilter_ValueChanged
+        End If
+
         summaryTiles = New List(Of SummaryTile) From {
             New SummaryTile With {.NameLabel = Label2, .DetailLabel = Label3},
             New SummaryTile With {.NameLabel = Label5, .DetailLabel = Label4},
@@ -147,6 +151,10 @@ Public Class FormProductPerformance
         LoadProductPerformance()
     End Sub
 
+    Private Sub DtpFilter_ValueChanged(sender As Object, e As EventArgs)
+        LoadProductPerformance()
+    End Sub
+
     Private Sub ConfigureChart()
         Chart1.Series.Clear()
         Chart1.Titles.Clear()
@@ -235,7 +243,10 @@ Public Class FormProductPerformance
 
         Select Case periodFilter
             Case "Daily"
-                If selectedYear = DateTime.Now.Year Then
+                If dtpFilter IsNot Nothing Then
+                    whereClauseReservations = $" AND DATE({dateColumnReservations}) = '{dtpFilter.Value:yyyy-MM-dd}'"
+                    whereClauseOrders = $" AND DATE({dateColumnOrders}) = '{dtpFilter.Value:yyyy-MM-dd}'"
+                ElseIf selectedYear = DateTime.Now.Year Then
                     whereClauseReservations = $" AND DATE({dateColumnReservations}) = CURDATE()"
                     whereClauseOrders = $" AND DATE({dateColumnOrders}) = CURDATE()"
                 Else
@@ -243,12 +254,12 @@ Public Class FormProductPerformance
                     whereClauseOrders = $" AND DATE({dateColumnOrders}) = '{selectedYear}-12-31'"
                 End If
             Case "Weekly"
-                If selectedYear = DateTime.Now.Year Then
+                If dtpFilter IsNot Nothing Then
+                    whereClauseReservations = $" AND YEARWEEK({dateColumnReservations}, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1)"
+                    whereClauseOrders = $" AND YEARWEEK({dateColumnOrders}, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1)"
+                Else
                     whereClauseReservations = $" AND YEARWEEK({dateColumnReservations}, 1) = YEARWEEK(CURDATE(), 1)"
                     whereClauseOrders = $" AND YEARWEEK({dateColumnOrders}, 1) = YEARWEEK(CURDATE(), 1)"
-                Else
-                    whereClauseReservations = $" AND YEAR({dateColumnReservations}) = {selectedYear} AND WEEK({dateColumnReservations}, 1) = 52"
-                    whereClauseOrders = $" AND YEAR({dateColumnOrders}) = {selectedYear} AND WEEK({dateColumnOrders}, 1) = 52"
                 End If
             Case "Monthly"
                 If selectedMonth = 0 Then
@@ -375,7 +386,9 @@ $"SELECT DisplayName,
         End If
 
         Dim periodPart As String = ""
-        If Reports.SelectedPeriod = "Monthly" AndAlso Reports.SelectedMonth > 0 Then
+        If Reports.SelectedPeriod = "Daily" AndAlso dtpFilter IsNot Nothing Then
+            periodPart = $" ({dtpFilter.Value:MMM dd, yyyy})"
+        ElseIf Reports.SelectedPeriod = "Monthly" AndAlso Reports.SelectedMonth > 0 Then
             periodPart = $" ({System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Reports.SelectedMonth)} {Reports.SelectedYear})"
         Else
             periodPart = $" ({Reports.SelectedPeriod} {Reports.SelectedYear})"

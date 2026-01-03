@@ -7,6 +7,8 @@ Public Class FormCustomerHistory
     Private ReadOnly connectionString As String = modDB.strConnection
     Private _isLoading As Boolean = False
     Private _baseTitle As String = ""
+    Private isInitializing As Boolean = True
+
 
     ' Pagination state
     Private _currentPage As Integer = 1
@@ -18,7 +20,10 @@ Public Class FormCustomerHistory
         _baseTitle = Label1.Text
         ConfigureGrid()
         _currentPage = 1
+        ConfigureDateFilter()
         BeginLoadCustomerHistory()
+        isInitializing = False
+
     End Sub
 
     Private Async Sub BeginLoadCustomerHistory()
@@ -62,17 +67,10 @@ Public Class FormCustomerHistory
 
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                If sYear = DateTime.Now.Year Then
-                    periodFilter = " AND DATE(OrderDate) = CURDATE() "
-                Else
-                    periodFilter = $" AND DATE(OrderDate) = '{sYear}-12-31' "
-                End If
+                 periodFilter = $" AND DATE(OrderDate) = '{dtpFilter.Value:yyyy-MM-dd}' "
             Case "Weekly"
-                If sYear = DateTime.Now.Year Then
-                    periodFilter = " AND YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                Else
-                    periodFilter = $" AND YEAR(OrderDate) = {sYear} AND WEEK(OrderDate, 1) = 52 "
-                End If
+                 periodFilter = $" AND YEARWEEK(OrderDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1) "
+
             Case "Monthly"
                 If sMonth = 0 Then
                     periodFilter = $" AND YEAR(OrderDate) = {sYear} "
@@ -101,17 +99,10 @@ Public Class FormCustomerHistory
 
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                If sYear = DateTime.Now.Year Then
-                    periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
-                Else
-                    periodFilter = $" AND DATE(o.OrderDate) = '{sYear}-12-31' "
-                End If
+                 periodFilter = $" AND DATE(o.OrderDate) = '{dtpFilter.Value:yyyy-MM-dd}' "
             Case "Weekly"
-                If sYear = DateTime.Now.Year Then
-                    periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                Else
-                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND WEEK(o.OrderDate, 1) = 52 "
-                End If
+                 periodFilter = $" AND YEARWEEK(o.OrderDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1) "
+
             Case "Monthly"
                 If sMonth = 0 Then
                     periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
@@ -235,6 +226,27 @@ Public Class FormCustomerHistory
     ' REFRESH DATA
     ' =======================================================================
     Public Sub RefreshData()
+        _currentPage = 1
+        ConfigureDateFilter()
+        BeginLoadCustomerHistory()
+    End Sub
+
+    Private Sub ConfigureDateFilter()
+        If dtpFilter Is Nothing Then Return
+
+        Dim currentPeriod As String = Reports.SelectedPeriod
+        Select Case currentPeriod
+            Case "Daily", "Weekly"
+                dtpFilter.Visible = True
+                dtpFilter.CustomFormat = "MMMM dd, yyyy"
+                dtpFilter.Format = DateTimePickerFormat.Custom
+            Case Else
+                dtpFilter.Visible = False
+        End Select
+    End Sub
+
+    Private Sub dtpFilter_ValueChanged(sender As Object, e As EventArgs) Handles dtpFilter.ValueChanged
+        If isInitializing Then Return
         _currentPage = 1
         BeginLoadCustomerHistory()
     End Sub

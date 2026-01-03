@@ -46,7 +46,9 @@ Partial Class FormSales
         Dim DataPoint16 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 1150000.0R)
         Dim DataPoint17 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 950000.0R)
         Dim DataPoint18 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 1300000.0R)
+        Me.dtpFilter = New System.Windows.Forms.DateTimePicker()
         Me.Panel1 = New System.Windows.Forms.Panel()
+
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
         Me.btnExportPdf = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -97,7 +99,9 @@ Partial Class FormSales
         Me.RoundedPane24.BorderColor = System.Drawing.Color.LightGray
         Me.RoundedPane24.BorderThickness = 1
         Me.RoundedPane24.Controls.Add(Me.btnExportPdf)
+        Me.RoundedPane24.Controls.Add(Me.dtpFilter)
         Me.RoundedPane24.Controls.Add(Me.Label1)
+
         Me.RoundedPane24.Controls.Add(Me.Chart1)
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
@@ -107,6 +111,16 @@ Partial Class FormSales
         Me.RoundedPane24.Name = "RoundedPane24"
         Me.RoundedPane24.Size = New System.Drawing.Size(1393, 476)
         Me.RoundedPane24.TabIndex = 10
+        '
+        'dtpFilter
+        '
+        Me.dtpFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.dtpFilter.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpFilter.Location = New System.Drawing.Point(820, 30)
+        Me.dtpFilter.Name = "dtpFilter"
+        Me.dtpFilter.Size = New System.Drawing.Size(180, 30)
+        Me.dtpFilter.TabIndex = 11
+        Me.dtpFilter.Visible = False
         '
         'btnExportPdf
         '
@@ -461,4 +475,6 @@ Partial Class FormSales
     Friend WithEvents PictureBox11 As PictureBox
     Friend WithEvents RoundedPane25 As RoundedPane2
     Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents dtpFilter As DateTimePicker
+
 End Class

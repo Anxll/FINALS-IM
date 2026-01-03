@@ -26,7 +26,30 @@ Public Class FormTakeOutOrders
 
         Await RefreshOrdersAsync()
         isInitialLoad = False
+        Await RefreshOrdersAsync()
+        ConfigureDateFilter()
+        isInitialLoad = False
+        ConfigureDateFilter()
     End Sub
+
+    Private Async Sub dtpFilter_ValueChanged(sender As Object, e As EventArgs) Handles dtpFilter.ValueChanged
+        If Not isInitialLoad Then
+            _currentPage = 1
+            Await RefreshOrdersAsync()
+        End If
+    End Sub
+
+    Private Sub ConfigureDateFilter()
+        If dtpFilter Is Nothing Then Return
+
+        Select Case Reports.SelectedPeriod
+            Case "Daily", "Weekly"
+                dtpFilter.Visible = True
+            Case Else
+                dtpFilter.Visible = False
+        End Select
+    End Sub
+
 
     Private Sub InitializePaginationControls()
         ' Make sure pagination controls exist and are enabled
@@ -124,23 +147,18 @@ Public Class FormTakeOutOrders
 
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                If sYear = DateTime.Now.Year Then
-                    periodFilter = " AND o.OrderDate = CURDATE() "
-                Else
-                    periodFilter = $" AND o.OrderDate = '{sYear}-12-31' "
-                End If
+                periodFilter = $" AND o.OrderDate = '{dtpFilter.Value:yyyy-MM-dd}' "
+
             Case "Weekly"
-                If sYear = DateTime.Now.Year Then
-                    periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                Else
-                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND WEEK(o.OrderDate, 1) = 52 "
-                End If
+                periodFilter = $" AND YEARWEEK(o.OrderDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1) "
+
             Case "Monthly"
                 If sMonth = 0 Then
                     periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
                 Else
                     periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND MONTH(o.OrderDate) = {sMonth} "
                 End If
+
             Case "Yearly"
                 periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
         End Select
@@ -169,23 +187,18 @@ Public Class FormTakeOutOrders
 
         Select Case Reports.SelectedPeriod
             Case "Daily"
-                If sYear = DateTime.Now.Year Then
-                    periodFilter = " AND o.OrderDate = CURDATE() "
-                Else
-                    periodFilter = $" AND o.OrderDate = '{sYear}-12-31' "
-                End If
+                periodFilter = $" AND o.OrderDate = '{dtpFilter.Value:yyyy-MM-dd}' "
+
             Case "Weekly"
-                If sYear = DateTime.Now.Year Then
-                    periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                Else
-                    periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND WEEK(o.OrderDate, 1) = 52 "
-                End If
+                periodFilter = $" AND YEARWEEK(o.OrderDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1) "
+
             Case "Monthly"
                 If sMonth = 0 Then
                     periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
                 Else
                     periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND MONTH(o.OrderDate) = {sMonth} "
                 End If
+
             Case "Yearly"
                 periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
         End Select
@@ -236,23 +249,18 @@ Public Class FormTakeOutOrders
 
                                Select Case Reports.SelectedPeriod
                                    Case "Daily"
-                                       If sYear = DateTime.Now.Year Then
-                                           periodFilter = " AND o.OrderDate = CURDATE() "
-                                       Else
-                                           periodFilter = $" AND o.OrderDate = '{sYear}-12-31' "
-                                       End If
+                                       periodFilter = $" AND o.OrderDate = '{dtpFilter.Value:yyyy-MM-dd}' "
+
                                    Case "Weekly"
-                                       If sYear = DateTime.Now.Year Then
-                                           periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
-                                       Else
-                                           periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND WEEK(o.OrderDate, 1) = 52 "
-                                       End If
+                                       periodFilter = $" AND YEARWEEK(o.OrderDate, 1) = YEARWEEK('{dtpFilter.Value:yyyy-MM-dd}', 1) "
+
                                    Case "Monthly"
                                        If sMonth = 0 Then
                                            periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
                                        Else
                                            periodFilter = $" AND YEAR(o.OrderDate) = {sYear} AND MONTH(o.OrderDate) = {sMonth} "
                                        End If
+
                                    Case "Yearly"
                                        periodFilter = $" AND YEAR(o.OrderDate) = {sYear} "
                                End Select
@@ -295,9 +303,11 @@ Public Class FormTakeOutOrders
     ' REFRESH DATA
     ' =============================
     Public Async Sub RefreshData()
+        ConfigureDateFilter()
         _currentPage = 1
         Await RefreshOrdersAsync()
     End Sub
+
 
     Private Sub UpdateSummaryTiles(dt As DataTable)
         Try
