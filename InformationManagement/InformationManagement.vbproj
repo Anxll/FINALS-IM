@@ -210,6 +210,12 @@
     <Compile Include="Admin\AddNewBatch.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Admin\AdminInfo.Designer.vb">
+      <DependentUpon>AdminInfo.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\AdminInfo.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Admin\BatchFormModel.vb" />
     <Compile Include="Admin\AddNewItems.Designer.vb">
       <DependentUpon>AddNewItems.vb</DependentUpon>
@@ -250,7 +256,9 @@
     <Compile Include="Admin\Customer.Designer.vb">
       <DependentUpon>Customer.vb</DependentUpon>
     </Compile>
-    <Compile Include="Admin\Customer.vb" />
+    <Compile Include="Admin\Customer.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Admin\Dashboard.Designer.vb">
       <DependentUpon>Dashboard.vb</DependentUpon>
     </Compile>
@@ -273,11 +281,15 @@
     <Compile Include="Admin\Employee.Designer.vb">
       <DependentUpon>Employee.vb</DependentUpon>
     </Compile>
-    <Compile Include="Admin\Employee.vb" />
+    <Compile Include="Admin\Employee.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Admin\Feedback.Designer.vb">
       <DependentUpon>Feedback.vb</DependentUpon>
     </Compile>
-    <Compile Include="Admin\Feedback.vb" />
+    <Compile Include="Admin\Feedback.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Admin\FormAddUser.Designer.vb">
       <DependentUpon>FormAddUser.vb</DependentUpon>
     </Compile>
@@ -677,6 +689,7 @@
   <ItemGroup>
     <None Include="Admin\generate_reservations.py" />
     <None Include="Admin\generate_reservations_fixed.py" />
+    <None Include="bin\Debug\db_config.ini" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

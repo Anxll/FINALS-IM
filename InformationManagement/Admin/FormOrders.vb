@@ -28,9 +28,6 @@ Public Class FormOrders
             isInitializing = False
 
         Catch ex As Exception
-
-
-        Catch ex As Exception
             MessageBox.Show($"Form Load Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
