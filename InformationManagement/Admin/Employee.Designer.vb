@@ -22,7 +22,7 @@ Partial Class Employee
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
@@ -41,11 +41,11 @@ Partial Class Employee
         Me.lblFilter = New System.Windows.Forms.Label()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.btnFirstPage = New System.Windows.Forms.Button()
-        Me.btnPrevPage = New System.Windows.Forms.Button()
-        Me.btnNextPage = New System.Windows.Forms.Button()
-        Me.btnLastPage = New System.Windows.Forms.Button()
         Me.lblPageInfo = New System.Windows.Forms.Label()
+        Me.btnLastPage = New System.Windows.Forms.Button()
+        Me.btnNextPage = New System.Windows.Forms.Button()
+        Me.btnPrevPage = New System.Windows.Forms.Button()
+        Me.btnFirstPage = New System.Windows.Forms.Button()
         Me.lblTotalEmployees = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -103,10 +103,10 @@ Partial Class Employee
         Me.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnDelete.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnDelete.ForeColor = System.Drawing.Color.White
-        Me.btnDelete.Location = New System.Drawing.Point(995, 13)
+        Me.btnDelete.Location = New System.Drawing.Point(980, 13)
         Me.btnDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.btnDelete.Name = "btnDelete"
-        Me.btnDelete.Size = New System.Drawing.Size(100, 30)
+        Me.btnDelete.Size = New System.Drawing.Size(100, 35)
         Me.btnDelete.TabIndex = 5
         Me.btnDelete.Text = "Delete"
         Me.btnDelete.UseVisualStyleBackColor = False
@@ -119,10 +119,10 @@ Partial Class Employee
         Me.EditEmployee.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.EditEmployee.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.EditEmployee.ForeColor = System.Drawing.Color.White
-        Me.EditEmployee.Location = New System.Drawing.Point(885, 13)
+        Me.EditEmployee.Location = New System.Drawing.Point(873, 13)
         Me.EditEmployee.Margin = New System.Windows.Forms.Padding(2)
         Me.EditEmployee.Name = "EditEmployee"
-        Me.EditEmployee.Size = New System.Drawing.Size(103, 30)
+        Me.EditEmployee.Size = New System.Drawing.Size(103, 35)
         Me.EditEmployee.TabIndex = 4
         Me.EditEmployee.Text = "Edit Employee"
         Me.EditEmployee.UseVisualStyleBackColor = False
@@ -135,10 +135,10 @@ Partial Class Employee
         Me.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnRefresh.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnRefresh.ForeColor = System.Drawing.Color.White
-        Me.btnRefresh.Location = New System.Drawing.Point(777, 13)
+        Me.btnRefresh.Location = New System.Drawing.Point(769, 13)
         Me.btnRefresh.Margin = New System.Windows.Forms.Padding(2)
         Me.btnRefresh.Name = "btnRefresh"
-        Me.btnRefresh.Size = New System.Drawing.Size(100, 30)
+        Me.btnRefresh.Size = New System.Drawing.Size(100, 35)
         Me.btnRefresh.TabIndex = 3
         Me.btnRefresh.Text = "Refresh"
         Me.btnRefresh.UseVisualStyleBackColor = False
@@ -154,7 +154,7 @@ Partial Class Employee
         Me.btnUpdateStatus.Location = New System.Drawing.Point(523, 13)
         Me.btnUpdateStatus.Margin = New System.Windows.Forms.Padding(2)
         Me.btnUpdateStatus.Name = "btnUpdateStatus"
-        Me.btnUpdateStatus.Size = New System.Drawing.Size(120, 30)
+        Me.btnUpdateStatus.Size = New System.Drawing.Size(120, 35)
         Me.btnUpdateStatus.TabIndex = 7
         Me.btnUpdateStatus.Text = "Update Status"
         Me.btnUpdateStatus.UseVisualStyleBackColor = False
@@ -167,10 +167,10 @@ Partial Class Employee
         Me.AddEmployee.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.AddEmployee.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
         Me.AddEmployee.ForeColor = System.Drawing.Color.White
-        Me.AddEmployee.Location = New System.Drawing.Point(651, 13)
+        Me.AddEmployee.Location = New System.Drawing.Point(647, 13)
         Me.AddEmployee.Margin = New System.Windows.Forms.Padding(2)
         Me.AddEmployee.Name = "AddEmployee"
-        Me.AddEmployee.Size = New System.Drawing.Size(117, 30)
+        Me.AddEmployee.Size = New System.Drawing.Size(117, 35)
         Me.AddEmployee.TabIndex = 2
         Me.AddEmployee.Text = "➕ Add Employee"
         Me.AddEmployee.UseVisualStyleBackColor = False
@@ -180,17 +180,18 @@ Partial Class Employee
         Me.txtSearch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.txtSearch.Location = New System.Drawing.Point(68, 15)
+        Me.txtSearch.Location = New System.Drawing.Point(96, 19)
         Me.txtSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(567, 25)
+        Me.txtSearch.Size = New System.Drawing.Size(412, 25)
         Me.txtSearch.TabIndex = 1
         '
         'lblSearch
         '
         Me.lblSearch.AutoSize = True
         Me.lblSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
-        Me.lblSearch.Location = New System.Drawing.Point(11, 17)
+        Me.lblSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblSearch.Location = New System.Drawing.Point(26, 20)
         Me.lblSearch.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblSearch.Name = "lblSearch"
         Me.lblSearch.Size = New System.Drawing.Size(58, 19)
@@ -199,7 +200,7 @@ Partial Class Employee
         '
         'Panel3
         '
-        Me.Panel3.BackColor = System.Drawing.Color.White
+        Me.Panel3.BackColor = System.Drawing.Color.GhostWhite
         Me.Panel3.Controls.Add(Me.btnViewAll)
         Me.Panel3.Controls.Add(Me.btnViewInactive)
         Me.Panel3.Controls.Add(Me.btnViewOnLeave)
@@ -210,7 +211,7 @@ Partial Class Employee
         Me.Panel3.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Padding = New System.Windows.Forms.Padding(8, 9, 8, 9)
-        Me.Panel3.Size = New System.Drawing.Size(1080, 48)
+        Me.Panel3.Size = New System.Drawing.Size(1080, 65)
         Me.Panel3.TabIndex = 2
         '
         'btnViewAll
@@ -220,10 +221,10 @@ Partial Class Employee
         Me.btnViewAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewAll.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnViewAll.ForeColor = System.Drawing.Color.White
-        Me.btnViewAll.Location = New System.Drawing.Point(514, 9)
+        Me.btnViewAll.Location = New System.Drawing.Point(34, 26)
         Me.btnViewAll.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewAll.Name = "btnViewAll"
-        Me.btnViewAll.Size = New System.Drawing.Size(100, 30)
+        Me.btnViewAll.Size = New System.Drawing.Size(56, 30)
         Me.btnViewAll.TabIndex = 3
         Me.btnViewAll.Text = "All"
         Me.btnViewAll.UseVisualStyleBackColor = False
@@ -235,7 +236,7 @@ Partial Class Employee
         Me.btnViewInactive.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewInactive.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnViewInactive.ForeColor = System.Drawing.Color.White
-        Me.btnViewInactive.Location = New System.Drawing.Point(410, 9)
+        Me.btnViewInactive.Location = New System.Drawing.Point(308, 26)
         Me.btnViewInactive.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewInactive.Name = "btnViewInactive"
         Me.btnViewInactive.Size = New System.Drawing.Size(100, 30)
@@ -250,7 +251,7 @@ Partial Class Employee
         Me.btnViewOnLeave.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewOnLeave.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnViewOnLeave.ForeColor = System.Drawing.Color.White
-        Me.btnViewOnLeave.Location = New System.Drawing.Point(306, 9)
+        Me.btnViewOnLeave.Location = New System.Drawing.Point(202, 26)
         Me.btnViewOnLeave.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewOnLeave.Name = "btnViewOnLeave"
         Me.btnViewOnLeave.Size = New System.Drawing.Size(100, 30)
@@ -265,7 +266,7 @@ Partial Class Employee
         Me.btnViewActive.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewActive.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
         Me.btnViewActive.ForeColor = System.Drawing.Color.White
-        Me.btnViewActive.Location = New System.Drawing.Point(202, 9)
+        Me.btnViewActive.Location = New System.Drawing.Point(96, 26)
         Me.btnViewActive.Margin = New System.Windows.Forms.Padding(2)
         Me.btnViewActive.Name = "btnViewActive"
         Me.btnViewActive.Size = New System.Drawing.Size(100, 30)
@@ -276,11 +277,12 @@ Partial Class Employee
         'lblFilter
         '
         Me.lblFilter.AutoSize = True
-        Me.lblFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
-        Me.lblFilter.Location = New System.Drawing.Point(11, 13)
+        Me.lblFilter.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblFilter.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblFilter.Location = New System.Drawing.Point(30, 3)
         Me.lblFilter.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblFilter.Name = "lblFilter"
-        Me.lblFilter.Size = New System.Drawing.Size(91, 19)
+        Me.lblFilter.Size = New System.Drawing.Size(83, 17)
         Me.lblFilter.TabIndex = 0
         Me.lblFilter.Text = "Filter Status:"
         '
@@ -294,19 +296,19 @@ Partial Class Employee
         Me.DataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.DataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         Me.DataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
-        DataGridViewCellStyle1.ForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
+        DataGridViewCellStyle3.ForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(CType(CType(44, Byte), Integer), CType(CType(62, Byte), Integer), CType(CType(80, Byte), Integer))
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.DataGridView1.ColumnHeadersHeight = 40
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridView1.EnableHeadersVisualStyles = False
-        Me.DataGridView1.Location = New System.Drawing.Point(0, 190)
+        Me.DataGridView1.Location = New System.Drawing.Point(0, 207)
         Me.DataGridView1.Margin = New System.Windows.Forms.Padding(2)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
@@ -314,7 +316,7 @@ Partial Class Employee
         Me.DataGridView1.RowHeadersWidth = 51
         Me.DataGridView1.RowTemplate.Height = 35
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1080, 342)
+        Me.DataGridView1.Size = New System.Drawing.Size(1080, 315)
         Me.DataGridView1.TabIndex = 3
         '
         'Panel4
@@ -327,59 +329,20 @@ Partial Class Employee
         Me.Panel4.Controls.Add(Me.btnFirstPage)
         Me.Panel4.Controls.Add(Me.lblTotalEmployees)
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel4.Location = New System.Drawing.Point(0, 532)
+        Me.Panel4.Location = New System.Drawing.Point(0, 522)
         Me.Panel4.Name = "Panel4"
         Me.Panel4.Size = New System.Drawing.Size(1080, 50)
         Me.Panel4.TabIndex = 4
-
         '
-        'btnFirstPage
+        'lblPageInfo
         '
-        Me.btnFirstPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
-        Me.btnFirstPage.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnFirstPage.FlatAppearance.BorderSize = 0
-        Me.btnFirstPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnFirstPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.btnFirstPage.ForeColor = System.Drawing.Color.Black
-        Me.btnFirstPage.Location = New System.Drawing.Point(379, 10)
-        Me.btnFirstPage.Name = "btnFirstPage"
-        Me.btnFirstPage.Size = New System.Drawing.Size(70, 30)
-        Me.btnFirstPage.TabIndex = 1
-        Me.btnFirstPage.Text = "First"
-        Me.btnFirstPage.UseVisualStyleBackColor = False
-
-        '
-        'btnPrevPage
-        '
-        Me.btnPrevPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
-        Me.btnPrevPage.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnPrevPage.FlatAppearance.BorderSize = 0
-        Me.btnPrevPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnPrevPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.btnPrevPage.ForeColor = System.Drawing.Color.Black
-        Me.btnPrevPage.Location = New System.Drawing.Point(455, 10)
-        Me.btnPrevPage.Name = "btnPrevPage"
-        Me.btnPrevPage.Size = New System.Drawing.Size(70, 30)
-        Me.btnPrevPage.TabIndex = 2
-        Me.btnPrevPage.Text = "Prev"
-        Me.btnPrevPage.UseVisualStyleBackColor = False
-
-        '
-        'btnNextPage
-        '
-        Me.btnNextPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
-        Me.btnNextPage.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnNextPage.FlatAppearance.BorderSize = 0
-        Me.btnNextPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnNextPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.btnNextPage.ForeColor = System.Drawing.Color.Black
-        Me.btnNextPage.Location = New System.Drawing.Point(531, 10)
-        Me.btnNextPage.Name = "btnNextPage"
-        Me.btnNextPage.Size = New System.Drawing.Size(70, 30)
-        Me.btnNextPage.TabIndex = 3
-        Me.btnNextPage.Text = "Next"
-        Me.btnNextPage.UseVisualStyleBackColor = False
-
+        Me.lblPageInfo.AutoSize = True
+        Me.lblPageInfo.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.lblPageInfo.Location = New System.Drawing.Point(697, 18)
+        Me.lblPageInfo.Name = "lblPageInfo"
+        Me.lblPageInfo.Size = New System.Drawing.Size(69, 15)
+        Me.lblPageInfo.TabIndex = 5
+        Me.lblPageInfo.Text = "Page 1 of 1"
         '
         'btnLastPage
         '
@@ -395,18 +358,51 @@ Partial Class Employee
         Me.btnLastPage.TabIndex = 4
         Me.btnLastPage.Text = "Last"
         Me.btnLastPage.UseVisualStyleBackColor = False
-
         '
-        'lblPageInfo
+        'btnNextPage
         '
-        Me.lblPageInfo.AutoSize = True
-        Me.lblPageInfo.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
-        Me.lblPageInfo.Location = New System.Drawing.Point(697, 18)
-        Me.lblPageInfo.Name = "lblPageInfo"
-        Me.lblPageInfo.Size = New System.Drawing.Size(68, 15)
-        Me.lblPageInfo.TabIndex = 5
-        Me.lblPageInfo.Text = "Page 1 of 1"
-        
+        Me.btnNextPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnNextPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnNextPage.FlatAppearance.BorderSize = 0
+        Me.btnNextPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNextPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnNextPage.ForeColor = System.Drawing.Color.Black
+        Me.btnNextPage.Location = New System.Drawing.Point(531, 10)
+        Me.btnNextPage.Name = "btnNextPage"
+        Me.btnNextPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnNextPage.TabIndex = 3
+        Me.btnNextPage.Text = "Next"
+        Me.btnNextPage.UseVisualStyleBackColor = False
+        '
+        'btnPrevPage
+        '
+        Me.btnPrevPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnPrevPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnPrevPage.FlatAppearance.BorderSize = 0
+        Me.btnPrevPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPrevPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnPrevPage.ForeColor = System.Drawing.Color.Black
+        Me.btnPrevPage.Location = New System.Drawing.Point(455, 10)
+        Me.btnPrevPage.Name = "btnPrevPage"
+        Me.btnPrevPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnPrevPage.TabIndex = 2
+        Me.btnPrevPage.Text = "Prev"
+        Me.btnPrevPage.UseVisualStyleBackColor = False
+        '
+        'btnFirstPage
+        '
+        Me.btnFirstPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnFirstPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnFirstPage.FlatAppearance.BorderSize = 0
+        Me.btnFirstPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnFirstPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnFirstPage.ForeColor = System.Drawing.Color.Black
+        Me.btnFirstPage.Location = New System.Drawing.Point(379, 10)
+        Me.btnFirstPage.Name = "btnFirstPage"
+        Me.btnFirstPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnFirstPage.TabIndex = 1
+        Me.btnFirstPage.Text = "First"
+        Me.btnFirstPage.UseVisualStyleBackColor = False
         '
         'lblTotalEmployees
         '

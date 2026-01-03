@@ -336,7 +336,7 @@ Public Class Reservations
                     r.ReservationType,
                     r.EventType,
                     r.EventDate,
-                    r.EventTime,
+                    TIME_FORMAT(r.EventTime, '%h:%i %p') AS EventTime,
                     r.NumberOfGuests,
                     GROUP_CONCAT(CONCAT(ri.ProductName, ' (', ri.Quantity, ')') SEPARATOR ', ') AS ProductSelection,
                     r.SpecialRequests,
