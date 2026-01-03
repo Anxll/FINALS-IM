@@ -732,4 +732,7 @@ Public Class FormSales
         End Try
     End Sub
 
+    Private Sub RoundedPane24_Paint(sender As Object, e As PaintEventArgs) Handles RoundedPane24.Paint
+
+    End Sub
 End Class

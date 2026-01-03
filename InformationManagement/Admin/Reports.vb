@@ -419,19 +419,18 @@ Public Class Reports
         Dim currentForm = Panel1.Controls(0)
 
         ' Set report title based on form type
+        ' Set report title based on form type - Force nicer names
         reportTitle = currentForm.Text
-        If String.IsNullOrEmpty(reportTitle) OrElse reportTitle = "Form" Then
-            If TypeOf currentForm Is FormSales Then reportTitle = "Sales Report"
-            If TypeOf currentForm Is FormOrders Then reportTitle = "Orders Report"
-            If TypeOf currentForm Is FormPayroll Then reportTitle = "Payroll Report"
-            If TypeOf currentForm Is FormCateringReservations Then reportTitle = "Catering Report"
-            If TypeOf currentForm Is FormReservationStatus Then reportTitle = "Reservation Status"
-            If TypeOf currentForm Is FormDineInOrders Then reportTitle = "Dine-In Orders"
-            If TypeOf currentForm Is FormTakeOutOrders Then reportTitle = "Take-Out Orders"
-            If TypeOf currentForm Is FormCustomerHistory Then reportTitle = "Customer History"
-            If TypeOf currentForm Is FormEmployeeAttendance Then reportTitle = "Employee Attendance"
-            If TypeOf currentForm Is FormProductPerformance Then reportTitle = "Product Performance"
-        End If
+        If TypeOf currentForm Is FormSales Then reportTitle = "Sales Report"
+        If TypeOf currentForm Is FormOrders Then reportTitle = "Orders Report"
+        If TypeOf currentForm Is FormPayroll Then reportTitle = "Payroll Report"
+        If TypeOf currentForm Is FormCateringReservations Then reportTitle = "Catering Report"
+        If TypeOf currentForm Is FormReservationStatus Then reportTitle = "Reservation Status"
+        If TypeOf currentForm Is FormDineInOrders Then reportTitle = "Dine-In Orders"
+        If TypeOf currentForm Is FormTakeOutOrders Then reportTitle = "Take-Out Orders"
+        If TypeOf currentForm Is FormCustomerHistory Then reportTitle = "Customer History"
+        If TypeOf currentForm Is FormEmployeeAttendance Then reportTitle = "Employee Attendance"
+        If TypeOf currentForm Is FormProductPerformance Then reportTitle = "Product Performance"
 
         ' Try to find ALL DataGridViews and Charts
         activeGrids.Clear()
@@ -475,17 +474,12 @@ Public Class Reports
         End If
 
         Try
-            ' === PRINT PREVIEW DIALOG ===
-            Dim ppd As New PrintPreviewDialog()
-            ppd.Document = prnDoc
-            ppd.Width = 1000
-            ppd.Height = 800
-            ppd.StartPosition = FormStartPosition.CenterScreen ' Center the preview window
-            ppd.ShowIcon = False
-            ppd.Text = $"Report Preview - {reportTitle}"
-            
             ' Suppress the "Printing..." status dialog
             prnDoc.PrintController = New StandardPrintController()
+
+            ' === CUSTOM PRINT PREVIEW FORM ===
+            ' Use the new custom form to match the user's design request
+            Dim previewForm As New FormReportPreview(prnDoc, $"Report Preview - {reportTitle}")
 
             ' Setup Page Settings
             If activeGrids.Count > 0 Then
@@ -495,7 +489,7 @@ Public Class Reports
                 prnDoc.DefaultPageSettings.Landscape = False
             End If
 
-            ppd.ShowDialog()
+            previewForm.ShowDialog()
 
         Catch ex As Exception
             MessageBox.Show("Error initializing preview: " & ex.Message, "Preview Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
