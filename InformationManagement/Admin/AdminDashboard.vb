@@ -230,6 +230,7 @@ Public Class AdminDashboard
         MakeRoundedButton(btnPayroll, 15)
         MakeRoundedButton(btnReports, 15)
         MakeRoundedButton(ActivityLogs, 15)
+        MakeRoundedButton(Setting, 15)
         HighlightButton(btnDashboard)
         With Dashboard
             .TopLevel = False

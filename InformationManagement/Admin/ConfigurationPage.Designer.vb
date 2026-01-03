@@ -31,7 +31,6 @@ Partial Class ConfigurationPage
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.txtDatabasename = New InformationManagement.RoundedTextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtPassword = New InformationManagement.RoundedTextBox()
@@ -39,6 +38,7 @@ Partial Class ConfigurationPage
         Me.btnTestConnection = New System.Windows.Forms.Button()
         Me.txtUsername = New InformationManagement.RoundedTextBox()
         Me.btnSaveAndContinue = New System.Windows.Forms.Button()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.RoundedPane21.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -47,7 +47,7 @@ Partial Class ConfigurationPage
         '
         Me.RoundedPane21.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.RoundedPane21.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane21.BorderColor = System.Drawing.SystemColors.ActiveCaption
+        Me.RoundedPane21.BorderColor = System.Drawing.Color.Transparent
         Me.RoundedPane21.BorderThickness = 1
         Me.RoundedPane21.Controls.Add(Me.lblServerStatus)
         Me.RoundedPane21.Controls.Add(Me.txtServer)
@@ -65,15 +65,15 @@ Partial Class ConfigurationPage
         Me.RoundedPane21.Controls.Add(Me.txtUsername)
         Me.RoundedPane21.Controls.Add(Me.btnSaveAndContinue)
         Me.RoundedPane21.CornerRadius = 12
-        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        Me.RoundedPane21.Location = New System.Drawing.Point(183, 29)
+        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(134, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.RoundedPane21.Location = New System.Drawing.Point(183, 40)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(494, 508)
         Me.RoundedPane21.TabIndex = 11
         '
         'lblServerStatus
         '
-        Me.lblServerStatus.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.lblServerStatus.BackColor = System.Drawing.Color.FromArgb(CType(CType(134, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.lblServerStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Italic)
         Me.lblServerStatus.ForeColor = System.Drawing.Color.Gray
         Me.lblServerStatus.Location = New System.Drawing.Point(90, 400)
@@ -160,17 +160,6 @@ Partial Class ConfigurationPage
         Me.Label3.Size = New System.Drawing.Size(40, 21)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Port"
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(168, 25)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(155, 56)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.PictureBox1.TabIndex = 10
-        Me.PictureBox1.TabStop = False
         '
         'txtDatabasename
         '
@@ -290,11 +279,23 @@ Partial Class ConfigurationPage
         Me.btnSaveAndContinue.Text = "Save && Continue"
         Me.btnSaveAndContinue.UseVisualStyleBackColor = False
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(168, 25)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(155, 56)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBox1.TabIndex = 10
+        Me.PictureBox1.TabStop = False
+        '
         'ConfigurationPage
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.GhostWhite
+        Me.BackgroundImage = Global.InformationManagement.My.Resources.Resources.Background
         Me.ClientSize = New System.Drawing.Size(898, 590)
         Me.Controls.Add(Me.RoundedPane21)
         Me.DoubleBuffered = True

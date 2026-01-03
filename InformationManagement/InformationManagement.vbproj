@@ -710,6 +710,7 @@
     <None Include="Resources\calendar_icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Background2.jpg" />
     <Content Include="Resources\search_icon.png" />
     <None Include="Resources\search_icon1.png" />
   </ItemGroup>
