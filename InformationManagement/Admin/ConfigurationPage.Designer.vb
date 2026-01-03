@@ -31,6 +31,7 @@ Partial Class ConfigurationPage
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.txtDatabasename = New InformationManagement.RoundedTextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtPassword = New InformationManagement.RoundedTextBox()
@@ -38,7 +39,6 @@ Partial Class ConfigurationPage
         Me.btnTestConnection = New System.Windows.Forms.Button()
         Me.txtUsername = New InformationManagement.RoundedTextBox()
         Me.btnSaveAndContinue = New System.Windows.Forms.Button()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.RoundedPane21.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -85,7 +85,7 @@ Partial Class ConfigurationPage
         'txtServer
         '
         Me.txtServer.BackColor = System.Drawing.Color.Transparent
-        Me.txtServer.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtServer.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtServer.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtServer.Location = New System.Drawing.Point(89, 158)
         Me.txtServer.MaxLength = 32767
@@ -161,10 +161,21 @@ Partial Class ConfigurationPage
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Port"
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(168, 25)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(155, 56)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBox1.TabIndex = 10
+        Me.PictureBox1.TabStop = False
+        '
         'txtDatabasename
         '
         Me.txtDatabasename.BackColor = System.Drawing.Color.Transparent
-        Me.txtDatabasename.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtDatabasename.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtDatabasename.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtDatabasename.Location = New System.Drawing.Point(88, 227)
         Me.txtDatabasename.MaxLength = 32767
@@ -196,7 +207,7 @@ Partial Class ConfigurationPage
         'txtPassword
         '
         Me.txtPassword.BackColor = System.Drawing.Color.Transparent
-        Me.txtPassword.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtPassword.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtPassword.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtPassword.Location = New System.Drawing.Point(89, 362)
         Me.txtPassword.MaxLength = 32767
@@ -215,7 +226,7 @@ Partial Class ConfigurationPage
         'txtPort
         '
         Me.txtPort.BackColor = System.Drawing.Color.Transparent
-        Me.txtPort.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtPort.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtPort.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtPort.Location = New System.Drawing.Point(287, 158)
         Me.txtPort.MaxLength = 32767
@@ -248,7 +259,7 @@ Partial Class ConfigurationPage
         'txtUsername
         '
         Me.txtUsername.BackColor = System.Drawing.Color.Transparent
-        Me.txtUsername.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtUsername.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtUsername.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtUsername.Location = New System.Drawing.Point(88, 295)
         Me.txtUsername.MaxLength = 32767
@@ -278,17 +289,6 @@ Partial Class ConfigurationPage
         Me.btnSaveAndContinue.TabIndex = 10
         Me.btnSaveAndContinue.Text = "Save && Continue"
         Me.btnSaveAndContinue.UseVisualStyleBackColor = False
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(168, 25)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(155, 56)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.PictureBox1.TabIndex = 10
-        Me.PictureBox1.TabStop = False
         '
         'ConfigurationPage
         '

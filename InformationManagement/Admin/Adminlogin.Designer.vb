@@ -34,6 +34,7 @@ Partial Class Adminlogin
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Adminlogin))
         Me.RoundedPanel1 = New InformationManagement.RoundedPanel()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.chkShowPassword = New System.Windows.Forms.CheckBox()
         Me.txtPassword = New InformationManagement.RoundedTextBox()
         Me.txtUsername = New InformationManagement.RoundedTextBox()
@@ -41,7 +42,6 @@ Partial Class Adminlogin
         Me.adminlog = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.RoundedPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -64,6 +64,15 @@ Partial Class Adminlogin
         Me.RoundedPanel1.Size = New System.Drawing.Size(366, 412)
         Me.RoundedPanel1.TabIndex = 10
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(126, 33)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(105, 46)
+        Me.PictureBox1.TabIndex = 12
+        Me.PictureBox1.TabStop = False
+        '
         'chkShowPassword
         '
         Me.chkShowPassword.AutoSize = True
@@ -83,7 +92,7 @@ Partial Class Adminlogin
         '
         Me.txtPassword.BackColor = System.Drawing.Color.Transparent
         Me.txtPassword.BorderRadius = 10
-        Me.txtPassword.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtPassword.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtPassword.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtPassword.Location = New System.Drawing.Point(58, 239)
         Me.txtPassword.MaxLength = 32767
@@ -103,7 +112,7 @@ Partial Class Adminlogin
         '
         Me.txtUsername.BackColor = System.Drawing.Color.Transparent
         Me.txtUsername.BorderRadius = 10
-        Me.txtUsername.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtUsername.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtUsername.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtUsername.Location = New System.Drawing.Point(56, 165)
         Me.txtUsername.MaxLength = 32767
@@ -178,22 +187,12 @@ Partial Class Adminlogin
         Me.Label3.TabIndex = 7
         Me.Label3.Text = "Password"
         '
-        'PictureBox1
-        '
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(126, 33)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(105, 46)
-        Me.PictureBox1.TabIndex = 12
-        Me.PictureBox1.TabStop = False
-        '
         'Adminlogin
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.GhostWhite
         Me.BackgroundImage = Global.InformationManagement.My.Resources.Resources.Background
-        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ClientSize = New System.Drawing.Size(895, 705)
         Me.Controls.Add(Me.RoundedPanel1)
         Me.DoubleBuffered = True
