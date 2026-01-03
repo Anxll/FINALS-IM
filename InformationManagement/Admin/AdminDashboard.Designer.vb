@@ -24,6 +24,10 @@ Partial Class AdminDashboard
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AdminDashboard))
         Me.SidePanel = New System.Windows.Forms.Panel()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Setting = New System.Windows.Forms.Button()
         Me.ActivityLogs = New System.Windows.Forms.Button()
         Me.Feedback = New System.Windows.Forms.Button()
         Me.Customer = New System.Windows.Forms.Button()
@@ -36,11 +40,8 @@ Partial Class AdminDashboard
         Me.btnMenuItems = New System.Windows.Forms.Button()
         Me.btnUserAccounts = New System.Windows.Forms.Button()
         Me.btnDashboard = New System.Windows.Forms.Button()
-        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.btnLogout = New System.Windows.Forms.Button()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.SidePanel.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -50,6 +51,7 @@ Partial Class AdminDashboard
         'SidePanel
         '
         Me.SidePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.SidePanel.Controls.Add(Me.Setting)
         Me.SidePanel.Controls.Add(Me.ActivityLogs)
         Me.SidePanel.Controls.Add(Me.Feedback)
         Me.SidePanel.Controls.Add(Me.Customer)
@@ -70,6 +72,53 @@ Partial Class AdminDashboard
         Me.SidePanel.Size = New System.Drawing.Size(261, 660)
         Me.SidePanel.TabIndex = 0
         '
+        'Panel3
+        '
+        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel3.Controls.Add(Me.btnLogout)
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel3.Location = New System.Drawing.Point(0, 617)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(261, 43)
+        Me.Panel3.TabIndex = 1
+        '
+        'Panel2
+        '
+        Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel2.Controls.Add(Me.PictureBox1)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel2.Location = New System.Drawing.Point(0, 0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(261, 86)
+        Me.Panel2.TabIndex = 0
+        '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(261, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(539, 660)
+        Me.Panel1.TabIndex = 1
+        '
+        'Setting
+        '
+        Me.Setting.FlatAppearance.BorderSize = 0
+        Me.Setting.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Setting.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Setting.ForeColor = System.Drawing.Color.White
+        Me.Setting.Image = CType(resources.GetObject("Setting.Image"), System.Drawing.Image)
+        Me.Setting.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.Setting.Location = New System.Drawing.Point(20, 589)
+        Me.Setting.Margin = New System.Windows.Forms.Padding(2)
+        Me.Setting.Name = "Setting"
+        Me.Setting.Size = New System.Drawing.Size(190, 28)
+        Me.Setting.TabIndex = 13
+        Me.Setting.Text = "     Settings"
+        Me.Setting.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.Setting.UseVisualStyleBackColor = True
+        '
         'ActivityLogs
         '
         Me.ActivityLogs.FlatAppearance.BorderSize = 0
@@ -79,9 +128,9 @@ Partial Class AdminDashboard
         Me.ActivityLogs.Image = CType(resources.GetObject("ActivityLogs.Image"), System.Drawing.Image)
         Me.ActivityLogs.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ActivityLogs.Location = New System.Drawing.Point(20, 552)
-        Me.ActivityLogs.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ActivityLogs.Margin = New System.Windows.Forms.Padding(2)
         Me.ActivityLogs.Name = "ActivityLogs"
-        Me.ActivityLogs.Size = New System.Drawing.Size(142, 23)
+        Me.ActivityLogs.Size = New System.Drawing.Size(190, 28)
         Me.ActivityLogs.TabIndex = 8
         Me.ActivityLogs.Text = "     Activity Logs"
         Me.ActivityLogs.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -160,7 +209,7 @@ Partial Class AdminDashboard
         Me.btnReports.Image = CType(resources.GetObject("btnReports.Image"), System.Drawing.Image)
         Me.btnReports.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.btnReports.Location = New System.Drawing.Point(20, 511)
-        Me.btnReports.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnReports.Margin = New System.Windows.Forms.Padding(2)
         Me.btnReports.Name = "btnReports"
         Me.btnReports.Size = New System.Drawing.Size(190, 28)
         Me.btnReports.TabIndex = 7
@@ -264,16 +313,6 @@ Partial Class AdminDashboard
         Me.btnDashboard.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnDashboard.UseVisualStyleBackColor = True
         '
-        'Panel3
-        '
-        Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel3.Controls.Add(Me.btnLogout)
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel3.Location = New System.Drawing.Point(0, 617)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(261, 43)
-        Me.Panel3.TabIndex = 1
-        '
         'btnLogout
         '
         Me.btnLogout.FlatAppearance.BorderSize = 0
@@ -290,35 +329,15 @@ Partial Class AdminDashboard
         Me.btnLogout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnLogout.UseVisualStyleBackColor = True
         '
-        'Panel2
-        '
-        Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel2.Controls.Add(Me.PictureBox1)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel2.Location = New System.Drawing.Point(0, 0)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(261, 86)
-        Me.Panel2.TabIndex = 0
-        '
         'PictureBox1
         '
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
         Me.PictureBox1.Location = New System.Drawing.Point(52, 19)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(127, 51)
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
-        '
-        'Panel1
-        '
-        Me.Panel1.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(261, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(539, 660)
-        Me.Panel1.TabIndex = 1
         '
         'AdminDashboard
         '
@@ -355,4 +374,5 @@ Partial Class AdminDashboard
     Friend WithEvents Feedback As Button
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents ActivityLogs As Button
+    Friend WithEvents Setting As Button
 End Class

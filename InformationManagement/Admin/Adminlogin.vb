@@ -58,7 +58,25 @@ Public Class Adminlogin
                 CurrentLoggedUser.id = reader("id")
                 CurrentLoggedUser.name = reader("name").ToString()
                 CurrentLoggedUser.username = reader("username").ToString()
+                CurrentLoggedUser.password = reader("password").ToString()
                 CurrentLoggedUser.type = reader("type")
+
+                ' Check status
+                Dim status As String = "Active"
+                Try
+                    If Not IsDBNull(reader("status")) Then
+                        status = reader("status").ToString()
+                    End If
+                Catch
+                    ' Column might not exist yet or error reading it
+                End Try
+
+                If status = "Resigned" OrElse status = "InActive" Then
+                    MessageBox.Show("Your account is deactivated or resigned. Access denied.", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    reader.Close()
+                    conn.Close()
+                    Exit Sub
+                End If
 
                 reader.Close()
                 conn.Close()

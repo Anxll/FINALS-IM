@@ -2,7 +2,6 @@
 Partial Class FormEdit
     Inherits System.Windows.Forms.Form
 
-    'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()> _
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
@@ -14,250 +13,191 @@ Partial Class FormEdit
         End Try
     End Sub
 
-    'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
 
-    'NOTE: The following procedure is required by the Windows Form Designer
-    'It can be modified using the Windows Form Designer.  
-    'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormEdit))
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.LabelTitle = New System.Windows.Forms.Label()
+        Me.LabelName = New System.Windows.Forms.Label()
+        Me.txtFullName = New System.Windows.Forms.TextBox()
+        Me.LabelUser = New System.Windows.Forms.Label()
+        Me.txtUsername = New System.Windows.Forms.TextBox()
+        Me.LabelCurrentPass = New System.Windows.Forms.Label()
+        Me.txtCurrentPassword = New System.Windows.Forms.TextBox()
+        Me.LabelNewPass = New System.Windows.Forms.Label()
+        Me.txtNewPassword = New System.Windows.Forms.TextBox()
+        Me.chkShowPass = New System.Windows.Forms.CheckBox()
         Me.btnAddUser = New System.Windows.Forms.Button()
-        Me.txtName = New System.Windows.Forms.TextBox()
-        Me.cmbRole = New System.Windows.Forms.ComboBox()
-        Me.cmbStatus = New System.Windows.Forms.ComboBox()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.btnClose = New System.Windows.Forms.Button()
-        Me.txtFullName = New InformationManagement.RoundedTextBox()
-        Me.txtPhone = New InformationManagement.RoundedTextBox()
+        Me.btnCancel = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
-        'Label1
+        'LabelTitle
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI", 14.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(18, 23)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(58, 32)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Edit"
+        Me.LabelTitle.AutoSize = True
+        Me.LabelTitle.Font = New System.Drawing.Font("Segoe UI", 14.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelTitle.Location = New System.Drawing.Point(24, 15)
+        Me.LabelTitle.Name = "LabelTitle"
+        Me.LabelTitle.Size = New System.Drawing.Size(90, 25)
+        Me.LabelTitle.TabIndex = 0
+        Me.LabelTitle.Text = "Edit User"
+        '
+        'LabelName
+        '
+        Me.LabelName.AutoSize = True
+        Me.LabelName.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelName.Location = New System.Drawing.Point(26, 60)
+        Me.LabelName.Name = "LabelName"
+        Me.LabelName.Size = New System.Drawing.Size(71, 19)
+        Me.LabelName.TabIndex = 1
+        Me.LabelName.Text = "Full Name"
+        '
+        'txtFullName
+        '
+        Me.txtFullName.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.txtFullName.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtFullName.Location = New System.Drawing.Point(30, 82)
+        Me.txtFullName.Name = "txtFullName"
+        Me.txtFullName.ReadOnly = True
+        Me.txtFullName.Size = New System.Drawing.Size(300, 25)
+        Me.txtFullName.TabIndex = 2
+        '
+        'LabelUser
+        '
+        Me.LabelUser.AutoSize = True
+        Me.LabelUser.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelUser.Location = New System.Drawing.Point(26, 120)
+        Me.LabelUser.Name = "LabelUser"
+        Me.LabelUser.Size = New System.Drawing.Size(71, 19)
+        Me.LabelUser.TabIndex = 3
+        Me.LabelUser.Text = "Username"
+        '
+        'txtUsername
+        '
+        Me.txtUsername.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtUsername.Location = New System.Drawing.Point(30, 142)
+        Me.txtUsername.Name = "txtUsername"
+        Me.txtUsername.Size = New System.Drawing.Size(300, 25)
+        Me.txtUsername.TabIndex = 4
+        '
+        'LabelCurrentPass
+        '
+        Me.LabelCurrentPass.AutoSize = True
+        Me.LabelCurrentPass.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelCurrentPass.Location = New System.Drawing.Point(26, 180)
+        Me.LabelCurrentPass.Name = "LabelCurrentPass"
+        Me.LabelCurrentPass.Size = New System.Drawing.Size(118, 19)
+        Me.LabelCurrentPass.TabIndex = 5
+        Me.LabelCurrentPass.Text = "Current Password"
+        '
+        'txtCurrentPassword
+        '
+        Me.txtCurrentPassword.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.txtCurrentPassword.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCurrentPassword.Location = New System.Drawing.Point(30, 202)
+        Me.txtCurrentPassword.Name = "txtCurrentPassword"
+        Me.txtCurrentPassword.PasswordChar = "*"c
+        Me.txtCurrentPassword.ReadOnly = True
+        Me.txtCurrentPassword.Size = New System.Drawing.Size(300, 25)
+        Me.txtCurrentPassword.TabIndex = 6
+        '
+        'LabelNewPass
+        '
+        Me.LabelNewPass.AutoSize = True
+        Me.LabelNewPass.Font = New System.Drawing.Font("Segoe UI Semibold", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelNewPass.Location = New System.Drawing.Point(26, 240)
+        Me.LabelNewPass.Name = "LabelNewPass"
+        Me.LabelNewPass.Size = New System.Drawing.Size(100, 19)
+        Me.LabelNewPass.TabIndex = 7
+        Me.LabelNewPass.Text = "New Password"
+        '
+        'txtNewPassword
+        '
+        Me.txtNewPassword.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtNewPassword.Location = New System.Drawing.Point(30, 262)
+        Me.txtNewPassword.Name = "txtNewPassword"
+        Me.txtNewPassword.PasswordChar = "*"c
+        Me.txtNewPassword.Size = New System.Drawing.Size(300, 25)
+        Me.txtNewPassword.TabIndex = 8
+        '
+        'chkShowPass
+        '
+        Me.chkShowPass.AutoSize = True
+        Me.chkShowPass.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkShowPass.Location = New System.Drawing.Point(30, 298)
+        Me.chkShowPass.Name = "chkShowPass"
+        Me.chkShowPass.Size = New System.Drawing.Size(108, 19)
+        Me.chkShowPass.TabIndex = 9
+        Me.chkShowPass.Text = "Show Password"
+        Me.chkShowPass.UseVisualStyleBackColor = True
         '
         'btnAddUser
         '
         Me.btnAddUser.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.btnAddUser.FlatAppearance.BorderSize = 0
         Me.btnAddUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnAddUser.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnAddUser.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnAddUser.ForeColor = System.Drawing.Color.White
-        Me.btnAddUser.Location = New System.Drawing.Point(30, 378)
+        Me.btnAddUser.Location = New System.Drawing.Point(190, 340)
         Me.btnAddUser.Name = "btnAddUser"
-        Me.btnAddUser.Size = New System.Drawing.Size(417, 42)
-        Me.btnAddUser.TabIndex = 6
-        Me.btnAddUser.Text = "Add User"
+        Me.btnAddUser.Size = New System.Drawing.Size(140, 40)
+        Me.btnAddUser.TabIndex = 10
+        Me.btnAddUser.Text = "Update"
         Me.btnAddUser.UseVisualStyleBackColor = False
         '
-        'txtName
+        'btnCancel
         '
-        Me.txtName.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.txtName.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.txtName.Location = New System.Drawing.Point(23, 86)
-        Me.txtName.MaximumSize = New System.Drawing.Size(0, 40)
-        Me.txtName.Multiline = True
-        Me.txtName.Name = "txtName"
-        Me.txtName.Size = New System.Drawing.Size(0, 35)
-        Me.txtName.TabIndex = 7
-        '
-        'cmbRole
-        '
-        Me.cmbRole.AutoCompleteCustomSource.AddRange(New String() {"Staff", "Emploee", "Customer"})
-        Me.cmbRole.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.cmbRole.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-        Me.cmbRole.DropDownWidth = 300
-        Me.cmbRole.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.cmbRole.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbRole.FormattingEnabled = True
-        Me.cmbRole.ItemHeight = 30
-        Me.cmbRole.Items.AddRange(New Object() {"Staff", "Employee", "Customer"})
-        Me.cmbRole.Location = New System.Drawing.Point(32, 232)
-        Me.cmbRole.Name = "cmbRole"
-        Me.cmbRole.Size = New System.Drawing.Size(419, 36)
-        Me.cmbRole.TabIndex = 10
-        '
-        'cmbStatus
-        '
-        Me.cmbStatus.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.cmbStatus.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-        Me.cmbStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.cmbStatus.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmbStatus.FormattingEnabled = True
-        Me.cmbStatus.ItemHeight = 30
-        Me.cmbStatus.Items.AddRange(New Object() {"Active ", "InActive"})
-        Me.cmbStatus.Location = New System.Drawing.Point(30, 315)
-        Me.cmbStatus.Name = "cmbStatus"
-        Me.cmbStatus.Size = New System.Drawing.Size(417, 36)
-        Me.cmbStatus.TabIndex = 11
-        '
-        'TextBox1
-        '
-        Me.TextBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.TextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBox1.Location = New System.Drawing.Point(24, 158)
-        Me.TextBox1.MaximumSize = New System.Drawing.Size(0, 40)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(0, 35)
-        Me.TextBox1.TabIndex = 14
-        '
-        'TextBox2
-        '
-        Me.TextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBox2.Location = New System.Drawing.Point(23, 232)
-        Me.TextBox2.MaximumSize = New System.Drawing.Size(0, 40)
-        Me.TextBox2.Multiline = True
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(0, 35)
-        Me.TextBox2.TabIndex = 15
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(29, 66)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(95, 23)
-        Me.Label7.TabIndex = 19
-        Me.Label7.Text = "User Name"
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(26, 212)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(44, 23)
-        Me.Label8.TabIndex = 21
-        Me.Label8.Text = "Role"
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(28, 138)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(82, 23)
-        Me.Label9.TabIndex = 22
-        Me.Label9.Text = "Password"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(27, 279)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(57, 23)
-        Me.Label3.TabIndex = 23
-        Me.Label3.Text = "Status"
-        '
-        'btnClose
-        '
-        Me.btnClose.FlatAppearance.BorderSize = 0
-        Me.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnClose.Image = CType(resources.GetObject("btnClose.Image"), System.Drawing.Image)
-        Me.btnClose.Location = New System.Drawing.Point(433, 12)
-        Me.btnClose.Name = "btnClose"
-        Me.btnClose.Size = New System.Drawing.Size(29, 27)
-        Me.btnClose.TabIndex = 24
-        Me.btnClose.UseVisualStyleBackColor = True
-        '
-        'txtFullName
-        '
-        Me.txtFullName.BackColor = System.Drawing.Color.Transparent
-        Me.txtFullName.FocusBorderColor = System.Drawing.Color.DarkGray
-        Me.txtFullName.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtFullName.Location = New System.Drawing.Point(30, 86)
-        Me.txtFullName.MaxLength = 32767
-        Me.txtFullName.MinimumSize = New System.Drawing.Size(50, 20)
-        Me.txtFullName.Multiline = False
-        Me.txtFullName.Name = "txtFullName"
-        Me.txtFullName.NormalBorderColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
-        Me.txtFullName.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
-        Me.txtFullName.ReadOnly = False
-        Me.txtFullName.Size = New System.Drawing.Size(421, 40)
-        Me.txtFullName.TabIndex = 25
-        Me.txtFullName.TextBoxBackColor = System.Drawing.Color.WhiteSmoke
-        Me.txtFullName.TextColor = System.Drawing.Color.Black
-        Me.txtFullName.TextFont = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        '
-        'txtPhone
-        '
-        Me.txtPhone.BackColor = System.Drawing.Color.Transparent
-        Me.txtPhone.FocusBorderColor = System.Drawing.Color.DarkGray
-        Me.txtPhone.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPhone.Location = New System.Drawing.Point(32, 158)
-        Me.txtPhone.MaxLength = 32767
-        Me.txtPhone.MinimumSize = New System.Drawing.Size(50, 20)
-        Me.txtPhone.Multiline = False
-        Me.txtPhone.Name = "txtPhone"
-        Me.txtPhone.NormalBorderColor = System.Drawing.Color.FromArgb(CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer), CType(CType(200, Byte), Integer))
-        Me.txtPhone.PasswordChar = Global.Microsoft.VisualBasic.ChrW(0)
-        Me.txtPhone.ReadOnly = False
-        Me.txtPhone.Size = New System.Drawing.Size(419, 40)
-        Me.txtPhone.TabIndex = 26
-        Me.txtPhone.TextBoxBackColor = System.Drawing.Color.WhiteSmoke
-        Me.txtPhone.TextColor = System.Drawing.Color.Black
-        Me.txtPhone.TextFont = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCancel.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.btnCancel.FlatAppearance.BorderSize = 0
+        Me.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnCancel.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnCancel.ForeColor = System.Drawing.Color.Black
+        Me.btnCancel.Location = New System.Drawing.Point(30, 340)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(140, 40)
+        Me.btnCancel.TabIndex = 11
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.UseVisualStyleBackColor = False
         '
         'FormEdit
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 19.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 17.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(484, 447)
-        Me.ControlBox = False
-        Me.Controls.Add(Me.txtPhone)
-        Me.Controls.Add(Me.txtFullName)
-        Me.Controls.Add(Me.btnClose)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Label9)
-        Me.Controls.Add(Me.Label8)
-        Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.TextBox2)
-        Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.cmbStatus)
-        Me.Controls.Add(Me.cmbRole)
-        Me.Controls.Add(Me.txtName)
+        Me.ClientSize = New System.Drawing.Size(360, 410)
+        Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.btnAddUser)
-        Me.Controls.Add(Me.Label1)
-        Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
+        Me.Controls.Add(Me.chkShowPass)
+        Me.Controls.Add(Me.txtNewPassword)
+        Me.Controls.Add(Me.LabelNewPass)
+        Me.Controls.Add(Me.txtCurrentPassword)
+        Me.Controls.Add(Me.LabelCurrentPass)
+        Me.Controls.Add(Me.txtUsername)
+        Me.Controls.Add(Me.LabelUser)
+        Me.Controls.Add(Me.txtFullName)
+        Me.Controls.Add(Me.LabelName)
+        Me.Controls.Add(Me.LabelTitle)
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "FormEdit"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "FormAddUser"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.Text = "Edit User"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
-    Friend WithEvents Label1 As Label
+    Friend WithEvents LabelTitle As Label
+    Friend WithEvents LabelName As Label
+    Friend WithEvents txtFullName As TextBox
+    Friend WithEvents LabelUser As Label
+    Friend WithEvents txtUsername As TextBox
+    Friend WithEvents LabelCurrentPass As Label
+    Friend WithEvents txtCurrentPassword As TextBox
+    Friend WithEvents LabelNewPass As Label
+    Friend WithEvents txtNewPassword As TextBox
+    Friend WithEvents chkShowPass As CheckBox
     Friend WithEvents btnAddUser As Button
-    Friend WithEvents txtName As TextBox
-    Friend WithEvents cmbStatus As ComboBox
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents TextBox2 As TextBox
-    Friend WithEvents Label7 As Label
-    Friend WithEvents Label8 As Label
-    Friend WithEvents Label9 As Label
-    Friend WithEvents Label3 As Label
-    Friend WithEvents btnClose As Button
-    Friend WithEvents txtFullName As RoundedTextBox
-    Friend WithEvents txtPhone As RoundedTextBox
-    Friend WithEvents cmbRole As ComboBox
+    Friend WithEvents btnCancel As Button
 End Class

@@ -163,7 +163,23 @@ Module modDB
                     End If
                 End Using
             Catch
-                ' Best-effort; don't block app startup on schema detection issues.
+                ' Best-effort
+            End Try
+
+            ' Ensure status column exists
+            Try
+                Dim colCheckSqlStatus As String = "SELECT COUNT(*) FROM information_schema.COLUMNS " &
+                                            "WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'user_accounts' AND COLUMN_NAME = 'status'"
+                Using colCheckCmd As New MySqlCommand(colCheckSqlStatus, conn)
+                    Dim colCount As Integer = Convert.ToInt32(colCheckCmd.ExecuteScalar())
+                    If colCount = 0 Then
+                        Using alterCmd As New MySqlCommand("ALTER TABLE user_accounts ADD COLUMN status VARCHAR(50) DEFAULT 'Active'", conn)
+                            alterCmd.ExecuteNonQuery()
+                        End Using
+                    End If
+                End Using
+            Catch
+                ' Best-effort
             End Try
 
             ' 2. Create payroll table

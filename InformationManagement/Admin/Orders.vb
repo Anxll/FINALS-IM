@@ -36,6 +36,7 @@ Public Class Orders
         EnableDoubleBuffering(DataGridView2)
 
         SetupPaginationControls()
+        RoundPaginationButtons()
     End Sub
 
     ' ============================================================
@@ -71,15 +72,37 @@ Public Class Orders
     ' ============================================================
     ' SETUP PAGINATION CONTROLS
     ' ============================================================
+    ' ============================================================
+    ' SETUP PAGINATION CONTROLS
+    ' ============================================================
+    ' Dynamic label for Page Info (since it's missing in Designer)
+    Private lblPageInfo As Label
+
     Private Sub SetupPaginationControls()
         If Me.Controls.Find("cboRecordsPerPage", True).Length > 0 Then
             Dim cbo As ComboBox = CType(Me.Controls.Find("cboRecordsPerPage", True)(0), ComboBox)
             cbo.Items.Clear()
-            cbo.Items.AddRange(New Object() {20, 50, 100, 200, 500})  ' Added 20 as first option
-            cbo.SelectedIndex = 0 ' Changed from 1 to 0 to select 20 as default
+            cbo.Items.AddRange(New Object() {20, 50, 100, 200, 500})
+            cbo.SelectedIndex = 0 
         End If
 
-        UpdatePaginationButtons()
+        ' Create lblPageInfo if it doesn't exist
+        If lblPageInfo Is Nothing Then
+            lblPageInfo = New Label()
+            lblPageInfo.Name = "lblPageInfo"
+            lblPageInfo.AutoSize = False
+            lblPageInfo.Size = New Size(100, 20)
+            lblPageInfo.TextAlign = ContentAlignment.MiddleCenter
+            lblPageInfo.Font = New Font("Segoe UI", 9.5!, FontStyle.Bold)
+            lblPageInfo.ForeColor = Color.Black
+            Panel4.Controls.Add(lblPageInfo)
+        End If
+
+        ' Ensure lblTotalOrders style
+        lblTotalOrders.Font = New Font("Segoe UI", 9.0!, FontStyle.Bold)
+        lblTotalOrders.ForeColor = Color.Black
+
+        UpdatePaginationInfo()
     End Sub
 
     ' ============================================================
@@ -602,46 +625,108 @@ Public Class Orders
     ' ============================================================
     ' UPDATE PAGINATION INFO
     ' ============================================================
+    ' ============================================================
+    ' UPDATE PAGINATION INFO
+    ' ============================================================
     Private Sub UpdatePaginationInfo()
         Dim totalPages As Integer = If(TotalRecords > 0, Math.Ceiling(TotalRecords / RecordsPerPage), 1)
         Dim startRecord As Integer = If(TotalRecords > 0, (CurrentPage - 1) * RecordsPerPage + 1, 0)
         Dim endRecord As Integer = Math.Min(CurrentPage * RecordsPerPage, TotalRecords)
 
-        lblTotalOrders.Text = $"Showing {startRecord:N0} to {endRecord:N0} of {TotalRecords:N0} orders (Page {CurrentPage} of {totalPages})"
-
-        If Me.Controls.Find("lblPageInfo", True).Length > 0 Then
-            Dim lblPage As Label = CType(Me.Controls.Find("lblPageInfo", True)(0), Label)
-            lblPage.Text = $"Page {CurrentPage} / {totalPages}"
+        ' Update Total Orders Label on the LEFT
+        If lblTotalOrders IsNot Nothing Then
+            lblTotalOrders.Text = $"Total Orders: {TotalRecords:N0}"
         End If
 
-        UpdatePaginationButtons()
+        ' Update Page Info Label in the CENTER
+        If lblPageInfo IsNot Nothing Then
+            lblPageInfo.Text = $"Page {CurrentPage} of {totalPages}"
+        End If
+
+        ' Enable/disable buttons directly
+        
+        btnFirstPage.Enabled = (CurrentPage > 1)
+        btnPrevPage.Enabled = (CurrentPage > 1)
+        btnNextPage.Enabled = (CurrentPage < totalPages)
+        btnLastPage.Enabled = (CurrentPage < totalPages)
+
+        ' Visual feedback for disabled buttons
+        btnFirstPage.BackColor = If(btnFirstPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+        btnPrevPage.BackColor = If(btnPrevPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+        btnNextPage.BackColor = If(btnNextPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+        btnLastPage.BackColor = If(btnLastPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+
+        ' Re-center
+        CenterPaginationControls()
     End Sub
 
     ' ============================================================
-    ' UPDATE PAGINATION BUTTONS
+    ' PAGINATION STYLING HELPERS
     ' ============================================================
-    Private Sub UpdatePaginationButtons()
-        Dim totalPages As Integer = If(TotalRecords > 0, Math.Ceiling(TotalRecords / RecordsPerPage), 1)
+    Private Sub RoundButton(btn As Button)
+        Dim radius As Integer = 8 
+        Dim path As New Drawing2D.GraphicsPath()
+        path.StartFigure()
+        path.AddArc(New Rectangle(0, 0, radius, radius), 180, 90)
+        path.AddArc(New Rectangle(btn.Width - radius, 0, radius, radius), 270, 90)
+        path.AddArc(New Rectangle(btn.Width - radius, btn.Height - radius, radius, radius), 0, 90)
+        path.AddArc(New Rectangle(0, btn.Height - radius, radius, radius), 90, 90)
+        path.CloseFigure()
+        btn.Region = New Region(path)
+    End Sub
 
-        If Me.Controls.Find("btnFirstPage", True).Length > 0 Then
-            Dim btn As Button = CType(Me.Controls.Find("btnFirstPage", True)(0), Button)
-            btn.Enabled = CurrentPage > 1
-        End If
+    Private Sub RoundPaginationButtons()
+        RoundButton(btnFirstPage)
+        RoundButton(btnPrevPage)
+        RoundButton(btnNextPage)
+        RoundButton(btnLastPage)
+    End Sub
 
-        If Me.Controls.Find("btnPrevPage", True).Length > 0 Then
-            Dim btn As Button = CType(Me.Controls.Find("btnPrevPage", True)(0), Button)
-            btn.Enabled = CurrentPage > 1
-        End If
+    Private Sub CenterPaginationControls()
+        Try
+            Dim panelWidth As Integer = Panel4.Width
+            Dim totalButtonWidth As Integer = btnFirstPage.Width + btnPrevPage.Width +
+                                              btnNextPage.Width + btnLastPage.Width
+            Dim spacing As Integer = 10
+            Dim labelWidth As Integer = 100 ' Estimated width
 
-        If Me.Controls.Find("btnNextPage", True).Length > 0 Then
-            Dim btn As Button = CType(Me.Controls.Find("btnNextPage", True)(0), Button)
-            btn.Enabled = CurrentPage < totalPages
-        End If
+            ' 1. Position TotalOrders label to the LEFT
+            lblTotalOrders.Location = New Point(10, 16) ' Vertically centered in 50px panel? 50-15=35/2 ~17
+            ' Use layout logic to vertical center
+            lblTotalOrders.Top = (Panel4.Height - lblTotalOrders.Height) \ 2
 
-        If Me.Controls.Find("btnLastPage", True).Length > 0 Then
-            Dim btn As Button = CType(Me.Controls.Find("btnLastPage", True)(0), Button)
-            btn.Enabled = CurrentPage < totalPages
-        End If
+
+            ' 2. Calculate Center Group Width (First + Prev + PageInfo + Next + Last)
+            ' Check if lblPageInfo is initialized
+            If lblPageInfo IsNot Nothing Then
+                 labelWidth = lblPageInfo.Width
+            End If
+            
+            Dim centerGroupWidth As Integer = totalButtonWidth + (spacing * 4) + labelWidth
+            Dim startX As Integer = (panelWidth - centerGroupWidth) \ 2
+
+            ' 3. Position Buttons and Center Label
+            btnFirstPage.Location = New Point(startX, 10)
+            btnPrevPage.Location = New Point(btnFirstPage.Right + spacing, 10)
+            
+            If lblPageInfo IsNot Nothing Then
+                lblPageInfo.Location = New Point(btnPrevPage.Right + spacing, 16)
+                lblPageInfo.Top = (Panel4.Height - lblPageInfo.Height) \ 2 ' Vertical center
+                
+                btnNextPage.Location = New Point(lblPageInfo.Right + spacing, 10)
+            Else
+                btnNextPage.Location = New Point(btnPrevPage.Right + spacing, 10) 
+            End If
+            
+            btnLastPage.Location = New Point(btnNextPage.Right + spacing, 10)
+            
+        Catch ex As Exception
+            ' Silently fail
+        End Try
+    End Sub
+
+    Private Sub Orders_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        CenterPaginationControls()
     End Sub
 
     ' ============================================================

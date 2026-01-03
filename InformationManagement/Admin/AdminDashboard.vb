@@ -229,6 +229,8 @@ Public Class AdminDashboard
         MakeRoundedButton(btnOrders, 15)
         MakeRoundedButton(btnPayroll, 15)
         MakeRoundedButton(btnReports, 15)
+        MakeRoundedButton(ActivityLogs, 15)
+        MakeRoundedButton(Setting, 15)
         HighlightButton(btnDashboard)
         With Dashboard
             .TopLevel = False
@@ -259,6 +261,23 @@ Public Class AdminDashboard
             .Dock = DockStyle.Fill
             Panel1.Controls.Clear()
             Panel1.Controls.Add(activityLogsForm)
+            .BringToFront()
+            .Show()
+        End With
+    End Sub
+
+    Private Sub Setting_Click(sender As Object, e As EventArgs) Handles Setting.Click
+        HighlightButton(Setting)
+
+        ' Create an instance of Setting form
+        Dim settingsForm As New Setting()
+
+        With settingsForm
+            .TopLevel = False
+            .FormBorderStyle = FormBorderStyle.None
+            .Dock = DockStyle.Fill
+            Panel1.Controls.Clear()
+            Panel1.Controls.Add(settingsForm)
             .BringToFront()
             .Show()
         End With

@@ -47,7 +47,7 @@ Partial Class ConfigurationPage
         '
         Me.RoundedPane21.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.RoundedPane21.BackColor = System.Drawing.Color.Transparent
-        Me.RoundedPane21.BorderColor = System.Drawing.SystemColors.ActiveCaption
+        Me.RoundedPane21.BorderColor = System.Drawing.Color.Transparent
         Me.RoundedPane21.BorderThickness = 1
         Me.RoundedPane21.Controls.Add(Me.lblServerStatus)
         Me.RoundedPane21.Controls.Add(Me.txtServer)
@@ -65,15 +65,15 @@ Partial Class ConfigurationPage
         Me.RoundedPane21.Controls.Add(Me.txtUsername)
         Me.RoundedPane21.Controls.Add(Me.btnSaveAndContinue)
         Me.RoundedPane21.CornerRadius = 12
-        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
-        Me.RoundedPane21.Location = New System.Drawing.Point(183, 29)
+        Me.RoundedPane21.FillColor = System.Drawing.Color.FromArgb(CType(CType(134, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Me.RoundedPane21.Location = New System.Drawing.Point(183, 40)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(494, 508)
         Me.RoundedPane21.TabIndex = 11
         '
         'lblServerStatus
         '
-        Me.lblServerStatus.BackColor = System.Drawing.Color.FromArgb(CType(CType(26, Byte), Integer), CType(CType(38, Byte), Integer), CType(CType(50, Byte), Integer))
+        Me.lblServerStatus.BackColor = System.Drawing.Color.FromArgb(CType(CType(134, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.lblServerStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Italic)
         Me.lblServerStatus.ForeColor = System.Drawing.Color.Gray
         Me.lblServerStatus.Location = New System.Drawing.Point(90, 400)
@@ -85,7 +85,7 @@ Partial Class ConfigurationPage
         'txtServer
         '
         Me.txtServer.BackColor = System.Drawing.Color.Transparent
-        Me.txtServer.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtServer.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtServer.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtServer.Location = New System.Drawing.Point(89, 158)
         Me.txtServer.MaxLength = 32767
@@ -175,7 +175,7 @@ Partial Class ConfigurationPage
         'txtDatabasename
         '
         Me.txtDatabasename.BackColor = System.Drawing.Color.Transparent
-        Me.txtDatabasename.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtDatabasename.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtDatabasename.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtDatabasename.Location = New System.Drawing.Point(88, 227)
         Me.txtDatabasename.MaxLength = 32767
@@ -207,7 +207,7 @@ Partial Class ConfigurationPage
         'txtPassword
         '
         Me.txtPassword.BackColor = System.Drawing.Color.Transparent
-        Me.txtPassword.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtPassword.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtPassword.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtPassword.Location = New System.Drawing.Point(89, 362)
         Me.txtPassword.MaxLength = 32767
@@ -226,7 +226,7 @@ Partial Class ConfigurationPage
         'txtPort
         '
         Me.txtPort.BackColor = System.Drawing.Color.Transparent
-        Me.txtPort.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtPort.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtPort.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtPort.Location = New System.Drawing.Point(287, 158)
         Me.txtPort.MaxLength = 32767
@@ -259,7 +259,7 @@ Partial Class ConfigurationPage
         'txtUsername
         '
         Me.txtUsername.BackColor = System.Drawing.Color.Transparent
-        Me.txtUsername.FocusBorderColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(234, Byte), Integer))
+        Me.txtUsername.FocusBorderColor = System.Drawing.Color.LightCoral
         Me.txtUsername.ForeColor = System.Drawing.Color.FromArgb(CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer), CType(CType(80, Byte), Integer))
         Me.txtUsername.Location = New System.Drawing.Point(88, 295)
         Me.txtUsername.MaxLength = 32767
@@ -295,6 +295,7 @@ Partial Class ConfigurationPage
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.GhostWhite
+        Me.BackgroundImage = Global.InformationManagement.My.Resources.Resources.Background
         Me.ClientSize = New System.Drawing.Size(898, 590)
         Me.Controls.Add(Me.RoundedPane21)
         Me.DoubleBuffered = True

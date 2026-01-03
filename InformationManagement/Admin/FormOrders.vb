@@ -463,20 +463,35 @@ Public Class FormOrders
                 .Series.Add(seriesTrend)
             End With
 
-            ' Configure Categories Chart (Pie)
+            ' Configure Categories Chart (Orders By Type)
             With OrderCategoriesGraph
                 .Series.Clear()
-                .ChartAreas(0).BackColor = Color.Transparent
+                .Titles.Clear()
+                .Legends.Clear()
 
-                Dim seriesPie As New Series("Categories")
-                seriesPie.ChartType = SeriesChartType.Doughnut
-                seriesPie("PieLabelStyle") = "Outside"
-                seriesPie("PieStartAngle") = "270"
-                seriesPie("DoughnutRadius") = "40"
+                .ChartAreas(0).BackColor = Color.White
+                .ChartAreas(0).AxisX.MajorGrid.Enabled = False
+                .ChartAreas(0).AxisY.MajorGrid.Enabled = True
+                .ChartAreas(0).AxisY.MajorGrid.LineColor = Color.FromArgb(240, 240, 240)
+                .ChartAreas(0).AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash
 
-                .Series.Add(seriesPie)
-                .Legends(0).Enabled = True
-                .Legends(0).Docking = Docking.Right
+                .ChartAreas(0).AxisX.LabelStyle.Font = New Font("Segoe UI", 9)
+                .ChartAreas(0).AxisX.LabelStyle.ForeColor = Color.DimGray
+                .ChartAreas(0).AxisX.LineWidth = 0
+
+                .ChartAreas(0).AxisY.LabelStyle.Enabled = False
+                .ChartAreas(0).AxisY.LineWidth = 0
+
+                .Titles.Add("Orders by Type")
+                .Titles(0).Font = New Font("Segoe UI", 12, FontStyle.Bold)
+                .Titles(0).Alignment = ContentAlignment.TopLeft
+                .Titles(0).ForeColor = Color.FromArgb(50, 50, 50)
+
+                Dim seriesType As New Series("OrderTypes")
+                seriesType.ChartType = SeriesChartType.Column
+                seriesType("PointWidth") = "0.4"
+
+                .Series.Add(seriesType)
             End With
 
         Catch ex As Exception
@@ -563,7 +578,13 @@ Public Class FormOrders
     End Sub
 
     ' =======================================================================
-    ' LOAD CATEGORIES CHART
+    ' LOAD CATEGORIES CHART -> ORDERS BY TYPE (COLUMN CHART)
+    ' =======================================================================
+    ' =======================================================================
+    ' LOAD CATEGORIES CHART -> ORDERS BY TYPE (COLUMN CHART) - FIXED
+    ' =======================================================================
+    ' =======================================================================
+    ' LOAD CATEGORIES CHART -> ORDERS BY TYPE (COLUMN CHART) - FIXED
     ' =======================================================================
     Private Sub LoadCategoriesChart()
         Try
@@ -577,52 +598,113 @@ Public Class FormOrders
             Select Case Reports.SelectedPeriod
                 Case "Daily"
                     If selectedYear = DateTime.Now.Year Then
-                        periodFilter = " AND DATE(o.OrderDate) = CURDATE() "
+                        periodFilter = " WHERE DATE(OrderDate) = CURDATE() "
                     Else
-                        periodFilter = $" AND DATE(o.OrderDate) = '{selectedYear}-12-31' "
+                        periodFilter = $" WHERE DATE(OrderDate) = '{selectedYear}-12-31' "
                     End If
                 Case "Weekly"
                     If selectedYear = DateTime.Now.Year Then
-                        periodFilter = " AND YEARWEEK(o.OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
+                        periodFilter = " WHERE YEARWEEK(OrderDate, 1) = YEARWEEK(CURDATE(), 1) "
                     Else
-                        periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} AND WEEK(o.OrderDate, 1) = 52 "
+                        periodFilter = $" WHERE YEAR(OrderDate) = {selectedYear} AND WEEK(OrderDate, 1) = 52 "
                     End If
                 Case "Monthly"
                     If selectedMonth = 0 Then
-                        periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} "
+                        periodFilter = $" WHERE YEAR(OrderDate) = {selectedYear} "
                     Else
-                        periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} AND MONTH(o.OrderDate) = {selectedMonth} "
+                        periodFilter = $" WHERE YEAR(OrderDate) = {selectedYear} AND MONTH(OrderDate) = {selectedMonth} "
                     End If
                 Case "Yearly"
-                    periodFilter = $" AND YEAR(o.OrderDate) = {selectedYear} "
+                    periodFilter = $" WHERE YEAR(OrderDate) = {selectedYear} "
+                Case Else
+                    periodFilter = "" ' All time - no filter
             End Select
 
+            ' FIXED: Removed the "AND" prefix and changed to proper WHERE clause
             Dim sql As String = $"
-                SELECT COALESCE(p.Category, 'Other') AS Category, COUNT(*) AS Count
-                FROM order_items oi
-                JOIN orders o ON oi.OrderID = o.OrderID
-                LEFT JOIN products p ON oi.ProductName = p.ProductName
-                WHERE 1=1 {periodFilter}
-                GROUP BY p.Category
-            "
+            SELECT OrderType, COUNT(*) AS Count
+            FROM orders
+            {periodFilter}
+            GROUP BY OrderType
+            ORDER BY OrderType
+        "
 
-            OrderCategoriesGraph.Series("Categories").Points.Clear()
+            ' Initialize counts with 0 - ensures all types show even if no data
+            Dim typeCounts As New Dictionary(Of String, Integer) From {
+            {"Dine-In", 0},
+            {"Takeout", 0},
+            {"Reservation", 0}
+        }
 
             Using cmd As New MySqlCommand(sql, conn)
                 Using reader As MySqlDataReader = cmd.ExecuteReader()
                     While reader.Read()
-                        Dim p As DataPoint = OrderCategoriesGraph.Series("Categories").Points.Add(Convert.ToDouble(reader("Count")))
-                        p.LegendText = reader("Category").ToString()
-                        p.Label = reader("Count").ToString()
+                        Dim rawType As String = reader("OrderType").ToString().Trim()
+                        Dim count As Integer = Convert.ToInt32(reader("Count"))
+                        Dim key As String = ""
+
+                        ' Normalize keys - handle various spellings
+                        If rawType.Equals("Dine-In", StringComparison.OrdinalIgnoreCase) OrElse
+                       rawType.Equals("Dine In", StringComparison.OrdinalIgnoreCase) OrElse
+                       rawType.Equals("DineIn", StringComparison.OrdinalIgnoreCase) Then
+                            key = "Dine-In"
+                        ElseIf rawType.Equals("Takeout", StringComparison.OrdinalIgnoreCase) OrElse
+                           rawType.Equals("Take Out", StringComparison.OrdinalIgnoreCase) OrElse
+                           rawType.Equals("Take-Out", StringComparison.OrdinalIgnoreCase) Then
+                            key = "Takeout"
+                        ElseIf rawType.Equals("Reservation", StringComparison.OrdinalIgnoreCase) OrElse
+                           rawType.Equals("Online", StringComparison.OrdinalIgnoreCase) Then
+                            key = "Reservation"
+                        End If
+
+                        ' Add count to the correct category
+                        If Not String.IsNullOrEmpty(key) AndAlso typeCounts.ContainsKey(key) Then
+                            typeCounts(key) += count
+                        End If
                     End While
                 End Using
             End Using
 
+            ' Bind to Chart with proper color coding
+            With OrderCategoriesGraph.Series("OrderTypes")
+                .Points.Clear()
+
+                ' Dine-In (Purple/Blue)
+                Dim idx1 As Integer = .Points.AddXY("Dine-In", typeCounts("Dine-In"))
+                .Points(idx1).Color = Color.FromArgb(88, 86, 214) ' Purple-ish Blue
+                .Points(idx1).Label = typeCounts("Dine-In").ToString() ' Show count on bar
+
+                ' Takeout (Green)
+                Dim idx2 As Integer = .Points.AddXY("Takeout", typeCounts("Takeout"))
+                .Points(idx2).Color = Color.FromArgb(149, 209, 36) ' Lime Green
+                .Points(idx2).Label = typeCounts("Takeout").ToString()
+
+                ' Reservation (Orange)
+                Dim idx3 As Integer = .Points.AddXY("Reservation", typeCounts("Reservation"))
+                .Points(idx3).Color = Color.FromArgb(255, 149, 0) ' Orange
+                .Points(idx3).Label = typeCounts("Reservation").ToString()
+            End With
+
         Catch ex As Exception
-            ' Load sample points
-            OrderCategoriesGraph.Series("Categories").Points.AddXY("Dine In", 45)
-            OrderCategoriesGraph.Series("Categories").Points.AddXY("Take Out", 35)
-            OrderCategoriesGraph.Series("Categories").Points.AddXY("Delivery", 20)
+            ' Fallback Sample Data - only if database completely fails
+            With OrderCategoriesGraph.Series("OrderTypes")
+                .Points.Clear()
+
+                Dim idx1 As Integer = .Points.AddXY("Dine-In", 0)
+                .Points(idx1).Color = Color.FromArgb(88, 86, 214)
+                .Points(idx1).Label = "0"
+
+                Dim idx2 As Integer = .Points.AddXY("Takeout", 0)
+                .Points(idx2).Color = Color.FromArgb(149, 209, 36)
+                .Points(idx2).Label = "0"
+
+                Dim idx3 As Integer = .Points.AddXY("Reservation", 0)
+                .Points(idx3).Color = Color.FromArgb(255, 149, 0)
+                .Points(idx3).Label = "0"
+            End With
+
+            ' Optional: Log the error for debugging
+            Console.WriteLine($"Error loading categories chart: {ex.Message}")
         End Try
     End Sub
     Private Sub btnExportPdf_Click(sender As Object, e As EventArgs) Handles btnExportPdf.Click

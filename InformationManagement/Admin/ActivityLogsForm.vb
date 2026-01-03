@@ -4,8 +4,9 @@ Imports System.Drawing.Printing
 
 Public Class ActivityLogsForm
     Private currentPage As Integer = 1
-    Private recordsPerPage As Integer = 100
+    Private recordsPerPage As Integer = 20
     Private totalRecords As Integer = 0
+    Private totalPages As Integer = 0
     Private WithEvents prnDoc As New PrintDocument()
 
     Public Sub New()
@@ -15,6 +16,7 @@ Public Class ActivityLogsForm
 
     Private Sub ActivityLogsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitializeControls()
+        RoundPaginationButtons()
         LoadActivityLogs()
     End Sub
 
@@ -208,6 +210,11 @@ Public Class ActivityLogsForm
                     totalRecords = Convert.ToInt32(cmdCount.ExecuteScalar())
                 End Using
 
+                ' Calculate logic
+                totalPages = Math.Ceiling(totalRecords / recordsPerPage)
+                If totalPages = 0 Then totalPages = 1
+                If currentPage > totalPages Then currentPage = totalPages
+
                 ' Get paginated data
                 Dim offset As Integer = (currentPage - 1) * recordsPerPage
                 Dim query As String = $"SELECT LogID, UserType, UserID, Username, Action, ActionCategory, Description, 
@@ -235,7 +242,7 @@ Public Class ActivityLogsForm
             End Using
 
             ' Update status labels
-            UpdateStatusLabels()
+            UpdatePaginationControls()
             ApplyRowColors()
 
         Catch ex As Exception
@@ -264,16 +271,114 @@ Public Class ActivityLogsForm
         Next
     End Sub
 
-    Private Sub UpdateStatusLabels()
-        Dim totalPages As Integer = Math.Ceiling(totalRecords / recordsPerPage)
-        lblStatus.Text = $"Showing {dgvActivityLogs.Rows.Count} of {totalRecords} records | Page {currentPage} of {totalPages}"
+    '====================================
+    ' PAGINATION LOGIC
+    '====================================
+    Private Sub UpdatePaginationControls()
+        lblPageInfo.Text = $"Page {currentPage} of {totalPages}"
+        lblTotalLogs.Text = $"Total Logs: {totalRecords:N0}"
 
-        ' Enable/disable navigation buttons
-        btnPrevious.Enabled = (currentPage > 1)
-        btnNext.Enabled = (currentPage < totalPages)
+        ' Enable/Disable navigation buttons
+        btnFirstPage.Enabled = (currentPage > 1)
+        btnPrevPage.Enabled = (currentPage > 1)
+        btnNextPage.Enabled = (currentPage < totalPages)
+        btnLastPage.Enabled = (currentPage < totalPages)
+
+        ' Visual feedback
+        Dim enabledColor As Color = Color.FromArgb(240, 244, 250)
+        Dim disabledColor As Color = Color.FromArgb(230, 230, 230)
+
+        btnFirstPage.BackColor = If(btnFirstPage.Enabled, enabledColor, disabledColor)
+        btnPrevPage.BackColor = If(btnPrevPage.Enabled, enabledColor, disabledColor)
+        btnNextPage.BackColor = If(btnNextPage.Enabled, enabledColor, disabledColor)
+        btnLastPage.BackColor = If(btnLastPage.Enabled, enabledColor, disabledColor)
+
+        CenterPaginationControls()
     End Sub
 
-    ' Filter Events
+    Private Sub RoundButton(btn As Button)
+        Dim radius As Integer = 8
+        Dim path As New Drawing2D.GraphicsPath()
+        path.StartFigure()
+        path.AddArc(New Rectangle(0, 0, radius, radius), 180, 90)
+        path.AddArc(New Rectangle(btn.Width - radius, 0, radius, radius), 270, 90)
+        path.AddArc(New Rectangle(btn.Width - radius, btn.Height - radius, radius, radius), 0, 90)
+        path.AddArc(New Rectangle(0, btn.Height - radius, radius, radius), 90, 90)
+        path.CloseFigure()
+        btn.Region = New Region(path)
+    End Sub
+
+    Private Sub RoundPaginationButtons()
+        RoundButton(btnFirstPage)
+        RoundButton(btnPrevPage)
+        RoundButton(btnNextPage)
+        RoundButton(btnLastPage)
+    End Sub
+
+    Private Sub CenterPaginationControls()
+        Try
+            If Panel4 Is Nothing Then Return
+
+            Dim panelWidth As Integer = Panel4.Width
+            Dim totalButtonWidth As Integer = btnFirstPage.Width + btnPrevPage.Width +
+                                              btnNextPage.Width + btnLastPage.Width
+            Dim spacing As Integer = 10
+            Dim labelWidth As Integer = lblPageInfo.Width
+
+            Dim centerGroupWidth As Integer = totalButtonWidth + (spacing * 4) + labelWidth
+            Dim startX As Integer = (panelWidth - centerGroupWidth) \ 2
+
+            ' 1. Position Total Label LEFT
+            lblTotalLogs.Location = New Point(10, 16)
+            lblTotalLogs.Top = (Panel4.Height - lblTotalLogs.Height) \ 2
+
+            ' 2. Position Center Group
+            btnFirstPage.Location = New Point(startX, 10)
+            btnPrevPage.Location = New Point(btnFirstPage.Right + spacing, 10)
+            
+            lblPageInfo.AutoSize = True
+            lblPageInfo.Location = New Point(btnPrevPage.Right + spacing, 16)
+            lblPageInfo.Top = (Panel4.Height - lblPageInfo.Height) \ 2
+            
+            btnNextPage.Location = New Point(lblPageInfo.Right + spacing, 10)
+            btnLastPage.Location = New Point(btnNextPage.Right + spacing, 10)
+
+        Catch ex As Exception
+            ' Squelch sizing errors
+        End Try
+    End Sub
+
+    Private Sub ActivityLogsForm_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        CenterPaginationControls()
+    End Sub
+
+    Private Sub btnFirstPage_Click(sender As Object, e As EventArgs) Handles btnFirstPage.Click
+        currentPage = 1
+        LoadActivityLogs()
+    End Sub
+
+    Private Sub btnPrevPage_Click(sender As Object, e As EventArgs) Handles btnPrevPage.Click
+        If currentPage > 1 Then
+            currentPage -= 1
+            LoadActivityLogs()
+        End If
+    End Sub
+
+    Private Sub btnNextPage_Click(sender As Object, e As EventArgs) Handles btnNextPage.Click
+        If currentPage < totalPages Then
+            currentPage += 1
+            LoadActivityLogs()
+        End If
+    End Sub
+
+    Private Sub btnLastPage_Click(sender As Object, e As EventArgs) Handles btnLastPage.Click
+        currentPage = totalPages
+        LoadActivityLogs()
+    End Sub
+
+    '====================================
+    ' FILTER EVENTS
+    '====================================
     Private Sub btnApplyFilters_Click(sender As Object, e As EventArgs) Handles btnApplyFilters.Click
         currentPage = 1
         LoadActivityLogs()
@@ -292,28 +397,12 @@ Public Class ActivityLogsForm
     End Sub
 
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
-        ' Auto-search after typing stops (optional - you can remove this if you prefer button-only search)
+        ' Auto-search optional
     End Sub
 
     Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
         currentPage = 1
         LoadActivityLogs()
-    End Sub
-
-    ' Pagination Events
-    Private Sub btnPrevious_Click(sender As Object, e As EventArgs) Handles btnPrevious.Click
-        If currentPage > 1 Then
-            currentPage -= 1
-            LoadActivityLogs()
-        End If
-    End Sub
-
-    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        Dim totalPages As Integer = Math.Ceiling(totalRecords / recordsPerPage)
-        If currentPage < totalPages Then
-            currentPage += 1
-            LoadActivityLogs()
-        End If
     End Sub
 
     ' Export Events
