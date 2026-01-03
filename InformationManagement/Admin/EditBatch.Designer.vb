@@ -40,6 +40,8 @@
         Me.txtOriginalQty = New System.Windows.Forms.TextBox()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.cmbStorageLocation = New System.Windows.Forms.ComboBox()
+        Me.Label13 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'SaveChanges
@@ -47,7 +49,7 @@
         Me.SaveChanges.BackColor = System.Drawing.Color.DarkRed
         Me.SaveChanges.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SaveChanges.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.SaveChanges.Location = New System.Drawing.Point(446, 520)
+        Me.SaveChanges.Location = New System.Drawing.Point(446, 530)
         Me.SaveChanges.Margin = New System.Windows.Forms.Padding(2)
         Me.SaveChanges.Name = "SaveChanges"
         Me.SaveChanges.Size = New System.Drawing.Size(91, 38)
@@ -60,13 +62,35 @@
         Me.Cancel.BackColor = System.Drawing.SystemColors.Highlight
         Me.Cancel.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Cancel.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Cancel.Location = New System.Drawing.Point(352, 520)
+        Me.Cancel.Location = New System.Drawing.Point(352, 530)
         Me.Cancel.Margin = New System.Windows.Forms.Padding(2)
         Me.Cancel.Name = "Cancel"
         Me.Cancel.Size = New System.Drawing.Size(88, 38)
         Me.Cancel.TabIndex = 60
         Me.Cancel.Text = "Cancel"
         Me.Cancel.UseVisualStyleBackColor = False
+        '
+        'cmbStorageLocation
+        '
+        Me.cmbStorageLocation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbStorageLocation.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.cmbStorageLocation.FormattingEnabled = True
+        Me.cmbStorageLocation.Items.AddRange(New Object() {"Freezer-Meat", "Freezer-Seafood", "Freezer-Processed", "Refrigerator-Dairy", "Refrigerator-Vegetables", "Refrigerator-Condiments", "Pantry-Dry-Goods", "Pantry-Canned", "Pantry-Condiments", "Pantry-Spices", "Pantry-Beverages"})
+        Me.cmbStorageLocation.Location = New System.Drawing.Point(296, 444)
+        Me.cmbStorageLocation.Name = "cmbStorageLocation"
+        Me.cmbStorageLocation.Size = New System.Drawing.Size(204, 25)
+        Me.cmbStorageLocation.TabIndex = 67
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
+        Me.Label13.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(54, Byte), Integer))
+        Me.Label13.Location = New System.Drawing.Point(292, 420)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(133, 21)
+        Me.Label13.TabIndex = 68
+        Me.Label13.Text = "Storage Location"
         '
         'DateTimePicker1
         '
@@ -232,7 +256,7 @@
         'DateTimePicker2
         '
         Me.DateTimePicker2.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.DateTimePicker2.Location = New System.Drawing.Point(296, 444)
+        Me.DateTimePicker2.Location = New System.Drawing.Point(296, 490)
         Me.DateTimePicker2.Margin = New System.Windows.Forms.Padding(2)
         Me.DateTimePicker2.Name = "DateTimePicker2"
         Me.DateTimePicker2.Size = New System.Drawing.Size(204, 29)
@@ -243,7 +267,7 @@
         Me.Label11.AutoSize = True
         Me.Label11.Font = New System.Drawing.Font("Segoe UI Semibold", 12.0!, System.Drawing.FontStyle.Bold)
         Me.Label11.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(54, Byte), Integer))
-        Me.Label11.Location = New System.Drawing.Point(292, 420)
+        Me.Label11.Location = New System.Drawing.Point(292, 470)
         Me.Label11.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(125, 21)
@@ -349,7 +373,7 @@
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(536, 580)
+        Me.ClientSize = New System.Drawing.Size(536, 590)
         Me.Controls.Add(Me.txtOriginalQty)
         Me.Controls.Add(Me.Label12)
         Me.Controls.Add(Me.txtBatchNumber)
@@ -374,8 +398,10 @@
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.Label13)
+        Me.Controls.Add(Me.cmbStorageLocation)
         Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(54, Byte), Integer))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "EditBatch"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -410,4 +436,6 @@
     Friend WithEvents txtBatchNumber As TextBox
     Friend WithEvents Label12 As Label
     Friend WithEvents txtOriginalQty As TextBox
+    Friend WithEvents cmbStorageLocation As ComboBox
+    Friend WithEvents Label13 As Label
 End Class

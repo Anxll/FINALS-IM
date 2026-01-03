@@ -76,6 +76,7 @@ Public Class EditBatch
                     ib.OriginalQuantity,
                     ib.UnitType,
                     ib.CostPerUnit,
+                    ib.StorageLocation,
                     ib.PurchaseDate,
                     ib.ExpirationDate,
                     i.MinStockLevel,
@@ -101,6 +102,16 @@ Public Class EditBatch
                 Unit.Text = reader.GetString("UnitType")
                 RoundedTextBox1.Text = reader.GetDecimal("CostPerUnit").ToString()
                 DateTimePicker1.Value = reader.GetDateTime("PurchaseDate")
+                
+                If Not reader.IsDBNull(reader.GetOrdinal("StorageLocation")) Then
+                    Dim loc As String = reader.GetString("StorageLocation")
+                    If cmbStorageLocation.Items.Contains(loc) Then
+                        cmbStorageLocation.SelectedItem = loc
+                    Else
+                        cmbStorageLocation.Items.Add(loc)
+                        cmbStorageLocation.SelectedItem = loc
+                    End If
+                End If
 
                 If Not reader.IsDBNull(reader.GetOrdinal("ExpirationDate")) Then
                     DateTimePicker2.Value = reader.GetDateTime("ExpirationDate")
@@ -158,6 +169,13 @@ Public Class EditBatch
             MessageBox.Show("Please select a unit type.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Unit.Focus()
             Return False
+        End If
+
+        ' Storage Location
+        If cmbStorageLocation.SelectedIndex < 0 Then
+             MessageBox.Show("Please select a storage location.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+             cmbStorageLocation.Focus()
+             Return False
         End If
 
         ' Cost per Unit
@@ -254,6 +272,7 @@ Public Class EditBatch
                 UnitType = @unit,
                 CostPerUnit = @cost,
                 PurchaseDate = @purchaseDate,
+                StorageLocation = @storage,
                 ExpirationDate = @expirationDate,
                 UpdatedDate = NOW()
             WHERE BatchID = @id
@@ -264,6 +283,7 @@ Public Class EditBatch
                 cmdUpdate.Parameters.AddWithValue("@quantity", newQuantity)
                 cmdUpdate.Parameters.AddWithValue("@unit", newUnit)
                 cmdUpdate.Parameters.AddWithValue("@cost", Convert.ToDecimal(RoundedTextBox1.Text))
+                cmdUpdate.Parameters.AddWithValue("@storage", cmbStorageLocation.SelectedItem.ToString())
                 cmdUpdate.Parameters.AddWithValue("@purchaseDate", DateTimePicker1.Value.Date)
                 cmdUpdate.Parameters.AddWithValue("@expirationDate", DateTimePicker2.Value.Date)
                 cmdUpdate.ExecuteNonQuery()
@@ -460,12 +480,23 @@ Public Class EditBatch
         End Try
     End Sub
     Private Sub ComboBox_DrawItem(sender As Object, e As DrawItemEventArgs) _
-      Handles Unit.DrawItem
+      Handles Unit.DrawItem, cmbStorageLocation.DrawItem
 
         If e.Index < 0 Then Return
         Dim cmb As ComboBox = DirectCast(sender, ComboBox)
         e.DrawBackground()
         e.Graphics.DrawString(cmb.Items(e.Index).ToString(), cmb.Font, Brushes.Black, e.Bounds)
         e.DrawFocusRectangle()
+    End Sub
+
+    ' Draw Border
+    Private Sub Form_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
+        Dim borderColor As Color = Color.LightGray
+        Dim borderThickness As Integer = 1
+        ControlPaint.DrawBorder(e.Graphics, Me.ClientRectangle,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid)
     End Sub
 End Class

@@ -23,7 +23,108 @@ Public Class BatchManagement
             buttonsAdded = True
         End If
 
+        AutoDiscardExpiredBatches()
+        AutoArchiveDepletedBatches()
         LoadBatchData()
+    End Sub
+
+    ' Automatic Discard for Expired Batches
+    Private Sub AutoDiscardExpiredBatches()
+        Dim expiredBatches As New List(Of Integer)()
+        Dim details As New List(Of String)()
+
+        Try
+            openConn()
+            ' Find expired but active batches
+            Dim sql As String = "SELECT BatchID, BatchNumber, StockQuantity FROM inventory_batches " &
+                                "WHERE IngredientID = @ingID AND BatchStatus = 'Active' " &
+                                "AND ExpirationDate <= CURDATE()"
+            Dim cmd As New MySqlCommand(sql, conn)
+            cmd.Parameters.AddWithValue("@ingID", _ingredientID)
+            
+            Dim reader As MySqlDataReader = cmd.ExecuteReader()
+            While reader.Read()
+                expiredBatches.Add(reader.GetInt32("BatchID"))
+                details.Add($"Batch #{reader.GetString("BatchNumber")} (Qty: {reader.GetDecimal("StockQuantity")})")
+            End While
+            reader.Close()
+
+            ' Process discards
+            For i As Integer = 0 To expiredBatches.Count - 1
+                Dim batchID As Integer = expiredBatches(i)
+                
+                ' reuse the stored procedure logic
+                Dim cmdDiscard As New MySqlCommand("CALL DiscardBatch(@id, @reason, @notes)", conn)
+                cmdDiscard.Parameters.AddWithValue("@id", batchID)
+                cmdDiscard.Parameters.AddWithValue("@reason", "Auto-discarded: Expired")
+                cmdDiscard.Parameters.AddWithValue("@notes", "System auto-discard due to expiration")
+                cmdDiscard.ExecuteNonQuery()
+
+                ' Log individual activity
+                ActivityLogger.LogUserActivity("Auto-Discard", "Inventory", 
+                    $"System auto-discarded {details(i)} due to expiration.", "System")
+            Next
+
+        Catch ex As Exception
+            ' Silent fail or log to debug, to not block the user from opening the form
+            ' We can optionally show a message but user requested "automatically discard... remove and log"
+        Finally
+            closeConn()
+        End Try
+    End Sub
+
+    ' Auto-Archive Depleted Batches (Zero Qty)
+    Private Sub AutoArchiveDepletedBatches()
+        Dim depletedBatches As New List(Of Integer)()
+        Dim details As New List(Of String)()
+
+        Try
+            openConn()
+            ' Find active batches with zero stock
+            Dim sql As String = "SELECT BatchID, BatchNumber FROM inventory_batches " &
+                                "WHERE IngredientID = @ingID AND BatchStatus = 'Active' " &
+                                "AND StockQuantity <= 0"
+            Dim cmd As New MySqlCommand(sql, conn)
+            cmd.Parameters.AddWithValue("@ingID", _ingredientID)
+
+            Dim reader As MySqlDataReader = cmd.ExecuteReader()
+            While reader.Read()
+                depletedBatches.Add(reader.GetInt32("BatchID"))
+                details.Add(reader.GetString("BatchNumber"))
+            End While
+            reader.Close()
+
+            ' Process updates
+            For i As Integer = 0 To depletedBatches.Count - 1
+                Dim batchID As Integer = depletedBatches(i)
+                Dim batchNum As String = details(i)
+
+                ' Update status to Depleted
+                Dim updateSql As String = "UPDATE inventory_batches SET BatchStatus = 'Depleted', UpdatedDate = NOW() WHERE BatchID = @id"
+                Dim updateCmd As New MySqlCommand(updateSql, conn)
+                updateCmd.Parameters.AddWithValue("@id", batchID)
+                updateCmd.ExecuteNonQuery()
+
+                ' Log Movement
+                Dim logSql As String = "INSERT INTO inventory_movement_log " &
+                                       "(IngredientID, BatchID, ChangeType, QuantityChanged, StockBefore, StockAfter, Reason, Source, MovementDate, Notes) " &
+                                       "VALUES (@ingID, @batchID, 'STATUS', 0, 0, 0, 'Depleted', 'SYSTEM', NOW(), @notes)"
+                Dim logCmd As New MySqlCommand(logSql, conn)
+                logCmd.Parameters.AddWithValue("@ingID", _ingredientID)
+                logCmd.Parameters.AddWithValue("@batchID", batchID)
+                logCmd.Parameters.AddWithValue("@notes", $"Batch #{batchNum} marked as Depleted (Zero Stock)")
+                logCmd.ExecuteNonQuery()
+
+                ' Log Activity
+                ActivityLogger.LogUserActivity("Batch Depleted", "Inventory",
+                    $"Batch #{batchNum} auto-archived due to zero stock.", "System")
+            Next
+
+        Catch ex As Exception
+            ' Silent fail
+        Finally
+            closeConn()
+        End Try
     End Sub
 
     ' Add Edit + Discard buttons only (Delete button removed)
@@ -81,7 +182,7 @@ Public Class BatchManagement
                     Notes
                 FROM inventory_batches
                 WHERE IngredientID = @ingredientID
-                 AND BatchStatus <> 'Discarded'
+                 AND BatchStatus = 'Active'
                 ORDER BY ExpirationDate ASC;
             "
 
@@ -130,6 +231,21 @@ Public Class BatchManagement
         End If
         If dgvBatches.Columns.Contains("Expiration") Then
             dgvBatches.Columns("Expiration").DefaultCellStyle.Format = "MMM dd, yyyy"
+        End If
+
+        ' Hide Batch ID
+        If dgvBatches.Columns.Contains("Batch ID") Then
+            dgvBatches.Columns("Batch ID").Visible = False
+        End If
+
+        ' Move Edit to the end
+        If dgvBatches.Columns.Contains("btnEdit") Then
+            dgvBatches.Columns("btnEdit").DisplayIndex = dgvBatches.Columns.Count - 1
+        End If
+
+        ' Move Discard to the end (will be after Edit)
+        If dgvBatches.Columns.Contains("btnDiscard") Then
+            dgvBatches.Columns("btnDiscard").DisplayIndex = dgvBatches.Columns.Count - 1
         End If
     End Sub
 
@@ -274,4 +390,14 @@ Public Class BatchManagement
         Me.Close()
     End Sub
 
+    ' Draw Border
+    Private Sub Form_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
+        Dim borderColor As Color = Color.LightGray
+        Dim borderThickness As Integer = 1
+        ControlPaint.DrawBorder(e.Graphics, Me.ClientRectangle,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid)
+    End Sub
 End Class

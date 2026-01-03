@@ -29,7 +29,7 @@ Partial Class AddNewBatch
         Me.lblQuantity = New System.Windows.Forms.Label()
         Me.txtQuantity = New System.Windows.Forms.TextBox()
         Me.lblUnit = New System.Windows.Forms.Label()
-        Me.txtUnit = New System.Windows.Forms.TextBox()
+        Me.cmbUnit = New System.Windows.Forms.ComboBox()
         Me.lblCostPerUnit = New System.Windows.Forms.Label()
         Me.txtCostPerUnit = New System.Windows.Forms.TextBox()
         Me.lblPurchaseDate = New System.Windows.Forms.Label()
@@ -114,13 +114,16 @@ Partial Class AddNewBatch
         Me.lblUnit.TabIndex = 6
         Me.lblUnit.Text = "Unit"
         '
-        'txtUnit
+        'cmbUnit
         '
-        Me.txtUnit.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.txtUnit.Location = New System.Drawing.Point(196, 143)
-        Me.txtUnit.Name = "txtUnit"
-        Me.txtUnit.Size = New System.Drawing.Size(120, 23)
-        Me.txtUnit.TabIndex = 7
+        Me.cmbUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbUnit.Font = New System.Drawing.Font("Segoe UI", 9.0!)
+        Me.cmbUnit.FormattingEnabled = True
+        Me.cmbUnit.Items.AddRange(New Object() {"kg", "g", "L", "ml", "pcs", "packs", "boxes", "cans", "bottles"})
+        Me.cmbUnit.Location = New System.Drawing.Point(196, 143)
+        Me.cmbUnit.Name = "cmbUnit"
+        Me.cmbUnit.Size = New System.Drawing.Size(120, 23)
+        Me.cmbUnit.TabIndex = 7
         '
         'lblCostPerUnit
         '
@@ -267,7 +270,7 @@ Partial Class AddNewBatch
         Me.Controls.Add(Me.lblPurchaseDate)
         Me.Controls.Add(Me.txtCostPerUnit)
         Me.Controls.Add(Me.lblCostPerUnit)
-        Me.Controls.Add(Me.txtUnit)
+        Me.Controls.Add(Me.cmbUnit)
         Me.Controls.Add(Me.lblUnit)
         Me.Controls.Add(Me.txtQuantity)
         Me.Controls.Add(Me.lblQuantity)
@@ -277,7 +280,7 @@ Partial Class AddNewBatch
         Me.Controls.Add(Me.lblTitle)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "AddNewBatch"
@@ -294,7 +297,7 @@ Partial Class AddNewBatch
     Friend WithEvents lblQuantity As System.Windows.Forms.Label
     Friend WithEvents txtQuantity As System.Windows.Forms.TextBox
     Friend WithEvents lblUnit As System.Windows.Forms.Label
-    Friend WithEvents txtUnit As System.Windows.Forms.TextBox
+    Friend WithEvents cmbUnit As System.Windows.Forms.ComboBox
     Friend WithEvents lblCostPerUnit As System.Windows.Forms.Label
     Friend WithEvents txtCostPerUnit As System.Windows.Forms.TextBox
     Friend WithEvents lblPurchaseDate As System.Windows.Forms.Label
