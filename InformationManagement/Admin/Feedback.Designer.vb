@@ -100,7 +100,7 @@ Partial Class Feedback
         Me.btnExport.ForeColor = System.Drawing.Color.White
         Me.btnExport.Location = New System.Drawing.Point(1035, 12)
         Me.btnExport.Name = "btnExport"
-        Me.btnExport.Size = New System.Drawing.Size(105, 30)
+        Me.btnExport.Size = New System.Drawing.Size(105, 35)
         Me.btnExport.TabIndex = 5
         Me.btnExport.Text = "Export to CSV"
         Me.btnExport.UseVisualStyleBackColor = False
@@ -114,7 +114,7 @@ Partial Class Feedback
         Me.btnDelete.ForeColor = System.Drawing.Color.White
         Me.btnDelete.Location = New System.Drawing.Point(929, 13)
         Me.btnDelete.Name = "btnDelete"
-        Me.btnDelete.Size = New System.Drawing.Size(100, 30)
+        Me.btnDelete.Size = New System.Drawing.Size(100, 35)
         Me.btnDelete.TabIndex = 4
         Me.btnDelete.Text = "Delete"
         Me.btnDelete.UseVisualStyleBackColor = False
@@ -128,7 +128,7 @@ Partial Class Feedback
         Me.btnViewDetails.ForeColor = System.Drawing.Color.White
         Me.btnViewDetails.Location = New System.Drawing.Point(818, 13)
         Me.btnViewDetails.Name = "btnViewDetails"
-        Me.btnViewDetails.Size = New System.Drawing.Size(105, 30)
+        Me.btnViewDetails.Size = New System.Drawing.Size(105, 35)
         Me.btnViewDetails.TabIndex = 3
         Me.btnViewDetails.Text = "View Details"
         Me.btnViewDetails.UseVisualStyleBackColor = False
@@ -142,7 +142,7 @@ Partial Class Feedback
         Me.btnRefresh.ForeColor = System.Drawing.Color.White
         Me.btnRefresh.Location = New System.Drawing.Point(712, 13)
         Me.btnRefresh.Name = "btnRefresh"
-        Me.btnRefresh.Size = New System.Drawing.Size(100, 30)
+        Me.btnRefresh.Size = New System.Drawing.Size(100, 35)
         Me.btnRefresh.TabIndex = 2
         Me.btnRefresh.Text = "Refresh"
         Me.btnRefresh.UseVisualStyleBackColor = False
@@ -150,16 +150,17 @@ Partial Class Feedback
         'txtSearch
         '
         Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.txtSearch.Location = New System.Drawing.Point(69, 15)
+        Me.txtSearch.Location = New System.Drawing.Point(107, 18)
         Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(627, 25)
+        Me.txtSearch.Size = New System.Drawing.Size(589, 25)
         Me.txtSearch.TabIndex = 1
         '
         'lblSearch
         '
         Me.lblSearch.AutoSize = True
         Me.lblSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
-        Me.lblSearch.Location = New System.Drawing.Point(11, 17)
+        Me.lblSearch.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblSearch.Location = New System.Drawing.Point(25, 21)
         Me.lblSearch.Name = "lblSearch"
         Me.lblSearch.Size = New System.Drawing.Size(58, 19)
         Me.lblSearch.TabIndex = 0
@@ -167,7 +168,7 @@ Partial Class Feedback
         '
         'Panel3
         '
-        Me.Panel3.BackColor = System.Drawing.Color.White
+        Me.Panel3.BackColor = System.Drawing.Color.GhostWhite
         Me.Panel3.Controls.Add(Me.btnViewAll)
         Me.Panel3.Controls.Add(Me.btnViewRejected)
         Me.Panel3.Controls.Add(Me.btnViewApproved)
@@ -177,7 +178,7 @@ Partial Class Feedback
         Me.Panel3.Location = New System.Drawing.Point(0, 142)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Padding = New System.Windows.Forms.Padding(9)
-        Me.Panel3.Size = New System.Drawing.Size(1190, 53)
+        Me.Panel3.Size = New System.Drawing.Size(1190, 65)
         Me.Panel3.TabIndex = 2
         '
         'btnViewAll
@@ -187,9 +188,9 @@ Partial Class Feedback
         Me.btnViewAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewAll.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnViewAll.ForeColor = System.Drawing.Color.White
-        Me.btnViewAll.Location = New System.Drawing.Point(466, 10)
+        Me.btnViewAll.Location = New System.Drawing.Point(29, 28)
         Me.btnViewAll.Name = "btnViewAll"
-        Me.btnViewAll.Size = New System.Drawing.Size(100, 30)
+        Me.btnViewAll.Size = New System.Drawing.Size(56, 30)
         Me.btnViewAll.TabIndex = 4
         Me.btnViewAll.Text = "All"
         Me.btnViewAll.UseVisualStyleBackColor = False
@@ -201,7 +202,7 @@ Partial Class Feedback
         Me.btnViewRejected.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewRejected.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnViewRejected.ForeColor = System.Drawing.Color.White
-        Me.btnViewRejected.Location = New System.Drawing.Point(360, 10)
+        Me.btnViewRejected.Location = New System.Drawing.Point(303, 28)
         Me.btnViewRejected.Name = "btnViewRejected"
         Me.btnViewRejected.Size = New System.Drawing.Size(100, 30)
         Me.btnViewRejected.TabIndex = 3
@@ -215,7 +216,7 @@ Partial Class Feedback
         Me.btnViewApproved.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewApproved.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.btnViewApproved.ForeColor = System.Drawing.Color.White
-        Me.btnViewApproved.Location = New System.Drawing.Point(254, 11)
+        Me.btnViewApproved.Location = New System.Drawing.Point(197, 28)
         Me.btnViewApproved.Name = "btnViewApproved"
         Me.btnViewApproved.Size = New System.Drawing.Size(100, 30)
         Me.btnViewApproved.TabIndex = 2
@@ -229,7 +230,7 @@ Partial Class Feedback
         Me.btnViewPending.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnViewPending.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
         Me.btnViewPending.ForeColor = System.Drawing.Color.White
-        Me.btnViewPending.Location = New System.Drawing.Point(148, 12)
+        Me.btnViewPending.Location = New System.Drawing.Point(91, 28)
         Me.btnViewPending.Name = "btnViewPending"
         Me.btnViewPending.Size = New System.Drawing.Size(100, 30)
         Me.btnViewPending.TabIndex = 1
@@ -239,10 +240,11 @@ Partial Class Feedback
         'lblFilter
         '
         Me.lblFilter.AutoSize = True
-        Me.lblFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
-        Me.lblFilter.Location = New System.Drawing.Point(11, 16)
+        Me.lblFilter.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblFilter.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.lblFilter.Location = New System.Drawing.Point(25, 5)
         Me.lblFilter.Name = "lblFilter"
-        Me.lblFilter.Size = New System.Drawing.Size(91, 19)
+        Me.lblFilter.Size = New System.Drawing.Size(83, 17)
         Me.lblFilter.TabIndex = 0
         Me.lblFilter.Text = "Filter Status:"
         '
@@ -253,13 +255,13 @@ Partial Class Feedback
         Me.DataGridView1.BackgroundColor = System.Drawing.Color.White
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridView1.Location = New System.Drawing.Point(0, 195)
+        Me.DataGridView1.Location = New System.Drawing.Point(0, 207)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.RowTemplate.Height = 25
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(1190, 344)
+        Me.DataGridView1.Size = New System.Drawing.Size(1190, 332)
         Me.DataGridView1.TabIndex = 3
         '
         'Panel4
@@ -285,7 +287,7 @@ Partial Class Feedback
         Me.lblPageInfo.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
         Me.lblPageInfo.Location = New System.Drawing.Point(440, 18)
         Me.lblPageInfo.Name = "lblPageInfo"
-        Me.lblPageInfo.Size = New System.Drawing.Size(177, 15)
+        Me.lblPageInfo.Size = New System.Drawing.Size(165, 15)
         Me.lblPageInfo.TabIndex = 7
         Me.lblPageInfo.Text = "Page 1 of 1 (Total: 0 records)"
         '
@@ -305,7 +307,7 @@ Partial Class Feedback
         Me.lblGoToPage.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.lblGoToPage.Location = New System.Drawing.Point(985, 18)
         Me.lblGoToPage.Name = "lblGoToPage"
-        Me.lblGoToPage.Size = New System.Drawing.Size(76, 15)
+        Me.lblGoToPage.Size = New System.Drawing.Size(71, 15)
         Me.lblGoToPage.TabIndex = 5
         Me.lblGoToPage.Text = "Go to Page: "
         '
@@ -375,7 +377,7 @@ Partial Class Feedback
         Me.lblTotalReviews.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
         Me.lblTotalReviews.Location = New System.Drawing.Point(10, 18)
         Me.lblTotalReviews.Name = "lblTotalReviews"
-        Me.lblTotalReviews.Size = New System.Drawing.Size(108, 15)
+        Me.lblTotalReviews.Size = New System.Drawing.Size(103, 15)
         Me.lblTotalReviews.TabIndex = 0
         Me.lblTotalReviews.Text = "Total Feedback: 0"
         '

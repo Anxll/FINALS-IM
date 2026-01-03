@@ -434,7 +434,7 @@
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.dgvBatches)
         Me.Controls.Add(Me.Panel1)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "BatchManagement"

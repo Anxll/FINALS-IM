@@ -161,7 +161,7 @@ Public Class Orders
                     o.DeliveryOption,
                     o.NumberOfDiners,
                     o.OrderDate,
-                    o.OrderTime,
+                   TIME_FORMAT(o.OrderTime, '%h:%i %p') AS OrderTime,
                     o.ItemsOrderedCount,
                     o.TotalAmount,
                     o.OrderStatus,

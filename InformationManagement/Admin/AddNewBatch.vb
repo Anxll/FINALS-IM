@@ -37,12 +37,7 @@ Public Class AddNewBatch
             End If
             ' If you have a unit textbox/combobox, pre-fill with the unit from BatchManagement
             If Not String.IsNullOrWhiteSpace(_unitType) Then
-                If Me.Controls.ContainsKey("txtUnit") Then
-                    Dim txt As TextBox = TryCast(Me.Controls("txtUnit"), TextBox)
-                    If txt IsNot Nothing Then
-                        txt.Text = _unitType
-                    End If
-                ElseIf Me.Controls.ContainsKey("cmbUnit") Then
+                If Me.Controls.ContainsKey("cmbUnit") Then
                     Dim cmb As ComboBox = TryCast(Me.Controls("cmbUnit"), ComboBox)
                     If cmb IsNot Nothing Then
                         If cmb.Items.Contains(_unitType) Then
@@ -148,28 +143,14 @@ Public Class AddNewBatch
                 Return False
             End If
         End If
-        ' Unit (text box or combo box)
-        Dim unit As String = ""
-        ' === FORCE UNIT DROPDOWN ===
+        ' Unit (text box or combo box)
+        Dim unit As String = ""
         If Me.Controls.ContainsKey("cmbUnit") Then
             Dim cmb As ComboBox = TryCast(Me.Controls("cmbUnit"), ComboBox)
             If cmb IsNot Nothing Then
-                cmb.DropDownStyle = ComboBoxStyle.DropDownList  ' prevent typing
-                cmb.Items.Clear()
-                cmb.Items.Add("kg")
-                cmb.Items.Add("g")
-                cmb.Items.Add("L")
-                cmb.Items.Add("ml")
-                cmb.Items.Add("pieces")
-
-                ' Auto-preselect the unit from Ingredient table
-                If Not String.IsNullOrEmpty(_unitType) Then
-                    If cmb.Items.Contains(_unitType) Then
-                        cmb.SelectedItem = _unitType
-                    Else
-                        cmb.Items.Add(_unitType)
-                        cmb.SelectedItem = _unitType
-                    End If
+                If cmb.SelectedItem Is Nothing Then
+                     MessageBox.Show("Please select a unit.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                     Return False
                 End If
             End If
         End If
@@ -227,12 +208,7 @@ Public Class AddNewBatch
                 notes = txt.Text.Trim()
             End If
         End If
-        If Me.Controls.ContainsKey("txtUnit") Then
-            Dim txt As TextBox = TryCast(Me.Controls("txtUnit"), TextBox)
-            If txt IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(txt.Text) Then
-                unit = txt.Text.Trim()
-            End If
-        ElseIf Me.Controls.ContainsKey("cmbUnit") Then
+        If Me.Controls.ContainsKey("cmbUnit") Then
             Dim cmb As ComboBox = TryCast(Me.Controls("cmbUnit"), ComboBox)
             If cmb IsNot Nothing AndAlso cmb.SelectedItem IsNot Nothing Then
                 unit = cmb.SelectedItem.ToString()
@@ -299,5 +275,15 @@ Public Class AddNewBatch
         Finally
             closeConn()
         End Try
+    End Sub
+    ' Draw Border
+    Private Sub Form_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
+        Dim borderColor As Color = Color.LightGray
+        Dim borderThickness As Integer = 1
+        ControlPaint.DrawBorder(e.Graphics, Me.ClientRectangle,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid,
+                                borderColor, borderThickness, ButtonBorderStyle.Solid)
     End Sub
 End Class

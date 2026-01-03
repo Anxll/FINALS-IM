@@ -15,6 +15,9 @@ Public Class Inventory
             ' Initialize and position the alerts button
             InitializeAlertsButton()
 
+            ' Load categories
+            LoadCategories()
+
             ' Load data
             LoadInventorySummary()
             LoadInventoryStatistics()
@@ -46,7 +49,7 @@ Public Class Inventory
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
 
             Category.Items.Clear()
-            Category.Items.Add("All Categories")
+            Category.Items.Add("All")
 
             While reader.Read()
                 Category.Items.Add(reader("CategoryName").ToString())
@@ -642,7 +645,7 @@ Public Class Inventory
                 Dim dt As DataTable = DirectCast(InventoryGrid.DataSource, DataTable)
                 Dim selectedCategory As String = Category.Text
 
-                If String.IsNullOrEmpty(selectedCategory) OrElse selectedCategory = "All Categories" Then
+                If String.IsNullOrEmpty(selectedCategory) OrElse selectedCategory = "All" Then
                     dt.DefaultView.RowFilter = ""
                 Else
                     dt.DefaultView.RowFilter = String.Format(
