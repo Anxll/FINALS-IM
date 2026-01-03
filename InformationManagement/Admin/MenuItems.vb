@@ -101,16 +101,21 @@ Public Class MenuItems
             ' ---------------------------------------------------
             ' LOAD IMAGES FROM URL PATHS
             ' ---------------------------------------------------
-            If dt.Columns.Contains("Image") Then
+            If dt IsNot Nothing AndAlso dt.Columns.Contains("Image") Then
                 ' Rename Image column to ImagePath temporarily
-                dt.Columns("Image").ColumnName = "ImagePath"
+                Dim imgColSource = dt.Columns("Image")
+                If imgColSource IsNot Nothing Then
+                    imgColSource.ColumnName = "ImagePath"
+                End If
 
-                ' Add new Image column for actual Image objects
-                dt.Columns.Add("ImageDisplay", GetType(Image))
+                ' Add new Image column for actual Image objects if it doesn't exist
+                If Not dt.Columns.Contains("ImageDisplay") Then
+                    dt.Columns.Add("ImageDisplay", GetType(Image))
+                End If
 
                 For Each row As DataRow In dt.Rows
                     ' Get the image path from database
-                    If IsDBNull(row("ImagePath")) OrElse String.IsNullOrEmpty(row("ImagePath").ToString()) Then
+                    If row.IsNull("ImagePath") OrElse String.IsNullOrEmpty(row("ImagePath").ToString()) Then
                         row("ImageDisplay") = Nothing
                         Continue For
                     End If
@@ -120,10 +125,15 @@ Public Class MenuItems
                         Dim imageUrl As String = ConvertToWebUrl(imagePath)
 
                         ' Load image from URL
-                        Dim webClient As New WebClient()
-                        Dim imageBytes() As Byte = webClient.DownloadData(imageUrl)
-                        Using ms As New MemoryStream(imageBytes)
-                            row("ImageDisplay") = Image.FromStream(ms)
+                        Using webClient As New WebClient()
+                            Dim imageBytes() As Byte = webClient.DownloadData(imageUrl)
+                            If imageBytes IsNot Nothing AndAlso imageBytes.Length > 0 Then
+                                Using ms As New MemoryStream(imageBytes)
+                                    row("ImageDisplay") = Image.FromStream(ms)
+                                End Using
+                            Else
+                                row("ImageDisplay") = Nothing
+                            End If
                         End Using
                     Catch ex As Exception
                         ' If image fails to load, set to Nothing
@@ -133,12 +143,14 @@ Public Class MenuItems
                 Next
             End If
 
-            DataGridMenu.AutoGenerateColumns = False
-            DataGridMenu.Columns.Clear()
-            DataGridMenu.DataSource = dt
+            If DataGridMenu IsNot Nothing Then
+                DataGridMenu.AutoGenerateColumns = False
+                DataGridMenu.Columns.Clear()
+                DataGridMenu.DataSource = dt
 
-            ' Add columns manually
-            AddDataGridColumns()
+                ' Add columns manually
+                AddDataGridColumns()
+            End If
 
             ' BUTTONS ADDED ONLY ONCE
             If Not ButtonsAdded Then

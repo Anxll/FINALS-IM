@@ -31,11 +31,15 @@ Module modDB
     ' ✔ Open connection
     Public Sub openConn()
         Try
-            If conn.State = ConnectionState.Open Then conn.Close()
+            ' Robust check: if connection is anything other than Closed, close it first
+            If conn IsNot Nothing AndAlso conn.State <> ConnectionState.Closed Then
+                conn.Close()
+            End If
+            
             conn.ConnectionString = strConnection
             conn.Open()
         Catch ex As Exception
-            MsgBox(ex.Message, MsgBoxStyle.Critical)
+            MsgBox("Connection Error: " & ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
 
