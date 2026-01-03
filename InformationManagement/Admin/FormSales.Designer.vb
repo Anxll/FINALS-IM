@@ -46,11 +46,10 @@ Partial Class FormSales
         Dim DataPoint16 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 1150000.0R)
         Dim DataPoint17 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 950000.0R)
         Dim DataPoint18 As System.Windows.Forms.DataVisualization.Charting.DataPoint = New System.Windows.Forms.DataVisualization.Charting.DataPoint(0R, 1300000.0R)
-        Me.dtpFilter = New System.Windows.Forms.DateTimePicker()
         Me.Panel1 = New System.Windows.Forms.Panel()
-
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
         Me.btnExportPdf = New System.Windows.Forms.Button()
+        Me.dtpFilter = New System.Windows.Forms.DateTimePicker()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.RoundedPane23 = New InformationManagement.RoundedPane2()
@@ -90,7 +89,7 @@ Partial Class FormSales
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(1488, 715)
+        Me.Panel1.Size = New System.Drawing.Size(1509, 715)
         Me.Panel1.TabIndex = 11
         '
         'RoundedPane24
@@ -101,7 +100,6 @@ Partial Class FormSales
         Me.RoundedPane24.Controls.Add(Me.btnExportPdf)
         Me.RoundedPane24.Controls.Add(Me.dtpFilter)
         Me.RoundedPane24.Controls.Add(Me.Label1)
-
         Me.RoundedPane24.Controls.Add(Me.Chart1)
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.White
@@ -111,16 +109,6 @@ Partial Class FormSales
         Me.RoundedPane24.Name = "RoundedPane24"
         Me.RoundedPane24.Size = New System.Drawing.Size(1393, 476)
         Me.RoundedPane24.TabIndex = 10
-        '
-        'dtpFilter
-        '
-        Me.dtpFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!)
-        Me.dtpFilter.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dtpFilter.Location = New System.Drawing.Point(820, 30)
-        Me.dtpFilter.Name = "dtpFilter"
-        Me.dtpFilter.Size = New System.Drawing.Size(180, 30)
-        Me.dtpFilter.TabIndex = 11
-        Me.dtpFilter.Visible = False
         '
         'btnExportPdf
         '
@@ -133,12 +121,22 @@ Partial Class FormSales
         Me.btnExportPdf.Image = CType(resources.GetObject("btnExportPdf.Image"), System.Drawing.Image)
         Me.btnExportPdf.Location = New System.Drawing.Point(1036, 23)
         Me.btnExportPdf.Name = "btnExportPdf"
-        Me.btnExportPdf.Size = New System.Drawing.Size(135, 45)
+        Me.btnExportPdf.Size = New System.Drawing.Size(188, 45)
         Me.btnExportPdf.TabIndex = 10
         Me.btnExportPdf.Text = "   Export PDF"
         Me.btnExportPdf.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.btnExportPdf.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnExportPdf.UseVisualStyleBackColor = False
+        '
+        'dtpFilter
+        '
+        Me.dtpFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.dtpFilter.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpFilter.Location = New System.Drawing.Point(777, 30)
+        Me.dtpFilter.Name = "dtpFilter"
+        Me.dtpFilter.Size = New System.Drawing.Size(223, 30)
+        Me.dtpFilter.TabIndex = 11
+        Me.dtpFilter.Visible = False
         '
         'Label1
         '
@@ -426,7 +424,7 @@ Partial Class FormSales
         Me.AutoScroll = True
         Me.AutoSize = True
         Me.BackColor = System.Drawing.Color.GhostWhite
-        Me.ClientSize = New System.Drawing.Size(1509, 626)
+        Me.ClientSize = New System.Drawing.Size(1530, 626)
         Me.Controls.Add(Me.RoundedPane24)
         Me.Controls.Add(Me.RoundedPane23)
         Me.Controls.Add(Me.RoundedPane22)

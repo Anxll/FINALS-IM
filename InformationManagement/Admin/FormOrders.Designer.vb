@@ -78,7 +78,7 @@ Partial Class FormOrders
         Me.dtpFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!)
         Me.dtpFilter.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
         Me.dtpFilter.Location = New System.Drawing.Point(916, 15)
-        Me.dtpFilter.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.dtpFilter.Margin = New System.Windows.Forms.Padding(4)
         Me.dtpFilter.Name = "dtpFilter"
         Me.dtpFilter.Size = New System.Drawing.Size(265, 30)
         Me.dtpFilter.TabIndex = 20
@@ -96,7 +96,7 @@ Partial Class FormOrders
         Me.btnExportPdf.Location = New System.Drawing.Point(1209, 10)
         Me.btnExportPdf.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.btnExportPdf.Name = "btnExportPdf"
-        Me.btnExportPdf.Size = New System.Drawing.Size(135, 46)
+        Me.btnExportPdf.Size = New System.Drawing.Size(167, 46)
         Me.btnExportPdf.TabIndex = 10
         Me.btnExportPdf.Text = "   Export PDF"
         Me.btnExportPdf.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -125,7 +125,7 @@ Partial Class FormOrders
         Me.RoundedPane25.CornerRadius = 15
         Me.RoundedPane25.FillColor = System.Drawing.Color.FromArgb(CType(CType(251, Byte), Integer), CType(CType(140, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.RoundedPane25.Location = New System.Drawing.Point(971, 62)
-        Me.RoundedPane25.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane25.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane25.Name = "RoundedPane25"
         Me.RoundedPane25.Size = New System.Drawing.Size(449, 154)
         Me.RoundedPane25.TabIndex = 16
@@ -148,7 +148,7 @@ Partial Class FormOrders
         Me.PictureBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(252, Byte), Integer), CType(CType(166, Byte), Integer), CType(CType(5, Byte), Integer))
         Me.PictureBox3.Image = CType(resources.GetObject("PictureBox3.Image"), System.Drawing.Image)
         Me.PictureBox3.Location = New System.Drawing.Point(27, 31)
-        Me.PictureBox3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox3.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox3.Name = "PictureBox3"
         Me.PictureBox3.Size = New System.Drawing.Size(53, 49)
         Me.PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
@@ -178,7 +178,7 @@ Partial Class FormOrders
         Me.RoundedPane24.CornerRadius = 15
         Me.RoundedPane24.FillColor = System.Drawing.Color.FromArgb(CType(CType(52, Byte), Integer), CType(CType(211, Byte), Integer), CType(CType(77, Byte), Integer))
         Me.RoundedPane24.Location = New System.Drawing.Point(508, 62)
-        Me.RoundedPane24.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane24.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane24.Name = "RoundedPane24"
         Me.RoundedPane24.Size = New System.Drawing.Size(449, 154)
         Me.RoundedPane24.TabIndex = 15
@@ -201,7 +201,7 @@ Partial Class FormOrders
         Me.PictureBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(92, Byte), Integer), CType(CType(219, Byte), Integer), CType(CType(113, Byte), Integer))
         Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
         Me.PictureBox2.Location = New System.Drawing.Point(27, 31)
-        Me.PictureBox2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(53, 49)
         Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
@@ -230,7 +230,7 @@ Partial Class FormOrders
         Me.RoundedPane23.CornerRadius = 15
         Me.RoundedPane23.FillColor = System.Drawing.Color.FromArgb(CType(CType(66, Byte), Integer), CType(CType(133, Byte), Integer), CType(CType(244, Byte), Integer))
         Me.RoundedPane23.Location = New System.Drawing.Point(43, 60)
-        Me.RoundedPane23.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane23.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane23.Name = "RoundedPane23"
         Me.RoundedPane23.Size = New System.Drawing.Size(449, 154)
         Me.RoundedPane23.TabIndex = 14
@@ -265,7 +265,7 @@ Partial Class FormOrders
         Me.PictureBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(102, Byte), Integer), CType(CType(157, Byte), Integer), CType(CType(246, Byte), Integer))
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
         Me.PictureBox1.Location = New System.Drawing.Point(27, 31)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(53, 49)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
@@ -281,7 +281,7 @@ Partial Class FormOrders
         Me.RoundedPane22.FillColor = System.Drawing.Color.White
         Me.RoundedPane22.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.RoundedPane22.Location = New System.Drawing.Point(41, 229)
-        Me.RoundedPane22.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane22.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane22.Name = "RoundedPane22"
         Me.RoundedPane22.Size = New System.Drawing.Size(699, 343)
         Me.RoundedPane22.TabIndex = 2
@@ -295,7 +295,7 @@ Partial Class FormOrders
         Legend1.Name = "Legend1"
         Me.MonthlyChartOrder.Legends.Add(Legend1)
         Me.MonthlyChartOrder.Location = New System.Drawing.Point(19, 47)
-        Me.MonthlyChartOrder.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.MonthlyChartOrder.Margin = New System.Windows.Forms.Padding(4)
         Me.MonthlyChartOrder.Name = "MonthlyChartOrder"
         Series1.ChartArea = "ChartArea1"
         Series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline
@@ -327,7 +327,7 @@ Partial Class FormOrders
         Me.RoundedPane21.CornerRadius = 15
         Me.RoundedPane21.FillColor = System.Drawing.Color.White
         Me.RoundedPane21.Location = New System.Drawing.Point(767, 229)
-        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.RoundedPane21.Margin = New System.Windows.Forms.Padding(4)
         Me.RoundedPane21.Name = "RoundedPane21"
         Me.RoundedPane21.Size = New System.Drawing.Size(679, 343)
         Me.RoundedPane21.TabIndex = 0
@@ -340,7 +340,7 @@ Partial Class FormOrders
         Legend2.Name = "Legend1"
         Me.OrderCategoriesGraph.Legends.Add(Legend2)
         Me.OrderCategoriesGraph.Location = New System.Drawing.Point(44, 16)
-        Me.OrderCategoriesGraph.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.OrderCategoriesGraph.Margin = New System.Windows.Forms.Padding(4)
         Me.OrderCategoriesGraph.Name = "OrderCategoriesGraph"
         Series2.ChartArea = "ChartArea1"
         Series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie
