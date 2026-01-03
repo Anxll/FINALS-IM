@@ -19,10 +19,7 @@ Public Class Orders
     Private Const WEB_BASE_URL As String = "http://localhost/TrialWeb/TrialWorkIM/Tabeya/"
     Private Sub Orders_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitializeSearchDebounce()
-        InitializeSearchDebounce()
-        LoadOrdersAsync()
-        UpdateFilterLabel()
-
+        
         With DataGridView2
             .SelectionMode = DataGridViewSelectionMode.FullRowSelect
             .ReadOnly = True
@@ -37,6 +34,11 @@ Public Class Orders
 
         SetupPaginationControls()
         RoundPaginationButtons()
+    End Sub
+
+    Private Sub Orders_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        LoadOrdersAsync()
+        UpdateFilterLabel()
     End Sub
 
     ' ============================================================

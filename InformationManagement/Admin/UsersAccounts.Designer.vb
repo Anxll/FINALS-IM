@@ -41,6 +41,13 @@ Partial Class UsersAccounts
         Me.colDelete = New System.Windows.Forms.DataGridViewImageColumn()
         Me.DataGridViewImageColumn1 = New System.Windows.Forms.DataGridViewImageColumn()
         Me.DataGridViewImageColumn2 = New System.Windows.Forms.DataGridViewImageColumn()
+        Me.PaginationPanel = New System.Windows.Forms.Panel()
+        Me.btnFirstPage = New System.Windows.Forms.Button()
+        Me.btnPreviousPage = New System.Windows.Forms.Button()
+        Me.lblPageInfo = New System.Windows.Forms.Label()
+        Me.btnNextPage = New System.Windows.Forms.Button()
+        Me.btnLastPage = New System.Windows.Forms.Button()
+        Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.AddEdit = New System.Windows.Forms.Button()
         Me.RoundedPane24 = New InformationManagement.RoundedPane2()
         Me.lblCustomers = New System.Windows.Forms.Label()
@@ -67,6 +74,7 @@ Partial Class UsersAccounts
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane21.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PaginationPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -256,6 +264,88 @@ Partial Class UsersAccounts
         Me.DataGridViewImageColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridViewImageColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.DataGridViewImageColumn2.Width = 80
+        '
+        'PaginationPanel
+        '
+        Me.PaginationPanel.Controls.Add(Me.btnFirstPage)
+        Me.PaginationPanel.Controls.Add(Me.btnPreviousPage)
+        Me.PaginationPanel.Controls.Add(Me.lblPageInfo)
+        Me.PaginationPanel.Controls.Add(Me.btnNextPage)
+        Me.PaginationPanel.Controls.Add(Me.btnLastPage)
+        Me.PaginationPanel.Location = New System.Drawing.Point(58, 498)
+        Me.PaginationPanel.Name = "PaginationPanel"
+        Me.PaginationPanel.Size = New System.Drawing.Size(1214, 40)
+        Me.PaginationPanel.TabIndex = 15
+        '
+        'btnFirstPage
+        '
+        Me.btnFirstPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnFirstPage.FlatAppearance.BorderSize = 0
+        Me.btnFirstPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnFirstPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnFirstPage.Location = New System.Drawing.Point(400, 5)
+        Me.btnFirstPage.Name = "btnFirstPage"
+        Me.btnFirstPage.Size = New System.Drawing.Size(40, 30)
+        Me.btnFirstPage.TabIndex = 0
+        Me.btnFirstPage.Text = "<<"
+        Me.btnFirstPage.UseVisualStyleBackColor = False
+        '
+        'btnPreviousPage
+        '
+        Me.btnPreviousPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnPreviousPage.FlatAppearance.BorderSize = 0
+        Me.btnPreviousPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPreviousPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPreviousPage.Location = New System.Drawing.Point(450, 5)
+        Me.btnPreviousPage.Name = "btnPreviousPage"
+        Me.btnPreviousPage.Size = New System.Drawing.Size(40, 30)
+        Me.btnPreviousPage.TabIndex = 1
+        Me.btnPreviousPage.Text = "<"
+        Me.btnPreviousPage.UseVisualStyleBackColor = False
+        '
+        'lblPageInfo
+        '
+        Me.lblPageInfo.AutoSize = True
+        Me.lblPageInfo.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPageInfo.Location = New System.Drawing.Point(500, 10)
+        Me.lblPageInfo.Name = "lblPageInfo"
+        Me.lblPageInfo.Size = New System.Drawing.Size(75, 17)
+        Me.lblPageInfo.TabIndex = 2
+        Me.lblPageInfo.Text = "Page 1 of 1"
+        '
+        'btnNextPage
+        '
+        Me.btnNextPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnNextPage.FlatAppearance.BorderSize = 0
+        Me.btnNextPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNextPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnNextPage.Location = New System.Drawing.Point(590, 5)
+        Me.btnNextPage.Name = "btnNextPage"
+        Me.btnNextPage.Size = New System.Drawing.Size(40, 30)
+        Me.btnNextPage.TabIndex = 3
+        Me.btnNextPage.Text = ">"
+        Me.btnNextPage.UseVisualStyleBackColor = False
+        '
+        'btnLastPage
+        '
+        Me.btnLastPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnLastPage.FlatAppearance.BorderSize = 0
+        Me.btnLastPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnLastPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnLastPage.Location = New System.Drawing.Point(640, 5)
+        Me.btnLastPage.Name = "btnLastPage"
+        Me.btnLastPage.Size = New System.Drawing.Size(40, 30)
+        Me.btnLastPage.TabIndex = 4
+        Me.btnLastPage.Text = ">>"
+        Me.btnLastPage.UseVisualStyleBackColor = False
+        '
+        'txtSearch
+        '
+        Me.txtSearch.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.txtSearch.Location = New System.Drawing.Point(927, 96)
+        Me.txtSearch.Name = "txtSearch"
+        Me.txtSearch.Size = New System.Drawing.Size(300, 25)
+        Me.txtSearch.TabIndex = 16
         '
         'AddEdit
         '
@@ -468,6 +558,8 @@ Partial Class UsersAccounts
         Me.Controls.Add(Me.RoundedPane22)
         Me.Controls.Add(Me.RoundedPane21)
         Me.Controls.Add(Me.UsersAccountData)
+        Me.Controls.Add(Me.PaginationPanel)
+        Me.Controls.Add(Me.txtSearch)
         Me.Controls.Add(Me.Customerbtn)
         Me.Controls.Add(Me.Employeesbtn)
         Me.Controls.Add(Me.Staffbtn)
@@ -490,6 +582,8 @@ Partial Class UsersAccounts
         Me.RoundedPane21.ResumeLayout(False)
         Me.RoundedPane21.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PaginationPanel.ResumeLayout(False)
+        Me.PaginationPanel.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -526,4 +620,11 @@ Partial Class UsersAccounts
     Friend WithEvents colJoinDate As DataGridViewTextBoxColumn
     Friend WithEvents colEdit As DataGridViewImageColumn
     Friend WithEvents colDelete As DataGridViewImageColumn
+    Friend WithEvents PaginationPanel As Panel
+    Friend WithEvents btnFirstPage As Button
+    Friend WithEvents btnPreviousPage As Button
+    Friend WithEvents lblPageInfo As Label
+    Friend WithEvents btnNextPage As Button
+    Friend WithEvents btnLastPage As Button
+    Friend WithEvents txtSearch As TextBox
 End Class

@@ -26,6 +26,10 @@ Public Class Reservations
         RoundPaginationButtons()
         CenterPaginationControls()
 
+
+    End Sub
+
+    Private Sub Reservations_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         LoadReservations()
     End Sub
 

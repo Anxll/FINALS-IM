@@ -262,7 +262,7 @@ Public Class UsersAccounts
                     ua.name,
                     ua.username,
                     ua.position,
-                    e.EmploymentStatus as status,
+                    ua.status,
                     ua.created_at as DateCreated,
                     ua.employee_id
                 FROM user_accounts ua
