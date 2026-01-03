@@ -334,6 +334,7 @@ Partial Class Customer
         'lblFilter
         '
         Me.lblFilter.AutoSize = True
+        Me.lblFilter.BackColor = System.Drawing.Color.Transparent
         Me.lblFilter.Font = New System.Drawing.Font("Segoe UI", 10.0!, System.Drawing.FontStyle.Bold)
         Me.lblFilter.Location = New System.Drawing.Point(32, 85)
         Me.lblFilter.Name = "lblFilter"
