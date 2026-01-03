@@ -5,15 +5,16 @@ Public Class Employee
     Private _isLoading As Boolean = False
     
     ' Pagination state
-    Private _currentPage As Integer = 1
-    Private ReadOnly _pageSize As Integer = 50
-    Private _totalRecords As Integer = 0
-    Private _totalPages As Integer = 0
+    Private currentPage As Integer = 1
+    Private recordsPerPage As Integer = 20
+    Private totalRecords As Integer = 0
+    Private totalPages As Integer = 0
     Private _currentCondition As String = ""
 
     Private Sub Employee_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Disable Update Status button initially
         btnUpdateStatus.Enabled = False
+        RoundPaginationButtons()
         
         LoadEmployees()
 
@@ -27,7 +28,7 @@ Public Class Employee
         _isLoading = True
         SetLoadingState(True)
 
-        If resetPage Then _currentPage = 1
+        If resetPage Then currentPage = 1
         If condition <> "" OrElse (condition = "" AndAlso Not resetPage AndAlso _currentCondition <> "") Then
              If condition <> "" Then _currentCondition = condition
         Else
@@ -41,12 +42,12 @@ Public Class Employee
             End If
 
             ' Get total count
-            _totalRecords = Await Task.Run(Function() FetchTotalEmployeeCount(searchText, _currentCondition))
-            _totalPages = Math.Ceiling(_totalRecords / _pageSize)
-            If _totalPages = 0 Then _totalPages = 1
-            If _currentPage > _totalPages Then _currentPage = _totalPages
+            totalRecords = Await Task.Run(Function() FetchTotalEmployeeCount(searchText, _currentCondition))
+            totalPages = Math.Ceiling(totalRecords / recordsPerPage)
+            If totalPages = 0 Then totalPages = 1
+            If currentPage > totalPages Then currentPage = totalPages
 
-            Dim offset As Integer = (_currentPage - 1) * _pageSize
+            Dim offset As Integer = (currentPage - 1) * recordsPerPage
             
             Dim query As String =
                 "SELECT EmployeeID, FirstName, LastName, Gender, DateOfBirth, ContactNumber, Email, Address, HireDate, Position, MaritalStatus, EmploymentStatus, EmploymentType, EmergencyContact, WorkShift, Salary FROM employee"
@@ -71,10 +72,9 @@ Public Class Employee
 
             query &= " ORDER BY FirstName, LastName LIMIT @limit OFFSET @offset"
 
-            Await Task.Run(Sub() LoadToDGV(query, DataGridView1, searchText, offset, _pageSize))
+            Await Task.Run(Sub() LoadToDGV(query, DataGridView1, searchText, offset, recordsPerPage))
 
-            lblTotalEmployees.Text = "Total: " & _totalRecords.ToString("N0")
-            UpdatePaginationUI()
+            UpdatePaginationControls()
 
         Catch ex As Exception
             If Not Me.IsDisposed Then
@@ -163,32 +163,115 @@ Public Class Employee
             AddEmployee.Enabled = Not isLoading
             EditEmployee.Enabled = Not isLoading
             btnDelete.Enabled = Not isLoading
-            If btnPrev IsNot Nothing Then btnPrev.Enabled = Not isLoading AndAlso _currentPage > 1
-            If btnNext IsNot Nothing Then btnNext.Enabled = Not isLoading AndAlso _currentPage < _totalPages
+            
+            ' Pagination buttons are handled in UpdatePaginationControls
         Catch
         End Try
     End Sub
 
-    Private Sub UpdatePaginationUI()
-        If lblPageStatus IsNot Nothing Then
-            lblPageStatus.Text = $"Page {_currentPage} of {_totalPages}"
-        End If
-        If btnPrev IsNot Nothing Then btnPrev.Enabled = (_currentPage > 1)
-        If btnNext IsNot Nothing Then btnNext.Enabled = (_currentPage < _totalPages)
+    '====================================
+    ' PAGINATION LOGIC
+    '====================================
+    Private Sub UpdatePaginationControls()
+        lblPageInfo.Text = $"Page {currentPage} of {totalPages}"
+        lblTotalEmployees.Text = $"Total Employees: {totalRecords:N0}"
+
+        ' Enable/Disable navigation buttons
+        btnFirstPage.Enabled = (currentPage > 1)
+        btnPrevPage.Enabled = (currentPage > 1)
+        btnNextPage.Enabled = (currentPage < totalPages)
+        btnLastPage.Enabled = (currentPage < totalPages)
+
+        ' Visual feedback
+        Dim enabledColor As Color = Color.FromArgb(240, 244, 250)
+        Dim disabledColor As Color = Color.FromArgb(230, 230, 230)
+
+        btnFirstPage.BackColor = If(btnFirstPage.Enabled, enabledColor, disabledColor)
+        btnPrevPage.BackColor = If(btnPrevPage.Enabled, enabledColor, disabledColor)
+        btnNextPage.BackColor = If(btnNextPage.Enabled, enabledColor, disabledColor)
+        btnLastPage.BackColor = If(btnLastPage.Enabled, enabledColor, disabledColor)
+
+        CenterPaginationControls()
     End Sub
 
-    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        If _currentPage < _totalPages Then
-            _currentPage += 1
+    Private Sub RoundButton(btn As Button)
+        Dim radius As Integer = 8
+        Dim path As New Drawing2D.GraphicsPath()
+        path.StartFigure()
+        path.AddArc(New Rectangle(0, 0, radius, radius), 180, 90)
+        path.AddArc(New Rectangle(btn.Width - radius, 0, radius, radius), 270, 90)
+        path.AddArc(New Rectangle(btn.Width - radius, btn.Height - radius, radius, radius), 0, 90)
+        path.AddArc(New Rectangle(0, btn.Height - radius, radius, radius), 90, 90)
+        path.CloseFigure()
+        btn.Region = New Region(path)
+    End Sub
+
+    Private Sub RoundPaginationButtons()
+        RoundButton(btnFirstPage)
+        RoundButton(btnPrevPage)
+        RoundButton(btnNextPage)
+        RoundButton(btnLastPage)
+    End Sub
+
+    Private Sub CenterPaginationControls()
+        Try
+            If Panel4 Is Nothing Then Return
+
+            Dim panelWidth As Integer = Panel4.Width
+            Dim totalButtonWidth As Integer = btnFirstPage.Width + btnPrevPage.Width +
+                                              btnNextPage.Width + btnLastPage.Width
+            Dim spacing As Integer = 10
+            Dim labelWidth As Integer = lblPageInfo.Width
+
+            Dim centerGroupWidth As Integer = totalButtonWidth + (spacing * 4) + labelWidth
+            Dim startX As Integer = (panelWidth - centerGroupWidth) \ 2
+
+            ' 1. Position Total Label LEFT
+            lblTotalEmployees.Location = New Point(10, 16)
+            lblTotalEmployees.Top = (Panel4.Height - lblTotalEmployees.Height) \ 2
+
+            ' 2. Position Center Group
+            btnFirstPage.Location = New Point(startX, 10)
+            btnPrevPage.Location = New Point(btnFirstPage.Right + spacing, 10)
+            
+            lblPageInfo.AutoSize = True
+            lblPageInfo.Location = New Point(btnPrevPage.Right + spacing, 16)
+            lblPageInfo.Top = (Panel4.Height - lblPageInfo.Height) \ 2
+            
+            btnNextPage.Location = New Point(lblPageInfo.Right + spacing, 10)
+            btnLastPage.Location = New Point(btnNextPage.Right + spacing, 10)
+
+        Catch ex As Exception
+            ' Squelch sizing errors
+        End Try
+    End Sub
+
+    Private Sub Employee_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        CenterPaginationControls()
+    End Sub
+
+    Private Sub btnFirstPage_Click(sender As Object, e As EventArgs) Handles btnFirstPage.Click
+        currentPage = 1
+        LoadEmployees()
+    End Sub
+
+    Private Sub btnPrevPage_Click(sender As Object, e As EventArgs) Handles btnPrevPage.Click
+        If currentPage > 1 Then
+            currentPage -= 1
             LoadEmployees()
         End If
     End Sub
 
-    Private Sub btnPrev_Click(sender As Object, e As EventArgs) Handles btnPrev.Click
-        If _currentPage > 1 Then
-            _currentPage -= 1
+    Private Sub btnNextPage_Click(sender As Object, e As EventArgs) Handles btnNextPage.Click
+        If currentPage < totalPages Then
+            currentPage += 1
             LoadEmployees()
         End If
+    End Sub
+
+    Private Sub btnLastPage_Click(sender As Object, e As EventArgs) Handles btnLastPage.Click
+        currentPage = totalPages
+        LoadEmployees()
     End Sub
 
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged

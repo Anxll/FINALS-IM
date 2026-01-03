@@ -52,6 +52,13 @@ Partial Class Customer
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.LabelHeader = New System.Windows.Forms.Label()
         Me.LabelSubHeader = New System.Windows.Forms.Label()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.btnFirstPage = New System.Windows.Forms.Button()
+        Me.btnPrevPage = New System.Windows.Forms.Button()
+        Me.btnNextPage = New System.Windows.Forms.Button()
+        Me.btnLastPage = New System.Windows.Forms.Button()
+        Me.lblPageInfo = New System.Windows.Forms.Label()
+        Me.lblTotalCustomers = New System.Windows.Forms.Label()
         Me.RoundedPane21.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.RoundedPane22.SuspendLayout()
@@ -471,6 +478,109 @@ Partial Class Customer
         Me.ClientSize = New System.Drawing.Size(1129, 749)
         Me.Controls.Add(Me.LabelSubHeader)
         Me.Controls.Add(Me.LabelHeader)
+        '
+        'Panel4
+        '
+        Me.Panel4.BackColor = System.Drawing.Color.White
+        Me.Panel4.Controls.Add(Me.lblPageInfo)
+        Me.Panel4.Controls.Add(Me.btnLastPage)
+        Me.Panel4.Controls.Add(Me.btnNextPage)
+        Me.Panel4.Controls.Add(Me.btnPrevPage)
+        Me.Panel4.Controls.Add(Me.btnFirstPage)
+        Me.Panel4.Controls.Add(Me.lblTotalCustomers)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel4.Location = New System.Drawing.Point(0, 699)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(1129, 50)
+        Me.Panel4.TabIndex = 6
+
+        '
+        'btnFirstPage
+        '
+        Me.btnFirstPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnFirstPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnFirstPage.FlatAppearance.BorderSize = 0
+        Me.btnFirstPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnFirstPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnFirstPage.ForeColor = System.Drawing.Color.Black
+        Me.btnFirstPage.Location = New System.Drawing.Point(379, 10)
+        Me.btnFirstPage.Name = "btnFirstPage"
+        Me.btnFirstPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnFirstPage.TabIndex = 1
+        Me.btnFirstPage.Text = "First"
+        Me.btnFirstPage.UseVisualStyleBackColor = False
+
+        '
+        'btnPrevPage
+        '
+        Me.btnPrevPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnPrevPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnPrevPage.FlatAppearance.BorderSize = 0
+        Me.btnPrevPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPrevPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnPrevPage.ForeColor = System.Drawing.Color.Black
+        Me.btnPrevPage.Location = New System.Drawing.Point(455, 10)
+        Me.btnPrevPage.Name = "btnPrevPage"
+        Me.btnPrevPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnPrevPage.TabIndex = 2
+        Me.btnPrevPage.Text = "Prev"
+        Me.btnPrevPage.UseVisualStyleBackColor = False
+
+        '
+        'btnNextPage
+        '
+        Me.btnNextPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnNextPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnNextPage.FlatAppearance.BorderSize = 0
+        Me.btnNextPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNextPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnNextPage.ForeColor = System.Drawing.Color.Black
+        Me.btnNextPage.Location = New System.Drawing.Point(531, 10)
+        Me.btnNextPage.Name = "btnNextPage"
+        Me.btnNextPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnNextPage.TabIndex = 3
+        Me.btnNextPage.Text = "Next"
+        Me.btnNextPage.UseVisualStyleBackColor = False
+
+        '
+        'btnLastPage
+        '
+        Me.btnLastPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnLastPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnLastPage.FlatAppearance.BorderSize = 0
+        Me.btnLastPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnLastPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnLastPage.ForeColor = System.Drawing.Color.Black
+        Me.btnLastPage.Location = New System.Drawing.Point(607, 10)
+        Me.btnLastPage.Name = "btnLastPage"
+        Me.btnLastPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnLastPage.TabIndex = 4
+        Me.btnLastPage.Text = "Last"
+        Me.btnLastPage.UseVisualStyleBackColor = False
+
+        '
+        'lblPageInfo
+        '
+        Me.lblPageInfo.AutoSize = True
+        Me.lblPageInfo.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.lblPageInfo.Location = New System.Drawing.Point(697, 18)
+        Me.lblPageInfo.Name = "lblPageInfo"
+        Me.lblPageInfo.Size = New System.Drawing.Size(68, 15)
+        Me.lblPageInfo.TabIndex = 5
+        Me.lblPageInfo.Text = "Page 1 of 1"
+        
+        '
+        'lblTotalCustomers
+        '
+        Me.lblTotalCustomers.AutoSize = True
+        Me.lblTotalCustomers.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTotalCustomers.Location = New System.Drawing.Point(12, 18)
+        Me.lblTotalCustomers.Name = "lblTotalCustomers"
+        Me.lblTotalCustomers.Size = New System.Drawing.Size(107, 15)
+        Me.lblTotalCustomers.TabIndex = 0
+        Me.lblTotalCustomers.Text = "Total Customers: 0"
+
+        Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.RoundedPane24)
         Me.Controls.Add(Me.RoundedPane23)
         Me.Controls.Add(Me.RoundedPane22)
@@ -489,6 +599,8 @@ Partial Class Customer
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.RoundedPane24.ResumeLayout(False)
         Me.RoundedPane24.PerformLayout()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
         Me.SearchContainer.ResumeLayout(False)
         Me.SearchContainer.PerformLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -526,4 +638,11 @@ Partial Class Customer
     Friend WithEvents btnViewAll As System.Windows.Forms.Button
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
+    Friend WithEvents Panel4 As System.Windows.Forms.Panel
+    Friend WithEvents btnFirstPage As System.Windows.Forms.Button
+    Friend WithEvents btnPrevPage As System.Windows.Forms.Button
+    Friend WithEvents btnNextPage As System.Windows.Forms.Button
+    Friend WithEvents btnLastPage As System.Windows.Forms.Button
+    Friend WithEvents lblPageInfo As System.Windows.Forms.Label
+    Friend WithEvents lblTotalCustomers As System.Windows.Forms.Label
 End Class

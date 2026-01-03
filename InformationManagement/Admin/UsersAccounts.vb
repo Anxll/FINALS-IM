@@ -9,11 +9,18 @@ Public Class UsersAccounts
     Private allStaffData As DataTable
     Private searchText As String = ""
     Private initialLoadComplete As Boolean = False
+    Private currentViewMode As String = "Staff" ' Types: "Staff", "Employee"
+    Private WithEvents btnShowStaff As Button
+    Private WithEvents btnShowEmployee As Button
+    Private WithEvents btnUpdateStatus As Button
+    Private WithEvents btnAddNew As Button ' Keep reference but might hide
 
     Private Sub UsersAccounts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitializeDataGridView()
         RoundPaginationButtons()
-        LoadStaffData()
+        SetupToggleButtons() ' Add toggle buttons
+        ' SetupAddButton() ' Disable original Add button favor of Employee view workflow
+        LoadDataBasedOnMode()
         initialLoadComplete = True
         AdjustControlsToScreen()
     End Sub
@@ -39,12 +46,33 @@ Public Class UsersAccounts
             Label1.Location = New Point(leftMargin, topMargin)
 
             ' Stats Card
-            RoundedPane22.Location = New Point(leftMargin, Label1.Bottom + 20)
             Dim statsCardWidth As Integer = Math.Min(300, (formWidth - leftMargin - rightMargin) \ 3)
             RoundedPane22.Width = statsCardWidth
+            
+            ' Add Button Position (Legacy or if needed)
+            ' If btnAddNew IsNot Nothing Then
+            '    btnAddNew.Location = New Point(formWidth - rightMargin - btnAddNew.Width, topMargin)
+            ' End If
+
+            ' Toggle Buttons Position - Fixed Overlay Issue
+            If btnShowStaff IsNot Nothing AndAlso btnShowEmployee IsNot Nothing Then
+                Dim buttonY As Integer = RoundedPane22.Bottom + 20 ' Place below the stats card
+                btnShowStaff.Location = New Point(leftMargin, buttonY)
+                btnShowEmployee.Location = New Point(btnShowStaff.Right + 10, buttonY)
+                
+                ' Position Update Status Button at Top Right (relative to where Add button was)
+                If btnUpdateStatus IsNot Nothing Then
+                     btnUpdateStatus.Location = New Point(formWidth - rightMargin - btnUpdateStatus.Width, topMargin + 10)
+                End If
+            End If
 
             ' DataGridView - Calculate available space
-            Dim gridTop As Integer = RoundedPane22.Bottom + 20
+            Dim gridTop As Integer
+            If btnShowStaff IsNot Nothing Then
+                gridTop = btnShowStaff.Bottom + 20
+            Else
+                gridTop = RoundedPane22.Bottom + 20
+            End If
             Dim gridWidth As Integer = formWidth - leftMargin - rightMargin
             Dim paginationHeight As Integer = 60
             Dim gridHeight As Integer = formHeight - gridTop - paginationHeight - 20
@@ -132,6 +160,18 @@ Public Class UsersAccounts
         UsersAccountData.DoubleBuffered(True)
         UsersAccountData.SuspendLayout()
         UsersAccountData.Rows.Clear()
+
+        ' Add Create Account Action Column
+        If Not UsersAccountData.Columns.Contains("colCreateAccount") Then
+            Dim btnCol As New DataGridViewButtonColumn()
+            btnCol.Name = "colCreateAccount"
+            btnCol.HeaderText = "Action"
+            btnCol.Text = "Create Account"
+            btnCol.UseColumnTextForButtonValue = True
+            UsersAccountData.Columns.Add(btnCol)
+            btnCol.Visible = False
+        End If
+
         UsersAccountData.ResumeLayout()
 
         ' Set alternating row colors for better readability
@@ -141,27 +181,94 @@ Public Class UsersAccounts
         UsersAccountData.DefaultCellStyle.SelectionBackColor = Color.FromArgb(240, 244, 250)
         UsersAccountData.DefaultCellStyle.SelectionForeColor = Color.Black
 
-        ' Hide the Edit column
-        If UsersAccountData.Columns.Contains("colEdit") Then
-            UsersAccountData.Columns("colEdit").Visible = False
+        ' Add hidden columns for data handling
+        If Not UsersAccountData.Columns.Contains("colUsername") Then
+            UsersAccountData.Columns.Add("colUsername", "Username")
+            UsersAccountData.Columns("colUsername").Visible = False
         End If
+
+        If Not UsersAccountData.Columns.Contains("colEmployeeID") Then
+            UsersAccountData.Columns.Add("colEmployeeID", "EmployeeID")
+            UsersAccountData.Columns("colEmployeeID").Visible = False
+        End If
+
+        ' Hide the Edit column
+        'If UsersAccountData.Columns.Contains("colEdit") Then
+        '    UsersAccountData.Columns("colEdit").Visible = False
+        'End If
+    End Sub
+
+    Private Sub LoadDataBasedOnMode()
+        If currentViewMode = "Staff" Then
+            LoadStaffData()
+        Else
+            LoadEmployeeData()
+        End If
+        UpdateToggleButtonStyles()
+    End Sub
+
+    Private Sub LoadEmployeeData()
+        Try
+            ' Configure Columns for Employee Mode
+            If UsersAccountData.Columns.Contains("colEdit") Then UsersAccountData.Columns("colEdit").Visible = False
+            If UsersAccountData.Columns.Contains("colDelete") Then UsersAccountData.Columns("colDelete").Visible = False
+            If UsersAccountData.Columns.Contains("colCreateAccount") Then UsersAccountData.Columns("colCreateAccount").Visible = True
+            
+            openConn()
+            Dim query As String = "
+                SELECT 
+                    EmployeeID as id,
+                    CONCAT(FirstName, ' ', LastName) as name,
+                    Position as position,
+                    HireDate as DateCreated,
+                    Email as username,
+                    EmployeeID as employee_id
+                FROM employee
+                WHERE EmploymentStatus = 'Active' 
+                AND Position = 'Employee'
+                AND EmployeeID NOT IN (SELECT IFNULL(employee_id,0) FROM user_accounts)
+                ORDER BY FirstName"
+
+            Dim cmd As New MySqlCommand(query, conn)
+            Dim adapter As New MySqlDataAdapter(cmd)
+            allStaffData = New DataTable()
+            adapter.Fill(allStaffData)
+            
+            totalRecords = allStaffData.Rows.Count
+            totalPages = If(totalRecords > 0, Math.Ceiling(totalRecords / pageSize), 1)
+            lblStaffs.Text = totalRecords.ToString()
+            
+            ApplySearchFilter()
+            
+        Catch ex As Exception
+            MessageBox.Show("Error loading employee data: " & ex.Message)
+        Finally
+            closeConn()
+        End Try
     End Sub
 
     Private Sub LoadStaffData()
         Try
-            openConn()
+            ' Configure Columns for Staff Mode
+            If UsersAccountData.Columns.Contains("colEdit") Then UsersAccountData.Columns("colEdit").Visible = True
+            If UsersAccountData.Columns.Contains("colDelete") Then UsersAccountData.Columns("colDelete").Visible = True
+            If UsersAccountData.Columns.Contains("colCreateAccount") Then UsersAccountData.Columns("colCreateAccount").Visible = False
 
-            ' FIXED QUERY: Load only staff members with exact Position match
-            ' Added LIMIT and proper index hints for performance
+            openConn()
+            ' FIXED QUERY: Load staff with status from Employee table
             Dim query As String = "
                 SELECT 
-                    e.EmployeeID as ID,
-                    e.FirstName,
-                    e.LastName,
-                    e.HireDate as DateCreated
-                FROM employee e
-                WHERE e.Position = 'Staff'
-                ORDER BY e.HireDate DESC
+                    ua.id,
+                    ua.name,
+                    ua.username,
+                    ua.position,
+                    e.EmploymentStatus as status,
+                    ua.created_at as DateCreated,
+                    ua.employee_id
+                FROM user_accounts ua
+                LEFT JOIN employee e ON ua.employee_id = e.EmployeeID
+                WHERE ua.position != 'Administrator' AND ua.position != 'Admin' AND ua.type != 0
+                ORDER BY ua.created_at DESC
                 LIMIT 1000"
 
             Dim cmd As New MySqlCommand(query, conn)
@@ -201,11 +308,13 @@ Public Class UsersAccounts
         Else
             filteredData = allStaffData.Clone()
             For Each row As DataRow In allStaffData.Rows
-                Dim firstName As String = If(row("FirstName") IsNot DBNull.Value, row("FirstName").ToString().ToLower(), "")
-                Dim lastName As String = If(row("LastName") IsNot DBNull.Value, row("LastName").ToString().ToLower(), "")
+                Dim name As String = If(row("name") IsNot DBNull.Value, row("name").ToString().ToLower(), "")
+                Dim username As String = If(row("username") IsNot DBNull.Value, row("username").ToString().ToLower(), "")
+                Dim position As String = If(row("position") IsNot DBNull.Value, row("position").ToString().ToLower(), "")
 
-                If firstName.Contains(searchText.ToLower()) OrElse
-                   lastName.Contains(searchText.ToLower()) Then
+                If name.Contains(searchText.ToLower()) OrElse
+                   username.Contains(searchText.ToLower()) OrElse
+                   position.Contains(searchText.ToLower()) Then
                     filteredData.ImportRow(row)
                 End If
             Next
@@ -244,11 +353,19 @@ Public Class UsersAccounts
             For i As Integer = startIndex To endIndex - 1
                 Dim row As DataRow = dataSource.Rows(i)
 
-                ' Get first name
-                Dim firstName As String = If(row("FirstName") IsNot DBNull.Value, row("FirstName").ToString().Trim(), "N/A")
+                ' Get name
+                Dim fullName As String = If(row("name") IsNot DBNull.Value, row("name").ToString().Trim(), "N/A")
+                Dim username As String = If(row("username") IsNot DBNull.Value, row("username").ToString().Trim(), "")
+                Dim employeeId As Integer = If(row("employee_id") IsNot DBNull.Value, Convert.ToInt32(row("employee_id")), 0)
+                
+                ' Get position/role
+                Dim position As String = If(row("position") IsNot DBNull.Value, row("position").ToString().Trim(), "Staff")
 
-                ' Get last name
-                Dim lastName As String = If(row("LastName") IsNot DBNull.Value, row("LastName").ToString().Trim(), "N/A")
+                ' Get status
+                Dim status As String = "Active"
+                If dataSource.Columns.Contains("status") AndAlso row("status") IsNot DBNull.Value Then
+                     status = row("status").ToString()
+                End If
 
                 ' Format hire date
                 Dim hireDate As String = "N/A"
@@ -265,25 +382,32 @@ Public Class UsersAccounts
                 Dim newRow As DataGridViewRow = UsersAccountData.Rows(rowIndex)
 
                 ' Set cell values (matching Designer column names)
-                ' FIXED: Removed colUsername reference that was causing the error
                 If UsersAccountData.Columns.Contains("txtName") Then
-                    newRow.Cells("txtName").Value = firstName & " " & lastName ' Combined name
+                    newRow.Cells("txtName").Value = fullName
                 End If
 
                 If UsersAccountData.Columns.Contains("colRole") Then
-                    newRow.Cells("colRole").Value = "Staff" ' All are staff
+                    newRow.Cells("colRole").Value = position
                 End If
 
                 If UsersAccountData.Columns.Contains("colStatus") Then
-                    newRow.Cells("colStatus").Value = "Active" ' Default status
+                    newRow.Cells("colStatus").Value = status
                 End If
 
                 If UsersAccountData.Columns.Contains("colJoinDate") Then
                     newRow.Cells("colJoinDate").Value = hireDate
                 End If
 
-                ' Store ID for delete operations
-                newRow.Tag = If(row("ID") IsNot DBNull.Value, Convert.ToInt32(row("ID")), 0)
+                If UsersAccountData.Columns.Contains("colUsername") Then
+                    newRow.Cells("colUsername").Value = username
+                End If
+
+                If UsersAccountData.Columns.Contains("colEmployeeID") Then
+                    newRow.Cells("colEmployeeID").Value = employeeId
+                End If
+
+                ' Store ID for delete/edit operations
+                newRow.Tag = If(row("id") IsNot DBNull.Value, Convert.ToInt32(row("id")), 0)
             Next
 
         Catch ex As Exception
@@ -344,16 +468,56 @@ Public Class UsersAccounts
             End If
         End If
 
-        ' EDIT BUTTON (Optional - add functionality if needed)
+        ' EDIT BUTTON
         If UsersAccountData.Columns.Contains("colEdit") AndAlso e.ColumnIndex = UsersAccountData.Columns("colEdit").Index Then
-            MessageBox.Show($"Edit functionality for {fullName} coming soon!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Dim empId As Integer = 0
+            Dim uName As String = ""
+            
+            If UsersAccountData.Columns.Contains("colEmployeeID") AndAlso selectedRow.Cells("colEmployeeID").Value IsNot Nothing Then
+                empId = CInt(selectedRow.Cells("colEmployeeID").Value)
+            End If
+
+            If UsersAccountData.Columns.Contains("colUsername") AndAlso selectedRow.Cells("colUsername").Value IsNot Nothing Then
+                uName = selectedRow.Cells("colUsername").Value.ToString()
+            End If
+
+            Dim frm As New FormEdit()
+            ' Pass data for editing
+            ' Use LoadUserData but set UserID property directly or via overload
+            frm.UserID = userID 
+            frm.LoadUserData(empId, uName, selectedRow.Cells("colRole").Value.ToString())
+            
+            If frm.ShowDialog() = DialogResult.OK Then
+                ' MDA FIX: Clear selection to release accessibility references
+                UsersAccountData.CurrentCell = Nothing
+                ' Defer reload to next message loop
+                Me.BeginInvoke(Sub() LoadDataBasedOnMode())
+            End If
+        End If
+
+        ' CREATE ACCOUNT BUTTON
+        If UsersAccountData.Columns.Contains("colCreateAccount") AndAlso e.ColumnIndex = UsersAccountData.Columns("colCreateAccount").Index Then
+             ' Get data from the Employee row
+             Dim empId As Integer = CInt(selectedRow.Cells("colEmployeeID").Value)
+             Dim empName As String = selectedRow.Cells("txtName").Value.ToString()
+             Dim empRole As String = selectedRow.Cells("colRole").Value.ToString()
+             
+             Dim frm As New CreateAccount()
+             ' Pre-fill for linking
+             frm.LoadEmployeeData(empId, empName, empRole)
+             
+             If frm.ShowDialog() = DialogResult.OK Then
+                  ' MDA FIX
+                  UsersAccountData.CurrentCell = Nothing
+                  Me.BeginInvoke(Sub() LoadDataBasedOnMode())
+             End If
         End If
     End Sub
 
     Private Sub DeleteStaffMember(userID As Integer, username As String)
         Try
             openConn()
-            Dim query As String = "DELETE FROM employee WHERE EmployeeID = @id AND Position = 'Staff'"
+            Dim query As String = "DELETE FROM user_accounts WHERE id = @id"
             Dim cmd As New MySqlCommand(query, conn)
             cmd.Parameters.AddWithValue("@id", userID)
 
@@ -362,7 +526,7 @@ Public Class UsersAccounts
             If rowsAffected > 0 Then
                 MessageBox.Show($"{username} has been deleted successfully.",
                               "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                LoadStaffData() ' Reload data
+                LoadDataBasedOnMode() ' Reload data
             Else
                 MessageBox.Show("No records were deleted. Staff member may not exist.",
                               "Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -415,11 +579,11 @@ Public Class UsersAccounts
         Else
             Dim filteredData As DataTable = allStaffData.Clone()
             For Each row As DataRow In allStaffData.Rows
-                Dim firstName As String = If(row("FirstName") IsNot DBNull.Value, row("FirstName").ToString().ToLower(), "")
-                Dim lastName As String = If(row("LastName") IsNot DBNull.Value, row("LastName").ToString().ToLower(), "")
+                Dim name As String = If(row("name") IsNot DBNull.Value, row("name").ToString().ToLower(), "")
+                Dim position As String = If(row("position") IsNot DBNull.Value, row("position").ToString().ToLower(), "")
 
-                If firstName.Contains(searchText.ToLower()) OrElse
-                   lastName.Contains(searchText.ToLower()) Then
+                If name.Contains(searchText.ToLower()) OrElse
+                   position.Contains(searchText.ToLower()) Then
                     filteredData.ImportRow(row)
                 End If
             Next
@@ -458,12 +622,108 @@ Public Class UsersAccounts
         LoadStaffData()
     End Sub
 
-    Public Sub LoadUsers()
-        LoadStaffData()
+    Private Sub SetupToggleButtons()
+        btnShowStaff = New Button()
+        btnShowStaff.Text = "Staff Accounts"
+        btnShowStaff.Size = New Size(140, 35)
+        btnShowStaff.FlatStyle = FlatStyle.Flat
+        btnShowStaff.Cursor = Cursors.Hand
+        
+        btnShowEmployee = New Button()
+        btnShowEmployee.Text = "Employees List"
+        btnShowEmployee.Size = New Size(140, 35)
+        btnShowEmployee.FlatStyle = FlatStyle.Flat
+        btnShowEmployee.Cursor = Cursors.Hand
+        
+        btnUpdateStatus = New Button()
+        btnUpdateStatus.Text = "Update Status"
+        btnUpdateStatus.Size = New Size(130, 35)
+        btnUpdateStatus.BackColor = Color.FromArgb(59, 130, 246)
+        btnUpdateStatus.ForeColor = Color.White
+        btnUpdateStatus.FlatStyle = FlatStyle.Flat
+        btnUpdateStatus.Cursor = Cursors.Hand
+        btnUpdateStatus.Visible = False ' Only visible in Staff mode
+        
+        RoundButton(btnShowStaff)
+        RoundButton(btnShowEmployee)
+        RoundButton(btnUpdateStatus)
+        
+        Me.Controls.Add(btnShowStaff)
+        Me.Controls.Add(btnShowEmployee)
+        Me.Controls.Add(btnUpdateStatus)
+        btnShowStaff.BringToFront()
+        btnShowEmployee.BringToFront()
+        btnUpdateStatus.BringToFront()
     End Sub
 
-    Private Sub lblStaffs_Click(sender As Object, e As EventArgs) Handles lblStaffs.Click
+    Private Sub UpdateToggleButtonStyles()
+        Dim activeColor As Color = Color.FromArgb(59, 130, 246) ' Blue
+        Dim inactiveColor As Color = Color.White
+        Dim activeText As Color = Color.White
+        Dim inactiveText As Color = Color.Black
 
+        If currentViewMode = "Staff" Then
+            btnShowStaff.BackColor = activeColor
+            btnShowStaff.ForeColor = activeText
+            btnShowEmployee.BackColor = inactiveColor
+            btnShowEmployee.ForeColor = inactiveText
+            If btnUpdateStatus IsNot Nothing Then btnUpdateStatus.Visible = True
+        Else
+            btnShowStaff.BackColor = inactiveColor
+            btnShowStaff.ForeColor = inactiveText
+            btnShowEmployee.BackColor = activeColor
+            btnShowEmployee.ForeColor = activeText
+            If btnUpdateStatus IsNot Nothing Then btnUpdateStatus.Visible = False
+        End If
+    End Sub
+
+    Private Sub btnShowStaff_Click(sender As Object, e As EventArgs) Handles btnShowStaff.Click
+        currentViewMode = "Staff"
+        LoadDataBasedOnMode()
+    End Sub
+
+    Private Sub btnShowEmployee_Click(sender As Object, e As EventArgs) Handles btnShowEmployee.Click
+        currentViewMode = "Employee"
+        LoadDataBasedOnMode()
+    End Sub
+
+    Private Sub btnAddNew_Click(sender As Object, e As EventArgs) Handles btnAddNew.Click
+        ' 1. Select Employee First
+        Dim selectEmp As New FormSelectEmployee()
+        If selectEmp.ShowDialog() = DialogResult.OK Then
+            ' 2. Open FormEdit with pre-filled data
+            Dim frm As New FormEdit()
+            ' Pass 0 as ID (new user), but provide EmployeeID and details
+            frm.LoadUserData(selectEmp.SelectedEmployeeID, selectEmp.SelectedEmployeeName, selectEmp.SelectedEmployeeRole)
+            
+            If frm.ShowDialog() = DialogResult.OK Then
+                LoadStaffData() ' Reload grid
+            End If
+        End If
+    End Sub
+
+    Public Sub LoadUsers()
+        LoadDataBasedOnMode()
+    End Sub
+
+    Private Sub btnUpdateStatus_Click(sender As Object, e As EventArgs) Handles btnUpdateStatus.Click
+        If UsersAccountData.SelectedRows.Count = 0 Then
+            MessageBox.Show("Please select a user to update status.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+        
+        Dim selectedRow As DataGridViewRow = UsersAccountData.SelectedRows(0)
+        Dim userId As Integer = If(selectedRow.Tag IsNot Nothing, CInt(selectedRow.Tag), 0)
+        Dim empId As Integer = If(selectedRow.Cells("colEmployeeID").Value IsNot Nothing, CInt(selectedRow.Cells("colEmployeeID").Value), 0)
+        Dim name As String = If(selectedRow.Cells("txtName").Value IsNot Nothing, selectedRow.Cells("txtName").Value.ToString(), "Unknown")
+        Dim currentStatus As String = If(selectedRow.Cells("colStatus").Value IsNot Nothing, selectedRow.Cells("colStatus").Value.ToString(), "Active")
+
+        Dim frm As New FormUpdateStatus()
+        frm.LoadData(userId, empId, name, currentStatus)
+
+        If frm.ShowDialog() = DialogResult.OK Then
+            LoadStaffData()
+        End If
     End Sub
 
 End Class

@@ -29,17 +29,22 @@ Partial Class ActivityLogsForm
         Me.cboUserType = New System.Windows.Forms.ComboBox()
         Me.cboActionCategory = New System.Windows.Forms.ComboBox()
         Me.cboSourceSystem = New System.Windows.Forms.ComboBox()
+        Me.cboSourceSystem = New System.Windows.Forms.ComboBox()
         Me.cboStatus = New System.Windows.Forms.ComboBox()
         Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.btnApplyFilters = New System.Windows.Forms.Button()
         Me.btnResetFilters = New System.Windows.Forms.Button()
         Me.btnSearch = New System.Windows.Forms.Button()
-        Me.btnPrevious = New System.Windows.Forms.Button()
-        Me.btnNext = New System.Windows.Forms.Button()
         Me.btnExportCSV = New System.Windows.Forms.Button()
         Me.btnRefresh = New System.Windows.Forms.Button()
         Me.btnClearLogs = New System.Windows.Forms.Button()
-        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.btnFirstPage = New System.Windows.Forms.Button()
+        Me.btnPrevPage = New System.Windows.Forms.Button()
+        Me.btnNextPage = New System.Windows.Forms.Button()
+        Me.btnLastPage = New System.Windows.Forms.Button()
+        Me.lblPageInfo = New System.Windows.Forms.Label()
+        Me.lblTotalLogs = New System.Windows.Forms.Label()
         Me.lblStartDate = New System.Windows.Forms.Label()
         Me.lblEndDate = New System.Windows.Forms.Label()
         Me.lblUserType = New System.Windows.Forms.Label()
@@ -48,10 +53,9 @@ Partial Class ActivityLogsForm
         Me.lblStatusFilter = New System.Windows.Forms.Label()
         Me.lblSearch = New System.Windows.Forms.Label()
         Me.pnlFilters = New System.Windows.Forms.Panel()
-        Me.pnlBottom = New System.Windows.Forms.Panel()
         CType(Me.dgvActivityLogs, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlFilters.SuspendLayout()
-        Me.pnlBottom.SuspendLayout()
+        Me.Panel4.SuspendLayout()
         Me.SuspendLayout()
         '
         'dgvActivityLogs
@@ -207,6 +211,15 @@ Partial Class ActivityLogsForm
         Me.cboStatus.Size = New System.Drawing.Size(150, 23)
         Me.cboStatus.TabIndex = 11
         '
+        'cboStatus
+        '
+        Me.cboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboStatus.FormattingEnabled = True
+        Me.cboStatus.Location = New System.Drawing.Point(180, 90)
+        Me.cboStatus.Name = "cboStatus"
+        Me.cboStatus.Size = New System.Drawing.Size(150, 23)
+        Me.cboStatus.TabIndex = 11
+        '
         'lblSearch
         '
         Me.lblSearch.AutoSize = True
@@ -303,62 +316,113 @@ Partial Class ActivityLogsForm
         Me.btnClearLogs.Text = "Clear Logs"
         Me.btnClearLogs.UseVisualStyleBackColor = False
         '
-        'pnlBottom
+        'Panel4
         '
-        Me.pnlBottom.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(240, Byte), Integer))
-        Me.pnlBottom.Controls.Add(Me.btnPrevious)
-        Me.pnlBottom.Controls.Add(Me.btnNext)
-        Me.pnlBottom.Controls.Add(Me.lblStatus)
-        Me.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.pnlBottom.Location = New System.Drawing.Point(0, 640)
-        Me.pnlBottom.Name = "pnlBottom"
-        Me.pnlBottom.Size = New System.Drawing.Size(1200, 50)
-        Me.pnlBottom.TabIndex = 2
+        Me.Panel4.BackColor = System.Drawing.Color.White
+        Me.Panel4.Controls.Add(Me.lblPageInfo)
+        Me.Panel4.Controls.Add(Me.btnLastPage)
+        Me.Panel4.Controls.Add(Me.btnNextPage)
+        Me.Panel4.Controls.Add(Me.btnPrevPage)
+        Me.Panel4.Controls.Add(Me.btnFirstPage)
+        Me.Panel4.Controls.Add(Me.lblTotalLogs)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel4.Location = New System.Drawing.Point(0, 640)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(1200, 50)
+        Me.Panel4.TabIndex = 2
+
         '
-        'btnPrevious
+        'btnFirstPage
         '
-        Me.btnPrevious.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnPrevious.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(215, Byte), Integer))
-        Me.btnPrevious.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnPrevious.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.btnPrevious.ForeColor = System.Drawing.Color.White
-        Me.btnPrevious.Location = New System.Drawing.Point(1000, 10)
-        Me.btnPrevious.Name = "btnPrevious"
-        Me.btnPrevious.Size = New System.Drawing.Size(90, 30)
-        Me.btnPrevious.TabIndex = 0
-        Me.btnPrevious.Text = "◄ Previous"
-        Me.btnPrevious.UseVisualStyleBackColor = False
+        Me.btnFirstPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnFirstPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnFirstPage.FlatAppearance.BorderSize = 0
+        Me.btnFirstPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnFirstPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnFirstPage.ForeColor = System.Drawing.Color.Black
+        Me.btnFirstPage.Location = New System.Drawing.Point(379, 10)
+        Me.btnFirstPage.Name = "btnFirstPage"
+        Me.btnFirstPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnFirstPage.TabIndex = 1
+        Me.btnFirstPage.Text = "First"
+        Me.btnFirstPage.UseVisualStyleBackColor = False
+
         '
-        'btnNext
+        'btnPrevPage
         '
-        Me.btnNext.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnNext.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(215, Byte), Integer))
-        Me.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnNext.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.btnNext.ForeColor = System.Drawing.Color.White
-        Me.btnNext.Location = New System.Drawing.Point(1098, 10)
-        Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(90, 30)
-        Me.btnNext.TabIndex = 1
-        Me.btnNext.Text = "Next ►"
-        Me.btnNext.UseVisualStyleBackColor = False
+        Me.btnPrevPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnPrevPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnPrevPage.FlatAppearance.BorderSize = 0
+        Me.btnPrevPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnPrevPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnPrevPage.ForeColor = System.Drawing.Color.Black
+        Me.btnPrevPage.Location = New System.Drawing.Point(455, 10)
+        Me.btnPrevPage.Name = "btnPrevPage"
+        Me.btnPrevPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnPrevPage.TabIndex = 2
+        Me.btnPrevPage.Text = "Prev"
+        Me.btnPrevPage.UseVisualStyleBackColor = False
+
         '
-        'lblStatus
+        'btnNextPage
         '
-        Me.lblStatus.AutoSize = True
-        Me.lblStatus.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
-        Me.lblStatus.Location = New System.Drawing.Point(15, 17)
-        Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Size = New System.Drawing.Size(185, 15)
-        Me.lblStatus.TabIndex = 2
-        Me.lblStatus.Text = "Showing 0 of 0 records | Page 1 of 1"
+        Me.btnNextPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnNextPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnNextPage.FlatAppearance.BorderSize = 0
+        Me.btnNextPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnNextPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnNextPage.ForeColor = System.Drawing.Color.Black
+        Me.btnNextPage.Location = New System.Drawing.Point(531, 10)
+        Me.btnNextPage.Name = "btnNextPage"
+        Me.btnNextPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnNextPage.TabIndex = 3
+        Me.btnNextPage.Text = "Next"
+        Me.btnNextPage.UseVisualStyleBackColor = False
+
+        '
+        'btnLastPage
+        '
+        Me.btnLastPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnLastPage.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnLastPage.FlatAppearance.BorderSize = 0
+        Me.btnLastPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnLastPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnLastPage.ForeColor = System.Drawing.Color.Black
+        Me.btnLastPage.Location = New System.Drawing.Point(607, 10)
+        Me.btnLastPage.Name = "btnLastPage"
+        Me.btnLastPage.Size = New System.Drawing.Size(70, 30)
+        Me.btnLastPage.TabIndex = 4
+        Me.btnLastPage.Text = "Last"
+        Me.btnLastPage.UseVisualStyleBackColor = False
+
+        '
+        'lblPageInfo
+        '
+        Me.lblPageInfo.AutoSize = True
+        Me.lblPageInfo.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.lblPageInfo.Location = New System.Drawing.Point(697, 18)
+        Me.lblPageInfo.Name = "lblPageInfo"
+        Me.lblPageInfo.Size = New System.Drawing.Size(68, 15)
+        Me.lblPageInfo.TabIndex = 5
+        Me.lblPageInfo.Text = "Page 1 of 1"
+        
+        '
+        'lblTotalLogs
+        '
+        Me.lblTotalLogs.AutoSize = True
+        Me.lblTotalLogs.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTotalLogs.Location = New System.Drawing.Point(12, 18)
+        Me.lblTotalLogs.Name = "lblTotalLogs"
+        Me.lblTotalLogs.Size = New System.Drawing.Size(109, 15)
+        Me.lblTotalLogs.TabIndex = 0
+        Me.lblTotalLogs.Text = "Total Logs: 0"
         '
         'ActivityLogsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1200, 690)
-        Me.Controls.Add(Me.pnlBottom)
+        Me.Controls.Add(Me.Panel4)
         Me.Controls.Add(Me.dgvActivityLogs)
         Me.Controls.Add(Me.pnlFilters)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
@@ -369,8 +433,8 @@ Partial Class ActivityLogsForm
         CType(Me.dgvActivityLogs, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnlFilters.ResumeLayout(False)
         Me.pnlFilters.PerformLayout()
-        Me.pnlBottom.ResumeLayout(False)
-        Me.pnlBottom.PerformLayout()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -386,12 +450,9 @@ Partial Class ActivityLogsForm
     Friend WithEvents btnApplyFilters As Button
     Friend WithEvents btnResetFilters As Button
     Friend WithEvents btnSearch As Button
-    Friend WithEvents btnPrevious As Button
-    Friend WithEvents btnNext As Button
     Friend WithEvents btnExportCSV As Button
     Friend WithEvents btnRefresh As Button
     Friend WithEvents btnClearLogs As Button
-    Friend WithEvents lblStatus As Label
     Friend WithEvents lblStartDate As Label
     Friend WithEvents lblEndDate As Label
     Friend WithEvents lblUserType As Label
@@ -400,5 +461,11 @@ Partial Class ActivityLogsForm
     Friend WithEvents lblStatusFilter As Label
     Friend WithEvents lblSearch As Label
     Friend WithEvents pnlFilters As Panel
-    Friend WithEvents pnlBottom As Panel
+    Friend WithEvents Panel4 As System.Windows.Forms.Panel
+    Friend WithEvents btnFirstPage As System.Windows.Forms.Button
+    Friend WithEvents btnPrevPage As System.Windows.Forms.Button
+    Friend WithEvents btnNextPage As System.Windows.Forms.Button
+    Friend WithEvents btnLastPage As System.Windows.Forms.Button
+    Friend WithEvents lblPageInfo As System.Windows.Forms.Label
+    Friend WithEvents lblTotalLogs As System.Windows.Forms.Label
 End Class

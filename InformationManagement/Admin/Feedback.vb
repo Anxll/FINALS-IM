@@ -22,6 +22,7 @@ Public Class Feedback
         LoadFeedback()
         SetupDataGridView()
         UpdatePaginationControls()
+        RoundPaginationButtons()
     End Sub
 
     ' Initialize Database Connection
@@ -256,8 +257,12 @@ Public Class Feedback
 
     ' Update Pagination Controls
     Private Sub UpdatePaginationControls()
-        lblPageInfo.Text = $"Page {currentPage} of {totalPages} (Total: {totalRecords} records)"
-        lblTotalReviews.Text = $"Total Feedback: {totalRecords}"
+        lblPageInfo.Text = $"Page {currentPage} of {totalPages}"
+        lblTotalReviews.Text = $"Total Feedback: {totalRecords:N0}"
+
+        ' Hide the old "Go To Page" controls to match requested style
+        If txtPageNumber IsNot Nothing Then txtPageNumber.Visible = False
+        If lblGoToPage IsNot Nothing Then lblGoToPage.Visible = False
 
         ' Enable/Disable navigation buttons
         btnFirstPage.Enabled = (currentPage > 1)
@@ -265,7 +270,69 @@ Public Class Feedback
         btnNextPage.Enabled = (currentPage < totalPages)
         btnLastPage.Enabled = (currentPage < totalPages)
 
-        txtPageNumber.Text = currentPage.ToString()
+        ' Visual feedback for disabled buttons
+        btnFirstPage.BackColor = If(btnFirstPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+        btnPrevPage.BackColor = If(btnPrevPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+        btnNextPage.BackColor = If(btnNextPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+        btnLastPage.BackColor = If(btnLastPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+
+        ' Re-center logic
+        CenterPaginationControls()
+    End Sub
+
+    ' ============================================================
+    ' PAGINATION STYLING HELPERS
+    ' ============================================================
+    Private Sub RoundButton(btn As Button)
+        Dim radius As Integer = 8 
+        Dim path As New Drawing2D.GraphicsPath()
+        path.StartFigure()
+        path.AddArc(New Rectangle(0, 0, radius, radius), 180, 90)
+        path.AddArc(New Rectangle(btn.Width - radius, 0, radius, radius), 270, 90)
+        path.AddArc(New Rectangle(btn.Width - radius, btn.Height - radius, radius, radius), 0, 90)
+        path.AddArc(New Rectangle(0, btn.Height - radius, radius, radius), 90, 90)
+        path.CloseFigure()
+        btn.Region = New Region(path)
+    End Sub
+
+    Private Sub RoundPaginationButtons()
+        RoundButton(btnFirstPage)
+        RoundButton(btnPrevPage)
+        RoundButton(btnNextPage)
+        RoundButton(btnLastPage)
+    End Sub
+
+    Private Sub CenterPaginationControls()
+        Try
+            Dim panelWidth As Integer = Panel4.Width
+            Dim totalButtonWidth As Integer = btnFirstPage.Width + btnPrevPage.Width +
+                                              btnNextPage.Width + btnLastPage.Width
+            Dim spacing As Integer = 10
+            Dim labelWidth As Integer = lblPageInfo.Width
+
+            Dim centerGroupWidth As Integer = totalButtonWidth + (spacing * 4) + labelWidth
+            Dim startX As Integer = (panelWidth - centerGroupWidth) \ 2
+
+            ' 1. Position Total Label LEFT
+            lblTotalReviews.Location = New Point(10, 16)
+            lblTotalReviews.Top = (Panel4.Height - lblTotalReviews.Height) \ 2
+
+            ' 2. Layout Center Group: [First] [Prev] [Page Info] [Next] [Last]
+            btnFirstPage.Location = New Point(startX, 10)
+            btnPrevPage.Location = New Point(btnFirstPage.Right + spacing, 10)
+            
+            lblPageInfo.Location = New Point(btnPrevPage.Right + spacing, 16)
+            lblPageInfo.Top = (Panel4.Height - lblPageInfo.Height) \ 2
+            
+            btnNextPage.Location = New Point(lblPageInfo.Right + spacing, 10)
+            btnLastPage.Location = New Point(btnNextPage.Right + spacing, 10)
+        Catch ex As Exception
+            ' Silently fail
+        End Try
+    End Sub
+
+    Private Sub Feedback_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        CenterPaginationControls()
     End Sub
 
     ' DataGridView Cell Click Event (for action buttons)
@@ -408,13 +475,10 @@ Public Class Feedback
 
             conn.Open()
 
-            Dim query As String = "SELECT 
-                cf.*,
-                CONCAT(c.FirstName, ' ', c.LastName) AS CustomerName,
-                c.Email
-                FROM customer_feedback cf
-                INNER JOIN customers c ON cf.CustomerID = c.CustomerID
-                WHERE cf.FeedbackID = @feedbackId"
+            Dim query As String = "SELECT cf.*, CONCAT(c.FirstName, ' ', c.LastName) AS CustomerName, c.Email " &
+                                  "FROM customer_feedback cf " &
+                                  "INNER JOIN customers c ON cf.CustomerID = c.CustomerID " &
+                                  "WHERE cf.FeedbackID = @feedbackId"
 
             Dim cmd As New MySqlCommand(query, conn)
             cmd.Parameters.AddWithValue("@feedbackId", feedbackId)
@@ -422,25 +486,52 @@ Public Class Feedback
             Dim reader As MySqlDataReader = cmd.ExecuteReader()
 
             If reader.Read() Then
-                Dim details As String = $"Feedback Details:" & vbCrLf & vbCrLf &
-                                       $"Feedback ID: {reader("FeedbackID")}" & vbCrLf &
-                                       $"Customer: {reader("CustomerName")}" & vbCrLf &
-                                       $"Email: {reader("Email")}" & vbCrLf &
-                                       $"Type: {reader("FeedbackType")}" & vbCrLf & vbCrLf &
-                                       $"Overall Rating: {reader("OverallRating")}/5" & vbCrLf & vbCrLf &
-                                       $"Review Message:" & vbCrLf &
-                                       $"{If(IsDBNull(reader("ReviewMessage")), "None", reader("ReviewMessage").ToString())}" & vbCrLf & vbCrLf &
-                                       $"Comments:" & vbCrLf &
-                                       $"Food: {If(IsDBNull(reader("FoodTasteComment")), "None", reader("FoodTasteComment").ToString())}" & vbCrLf &
-                                       $"Portion: {If(IsDBNull(reader("PortionSizeComment")), "None", reader("PortionSizeComment").ToString())}" & vbCrLf &
-                                       $"Service: {If(IsDBNull(reader("ServiceComment")), "None", reader("ServiceComment").ToString())}" & vbCrLf &
-                                       $"Ambience: {If(IsDBNull(reader("AmbienceComment")), "None", reader("AmbienceComment").ToString())}" & vbCrLf &
-                                       $"Cleanliness: {If(IsDBNull(reader("CleanlinessComment")), "None", reader("CleanlinessComment").ToString())}" & vbCrLf & vbCrLf &
-                                       $"Status: {reader("Status")}" & vbCrLf &
-                                       $"Created: {reader("CreatedDate")}" & vbCrLf &
-                                       $"Approved: {If(IsDBNull(reader("ApprovedDate")), "Not yet approved", reader("ApprovedDate").ToString())}"
+                Dim sb As New System.Text.StringBuilder()
+                sb.AppendLine("Feedback Details:")
+                sb.AppendLine("")
+                sb.AppendLine("Feedback ID: " & reader("FeedbackID").ToString())
+                sb.AppendLine("Customer: " & reader("CustomerName").ToString())
+                sb.AppendLine("Email: " & reader("Email").ToString())
+                sb.AppendLine("Type: " & reader("FeedbackType").ToString())
+                sb.AppendLine("")
+                sb.AppendLine("Overall Rating: " & reader("OverallRating").ToString() & "/5")
+                sb.AppendLine("")
+                sb.AppendLine("Review Message:")
+                Dim msg As String = "None"
+                If Not IsDBNull(reader("ReviewMessage")) Then msg = reader("ReviewMessage").ToString()
+                sb.AppendLine(msg)
+                sb.AppendLine("")
+                sb.AppendLine("Comments:")
+                
+                Dim food As String = "None"
+                If Not IsDBNull(reader("FoodTasteComment")) Then food = reader("FoodTasteComment").ToString()
+                sb.AppendLine("Food: " & food)
 
-                MessageBox.Show(details, "Feedback Details", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Dim portion As String = "None"
+                If Not IsDBNull(reader("PortionSizeComment")) Then portion = reader("PortionSizeComment").ToString()
+                sb.AppendLine("Portion: " & portion)
+
+                Dim service As String = "None"
+                If Not IsDBNull(reader("ServiceComment")) Then service = reader("ServiceComment").ToString()
+                sb.AppendLine("Service: " & service)
+
+                Dim ambience As String = "None"
+                If Not IsDBNull(reader("AmbienceComment")) Then ambience = reader("AmbienceComment").ToString()
+                sb.AppendLine("Ambience: " & ambience)
+
+                Dim clean As String = "None"
+                If Not IsDBNull(reader("CleanlinessComment")) Then clean = reader("CleanlinessComment").ToString()
+                sb.AppendLine("Cleanliness: " & clean)
+
+                sb.AppendLine("")
+                sb.AppendLine("Status: " & reader("Status").ToString())
+                sb.AppendLine("Created: " & reader("CreatedDate").ToString())
+                
+                Dim approved As String = "Not yet approved"
+                If Not IsDBNull(reader("ApprovedDate")) Then approved = reader("ApprovedDate").ToString()
+                sb.AppendLine("Approved: " & approved)
+
+                MessageBox.Show(sb.ToString(), "Feedback Details", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
 
             reader.Close()
@@ -567,7 +658,7 @@ Public Class Feedback
         Try
             Dim saveFileDialog As New SaveFileDialog()
             saveFileDialog.Filter = "CSV Files (*.csv)|*.csv"
-            saveFileDialog.FileName = $"Feedback_Export_{DateTime.Now:yyyyMMdd}.csv"
+            saveFileDialog.FileName = "Feedback_Export_" & DateTime.Now.ToString("yyyyMMdd") & ".csv"
 
             If saveFileDialog.ShowDialog() = DialogResult.OK Then
                 Using writer As New IO.StreamWriter(saveFileDialog.FileName)
@@ -581,7 +672,8 @@ Public Class Feedback
                     ' Write data
                     For Each row As DataRow In dt.Rows
                         For i As Integer = 0 To dt.Columns.Count - 1
-                            writer.Write(row(i).ToString().Replace(",", ";"))
+                            Dim itemValue As String = row(i).ToString().Replace(",", ";")
+                            writer.Write(itemValue)
                             If i < dt.Columns.Count - 1 Then writer.Write(",")
                         Next
                         writer.WriteLine()

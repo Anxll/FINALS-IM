@@ -264,7 +264,7 @@ Partial Class Feedback
         '
         'Panel4
         '
-        Me.Panel4.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.Panel4.BackColor = System.Drawing.Color.White
         Me.Panel4.Controls.Add(Me.lblPageInfo)
         Me.Panel4.Controls.Add(Me.txtPageNumber)
         Me.Panel4.Controls.Add(Me.lblGoToPage)
@@ -311,58 +311,62 @@ Partial Class Feedback
         '
         'btnLastPage
         '
-        Me.btnLastPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.btnLastPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnLastPage.Cursor = System.Windows.Forms.Cursors.Hand
         Me.btnLastPage.FlatAppearance.BorderSize = 0
         Me.btnLastPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnLastPage.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnLastPage.ForeColor = System.Drawing.Color.White
+        Me.btnLastPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnLastPage.ForeColor = System.Drawing.Color.Black
         Me.btnLastPage.Location = New System.Drawing.Point(376, 11)
         Me.btnLastPage.Name = "btnLastPage"
-        Me.btnLastPage.Size = New System.Drawing.Size(50, 28)
+        Me.btnLastPage.Size = New System.Drawing.Size(70, 30)
         Me.btnLastPage.TabIndex = 4
-        Me.btnLastPage.Text = ">>"
+        Me.btnLastPage.Text = "Last"
         Me.btnLastPage.UseVisualStyleBackColor = False
         '
         'btnNextPage
         '
-        Me.btnNextPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.btnNextPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnNextPage.Cursor = System.Windows.Forms.Cursors.Hand
         Me.btnNextPage.FlatAppearance.BorderSize = 0
         Me.btnNextPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnNextPage.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnNextPage.ForeColor = System.Drawing.Color.White
+        Me.btnNextPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnNextPage.ForeColor = System.Drawing.Color.Black
         Me.btnNextPage.Location = New System.Drawing.Point(320, 11)
         Me.btnNextPage.Name = "btnNextPage"
-        Me.btnNextPage.Size = New System.Drawing.Size(50, 28)
+        Me.btnNextPage.Size = New System.Drawing.Size(70, 30)
         Me.btnNextPage.TabIndex = 3
-        Me.btnNextPage.Text = ">"
+        Me.btnNextPage.Text = "Next"
         Me.btnNextPage.UseVisualStyleBackColor = False
         '
         'btnPrevPage
         '
-        Me.btnPrevPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.btnPrevPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnPrevPage.Cursor = System.Windows.Forms.Cursors.Hand
         Me.btnPrevPage.FlatAppearance.BorderSize = 0
         Me.btnPrevPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnPrevPage.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnPrevPage.ForeColor = System.Drawing.Color.White
+        Me.btnPrevPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnPrevPage.ForeColor = System.Drawing.Color.Black
         Me.btnPrevPage.Location = New System.Drawing.Point(264, 11)
         Me.btnPrevPage.Name = "btnPrevPage"
-        Me.btnPrevPage.Size = New System.Drawing.Size(50, 28)
+        Me.btnPrevPage.Size = New System.Drawing.Size(70, 30)
         Me.btnPrevPage.TabIndex = 2
-        Me.btnPrevPage.Text = "<"
+        Me.btnPrevPage.Text = "Prev"
         Me.btnPrevPage.UseVisualStyleBackColor = False
         '
         'btnFirstPage
         '
-        Me.btnFirstPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.btnFirstPage.BackColor = System.Drawing.Color.FromArgb(CType(CType(240, Byte), Integer), CType(CType(244, Byte), Integer), CType(CType(250, Byte), Integer))
+        Me.btnFirstPage.Cursor = System.Windows.Forms.Cursors.Hand
         Me.btnFirstPage.FlatAppearance.BorderSize = 0
         Me.btnFirstPage.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnFirstPage.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.btnFirstPage.ForeColor = System.Drawing.Color.White
+        Me.btnFirstPage.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.btnFirstPage.ForeColor = System.Drawing.Color.Black
         Me.btnFirstPage.Location = New System.Drawing.Point(208, 11)
         Me.btnFirstPage.Name = "btnFirstPage"
-        Me.btnFirstPage.Size = New System.Drawing.Size(50, 28)
+        Me.btnFirstPage.Size = New System.Drawing.Size(70, 30)
         Me.btnFirstPage.TabIndex = 1
-        Me.btnFirstPage.Text = "<<"
+        Me.btnFirstPage.Text = "First"
         Me.btnFirstPage.UseVisualStyleBackColor = False
         '
         'lblTotalReviews

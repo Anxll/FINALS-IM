@@ -23,6 +23,9 @@ Public Class Reservations
         cboRecordsPerPage.Items.AddRange(New Object() {10, 20, 50, 100})
         cboRecordsPerPage.SelectedItem = 20  ' Changed from 50 to 20
 
+        RoundPaginationButtons()
+        CenterPaginationControls()
+
         LoadReservations()
     End Sub
 
@@ -394,12 +397,18 @@ Public Class Reservations
     ' ==========================================
     ' UPDATE PAGINATION INFO
     ' ==========================================
+    ' ==========================================
+    ' UPDATE PAGINATION INFO
+    ' ==========================================
     Private Sub UpdatePaginationInfo()
         Try
             Dim totalPages As Integer = If(TotalRecords > 0, Math.Ceiling(TotalRecords / RecordsPerPage), 1)
 
             ' Update label with current info
-            lblTotalReservations.Text = $"Total: {TotalRecords} | Page {CurrentPage} of {totalPages}"
+            lblPageInfo.Text = $"Page {CurrentPage} of {totalPages}"
+            
+            ' Update Total Count label if needed or ensure it's removed if following UsersAccounts style strict
+            lblTotalReservations.Text = $"Total: {TotalRecords}" ' Simplifed
 
             ' Enable/disable navigation buttons
             btnFirstPage.Enabled = (CurrentPage > 1)
@@ -407,10 +416,72 @@ Public Class Reservations
             btnNextPage.Enabled = (CurrentPage < totalPages)
             btnLastPage.Enabled = (CurrentPage < totalPages)
 
+            ' Visual feedback for disabled buttons (UsersAccounts Style)
+            btnFirstPage.BackColor = If(btnFirstPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+            btnPrevPage.BackColor = If(btnPrevPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+            btnNextPage.BackColor = If(btnNextPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+            btnLastPage.BackColor = If(btnLastPage.Enabled, Color.FromArgb(240, 244, 250), Color.FromArgb(230, 230, 230))
+            
+            ' Re-center in case text length changed
+            CenterPaginationControls()
+
         Catch ex As Exception
             ' Silently handle errors
         End Try
     End Sub
+
+    ' ==========================================
+    ' PAGINATION STYLING HELPERS
+    ' ==========================================
+    Private Sub RoundButton(btn As Button)
+        Dim radius As Integer = 8 ' Slightly smaller radius for 30px height
+        Dim path As New Drawing2D.GraphicsPath()
+        path.StartFigure()
+        path.AddArc(New Rectangle(0, 0, radius, radius), 180, 90)
+        path.AddArc(New Rectangle(btn.Width - radius, 0, radius, radius), 270, 90)
+        path.AddArc(New Rectangle(btn.Width - radius, btn.Height - radius, radius, radius), 0, 90)
+        path.AddArc(New Rectangle(0, btn.Height - radius, radius, radius), 90, 90)
+        path.CloseFigure()
+        btn.Region = New Region(path)
+    End Sub
+
+    Private Sub RoundPaginationButtons()
+        RoundButton(btnFirstPage)
+        RoundButton(btnPrevPage)
+        RoundButton(btnNextPage)
+        RoundButton(btnLastPage)
+    End Sub
+
+    Private Sub CenterPaginationControls()
+        Try
+            Dim panelWidth As Integer = Panel4.Width
+            Dim totalButtonWidth As Integer = btnFirstPage.Width + btnPrevPage.Width +
+                                              btnNextPage.Width + btnLastPage.Width
+            Dim spacing As Integer = 10
+            Dim labelWidth As Integer = 100 ' Estimated width
+
+            Dim totalWidth As Integer = totalButtonWidth + (spacing * 3) + labelWidth
+            Dim startX As Integer = (panelWidth - totalWidth) \ 2
+
+            btnFirstPage.Location = New Point(startX, 10)
+            btnPrevPage.Location = New Point(btnFirstPage.Right + spacing, 10)
+            
+            ' Center label vertically relative to buttons
+            lblPageInfo.Location = New Point(btnPrevPage.Right + spacing, 16) ' Approximate
+            lblPageInfo.Width = labelWidth
+            lblPageInfo.TextAlign = ContentAlignment.MiddleCenter
+
+            btnNextPage.Location = New Point(lblPageInfo.Right + spacing, 10)
+            btnLastPage.Location = New Point(btnNextPage.Right + spacing, 10)
+        Catch ex As Exception
+            Debug.WriteLine("Pagination centering error: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub Reservations_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        CenterPaginationControls()
+    End Sub
+
 
     ' ==========================================
     ' FORMAT DATAGRIDVIEW COLUMNS - UPDATED
